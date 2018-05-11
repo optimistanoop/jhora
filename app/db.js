@@ -6,11 +6,6 @@ let q = new Query(db);
 q.createCustomerTable();
 q.createTransectionTable();
 
-// db.serialize(function() {
-//   q.insert();
-//   q.selectAll();    
-// });
-
 function getDBInstance(){
   if(db){
     return db;
