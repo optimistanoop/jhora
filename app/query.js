@@ -49,7 +49,7 @@ class Query {
   }
   
   selectAll(tableName, cb){
-      this.db.all(`select * from ${tableName}`, function(err, data) {
+      this.db.all(`select * from ${tableName}`, (err, data)=>{
         cb ? cb(data) :'';
     });
   }
