@@ -21,10 +21,4 @@ jhora.controller('customerCtrl', function($scope) {
       console.log('anp customer', $scope.customer);
     };
     
-  })
-  .config(function($mdThemingProvider) {
-    $mdThemingProvider.theme('docs-dark', 'default')
-      .primaryPalette('yellow')
-      .dark();
-
   });
