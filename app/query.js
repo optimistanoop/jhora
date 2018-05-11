@@ -30,13 +30,13 @@ class Query {
     let columns = keys.map((key) => `${key}`).join(',');
     values = values.map((value) => `'${value}'`).join(',');
     let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
-    console.log('anp sql', sql);
-    this.db.run(sql);
+    this.db.run(sql, [], (err)=>{
+      cb(err);
+    });
   }
   
   selectAll(tableName, cb){
       this.db.all("select * from customer", function(err, data) {
-        console.log('anp row', data);
         cb ? cb(data) :'';
     });
   }
