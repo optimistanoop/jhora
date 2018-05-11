@@ -1,8 +1,6 @@
 
 jhora.controller('customerCtrl', function($scope) {
-    $scope.villages = ['Daniyari', 'Gadahia Mohan'];
-    $scope.selectedIndex = 0;
-    $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, {title:'View Customer', content:'customer/customerView.html'}];
+
     $scope.customer = {
       name: 'Addu',
       mobile: '9738275930',
