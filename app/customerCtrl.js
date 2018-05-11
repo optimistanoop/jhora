@@ -2,6 +2,8 @@ angular
   .module('jhora', ['ngMaterial', 'ngMessages'])
   .controller('customerCtrl', function($scope) {
     $scope.villages = ['Daniyari', 'Gadahia Mohan'];
+    $scope.selectedIndex = 0;
+    $scope.tabs = [{title:'Customer', content:'Customer form'}, {title:'Customer View', content:'Customer View'}];
     $scope.customer = {
       name: 'Addu',
       mobile: '9738275930',
