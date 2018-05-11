@@ -1,0 +1,9 @@
+<div ng-controller="transectionCtrl">      
+  <md-list-item class="md-3-line" ng-repeat="tran in transections" ng-click="null">
+    <div class="md-list-item-text" layout="column">
+      <h3>{{ tran.amount }}</h3>
+      <h3>{{ tran.date }}</h3>
+      <h5>{{ tran.rate }}</h5>
+    </div>
+  </md-list-item>
+</div>
