@@ -76,10 +76,13 @@
 
           <md-input-container class="md-block">
             <label>Remarks</label>
-            <textarea ng-model="customer.remarks" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+            <textarea ng-model="customer.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
           </md-input-container>
 
         </form>
+        
+        <md-button class="md-raised md-primary" ng-click="submitCustomer()">Submit</md-button>
+        <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
       </div>
     </md-content>
 

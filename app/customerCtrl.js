@@ -12,6 +12,15 @@ angular
       pageNo: '1',
       remarks: 'Some big natural remarks here!'
     };
+    
+    $scope.resetCustomer = function(){
+      $scope.customer ={};
+    };
+    
+    $scope.submitCustomer = function(){
+      console.log('anp customer', $scope.customer);
+    };
+    
   })
   .config(function($mdThemingProvider) {
 
