@@ -2,11 +2,95 @@
 <html>
   <head>
   </head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
   <body>
-    <h1>Jhora App</h1>
-    <div id="msg"></div>
-    <ul id="database">
-    </ul>
+    <h1>Jhora</h1>
+    <div ng-app="jhora" ng-controller="customerCtrl" layout="column" ng-cloak class="md-inline-form">
+
+    <md-content layout-padding>
+      <div>
+        <form name="customerForm">
+
+          <div layout-gt-xs="row">
+
+          <div layout-gt-sm="row">
+            
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Name</label>
+              <input ng-model="customer.name">
+            </md-input-container>
+            
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Mobile No</label>
+              <input ng-model="customer.mobile">
+            </md-input-container>
+            
+            <md-input-container>
+              <label>Adress</label>
+              <md-select ng-model="customer.address">
+                <md-option><em>None</em></md-option>
+                <md-option ng-repeat="vil in villages" ng-value="vil">
+                  {{vil}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          
+          
+            
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Father's Name</label>
+              <input ng-model="customer.fathersName">
+            </md-input-container>
+          </div>
+
+          <div layout-gt-sm="row">
+
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Guarantor</label>
+              <input ng-model="customer.guarantor">
+            </md-input-container>
+            
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Page No</label>
+              <input name="postalCode" ng-model="customer.pageNo" placeholder="12345"
+                     required ng-pattern="/^[0-9]$/" md-maxlength="5">
+
+              <div ng-messages="customerForm.postalCode.$error" role="alert" multiple>
+                <div ng-message="required" class="my-message">You must supply a Page No.</div>
+                <div ng-message="pattern" class="my-message">That doesn't look like a valid Page No.
+                </div>
+                <div ng-message="md-maxlength" class="my-message">
+                  Don't use the long version silly...we don't need to be that specific...
+                </div>
+              </div>
+            </md-input-container>
+            
+            <md-input-container>
+              <label>Enter date</label>
+              <md-datepicker ng-model="customer.date" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+            </md-input-container>
+          </div>
+          
+          </div>
+
+          <md-input-container class="md-block">
+            <label>Remarks</label>
+            <textarea ng-model="customer.remarks" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+          </md-input-container>
+
+        </form>
+      </div>
+    </md-content>
+
+  </div>
+  
     <script src="./db.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="./customerCtrl.js"></script>
   </body>
 </html>

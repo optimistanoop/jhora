@@ -14,9 +14,9 @@ db.serialize(function() {
 
   let rows = document.getElementById("database");
   db.each("SELECT rowid AS id, info FROM customer", function(err, row) {
-    let item = document.createElement("li");
-    item.textContent = "" + row.id + ": " + row.info;
-    rows.appendChild(item);
+    // let item = document.createElement("li");
+    // item.textContent = "" + row.id + ": " + row.info;
+    // rows.appendChild(item);
   });
 });
 
