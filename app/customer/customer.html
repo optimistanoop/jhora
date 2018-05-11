@@ -1,18 +1,16 @@
-<div ng-controller="customerCtrl" layout="column" ng-cloak class="md-inline-form">
-  <md-content layout-padding>
-    <div>
+<div ng-controller="customerCtrl"  ng-cloak class="md-inline-form">
       <form name="customerForm">
-        <div layout-gt-xs="row">
-        <div layout-gt-sm="row">  
-          <md-input-container class="md-block" flex-gt-sm>
+        
+        <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
             <label>Name</label>
             <input ng-model="customer.name">
           </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm>
+          <md-input-container class="md-block" flex-xs>
             <label>Mobile No</label>
             <input ng-model="customer.mobile">
-          </md-input-container>  
-          <md-input-container>
+          </md-input-container> 
+          <md-input-container flex-xs>
             <label>Adress</label>
             <md-select ng-model="customer.address">
               <md-option><em>None</em></md-option>
@@ -21,17 +19,18 @@
               </md-option>
             </md-select>
           </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm>
+          </md-content> 
+          
+          <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
             <label>Father's Name</label>
             <input ng-model="customer.father">
           </md-input-container>
-        </div>
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
+          <md-input-container class="md-block" flex-xs>
             <label>Guarantor</label>
             <input ng-model="customer.guarantor">
           </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm>
+          <md-input-container class="md-block" flex-xs>
             <label>Page No</label>
             <input name="postalCode" ng-model="customer.pageNo" placeholder="12345"
                    required ng-pattern="/^[0-9]$/" md-maxlength="5">
@@ -44,19 +43,18 @@
               </div>
             </div>
           </md-input-container>  
-          <md-input-container>
+          </md-content>
+          <md-content layout-padding layout="row">
+          <md-input-container flex-xs>
             <label>Enter date</label>
             <md-datepicker ng-model="customer.date" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
           </md-input-container>
-        </div>
-        </div>
-        <md-input-container class="md-block">
+        <md-input-container class="md-block" flex-xs>
           <label>Remarks</label>
           <textarea ng-model="customer.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
         </md-input-container>
+      </md-content>
+        <md-button class="md-raised md-primary" ng-click="submitCustomer()">Submit</md-button>
+        <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
       </form>
-      <md-button class="md-raised md-primary" ng-click="submitCustomer()">Submit</md-button>
-      <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
-    </div>
-  </md-content>
 </div>
