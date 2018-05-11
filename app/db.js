@@ -4,6 +4,7 @@ let db = new sqlite3.Database('/Users/anoop/Documents/electron-boilerplate-sqlit
 let q = new Query(db);
 
 q.createCustomerTable();
+q.createTransectionTable();
 
 // db.serialize(function() {
 //   q.insert();

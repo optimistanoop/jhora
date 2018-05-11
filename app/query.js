@@ -22,6 +22,19 @@ class Query {
        remarks        CHAR(80) )`
      );
   }
+  createTransectionTable(){
+    this.db.run(`CREATE TABLE IF NOT EXISTS transection(
+       ID INTEGER PRIMARY KEY AUTOINCREMENT,
+       amount         INT    NOT NULL,
+       rate           INT    NOT NULL,
+       date           TEXT   NOT NULL, 
+       promiseDate    TEXT   NOT NULL,
+       type           TEXT   NOT NULL,
+       customerId     INTEGER NOT NULL,
+       customer       TEXT    NOT NULL,
+       remarks        CHAR(80) )`
+     );
+  }
   
   insert(tableName ='', keys = [], values =[], cb = {} ){
     //INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
@@ -36,7 +49,7 @@ class Query {
   }
   
   selectAll(tableName, cb){
-      this.db.all("select * from customer", function(err, data) {
+      this.db.all(`select * from ${tableName}`, function(err, data) {
         cb ? cb(data) :'';
     });
   }
