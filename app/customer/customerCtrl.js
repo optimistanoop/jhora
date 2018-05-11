@@ -1,9 +1,7 @@
-angular
-  .module('jhora', ['ngMaterial', 'ngMessages'])
-  .controller('customerCtrl', function($scope) {
+jhora.controller('customerCtrl', function($scope) {
     $scope.villages = ['Daniyari', 'Gadahia Mohan'];
     $scope.selectedIndex = 0;
-    $scope.tabs = [{title:'Customer', content:'customer.html'}, {title:'Customer View', content:'customerView.html'}];
+    $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, {title:'Customer View', content:'customer/customerView.html'}];
     $scope.customer = {
       name: 'Addu',
       mobile: '9738275930',
@@ -25,9 +23,6 @@ angular
     
   })
   .config(function($mdThemingProvider) {
-
-    // Configure a dark theme with primary foreground yellow
-
     $mdThemingProvider.theme('docs-dark', 'default')
       .primaryPalette('yellow')
       .dark();
