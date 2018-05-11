@@ -6,15 +6,12 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
   <body>
     <h1>Jhora</h1>
-    <div ng-app="jhora" ng-controller="customerCtrl" layout="column" ng-cloak class="md-inline-form">
-        <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content>
+    <div ng-app="jhora" ng-controller="customerCtrl" ng-cloak>
+        <md-tabs md-selected="selectedIndex"  md-autoselect>
           <md-tab ng-repeat="tab in tabs"
                   label="{{tab.title}}">
-            <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
-            <md-content layout-padding>
-              <div ng-include="tab.content"></div>
-            </md-content>
-            <br/>
+            <div class="demo-tab tab{{$index%4}}">
+                <div ng-include="tab.content"></div>
             </div>
           </md-tab>
         </md-tabs>

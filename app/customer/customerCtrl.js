@@ -1,12 +1,13 @@
+
 jhora.controller('customerCtrl', function($scope) {
     $scope.villages = ['Daniyari', 'Gadahia Mohan'];
     $scope.selectedIndex = 0;
-    $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, {title:'Customer View', content:'customer/customerView.html'}];
+    $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, {title:'View Customer', content:'customer/customerView.html'}];
     $scope.customer = {
       name: 'Addu',
       mobile: '9738275930',
       address: 'Daniyari',
-      fathersName: 'Pita G',
+      father: 'Pita G',
       guarantor: 'Naresh',
       date: new Date(),
       pageNo: '1',
@@ -19,6 +20,18 @@ jhora.controller('customerCtrl', function($scope) {
     
     $scope.submitCustomer = function(){
       console.log('anp customer', $scope.customer);
+      let keys = Object.keys($scope.customer);
+      let values = Object.values($scope.customer);
+      q.insert('customer', keys, values);
     };
+    
+    $scope.getCustomers = function(){
+      q.selectAll('customer', function(rows){
+        $scope.customers = rows;  
+        console.log('anp getCustomers', rows);
+      });
+    };
+    
+    $scope.getCustomers();
     
   });

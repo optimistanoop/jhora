@@ -1,5 +1,9 @@
-<div layout="column" ng-cloak class="md-inline-form">
-  <md-content layout-padding>
-    <h1>customer view</h1>
-  </md-content>
+<div >      
+  <md-list-item class="md-3-line" ng-repeat="cust in customers" ng-click="null">
+    <div class="md-list-item-text" layout="column">
+      <h3>{{ cust.name }}</h3>
+      <h3>{{ cust.father }}</h3>
+      <h5>{{ cust.address }}</h5>
+    </div>
+  </md-list-item>
 </div>
