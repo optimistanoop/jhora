@@ -1,6 +1,6 @@
 let jhora = angular.module('jhora', ['ngMaterial', 'ngMessages']);
 jhora.controller('jhoraCtrl', function($scope) {
-  $scope.villages = ['Daniyari', 'Gadahia Mohan'];
+  $scope.villages = ['Daniyari', 'Gadahia Mohan', 'Koindaha'];
   $scope.selectedIndex = 0;
   $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, 
                  {title:'View Customer', content:'customer/customerView.html'},
