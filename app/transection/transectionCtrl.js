@@ -1,6 +1,7 @@
 
 jhora.controller('transectionCtrl', function($scope) {
 
+    $scope.types = ['Cr', 'Dr'];
     $scope.transection = {
       amount: 100,
       rate: 2,
@@ -24,18 +25,19 @@ jhora.controller('transectionCtrl', function($scope) {
         if (err){
           console.err('anp err, transection insertion')
         }else{
-          $scope.getTransections();
+          $scope.getDataByTables('transection');
         } 
       });
     };
     
-    $scope.getTransections = ()=>{
-      q.selectAll('transection', (rows)=>{
-        $scope.transections = rows;  
-        console.log('anp transection data fetched', rows);
+    $scope.getDataByTables = (table)=>{
+      q.selectAll(table, (rows)=>{
+        $scope[table+'s'] = rows;  
+        console.log(`anp ${table} data fetched`, rows);
       });
     };
     
-    $scope.getTransections();
+    $scope.getDataByTables('transection');
+    $scope.getDataByTables('customer');
     
   });

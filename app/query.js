@@ -11,7 +11,7 @@ class Query {
   
   createCustomerTable(){
     this.db.run(`CREATE TABLE IF NOT EXISTS customer(
-       ID INTEGER PRIMARY KEY AUTOINCREMENT,
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
        pageNo         INT     NOT NULL,
        address        CHAR(50) NOT NULL,
@@ -24,7 +24,7 @@ class Query {
   }
   createTransectionTable(){
     this.db.run(`CREATE TABLE IF NOT EXISTS transection(
-       ID INTEGER PRIMARY KEY AUTOINCREMENT,
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
        rate           INT    NOT NULL,
        date           TEXT   NOT NULL, 
