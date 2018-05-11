@@ -3,7 +3,7 @@
 Truly tiny boilerplate for an Electron app that includes SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
 
 ```
-git clone https://github.com/sjmelia/electron-boilerplate-sqlite.git
+git clone https://github.com/optimistanoop/jhora.git
 cd electron-boilerplate-sqlite
 npm install
 npm start
