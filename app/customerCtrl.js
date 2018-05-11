@@ -3,7 +3,7 @@ angular
   .controller('customerCtrl', function($scope) {
     $scope.villages = ['Daniyari', 'Gadahia Mohan'];
     $scope.selectedIndex = 0;
-    $scope.tabs = [{title:'Customer', content:'Customer form'}, {title:'Customer View', content:'Customer View'}];
+    $scope.tabs = [{title:'Customer', content:'customer.html'}, {title:'Customer View', content:'customerView.html'}];
     $scope.customer = {
       name: 'Addu',
       mobile: '9738275930',

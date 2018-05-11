@@ -7,96 +7,18 @@
   <body>
     <h1>Jhora</h1>
     <div ng-app="jhora" ng-controller="customerCtrl" layout="column" ng-cloak class="md-inline-form">
-
-    <md-content layout-padding>
-      <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content>
-      <md-tab ng-repeat="tab in tabs"
-              label="{{tab.title}}">
-        <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
-          <div ng-bind="tab.content"></div>
-          <br/>
-        </div>
-      </md-tab>
-    </md-tabs>
-
-      <div>
-        <form name="customerForm">
-
-          <div layout-gt-xs="row">
-
-          <div layout-gt-sm="row">
-            
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Name</label>
-              <input ng-model="customer.name">
-            </md-input-container>
-            
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Mobile No</label>
-              <input ng-model="customer.mobile">
-            </md-input-container>
-            
-            <md-input-container>
-              <label>Adress</label>
-              <md-select ng-model="customer.address">
-                <md-option><em>None</em></md-option>
-                <md-option ng-repeat="vil in villages" ng-value="vil">
-                  {{vil}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-          
-          
-            
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Father's Name</label>
-              <input ng-model="customer.fathersName">
-            </md-input-container>
-          </div>
-
-          <div layout-gt-sm="row">
-
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Guarantor</label>
-              <input ng-model="customer.guarantor">
-            </md-input-container>
-            
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Page No</label>
-              <input name="postalCode" ng-model="customer.pageNo" placeholder="12345"
-                     required ng-pattern="/^[0-9]$/" md-maxlength="5">
-
-              <div ng-messages="customerForm.postalCode.$error" role="alert" multiple>
-                <div ng-message="required" class="my-message">You must supply a Page No.</div>
-                <div ng-message="pattern" class="my-message">That doesn't look like a valid Page No.
-                </div>
-                <div ng-message="md-maxlength" class="my-message">
-                  Don't use the long version silly...we don't need to be that specific...
-                </div>
-              </div>
-            </md-input-container>
-            
-            <md-input-container>
-              <label>Enter date</label>
-              <md-datepicker ng-model="customer.date" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
-            </md-input-container>
-          </div>
-          
-          </div>
-
-          <md-input-container class="md-block">
-            <label>Remarks</label>
-            <textarea ng-model="customer.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
-          </md-input-container>
-
-        </form>
-        
-        <md-button class="md-raised md-primary" ng-click="submitCustomer()">Submit</md-button>
-        <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
-      </div>
-    </md-content>
-
-  </div>
+        <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content>
+          <md-tab ng-repeat="tab in tabs"
+                  label="{{tab.title}}">
+            <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
+            <md-content layout-padding>
+              <div ng-include="tab.content"></div>
+            </md-content>
+            <br/>
+            </div>
+          </md-tab>
+        </md-tabs>
+    </div>
   
     <script src="./db.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
