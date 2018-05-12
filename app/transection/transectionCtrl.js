@@ -33,7 +33,6 @@ jhora.controller('transectionCtrl', function($scope) {
     $scope.getDataByTables = (table)=>{
       q.selectAll(table, (rows)=>{
         $scope[table+'s'] = rows;  
-        console.log(`anp ${table} data fetched`, rows);
       });
     };
     

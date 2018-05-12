@@ -32,7 +32,6 @@ jhora.controller('customerCtrl', function($scope) {
     $scope.getCustomers = function(){
       q.selectAll('customer', function(rows){
         $scope.customers = rows;  
-        console.log('anp data fetched', rows);
       });
     };
     

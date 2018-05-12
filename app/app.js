@@ -1,12 +1,20 @@
-const electron = require('electron');
-const {ipcMain} = require('electron');
-const app = electron.app;
-
-let BrowserWindow = electron.BrowserWindow;
+const {app, dialog, ipcMain, BrowserWindow} = require('electron');
+app.showExitPrompt = true
 
 let mainWindow;
 app.on('window-all-closed', ()=> {
-    app.quit();
+  console.log('anp window-all-closed');
+  app.quit();
+});
+app.on('will-quit', ()=> {
+  console.log('anp will quit');
+});
+app.on('quit', ()=> {
+  console.log('anp quit');
+});
+
+ipcMain.on('closed-db', (event, message)=>{
+  console.log('anp db closed now', message);
 });
 
 // This method will be called when Electron has done everything
@@ -19,9 +27,27 @@ app.on('ready', ()=> {
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.webContents.openDevTools()
   
+  mainWindow.on('close', (e) => {
+      if (app.showExitPrompt) {
+          e.preventDefault() // Prevents the window from closing 
+          dialog.showMessageBox({
+              type: 'question',
+              buttons: ['Yes', 'No'],
+              title: 'Confirm',
+              message: 'Are you sure you want to quit?'
+          }, function (response) {
+              if (response === 0) { // Runs the following if 'Yes' is clicked
+                  console.log('anp exit yes');
+                  mainWindow.webContents.send('close-db', 'bye');
+                  app.showExitPrompt = false
+                  mainWindow.close()
+              }
+          })
+      }
+  })
+  
   app.on('before-quit', (event)=> {
-      //event.preventDefault();
-      mainWindow.webContents.send('close-db', 'bye')
+      console.log('anp before-quit');
   });
   
   // Emitted when the window is closed.
