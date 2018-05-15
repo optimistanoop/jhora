@@ -2,26 +2,10 @@
 jhora.controller('transectionCtrl', function($scope) {
 
     $scope.types = ['Cr', 'Dr'];
-    $scope.transection = {
-      amount: 100,
-      rate: 2,
-      date: new Date(),
-      promiseDate: new Date(),
-      type: 'Cr',
-      customerId: 1,
-      customer: 'Addu',
-      remarks: 'Some big natural remarks here!'
+    $scope.transection = { amount: 100, rate: 2, date: new Date(), promiseDate: new Date(), type: 'Cr', customerId: 1, 
+      customer: 'Addu', remarks: 'remarks here!'
     };
-    $scope.customer = {
-      name: '',
-      mobile: '',
-      address: '',
-      father: '',
-      guarantor: '',
-      date: '',
-      pageNo: '',
-      remarks: ''
-    };
+    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', date: '', pageNo: '', remarks: '' };
     
     $scope.resetTransection = ()=>{
       $scope.transection ={};
@@ -37,18 +21,18 @@ jhora.controller('transectionCtrl', function($scope) {
         if (err){
           console.err('anp err, transection insertion')
         }else{
-          $scope.getDataByTables('transection');
+          $scope.getDataByTable('transection');
         } 
       });
     };
     
-    $scope.getDataByTables = (table)=>{
+    $scope.getDataByTable = (table)=>{
       q.selectAll(table, (rows)=>{
         $scope[table+'s'] = rows;  
       });
     };
     
-    $scope.getDataByTables('transection');
-    $scope.getDataByTables('customer');
+    $scope.getDataByTable('transection');
+    $scope.getDataByTable('customer');
     
   });

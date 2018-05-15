@@ -1,10 +1,20 @@
 <div ng-controller="transectionCtrl">      
-  <md-list-item class="md-3-line" ng-repeat="tran in transections" ng-click="null">
-    <div class="md-list-item-text" layout="column">
-      <h3> Amount : {{ tran.amount | currency:'&#8377;' }}</h3>
-      <h3>Date : {{ tran.date | date:'medium' }}</h3>
-      <h3>Ac No : {{ tran.customerId }}</h3>
-      <h5>Rate : {{ tran.rate }} % </h5>
-    </div>
-  </md-list-item>
+  <table>
+    <tr>
+      <td>Amount</td>
+      <td>Date</td>
+      <td>Acc. No</td>
+      <td>Rate</td>
+      <td>Edit</td>
+      <td>Delete</td>
+    </tr>
+    <tr ng-repeat="tran in transections">
+      <td>{{ tran.amount | currency:'&#8377;' }}</td>
+      <td>{{ tran.date | date:'medium' }}</td>
+      <td>{{ tran.customerId }}</td>
+      <td>{{  tran.rate }}%</td>
+      <td ng-click="editTransection(tran)"><a><i class="material-icons">edit</i></a></td>
+      <td ng-click="deleteTransection(tran)"><a><i class="material-icons" style="color:red">delete</i></a></td>
+    </tr>
+  </table>
 </div>

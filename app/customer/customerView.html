@@ -1,10 +1,20 @@
 <div ng-controller="customerCtrl">      
-  <md-list-item class="md-3-line" ng-repeat="cust in customers" ng-click="null">
-    <div class="md-list-item-text" layout="column">
-      <h3>Name : {{ cust.name }}</h3>
-      <h3>Ac : {{ cust.id }}</h3>
-      <h3>Father : {{ cust.father }}</h3>
-      <h5>Address :{{ cust.address }}</h5>
-    </div>
-  </md-list-item>
+  <table>
+    <tr>
+      <td>Name</td>
+      <td>Acc. No</td>
+      <td>Father</td>
+      <td>Address</td>
+      <td>Edit</td>
+      <td>Delete</td>
+    </tr>
+    <tr ng-repeat="cust in customers">
+      <td>{{ cust.name }}</td>
+      <td>{{ cust.id }}</td>
+      <td>{{ cust.father }}</td>
+      <td>{{ cust.address }}</td>
+      <td ng-click="editCustomer(cust)"><i class="material-icons">edit</i></td>
+      <td ng-click="deleteCustomer(cust)"><i class="material-icons" style="color:red">delete</i></td>
+    </tr>
+  </table>
 </div>
