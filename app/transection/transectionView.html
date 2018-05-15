@@ -2,6 +2,7 @@
    Search: <input ng-model="$ctrl.query" />
    <select ng-model="$ctrl.orderProp">
      <option value="amount">Amount</option>
+     <option value="promiseDate">Promise Date</option>
      <option value="customerId">Account</option>
      <option value="date">Date</option>
      <option value="rate">Rate</option>
@@ -13,6 +14,7 @@
       <td>Date</td>
       <td>Acc. No</td>
       <td>Rate</td>
+      <td>Promise Date</td>
       <td>Edit</td>
       <td>Delete</td>
     </tr>
@@ -21,6 +23,7 @@
       <td>{{ tran.date | date:'medium' }}</td>
       <td>{{ tran.customerId }}</td>
       <td>{{  tran.rate }}%</td>
+      <td>{{  tran.promiseDate }}</td>
       <td ng-click="editTransection(tran)"><a><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransection(tran)"><a><i class="material-icons" style="color:red">delete</i></a></td>
     </tr>
