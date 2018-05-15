@@ -22,10 +22,10 @@
     </tr>
     <tr ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
-      <td>{{ tran.date | date:"shortDate" }}</td>
+      <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.customerId }}</td>
       <td>{{  tran.rate }}%</td>
-      <td>{{  tran.promiseDate date:"shortDate" }}</td>
+      <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td ng-click="editTransection(tran)"><a><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransection(tran)"><a><i class="material-icons" style="color:red">delete</i></a></td>
     </tr>
