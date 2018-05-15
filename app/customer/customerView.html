@@ -1,4 +1,5 @@
-<div ng-controller="customerCtrl">      
+<div ng-controller="customerCtrl">
+  Search: <input ng-model="$ctrl.query" />       
   <table>
     <tr>
       <td>Name</td>
@@ -8,7 +9,7 @@
       <td>Edit</td>
       <td>Delete</td>
     </tr>
-    <tr ng-repeat="cust in customers">
+    <tr ng-repeat="cust in customers | filter:$ctrl.query">
       <td>{{ cust.name }}</td>
       <td>{{ cust.id }}</td>
       <td>{{ cust.father }}</td>
