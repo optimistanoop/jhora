@@ -12,12 +12,24 @@ jhora.controller('transectionCtrl', function($scope) {
       customer: 'Addu',
       remarks: 'Some big natural remarks here!'
     };
+    $scope.customer = {
+      name: '',
+      mobile: '',
+      address: '',
+      father: '',
+      guarantor: '',
+      date: '',
+      pageNo: '',
+      remarks: ''
+    };
     
     $scope.resetTransection = ()=>{
       $scope.transection ={};
+      $scope.customer ={};
     };
     
     $scope.submitTransection = ()=>{
+      $scope.transection.customerId = $scope.customer.id;
       console.log('anp transection', $scope.transection);
       let keys = Object.keys($scope.transection);
       let values = Object.values($scope.transection);
