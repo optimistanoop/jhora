@@ -1,5 +1,12 @@
 <div ng-controller="customerCtrl">
-  Search: <input ng-model="$ctrl.query" />       
+  Search: <input ng-model="$ctrl.query" />
+  Sort by:
+  <select ng-model="$ctrl.orderProp">
+    <option value="name">Name</option>
+    <option value="address">Address</option>
+    <option value="id">Account</option>
+    <option value="father">Father</option>
+  </select>       
   <table>
     <tr>
       <td>Name</td>
@@ -9,7 +16,7 @@
       <td>Edit</td>
       <td>Delete</td>
     </tr>
-    <tr ng-repeat="cust in customers | filter:$ctrl.query">
+    <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ cust.name }}</td>
       <td>{{ cust.id }}</td>
       <td>{{ cust.father }}</td>

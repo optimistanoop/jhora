@@ -1,5 +1,12 @@
 <div ng-controller="transectionCtrl">  
-   Search: <input ng-model="$ctrl.query" />    
+   Search: <input ng-model="$ctrl.query" />
+   <select ng-model="$ctrl.orderProp">
+     <option value="amount">Amount</option>
+     <option value="customerId">Account</option>
+     <option value="date">Date</option>
+     <option value="rate">Rate</option>
+   </select> 
+       
   <table>
     <tr>
       <td>Amount</td>
@@ -9,7 +16,7 @@
       <td>Edit</td>
       <td>Delete</td>
     </tr>
-    <tr ng-repeat="tran in transections | filter:$ctrl.query">
+    <tr ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:'medium' }}</td>
       <td>{{ tran.customerId }}</td>
