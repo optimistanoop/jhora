@@ -28,22 +28,23 @@ app.on('ready', ()=> {
   mainWindow.webContents.openDevTools()
   
   mainWindow.on('close', (e) => {
-      if (app.showExitPrompt) {
-          e.preventDefault() // Prevents the window from closing 
-          dialog.showMessageBox({
-              type: 'question',
-              buttons: ['Yes', 'No'],
-              title: 'Confirm',
-              message: 'Are you sure you want to quit?'
-          }, function (response) {
-              if (response === 0) { // Runs the following if 'Yes' is clicked
-                  console.log('anp exit yes');
-                  mainWindow.webContents.send('close-db', 'bye');
-                  app.showExitPrompt = false
-                  mainWindow.close()
-              }
-          })
-      }
+      console.log('anp close');
+      // if (app.showExitPrompt) {
+      //     e.preventDefault() // Prevents the window from closing 
+      //     dialog.showMessageBox({
+      //         type: 'question',
+      //         buttons: ['Yes', 'No'],
+      //         title: 'Confirm',
+      //         message: 'Are you sure you want to quit?'
+      //     }, function (response) {
+      //         if (response === 0) { // Runs the following if 'Yes' is clicked
+      //             console.log('anp exit yes');
+      //             mainWindow.webContents.send('close-db', 'bye');
+      //             app.showExitPrompt = false
+      //             mainWindow.close()
+      //         }
+      //     })
+      // }
   })
   
   app.on('before-quit', (event)=> {
@@ -55,6 +56,7 @@ app.on('ready', ()=> {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+    console.log('anp closed');
     mainWindow = null;
   });
 });

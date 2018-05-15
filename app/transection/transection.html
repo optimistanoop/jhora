@@ -23,9 +23,9 @@
           </md-input-container>
           <md-input-container>
             <label>Customer</label>
-            <md-select ng-model="transection.customerId">
+            <md-select ng-model="customer">
               <md-option><em>None</em></md-option>
-              <md-option ng-repeat="cust in customers" ng-value="cust.id">
+              <md-option ng-repeat="cust in customers" ng-value="cust">
                 {{cust.name}}
               </md-option>
             </md-select>
@@ -40,6 +40,9 @@
             <label>Promise Date</label>
             <md-datepicker ng-model="transection.promiseDate" md-placeholder="Enter promise date" md-open-on-focus></md-datepicker>
           </md-input-container>
+          <md-input-container>
+            {{customer.id}}-{{customer.name}}-{{customer.address}}
+          </md-input-container>
         </div>
         </div>
         <md-input-container class="md-block">
@@ -50,5 +53,6 @@
       <md-button class="md-raised md-primary" ng-click="submitTransection()">Submit</md-button>
       <md-button class="md-raised md-warn" ng-click="resetTransection()">Reset</md-button>
     </div>
+    
   </md-content>
 </div>

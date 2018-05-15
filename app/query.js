@@ -36,6 +36,13 @@ class Query {
      );
   }
   
+  getTotalCountForTable(tableName, cb){
+    let sql = `select count(id) from ${tableName}`;
+    this.db.get(sql, (err, data)=>{
+      cb ? cb(err, data) :'';
+    })
+  }
+  
   insert(tableName ='', keys = [], values =[], cb = {} ){
     //INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
     //this.db.run(`INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHER, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 9738275930, 'prahlad', 'arun', '02-10-1991', 'demo')`);

@@ -1,3 +1,4 @@
+const {shell} = require('electron')
 let jhora = angular.module('jhora', ['ngMaterial', 'ngMessages']);
 jhora.controller('jhoraCtrl', function($scope) {
   $scope.villages = ['Daniyari', 'Gadahia Mohan', 'Koindaha'];
