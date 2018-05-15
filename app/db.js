@@ -1,6 +1,6 @@
-et Query = require('./query.js');
+let Query = require('./query.js');
 let sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('/Users/anoop/Documents/electron-boilerplate-sqlite/db.db');
+let db = new sqlite3.Database('C:\Users\Administrator\Downloads\db.db');
 let q = new Query(db);
 let ipcRenderer = require('electron').ipcRenderer;
 

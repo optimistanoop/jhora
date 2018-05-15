@@ -37,6 +37,7 @@ jhora.controller('transectionCtrl', function($scope) {
     
     $scope.getDataByTable = (table)=>{
       q.selectAll(table, (rows)=>{  
+        if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
           if(table == 'transection')  
