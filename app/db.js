@@ -10,8 +10,5 @@ ipcRenderer.on('close-db', (event, message) => {
   ipcRenderer.send('closed-db', 'thanks');
 });
 
-
-
-
 q.createCustomerTable();
 q.createTransectionTable();

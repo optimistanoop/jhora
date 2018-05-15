@@ -36,7 +36,12 @@ jhora.controller('transectionCtrl', function($scope) {
     };
     
     $scope.getDataByTable = (table)=>{
-      q.selectAll(table, (rows)=>{
+      q.selectAll(table, (rows)=>{  
+        for(let row of rows){
+          row.date = new Date(row.date);
+          if(table == 'transection')  
+          row.promiseDate = new Date(row.promiseDate);
+        }
         $scope[table+'s'] = rows;  
       });
     };
