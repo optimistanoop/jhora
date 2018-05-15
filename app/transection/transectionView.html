@@ -9,7 +9,7 @@
      <option value="date">Date</option>
      <option value="rate">Rate</option>
    </select> 
-   Total : {{transections.length}}       
+   Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }}       
    
   <table>
     <tr>

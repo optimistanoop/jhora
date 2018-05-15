@@ -8,7 +8,7 @@
     <option value="id">Account</option>
     <option value="father">Father</option>
   </select>
-  Total : {{customers.length}}       
+  Total : {{ (customers | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }}       
   <table>
     <tr>
       <td>Name</td>
