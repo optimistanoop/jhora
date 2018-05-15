@@ -7,6 +7,15 @@ jhora.controller('transectionCtrl', function($scope) {
     };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', date: '', pageNo: '', remarks: '' };
     
+    $scope.editTransection = (transection)=>{
+      console.log('anp edit', transection);
+    };
+    
+    $scope.deleteTransection = (transection)=>{
+      console.log('anp delete', transection);
+      shell.beep();
+    };
+    
     $scope.resetTransection = ()=>{
       $scope.transection ={};
       $scope.customer ={};

@@ -11,12 +11,21 @@ jhora.controller('customerCtrl', function($scope) {
       pageNo: '1',
       remarks: 'Some big natural remarks here!'
     };
+        
+    $scope.editCustomer = (customer)=>{
+      console.log('anp edit', customer);
+    };
     
-    $scope.resetCustomer = function(){
+    $scope.deleteCustomer = (customer)=>{
+      console.log('anp delete', customer);
+      shell.beep();
+    };
+    
+    $scope.resetCustomer = ()=>{
       $scope.customer ={};
     };
     
-    $scope.submitCustomer = function(){
+    $scope.submitCustomer = ()=>{
       console.log('anp customer', $scope.customer);
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
@@ -29,8 +38,8 @@ jhora.controller('customerCtrl', function($scope) {
       });
     };
     
-    $scope.getCustomers = function(){
-      q.selectAll('customer', function(rows){
+    $scope.getCustomers = ()=>{
+      q.selectAll('customer', (rows)=>{
         $scope.customers = rows;  
       });
     };
