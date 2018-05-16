@@ -10,14 +10,33 @@
     <h1>Jhora</h1>
     
     <div ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
-        <md-tabs md-selected="selectedIndex"  md-autoselect>
-          <md-tab ng-repeat="tab in tabs"
-                  label="{{tab.title}}">
-            <div class="demo-tab tab{{$index%4}}">
-                <div ng-include="tab.content"></div>
-            </div>
-          </md-tab>
-        </md-tabs>
+         <md-nav-bar
+            md-no-ink-bar="disableInkBar"
+            md-selected-nav-item="selectedIndex"
+            nav-bar-aria-label="navigation links">
+            <md-nav-item md-nav-click="goto('0')" name="page1">
+              Customer
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('1')" name="page2">
+              View Customer
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('2')" name="page3">
+              Transection
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('3')" name="page4">
+              View Transection
+            </md-nav-item>
+            <!-- these require actual routing with ui-router or ng-route, so they
+            won't work in the demo
+            <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
+            <md-nav-item md-nav-sref="app.page5" name="page4">Page Five</md-nav-item>
+            You can also add options for the <code>ui-sref-opts</code> attribute.
+            <md-nav-item md-nav-sref="page6" sref-opts="{reload:true, notify:true}">
+              Page Six
+            </md-nav-item>
+            -->
+          </md-nav-bar>
+          <div ng-include="tab"></div>  
     </div>
   
     <script src="./db.js"></script>

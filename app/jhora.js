@@ -10,6 +10,10 @@ jhora.controller('jhoraCtrl', function($scope) {
                  {title:'Transection', content:'transection/transection.html'},
                  {title:'View Transection', content:'transection/transectionView.html'}
                ];
+  $scope.tab = $scope.tabs[0].content;
+  $scope.goto = function(page) {
+    $scope.tab = $scope.tabs[page].content;
+  };             
 })
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('docs-dark', 'default')
