@@ -1,6 +1,12 @@
 let Query = require('./query.js');
 let sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('C:\Users\Administrator\Downloads\db.db');
+const {app} = require('electron').remote;
+const path = require('path');
+let dir = app.getPath("appData");
+let dbPath = path.join(dir, 'db.db')
+console.log('anp dbPath', dbPath);
+// 'C:\Users\Administrator\Downloads\db.db'
+let db = new sqlite3.Database(dbPath);
 let q = new Query(db);
 let ipcRenderer = require('electron').ipcRenderer;
 
