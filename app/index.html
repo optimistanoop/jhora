@@ -12,9 +12,13 @@
     <div ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
          <md-nav-bar
             md-no-ink-bar="disableInkBar"
-            md-selected-nav-item="selectedIndex"
+            md-selected-nav-item="currentNavItem"
             nav-bar-aria-label="navigation links">
-            <md-nav-item md-nav-click="goto('0')" name="page1">
+            <md-nav-item md-nav-click="goto($index)" name="{{$index}}" ng-repeat="tab in tabs">
+              {{tab.title}}
+            </md-nav-item>
+            
+            <!-- <md-nav-item md-nav-click="goto('0')" name="page1">
               Customer
             </md-nav-item>
             <md-nav-item md-nav-click="goto('1')" name="page2">
@@ -25,7 +29,7 @@
             </md-nav-item>
             <md-nav-item md-nav-click="goto('3')" name="page4">
               View Transection
-            </md-nav-item>
+            </md-nav-item> -->
             <!-- these require actual routing with ui-router or ng-route, so they
             won't work in the demo
             <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
@@ -36,7 +40,7 @@
             </md-nav-item>
             -->
           </md-nav-bar>
-          <div ng-include="tab"></div>  
+          <div ng-include="template" ng-cloak></div>  
     </div>
   
     <script src="./db.js"></script>
