@@ -27,8 +27,8 @@
       <td>{{ tran.customerId }}</td>
       <td>{{  tran.rate }}%</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-click="editTransection(tran)"><a><i class="material-icons">edit</i></a></td>
-      <td ng-click="deleteTransection(tran)"><a><i class="material-icons" style="color:red">delete</i></a></td>
+      <td ng-click="editTransection(tran)"><md-tooltip md-direction="bottom">{{tran.customer}} - {{tran.type}}</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-click="deleteTransection(tran)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
 </div>

@@ -23,7 +23,7 @@
       <td>{{ cust.id }}</td>
       <td>{{ cust.father }}</td>
       <td>{{ cust.address }}</td>
-      <td ng-click="editCustomer(cust)"><i class="material-icons">edit</i></td>
+      <td ng-click="editCustomer(cust)"><md-tooltip md-direction="bottom">{{cust.guarantor}} - {{cust.mobile}}</md-tooltip><i class="material-icons">edit</i></td>
       <td ng-click="deleteCustomer(cust)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
