@@ -9,6 +9,14 @@ npm install
 npm start
 ```
 
+## To install dependency packages in windows OS
+
+`npm i -g windows-build-tools`
+
+## After that
+
+`npm i sqlite3 --build-from-source`
+
 ## Building a release package
 
 Releases can only be built on the target platform.
