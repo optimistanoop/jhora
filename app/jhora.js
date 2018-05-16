@@ -1,4 +1,6 @@
 const {shell} = require('electron')
+const {dialog} = require('electron').remote
+
 let jhora = angular.module('jhora', ['ngMaterial', 'ngMessages']);
 jhora.controller('jhoraCtrl', function($scope) {
   $scope.villages = ['Daniyari', 'Gadahia Mohan', 'Koindaha'];

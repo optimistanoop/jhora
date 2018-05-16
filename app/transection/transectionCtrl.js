@@ -31,6 +31,7 @@ jhora.controller('transectionCtrl', function($scope) {
           console.err('anp err, transection insertion')
         }else{
           $scope.getDataByTable('transection');
+          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
         } 
       });
     };
