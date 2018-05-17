@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./jhora.css">
   <body>
     <h1>Jhora</h1>
-    
     <div ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
          <md-nav-bar
             md-no-ink-bar="disableInkBar"
@@ -29,10 +28,13 @@
             -->
           </md-nav-bar>
           <div ng-include="template" ng-cloak></div>  
+          
+          <div ng-view></div>
     </div>
   
     <script src="./db.js"></script>
     <script src="lib/angular.min.js"></script>
+    <script src="lib/angular-route.min.js"></script>
     <script src="lib/angular-animate.min.js"></script>
     <script src="lib/angular-aria.min.js"></script>
     <script src="lib/angular-messages.min.js"></script>
