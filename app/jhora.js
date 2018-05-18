@@ -16,13 +16,15 @@ jhora.config(function($routeProvider, $locationProvider) {
     // });
 });
 jhora.controller('jhoraCtrl', function($scope) {
-  $scope.villages = ['Daniyari', 'Gadahia Mohan', 'Koindaha'];
+  $scope.villages = ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'];
   $scope.currentNavItem = '0';
-  $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, 
-                 {title:'View Customer', content:'customer/customerView.html'},
-                 {title:'Transection', content:'transection/transection.html'},
-                 {title:'View Transection', content:'transection/transectionView.html'}
-               ];
+  $scope.tabs = [
+    {title:'Customer', content:'customer/customer.html'},
+    {title:'Transection', content:'transection/transection.html'},
+    {title:'View Customer', content:'customer/customerView.html'},
+    {title:'View Transection', content:'transection/transectionView.html'}
+  ];
+  
   $scope.template = $scope.tabs[0];
   $scope.goto = function(page) {
     $scope.template = $scope.tabs[page];
