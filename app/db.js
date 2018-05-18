@@ -11,7 +11,10 @@ let ipcRenderer = require('electron').ipcRenderer;
 
 ipcRenderer.on('close-db', (event, message) => {
  console.log('anp going to close the db', message);
- db.close();
+ db.close((err)=>{
+   if(err) console.log('anp an error occured while closing db');
+   console.log('anp db closed succesfully cb ');
+ });
  ipcRenderer.send('closed-db', 'thanks');
 });
 
