@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./jhora.css">
   <body>
     <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
-      <span style="font-size:30px;cursor:pointer" ng-click="openNav()">&#9776;Jhora</span>
           <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
             <a ng-click="goto($index)" ng-repeat="tab in tabs">{{tab.title}}  
@@ -16,6 +15,7 @@
             </a>
           </div>
           <div id="main">
+              <span style="font-size:30px;cursor:pointer" ng-click="openNav()">&#9776;Jhora</span>
               <div ng-include="template" ng-cloak></div>
           </div>  
     </div>

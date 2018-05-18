@@ -1,13 +1,21 @@
 <div ng-controller="customerCtrl">
-  Search: 
-  <input ng-model="$ctrl.query" />
-  Sort By:
-  <select ng-model="$ctrl.orderProp">
-    <option value="name">Name</option>
-    <option value="address">Address</option>
-    <option value="id">Account</option>
-    <option value="father">Father</option>
-  </select>
+  <md-content layout-padding layout="row">
+  <md-input-container flex-xs>
+    <label>Search</label>
+    <md-icon> <i class="material-icons">search</i> </md-icon>
+    <input ng-model="$ctrl.query" type="text">
+  </md-input-container> 
+  <md-input-container flex-xs>
+    <label>Sort By</label>
+    <md-select ng-model="$ctrl.orderProp">
+      <md-option><em>None</em></md-option>
+      <md-option value="name">Name</md-option>
+      <md-option value="address">Address</md-option>
+      <md-option value="id">Account</md-option>
+      <md-option value="father">Father</md-option>
+    </md-select>
+  </md-input-container>
+</md-content>
   Total : {{ (customers | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }}       
   <table>
     <tr>

@@ -1,14 +1,22 @@
 <div ng-controller="transectionCtrl">  
-   Search: 
-   <input ng-model="$ctrl.query" />
-   Sort By:
-   <select ng-model="$ctrl.orderProp">
-     <option value="amount">Amount</option>
-     <option value="promiseDate">Promise Date</option>
-     <option value="customerId">Account</option>
-     <option value="date">Date</option>
-     <option value="rate">Rate</option>
-   </select> 
+   <md-content layout-padding layout="row">
+     <md-input-container flex-xs>
+       <label>Search</label>
+       <md-icon> <i class="material-icons">search</i> </md-icon>
+       <input ng-model="$ctrl.query" type="text">
+     </md-input-container> 
+     <md-input-container flex-xs>
+       <label>Sort By</label>
+       <md-select ng-model="$ctrl.orderProp">
+         <md-option><em>None</em></md-option>
+         <md-option value="amount">Amount</md-option>
+         <md-option value="promiseDate">Promise Date</md-option>
+         <md-option value="customerId">Account</md-option>
+         <md-option value="date">Date</md-option>
+         <md-option value="rate">Rate</md-option>
+       </md-select>
+     </md-input-container>
+ </md-content> 
    Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }}       
    
   <table>
