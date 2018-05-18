@@ -9,7 +9,7 @@ jhora.controller('customerCtrl', function($scope) {
       guarantor: 'Naresh',
       date: new Date(),
       pageNo: '1',
-      remarks: 'Some big natural remarks here!'
+      remarks: 'remarks here!'
     };
         
     $scope.editCustomer = (customer)=>{
