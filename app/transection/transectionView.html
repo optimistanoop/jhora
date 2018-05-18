@@ -30,7 +30,7 @@
       <td>Edit</td>
       <td>Delete</td>
     </tr>
-    <tr ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
+    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.customer }}</td>

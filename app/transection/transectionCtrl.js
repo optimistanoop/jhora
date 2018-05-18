@@ -1,7 +1,7 @@
 
 jhora.controller('transectionCtrl', function($scope) {
 
-    $scope.types = ['Cr', 'Dr'];
+    $scope.types = ['Cr', 'Dr', 'Settle'];
     $scope.transection = { amount: 100, rate: 2, date: new Date(), promiseDate: new Date(), type: 'Cr', customerId: 1, 
       customer: 'Addu', remarks: 'remarks here!'
     };

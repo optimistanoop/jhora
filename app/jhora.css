@@ -7,13 +7,15 @@ table, th , td  {
   border-collapse: collapse;
   padding: 5px;
 }
-table tr:nth-child(odd) {
-  background-color: #f1f1f1;
+.trcr {
+  background-color: #C4E690;
 }
-table tr:nth-child(even) {
-  background-color: #ffffff;
+.trdr {
+  background-color: #F08B73;
 }
-
+.trst {
+  background-color: #70D145;
+}
 .sidenav {
     height: 100%;
     width: 0;
