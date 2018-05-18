@@ -15,8 +15,10 @@
             </a>
           </div>
           <div id="main">
-              <span style="font-size:30px;cursor:pointer" ng-click="openNav()">&#9776;Jhora</span>
-              <div ng-include="template" ng-cloak></div>
+              <div style="font-size:30px;cursor:pointer" ng-click="openNav()">&#9776;Jhora
+                <div  style="text-align:center;">{{template.title}}</div>
+              </div>
+              <div ng-include="template.content" ng-cloak></div>
           </div>  
     </div>
     <script src="./db.js"></script>

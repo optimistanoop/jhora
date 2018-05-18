@@ -23,9 +23,9 @@ jhora.controller('jhoraCtrl', function($scope) {
                  {title:'Transection', content:'transection/transection.html'},
                  {title:'View Transection', content:'transection/transectionView.html'}
                ];
-  $scope.template = $scope.tabs[0].content;
+  $scope.template = $scope.tabs[0];
   $scope.goto = function(page) {
-    $scope.template = $scope.tabs[page].content;
+    $scope.template = $scope.tabs[page];
     $scope.closeNav();
   };
   
