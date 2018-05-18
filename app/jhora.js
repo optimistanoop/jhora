@@ -2,20 +2,18 @@ const {shell} = require('electron')
 const {dialog} = require('electron').remote
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.config(function($routeProvider) {
+jhora.config(function($routeProvider, $locationProvider) {
     $routeProvider
     .when("/", {
         templateUrl : "index2.html"
-    })
-    .when("/red", {
-        templateUrl : "red.htm"
-    })
-    .when("/green", {
-        templateUrl : "green.htm"
-    })
-    .when("/blue", {
-        templateUrl : "blue.htm"
     });
+    //$locationProvider.hashPrefix('!');
+    //$locationProvider.html5Mode({enabled: false, requireBase: false});
+    //$locationProvider.html5Mode(true);
+    // $locationProvider.html5Mode({
+    //   enabled: true,
+    //   requireBase: false
+    // });
 });
 jhora.controller('jhoraCtrl', function($scope) {
   $scope.villages = ['Daniyari', 'Gadahia Mohan', 'Koindaha'];
@@ -28,7 +26,19 @@ jhora.controller('jhoraCtrl', function($scope) {
   $scope.template = $scope.tabs[0].content;
   $scope.goto = function(page) {
     $scope.template = $scope.tabs[page].content;
-  };             
+    $scope.closeNav();
+  };
+  
+  $scope.openNav = ()=> {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  };
+
+  $scope.closeNav = ()=>{
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  };
+               
 });
 // .config(function($mdThemingProvider) {
 //   $mdThemingProvider.theme('docs-dark', 'default')

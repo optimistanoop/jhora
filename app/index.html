@@ -7,31 +7,20 @@
     <link rel="stylesheet" href="lib/angular-material.min.css">
     <link rel="stylesheet" href="./jhora.css">
   <body>
-    <h1>Jhora</h1>
-    <div ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
-         <md-nav-bar
-            md-no-ink-bar="disableInkBar"
-            md-selected-nav-item="currentNavItem"
-            nav-bar-aria-label="navigation links">
-            <md-nav-item md-nav-click="goto($index)" name="{{$index}}" ng-repeat="tab in tabs">
-              {{tab.title}}
+    <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
+      <span style="font-size:30px;cursor:pointer" ng-click="openNav()">&#9776;Jhora</span>
+          <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
+            <a ng-click="goto($index)" ng-repeat="tab in tabs">{{tab.title}}  
               <md-tooltip md-direction="bottom">{{tab.title}}</md-tooltip>
-            </md-nav-item>
-            <!-- these require actual routing with ui-router or ng-route, so they
-            won't work in the demo
-            <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
-            <md-nav-item md-nav-sref="app.page5" name="page4">Page Five</md-nav-item>
-            You can also add options for the <code>ui-sref-opts</code> attribute.
-            <md-nav-item md-nav-sref="page6" sref-opts="{reload:true, notify:true}">
-              Page Six
-            </md-nav-item>
-            -->
-          </md-nav-bar>
-          <div ng-include="template" ng-cloak></div>  
+            </a>
+          </div>
           
-          <div ng-view></div>
+          <div id="main">
+              <div ng-include="template" ng-cloak></div>
+          </div>
+          
     </div>
-  
     <script src="./db.js"></script>
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
@@ -42,6 +31,5 @@
     <script src="./jhora.js"></script>
     <script src="./customer/customerCtrl.js"></script>
     <script src="./transection/transectionCtrl.js"></script>
-
   </body>
 </html>
