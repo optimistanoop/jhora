@@ -25,6 +25,11 @@ jhora.controller('customerCtrl', function($scope) {
       $scope.customer ={};
     };
     
+    $scope.sortBy = function(propertyName) {
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
+    
     $scope.submitCustomer = ()=>{
       console.log('anp customer', $scope.customer);
       let keys = Object.keys($scope.customer);
