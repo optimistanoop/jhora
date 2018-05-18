@@ -1,0 +1,65 @@
+<div ng-controller="transectionCtrl" ng-cloak class="md-inline-form">
+  <md-content layout-padding>
+    <div>
+      <form name="transectionForm">
+        <div layout-gt-xs="row">
+        <div layout-gt-sm="row">  
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Amount</label>
+            <md-icon><i class="material-icons">money</i></md-icon>
+            <input ng-model="transection.amount">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Rate</label>
+            <md-icon><i class="material-icons">trending_up</i></md-icon>
+            <input ng-model="transection.rate">
+          </md-input-container>  
+          <md-input-container flex-gt-sm>
+            <label>Type</label>
+            <md-icon><i class="material-icons">credit_card</i></md-icon>
+            <md-select ng-model="transection.type">
+              <md-option><em>None</em></md-option>
+              <md-option ng-repeat="type in types" ng-value="type">
+                {{type}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container>
+            <label>Customer</label>
+            <md-icon><i class="material-icons">person</i></md-icon>
+            <md-select ng-model="customer">
+              <md-option><em>None</em></md-option>
+              <md-option ng-repeat="cust in customers" ng-value="cust">
+                {{cust.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+          <md-input-container>
+            <label>Date</label>
+            <!-- <md-icon><i class="material-icons">calender</i></md-icon> -->
+            <md-datepicker ng-model="transection.date" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+          </md-input-container>
+          <md-input-container>
+            <label>Promise Date</label>
+            <!-- <md-icon><i class="material-icons">schedule</i></md-icon> -->
+            <md-datepicker ng-model="transection.promiseDate" md-placeholder="Enter promise date" md-open-on-focus></md-datepicker>
+          </md-input-container>
+          <md-input-container>
+            {{customer.id}}-{{customer.name}}-{{customer.address}}
+          </md-input-container>
+        </div>
+        </div>
+        <md-input-container class="md-block">
+          <label>Remarks</label>
+          <md-icon><i class="material-icons">note</i></md-icon>
+          <textarea ng-model="transection.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
+        </md-input-container>
+      </form>
+      <md-button class="md-raised md-primary" ng-click="submitTransection()">Submit</md-button>
+      <md-button class="md-raised md-warn" ng-click="resetTransection()">Reset</md-button>
+    </div>
+    
+  </md-content>
+</div>

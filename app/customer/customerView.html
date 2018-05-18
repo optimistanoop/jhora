@@ -1,0 +1,39 @@
+<div ng-controller="customerCtrl">
+  <md-content layout-padding layout="row">
+  <md-input-container flex-xs>
+    <label>Search</label>
+    <md-icon> <i class="material-icons">search</i> </md-icon>
+    <input ng-model="$ctrl.query" type="text">
+  </md-input-container> 
+  <md-input-container flex-xs>
+    <label>Sort By</label>
+    <md-icon> <i class="material-icons">sort</i> </md-icon>
+    <md-select ng-model="$ctrl.orderProp">
+      <md-option><em>None</em></md-option>
+      <md-option value="name">Name</md-option>
+      <md-option value="address">Address</md-option>
+      <md-option value="id">Account</md-option>
+      <md-option value="father">Father</md-option>
+    </md-select>
+  </md-input-container>
+</md-content>
+  Total : {{ (customers | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }}       
+  <table>
+    <tr>
+      <td>Name</td>
+      <td>Father</td>
+      <td>Address</td>
+      <td>Mobile</td>
+      <td>Edit</td>
+      <td>Delete</td>
+    </tr>
+    <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:$ctrl.orderProp">
+      <td>{{ cust.name }}</td>
+      <td>{{ cust.father }}</td>
+      <td>{{ cust.address }}</td>
+      <td>{{ cust.mobile }}</td>
+      <td ng-click="editCustomer(cust)"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-click="deleteCustomer(cust)"><i class="material-icons" style="color:red">delete</i></td>
+    </tr>
+  </table>
+</div>

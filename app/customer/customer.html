@@ -1,0 +1,68 @@
+<div ng-controller="customerCtrl"  ng-cloak class="md-inline-form">
+      <form name="customerForm">
+        
+        <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
+            <label>Name</label>
+            <md-icon><i class="material-icons">person</i></md-icon>
+            <input ng-model="customer.name">
+          </md-input-container>
+          <md-input-container class="md-block" flex-xs>
+            <label>Mobile No</label>
+            <md-icon><i class="material-icons">phone</i></md-icon>
+            <input ng-model="customer.mobile">
+          </md-input-container> 
+          <md-input-container flex-xs>
+            <label>Adress</label>
+            <md-icon><i class="material-icons">my_location</i></md-icon>
+            <md-select ng-model="customer.address">
+              <md-option><em>None</em></md-option>
+              <md-option ng-repeat="vil in villages" ng-value="vil">
+                {{vil}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          </md-content> 
+          
+          <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
+            <label>Father's Name</label>
+            <md-icon><i class="material-icons">person</i></md-icon>
+            <input ng-model="customer.father">
+          </md-input-container>
+          <md-input-container class="md-block" flex-xs>
+            <label>Guarantor</label>
+            <md-icon><i class="material-icons">people</i></md-icon>
+            <input ng-model="customer.guarantor">
+          </md-input-container>
+          <md-input-container class="md-block" flex-xs>
+            <label>Page No</label>
+            <md-icon><i class="material-icons">book</i></md-icon>
+            <input name="postalCode" ng-model="customer.pageNo" placeholder="12345"
+                   required ng-pattern="/^[0-9]$/" md-maxlength="5">
+            <div ng-messages="customerForm.postalCode.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a Page No.</div>
+              <div ng-message="pattern" class="my-message">That doesn't look like a valid Page No.
+              </div>
+              <div ng-message="md-maxlength" class="my-message">
+                Don't use the long version silly...we don't need to be that specific...
+              </div>
+            </div>
+          </md-input-container>  
+          </md-content>
+          <md-content layout-padding layout="row">
+          <md-input-container flex-xs>
+            <label>Enter date</label>
+            <!-- <md-icon><i class="material-icons">calender</i></md-icon> -->
+            <md-datepicker ng-model="customer.date" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+          </md-input-container>
+        <md-input-container class="md-block" flex-xs>
+          <label>Remarks</label>
+          <md-icon><i class="material-icons">note</i></md-icon>
+          <textarea ng-model="customer.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
+        </md-input-container>
+      </md-content>
+        <md-button class="md-raised md-primary" ng-click="submitCustomer()">Submit</md-button>
+        <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
+      </form>
+</div>

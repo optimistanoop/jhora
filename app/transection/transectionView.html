@@ -1,0 +1,43 @@
+<div ng-controller="transectionCtrl">  
+   <md-content layout-padding layout="row">
+     <md-input-container flex-xs>
+       <label>Search</label>
+       <md-icon> <i class="material-icons">search</i> </md-icon>
+       <input ng-model="$ctrl.query" type="text">
+     </md-input-container> 
+     <md-input-container flex-xs>
+       <label>Sort By</label>
+       <md-icon> <i class="material-icons">sort</i> </md-icon>
+       <md-select ng-model="$ctrl.orderProp">
+         <md-option><em>None</em></md-option>
+         <md-option value="amount">Amount</md-option>
+         <md-option value="promiseDate">Promise Date</md-option>
+         <md-option value="customerId">Account</md-option>
+         <md-option value="date">Date</md-option>
+         <md-option value="rate">Rate</md-option>
+       </md-select>
+     </md-input-container>
+ </md-content> 
+   Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }}       
+   
+  <table>
+    <tr>
+      <td>Amount</td>
+      <td>Date</td>
+      <td>Customer</td>
+      <td>Type</td>
+      <td>Promise Date</td>
+      <td>Edit</td>
+      <td>Delete</td>
+    </tr>
+    <tr ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
+      <td>{{ tran.amount | currency:'&#8377;' }}</td>
+      <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
+      <td>{{ tran.customer }}</td>
+      <td>{{  tran.type }}</td>
+      <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+      <td ng-click="editTransection(tran)"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-click="deleteTransection(tran)"><i class="material-icons" style="color:red">delete</i></td>
+    </tr>
+  </table>
+</div>
