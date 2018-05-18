@@ -23,7 +23,10 @@
     </md-select>
   </md-input-container>
 </md-content>
-  Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }}       
+  <md-content layout-padding layout="row">
+      <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+      <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+  </md-content>     
   <table>
     <tr>
       <th> 

@@ -18,8 +18,10 @@
        </md-select>
      </md-input-container>
  </md-content> 
-   Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }}       
-   
+ <md-content layout-padding layout="row">
+     <label>Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }} </label>
+     <label> Percentage : {{ (100 / transections.length  ) * (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }} % </label>
+ </md-content>
   <table>
     <tr>
       <td>Amount</td>
