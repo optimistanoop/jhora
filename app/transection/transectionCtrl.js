@@ -3,7 +3,7 @@ jhora.controller('transectionCtrl', function($scope) {
 
     $scope.types = ['Cr', 'Dr', 'Settle'];
     $scope.transection = { amount: 100, rate: 2, date: new Date(), promiseDate: new Date(), type: 'Cr', customerId: 1, 
-      customer: 'Addu', remarks: 'remarks here!'
+      customer: '', address:'', remarks: 'remarks here!'
     };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', date: '', pageNo: '', remarks: '' };
     
@@ -23,12 +23,14 @@ jhora.controller('transectionCtrl', function($scope) {
     
     $scope.submitTransection = ()=>{
       $scope.transection.customerId = $scope.customer.id;
+      $scope.transection.customer = $scope.customer.name;
+      $scope.transection.address = $scope.customer.address;
       console.log('anp transection', $scope.transection);
       let keys = Object.keys($scope.transection);
       let values = Object.values($scope.transection);
       q.insert('transection', keys, values, (err)=>{
         if (err){
-          console.err('anp err, transection insertion')
+          console.error('anp err, transection insertion', err);
         }else{
           $scope.getDataByTable('transection');
           //dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
