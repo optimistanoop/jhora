@@ -32,6 +32,7 @@ class Query {
        type           TEXT   NOT NULL,
        customerId     INTEGER NOT NULL,
        customer       TEXT    NOT NULL,
+       address       TEXT    ,
        remarks        CHAR(80) )`
      );
   }
