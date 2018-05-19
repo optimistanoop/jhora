@@ -23,11 +23,11 @@
     </md-select>
   </md-input-container>
 </md-content>
-  <md-content layout-padding layout="row">
+  <div style="width:80%;margin: 10px auto;">
       <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
       <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
-  </md-content>     
-  <table>
+  </div>     
+  <table style="width:80%;margin: 0px auto;">
     <tr>
       <th> 
         <button ng-click="sortBy('name')">Name</button>
