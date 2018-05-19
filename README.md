@@ -23,6 +23,12 @@ Releases can only be built on the target platform.
 
 `npm run release`
 
+## DB path
+
+Windows -  `C:\Users\Administrator\AppData\Roaming\db.db`
+Mac -  `/Users/<USER_NAME>/Library/Application Support/db.db`
+Linux -  ``
+
 ## Using native modules
 
 If you wish to use native modules, you must run `npm run postinstall` after first install of the module.
