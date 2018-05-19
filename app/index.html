@@ -9,16 +9,19 @@
   <body>
     <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
           <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
+            <a href="javascript:void(0)" class="closebtn" >&times;</a>
             <a ng-click="goto($index)" ng-repeat="tab in tabs">{{tab.title}}  
               <md-tooltip md-direction="bottom">{{tab.title}}</md-tooltip>
             </a>
           </div>
-          <div id="main">
-              <div style="font-size:30px;cursor:pointer;color: #3575D3;" ng-click="openNav()">&#9776;Jhora
-                <div  style="text-align:center;margin-top: -32px;color: #000;">{{template.title}}</div>
-              </div>
-              <div ng-include="template.content" ng-cloak></div>
+          <div>
+          	<md-toolbar class="md-theme-light _md _md-toolbar-transitions" ng-click="openNav()">
+          		<input type="hidden" id="nav_value" value="1">
+              	<h1 class="md-toolbar-tools">
+              	&#9776;Jhora</h1>
+                <div  style="text-align:center;margin-top: -32px;">{{template.title}}</div>
+            </md-toolbar>
+            <div ng-include="template.content" ng-cloak></div>
           </div>  
     </div>
     <script src="./db.js"></script>

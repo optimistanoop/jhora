@@ -32,14 +32,22 @@ jhora.controller('jhoraCtrl', function($scope) {
   };
   
   $scope.openNav = ()=> {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    console.log("openNav");
+    let nav_value = document.getElementById("nav_value").value ;
+    if(nav_value == 1){
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("nav_value").value = 0;
+    }else{
+       document.getElementById("mySidenav").style.width = "0";
+       document.getElementById("nav_value").value = 1;
+    }
+    //document.getElementById("main").style.marginLeft = "250px";
   };
 
-  $scope.closeNav = ()=>{
+  /*$scope.closeNav = ()=>{
     document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
-  };
+    //document.getElementById("main").style.marginLeft= "0";
+  };*/
                
 });
 // .config(function($mdThemingProvider) {
