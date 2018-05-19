@@ -9,9 +9,9 @@
     <title>Jhora</title>
   <body>
     <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
-          <div id="mySidenav" class="sidenav">
+          <div id="mySidenav" style="background-color: #1460AC;" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" >&times;</a>
-            <a ng-click="goto($index)" ng-repeat="tab in tabs">{{tab.title}}  
+            <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs">{{tab.title}}  
               <md-tooltip md-direction="bottom">{{tab.title}}</md-tooltip>
             </a>
           </div>
@@ -22,7 +22,7 @@
               	&#9776;Jhora</h1>
                 <div  style="text-align:center;margin-top: -32px;">{{template.title}}</div>
             </md-toolbar>
-            <div ng-include="template.content" ng-cloak></div>
+            <div id="temp" ng-include="template.content" ng-cloak></div>
           </div>  
     </div>
     <script src="./db.js"></script>
