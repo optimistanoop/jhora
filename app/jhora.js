@@ -35,6 +35,7 @@ jhora.controller('jhoraCtrl', function($scope) {
     let nav_value = document.getElementById("nav_value").value ;
     if(nav_value == 1){
       document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("temp").style.marginLeft = "250px";
       document.getElementById("nav_value").value = 0;
     }else{
        $scope.closeNav();
@@ -43,6 +44,7 @@ jhora.controller('jhoraCtrl', function($scope) {
 
   $scope.closeNav = ()=>{
     document.getElementById("mySidenav").style.width = "0";
+     document.getElementById("temp").style.marginLeft = "0px";
     document.getElementById("nav_value").value = 1;
   };
                
