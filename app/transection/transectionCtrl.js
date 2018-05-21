@@ -22,6 +22,7 @@ jhora.controller('transectionCtrl', function($scope) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
             q.deleteRowById('transection', transection.id).then((data)=>{
               $scope.getDataByTable('transection');
+              dialog.showMessageBox({type :'info', message:`${transection.customer}'s transaction deleted`, buttons:[]});
             }).catch((err)=>{
               console.error('anp an err occured while deleting', transection);
             });

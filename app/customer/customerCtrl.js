@@ -27,6 +27,7 @@ jhora.controller('customerCtrl', function($scope) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
             q.deleteRowById('customer', customer.id).then((data)=>{
               $scope.getCustomers();
+              dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
             }).catch((err)=>{
               console.error('anp an err occured while deleting', customer);
             });
