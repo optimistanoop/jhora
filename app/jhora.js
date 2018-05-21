@@ -21,9 +21,9 @@ jhora.controller('jhoraCtrl', function($scope) {
   $scope.navClosed = true;
   $scope.tabs = [
     {title:'Customer', content:'customer/customer.html'},
-    {title:'Transection', content:'transection/transection.html'},
+    {title:'Transaction', content:'transaction/transaction.html'},
     {title:'View Customer', content:'customer/customerView.html'},
-    {title:'View Transection', content:'transection/transectionView.html'}
+    {title:'View Transaction', content:'transaction/transactionView.html'}
   ];
   
   $scope.template = $scope.tabs[0];
