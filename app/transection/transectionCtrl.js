@@ -12,8 +12,21 @@ jhora.controller('transectionCtrl', function($scope) {
     };
     
     $scope.deleteTransection = (transection)=>{
-      console.log('anp delete', transection);
-      shell.beep();
+      shell.beep
+      dialog.showMessageBox({
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          title: 'Confirm',
+          message: `Are you sure you want to delete ${transection.customer}'s transaction'?`
+      }, function (response) {
+          if (response === 0) { // Runs the following if 'Yes' is clicked
+            q.deleteRowById('transection', transection.id).then((data)=>{
+              $scope.getDataByTable('transection');
+            }).catch((err)=>{
+              console.error('anp an err occured while deleting', transection);
+            });
+          }
+      })
     };
     
     $scope.resetTransection = ()=>{
@@ -25,7 +38,6 @@ jhora.controller('transectionCtrl', function($scope) {
       $scope.transection.customerId = $scope.customer.id;
       $scope.transection.customer = $scope.customer.name;
       $scope.transection.address = $scope.customer.address;
-      console.log('anp transection', $scope.transection);
       let keys = Object.keys($scope.transection);
       let values = Object.values($scope.transection);
       q.insert('transection', keys, values, (err)=>{

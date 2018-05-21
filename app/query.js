@@ -56,6 +56,17 @@ class Query {
     });
   }
   
+  deleteRowById(tableName, id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `DELETE FROM ${tableName} WHERE ID = ${id}`
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
+  
   selectAll(tableName, cb){
       this.db.all(`select * from ${tableName}`, (err, data)=>{
         cb ? cb(data) :'';

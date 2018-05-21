@@ -17,8 +17,21 @@ jhora.controller('customerCtrl', function($scope) {
     };
     
     $scope.deleteCustomer = (customer)=>{
-      console.log('anp delete', customer);
       shell.beep();
+      dialog.showMessageBox({
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          title: 'Confirm',
+          message: `Are you sure you want to delete ${customer.name}?`
+      }, function (response) {
+          if (response === 0) { // Runs the following if 'Yes' is clicked
+            q.deleteRowById('customer', customer.id).then((data)=>{
+              $scope.getCustomers();
+            }).catch((err)=>{
+              console.error('anp an err occured while deleting', customer);
+            });
+          }
+      })
     };
     
     $scope.resetCustomer = ()=>{
@@ -36,7 +49,7 @@ jhora.controller('customerCtrl', function($scope) {
       let values = Object.values($scope.customer);
       q.insert('customer', keys, values, (err)=>{
         if (err){
-          console.err('anp err occured while insertion')
+          console.error('anp err occured while insertion')
         }else{
           $scope.getCustomers();
           //dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
