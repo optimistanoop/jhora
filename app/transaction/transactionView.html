@@ -5,18 +5,6 @@
        <md-icon> <i class="material-icons">search</i> </md-icon>
        <input ng-model="$ctrl.query" type="text">
      </md-input-container> 
-     <md-input-container flex-xs>
-       <label>Sort By</label>
-       <md-icon> <i class="material-icons">sort</i> </md-icon>
-       <md-select ng-model="$ctrl.orderProp">
-         <md-option><em>None</em></md-option>
-         <md-option value="amount">Amount</md-option>
-         <md-option value="promiseDate">Promise Date</md-option>
-         <md-option value="customerId">Account</md-option>
-         <md-option value="date">Date</md-option>
-         <md-option value="rate">Rate</md-option>
-       </md-select>
-     </md-input-container>
  </md-content> 
  <div style="width:80%;margin: 10px auto;">
      <label>Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }} </label>
@@ -24,13 +12,28 @@
  </div>
   <table style="width:80%;margin: 0px auto;">
     <tr>
-      <td>Amount</td>
-      <td>Date</td>
-      <td>Customer</td>
-      <td>Type</td>
-      <td>Promise Date</td>
-      <td>Edit</td>
-      <td>Delete</td>
+      <th> 
+        <button ng-click="sortBy('amount')">Amount</button>
+        <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('date')">Date</button>
+        <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('customer')">Customer</button>
+        <span class="sortorder" ng-show="propertyName === 'customer'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('type')">Type</button>
+        <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('promiseDate')">Promise Date</button>
+        <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>

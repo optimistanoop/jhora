@@ -5,23 +5,7 @@
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container> 
-  <md-input-container flex-xs>
-    <label>Sort By</label>
-    <md-icon> <i class="material-icons">sort</i> </md-icon>
-    <md-select ng-model="propertyName">
-      <md-option><em>None</em></md-option>
-      <md-option value="name">Name</md-option>
-      <md-option value="address">Address</md-option>
-      <md-option value="id">Account</md-option>
-      <md-option value="father">Father</md-option>
-      <md-option value="mobile">Mobile</md-option>
-      <md-option value="-name">-Name</md-option>
-      <md-option value="-address">-Address</md-option>
-      <md-option value="-id">-Account</md-option>
-      <md-option value="-father">Mobile</md-option>
-      <md-option value="-mobile">-Mobile</md-option>
-    </md-select>
-  </md-input-container>
+
 </md-content>
   <div style="width:80%;margin: 10px auto;">
       <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>

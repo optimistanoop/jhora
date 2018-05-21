@@ -35,6 +35,11 @@ jhora.controller('transectionCtrl', function($scope) {
       $scope.customer ={};
     };
     
+    $scope.sortBy = function(propertyName) {
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
+    
     $scope.submitTransection = ()=>{
       $scope.transection.customerId = $scope.customer.id;
       $scope.transection.customer = $scope.customer.name;
