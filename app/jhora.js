@@ -18,6 +18,7 @@ jhora.config(function($routeProvider, $locationProvider) {
 jhora.controller('jhoraCtrl', function($scope) {
   $scope.villages = ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'];
   $scope.currentNavItem = '0';
+  $scope.navClosed = true;
   $scope.tabs = [
     {title:'Customer', content:'customer/customer.html'},
     {title:'Transection', content:'transection/transection.html'},
@@ -32,20 +33,19 @@ jhora.controller('jhoraCtrl', function($scope) {
   };
   
   $scope.openNav = ()=> {
-    let nav_value = document.getElementById("nav_value").value ;
-    if(nav_value == 1){
+    if($scope.navClosed){
       document.getElementById("mySidenav").style.width = "250px";
-      document.getElementById("temp").style.marginLeft = "250px";
-      document.getElementById("nav_value").value = 0;
+      document.getElementById("main").style.marginLeft = "250px";
+      $scope.navClosed = ! $scope.navClosed;
     }else{
-       $scope.closeNav();
+      $scope.navClosed = ! $scope.navClosed;
+      $scope.closeNav();
     }
   };
 
   $scope.closeNav = ()=>{
-    document.getElementById("mySidenav").style.width = "0";
-     document.getElementById("temp").style.marginLeft = "0px";
-    document.getElementById("nav_value").value = 1;
+    document.getElementById("mySidenav").style.width = "0px";
+    document.getElementById("main").style.marginLeft = "0px";
   };
                
 });
