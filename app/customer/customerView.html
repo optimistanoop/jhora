@@ -8,26 +8,47 @@
   <md-input-container flex-xs>
     <label>Sort By</label>
     <md-icon> <i class="material-icons">sort</i> </md-icon>
-    <md-select ng-model="$ctrl.orderProp">
+    <md-select ng-model="propertyName">
       <md-option><em>None</em></md-option>
       <md-option value="name">Name</md-option>
       <md-option value="address">Address</md-option>
       <md-option value="id">Account</md-option>
       <md-option value="father">Father</md-option>
+      <md-option value="mobile">Mobile</md-option>
+      <md-option value="-name">-Name</md-option>
+      <md-option value="-address">-Address</md-option>
+      <md-option value="-id">-Account</md-option>
+      <md-option value="-father">Mobile</md-option>
+      <md-option value="-mobile">-Mobile</md-option>
     </md-select>
   </md-input-container>
 </md-content>
-  Total : {{ (customers | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }}       
-  <table>
+  <div style="width:80%;margin: 10px auto;">
+      <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+      <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+  </div>     
+  <table style="width:80%;margin: 0px auto;">
     <tr>
-      <td>Name</td>
-      <td>Father</td>
-      <td>Address</td>
-      <td>Mobile</td>
-      <td>Edit</td>
-      <td>Delete</td>
+      <th> 
+        <button ng-click="sortBy('name')">Name</button>
+        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('father')">Father</button>
+        <span class="sortorder" ng-show="propertyName === 'father'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('address')">Address</button>
+        <span class="sortorder" ng-show="propertyName === 'address'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('mobile')">Mobile</button>
+        <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
-    <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:$ctrl.orderProp">
+    <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ cust.name }}</td>
       <td>{{ cust.father }}</td>
       <td>{{ cust.address }}</td>

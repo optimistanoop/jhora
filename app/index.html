@@ -6,17 +6,22 @@
     <link rel="stylesheet" href="lib/icon.css">
     <link rel="stylesheet" href="lib/angular-material.min.css">
     <link rel="stylesheet" href="./jhora.css">
+    <title>Jhora</title>
   <body>
     <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
-          <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
-            <a ng-click="goto($index)" ng-repeat="tab in tabs">{{tab.title}}  
+          <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()" >&times;</a>
+            <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs">{{tab.title}}  
               <md-tooltip md-direction="bottom">{{tab.title}}</md-tooltip>
             </a>
           </div>
           <div id="main">
-              <span style="font-size:30px;cursor:pointer" ng-click="openNav()">&#9776;Jhora</span>
-              <div ng-include="template" ng-cloak></div>
+          	<md-toolbar   class="md-theme-light _md _md-toolbar-transitions" ng-click="openNav()">
+              	<h1 class="md-toolbar-tools">
+              	&#9776;Jhora</h1>
+                <div  style="text-align:center;margin-top: -32px;">{{template.title}}</div>
+            </md-toolbar>
+            <div ng-include="template.content" ng-cloak></div>
           </div>  
     </div>
     <script src="./db.js"></script>
@@ -28,6 +33,6 @@
     <script src="lib/angular-material.min.js"></script>
     <script src="./jhora.js"></script>
     <script src="./customer/customerCtrl.js"></script>
-    <script src="./transection/transectionCtrl.js"></script>
+    <script src="./transaction/transactionCtrl.js"></script>
   </body>
 </html>

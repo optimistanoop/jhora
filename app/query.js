@@ -32,6 +32,7 @@ class Query {
        type           TEXT   NOT NULL,
        customerId     INTEGER NOT NULL,
        customer       TEXT    NOT NULL,
+       address       TEXT    ,
        remarks        CHAR(80) )`
      );
   }
@@ -53,6 +54,17 @@ class Query {
     this.db.run(sql, [], (err)=>{
       cb(err);
     });
+  }
+  
+  deleteRowById(tableName, id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `DELETE FROM ${tableName} WHERE ID = ${id}`
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
   }
   
   selectAll(tableName, cb){

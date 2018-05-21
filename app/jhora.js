@@ -16,27 +16,36 @@ jhora.config(function($routeProvider, $locationProvider) {
     // });
 });
 jhora.controller('jhoraCtrl', function($scope) {
-  $scope.villages = ['Daniyari', 'Gadahia Mohan', 'Koindaha'];
+  $scope.villages = ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'];
   $scope.currentNavItem = '0';
-  $scope.tabs = [{title:'Customer', content:'customer/customer.html'}, 
-                 {title:'View Customer', content:'customer/customerView.html'},
-                 {title:'Transection', content:'transection/transection.html'},
-                 {title:'View Transection', content:'transection/transectionView.html'}
-               ];
-  $scope.template = $scope.tabs[0].content;
+  $scope.navClosed = true;
+  $scope.tabs = [
+    {title:'Customer', content:'customer/customer.html'},
+    {title:'Transaction', content:'transaction/transaction.html'},
+    {title:'View Customer', content:'customer/customerView.html'},
+    {title:'View Transaction', content:'transaction/transactionView.html'}
+  ];
+  
+  $scope.template = $scope.tabs[0];
   $scope.goto = function(page) {
-    $scope.template = $scope.tabs[page].content;
+    $scope.template = $scope.tabs[page];
     $scope.closeNav();
   };
   
   $scope.openNav = ()=> {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    if($scope.navClosed){
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+      $scope.navClosed = ! $scope.navClosed;
+    }else{
+      $scope.navClosed = ! $scope.navClosed;
+      $scope.closeNav();
+    }
   };
 
   $scope.closeNav = ()=>{
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
+    document.getElementById("mySidenav").style.width = "0px";
+    document.getElementById("main").style.marginLeft = "0px";
   };
                
 });

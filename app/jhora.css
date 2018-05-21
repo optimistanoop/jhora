@@ -7,13 +7,15 @@ table, th , td  {
   border-collapse: collapse;
   padding: 5px;
 }
-table tr:nth-child(odd) {
-  background-color: #f1f1f1;
+.trcr {
+  background-color: #C4E690;
 }
-table tr:nth-child(even) {
-  background-color: #ffffff;
+.trdr {
+  background-color: rgb(244,81,30);
 }
-
+.trst {
+  background-color: #70D145;
+}
 .sidenav {
     height: 100%;
     width: 0;
@@ -21,7 +23,7 @@ table tr:nth-child(even) {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: rgb(57,73,171);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -50,10 +52,17 @@ table tr:nth-child(even) {
 
 #main {
     transition: margin-left .5s;
-    padding: 16px;
 }
 
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+}
+
+
+.sortorder:after {
+  content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+}
+.sortorder.reverse:after {
+  content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
 }
