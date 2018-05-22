@@ -33,6 +33,8 @@ jhora.controller('transectionCtrl', function($scope) {
     $scope.resetTransection = ()=>{
       $scope.transection ={};
       $scope.customer ={};
+      $scope.transactionForm.$setPristine();
+      $scope.transactionForm.$setUntouched(); 
     };
     
     $scope.sortBy = function(propertyName) {

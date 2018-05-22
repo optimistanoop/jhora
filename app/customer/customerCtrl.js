@@ -28,6 +28,8 @@ jhora.controller('customerCtrl', function($scope) {
     
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
+      $scope.customerForm.$setPristine();
+      $scope.customerForm.$setUntouched(); 
     };
     
     $scope.sortBy = function(propertyName) {

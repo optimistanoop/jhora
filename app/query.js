@@ -18,7 +18,7 @@ class Query {
        mobile         INT NOT NULL,
        father         TEXT NOT NULL,
        rate           INT    NOT NULL,
-       guarantor      TEXT NOT NULL,
+       guarantor      TEXT,
        date           TEXT,
        remarks        CHAR(80) )`
      );
