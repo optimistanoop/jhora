@@ -6,7 +6,7 @@
           <md-input-container class="md-block" flex-gt-sm>
             <label>Amount</label>
             <md-icon><i class="material-icons">money</i></md-icon>
-            <input name="amount" type="number" ng-model="transection.amount" ng-minlength="3" ng-maxlength="6" required>
+            <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" required>
             <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply an amount.</div>
               <div ng-message="ng-minlength" class="my-message">You must supply minimum amount.</div>
@@ -15,7 +15,7 @@
           <md-input-container flex-gt-sm>
             <label>Type</label>
             <md-icon><i class="material-icons">credit_card</i></md-icon>
-            <md-select name="type" ng-model="transection.type" required>
+            <md-select name="type" ng-model="transaction.type" required>
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="type in types" ng-value="type">
                 {{type}}
@@ -42,14 +42,14 @@
         <div layout-gt-xs="row">
           <md-input-container>
             <label>Date</label>
-            <md-datepicker name="date" ng-model="transection.date" md-open-on-focus required></md-datepicker>
+            <md-datepicker name="date" ng-model="transaction.date" md-open-on-focus required></md-datepicker>
             <div ng-messages="transactionForm.date.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a dateo.</div>
             </div>
           </md-input-container>
           <md-input-container flex-gt-sm>
             <label>Promise Date</label>
-            <md-datepicker name="promiseDate" ng-model="transection.promiseDate" md-open-on-focus required></md-datepicker>
+            <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-open-on-focus required></md-datepicker>
             <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a promise date.</div>
             </div>
@@ -57,7 +57,7 @@
           <md-input-container flex-gt-sm>
             <label>Remarks</label>
             <md-icon><i class="material-icons">note</i></md-icon>
-            <textarea ng-model="transection.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
+            <textarea ng-model="transaction.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
           </md-input-container>
           </div>
           <div layout-gt-xs="row">

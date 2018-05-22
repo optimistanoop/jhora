@@ -2,7 +2,7 @@
 jhora.controller('transectionCtrl', function($scope) {
 
     $scope.types = ['Cr', 'Dr', 'Settle'];
-    $scope.transection = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', 
+    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', 
       customer: '', address:'', remarks: ''
     };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
@@ -31,7 +31,7 @@ jhora.controller('transectionCtrl', function($scope) {
     };
     
     $scope.resetTransection = ()=>{
-      $scope.transection ={};
+      $scope.transaction ={};
       $scope.customer ={};
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched(); 
@@ -43,11 +43,11 @@ jhora.controller('transectionCtrl', function($scope) {
     };
     
     $scope.submitTransection = ()=>{
-      $scope.transection.customerId = $scope.customer.id;
-      $scope.transection.customer = $scope.customer.name;
-      $scope.transection.address = $scope.customer.address;
-      let keys = Object.keys($scope.transection);
-      let values = Object.values($scope.transection);
+      $scope.transaction.customerId = $scope.customer.id;
+      $scope.transaction.customer = $scope.customer.name;
+      $scope.transaction.address = $scope.customer.address;
+      let keys = Object.keys($scope.transaction);
+      let values = Object.values($scope.transaction);
       q.insert('transection', keys, values, (err)=>{
         if (err){
           console.error('anp err, transection insertion', err);
