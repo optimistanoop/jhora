@@ -1,7 +1,7 @@
 
 jhora.controller('transactionCtrl', function($scope) {
 
-    $scope.types = ['Cr', 'Dr', 'Settle'];
+    $scope.types = ['Dr', 'Cr', 'Settle'];
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', customer: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
