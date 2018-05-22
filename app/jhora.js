@@ -20,10 +20,10 @@ jhora.controller('jhoraCtrl', function($scope) {
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
   $scope.tabs = [
-    {title:'Customer', content:'customer/customer.html'},
-    {title:'Transaction', content:'transaction/transaction.html'},
-    {title:'View Customer', content:'customer/customerView.html'},
-    {title:'View Transaction', content:'transaction/transactionView.html'}
+    {title:'Add Customer', content:'customer/customer.html'},
+    {title:'Add Transaction', content:'transaction/transaction.html'},
+    {title:'Customers', content:'customer/customerView.html'},
+    {title:'Transactions', content:'transaction/transactionView.html'}
   ];
   
   $scope.template = $scope.tabs[0];
