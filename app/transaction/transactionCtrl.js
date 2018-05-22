@@ -46,19 +46,17 @@ jhora.controller('transactionCtrl', function($scope) {
       $scope.transaction.address = $scope.customer.address;
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
-      q.insert('transactions', keys, values, (err)=>{
-        if (err){
-          console.error('anp err, transaction insertion', err);
-        }else{
+      q.insert('transactions', keys, values).then((data)=>{
           $scope.getDataByTable('transactions');
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-        } 
+      }).catch((err)=>{
+          console.error('anp err, transaction insertion', err);
       });
     };
     
     $scope.getDataByTable = (table)=>{
-      q.selectAll(table, (rows)=>{  
+      q.selectAll(table).then((rows)=>{  
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
@@ -66,6 +64,8 @@ jhora.controller('transactionCtrl', function($scope) {
           row.promiseDate = new Date(row.promiseDate);
         }
         $scope[table] = rows;  
+      }).catch((err)=>{
+        console.error(err);
       });
     };
     

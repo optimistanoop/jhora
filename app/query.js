@@ -37,23 +37,30 @@ class Query {
      );
   }
   
-  getTotalCountForTable(tableName, cb){
-    let sql = `select count(id) from ${tableName}`;
-    this.db.get(sql, (err, data)=>{
-      cb ? cb(err, data) :'';
-    })
+  getTotalCountForTable(tableName){
+    let p = new Promise((resolve, reject)=>{
+      let sql = `select count(id) from ${tableName}`;
+      this.db.get(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      })
+    });
+    return p;
   }
   
-  insert(tableName ='', keys = [], values =[], cb = {} ){
+  insert(tableName ='', keys = [], values =[]){
     //INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
     //this.db.run(`INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHER, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 9738275930, 'prahlad', 'arun', '02-10-1991', 'demo')`);
-    
-    let columns = keys.map((key) => `${key}`).join(',');
-    values = values.map((value) => `'${value}'`).join(',');
-    let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
-    this.db.run(sql, [], (err)=>{
-      cb(err);
+    let p = new Promise((resolve, reject)=>{
+      let columns = keys.map((key) => `${key}`).join(',');
+      values = values.map((value) => `'${value}'`).join(',');
+      let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });  
     });
+    return p;
   }
   
   deleteRowById(tableName, id){
@@ -67,10 +74,14 @@ class Query {
     return p;
   }
   
-  selectAll(tableName, cb){
+  selectAll(tableName){
+    let p = new Promise( (resolve, reject)=>{
       this.db.all(`select * from ${tableName}`, (err, data)=>{
-        cb ? cb(data) :'';
+        if(err) reject(err);
+        resolve(data);
+      });
     });
+    return p;
   }
 };
 
