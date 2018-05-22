@@ -1,9 +1,9 @@
 
-jhora.controller('transactionCtrl', function($scope) {
+jhora.controller('transactionCtrl', function($scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
-    $scope.types = ['Dr', 'Cr', 'Settle'];
-    $scope.limits = ['All', 'Deleted'];
-    $scope.queryFor = 'All';
+    $scope.types = TRANSACTION_TYPES;
+    $scope.limits = VIEW_LIMITS;
+    $scope.queryFor = $scope.limits[0];
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', customer: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
@@ -12,7 +12,7 @@ jhora.controller('transactionCtrl', function($scope) {
     };
     
     $scope.deleteTransaction = (transaction)=>{
-      shell.beep
+      shell.beep()
       dialog.showMessageBox({
           type: 'question',
           buttons: ['Yes', 'No'],
@@ -23,13 +23,13 @@ jhora.controller('transactionCtrl', function($scope) {
            let  {amount, date, promiseDate, type, customerId, customer, address, remarks } = transaction;
            let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'customer', 'address', 'remarks' ];
            let values =[amount, date, promiseDate, type, customerId, customer, address, remarks];
-            q.insert('deltransactions', keys, values)
+            q.insert(DELTRANSACTION_TABLE, keys, values)
             .then((data)=>{
-              return q.deleteRowById('transactions', transaction.id);
+              return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
             })
             //q.deleteRowById('transactions', transaction.id)
             .then((data)=>{
-              $scope.getDataByTable('transactions', 'transactions');
+              $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
               dialog.showMessageBox({type :'info', message:`${transaction.customer}'s transaction deleted`, buttons:[]});
             })
             .catch((err)=>{
@@ -57,9 +57,9 @@ jhora.controller('transactionCtrl', function($scope) {
       $scope.transaction.address = $scope.customer.address;
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
-      q.insert('transactions', keys, values)
+      q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
-          $scope.getDataByTable('transactions', 'transactions');
+          $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       })
@@ -74,7 +74,7 @@ jhora.controller('transactionCtrl', function($scope) {
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
-          if(tableName == 'transactions' || tableName == 'deltransactions')  
+          if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)  
           row.promiseDate = new Date(row.promiseDate);
         }
         $scope[modelName] = rows;  
@@ -85,14 +85,14 @@ jhora.controller('transactionCtrl', function($scope) {
     };
     
     $scope.getNewData= (queryFor)=>{
-      if(queryFor == 'Deleted') {
-        $scope.getDataByTable('deltransactions', 'transactions');
+      if(queryFor == $scope.limits[1]) {
+        $scope.getDataByTable(DELTRANSACTION_TABLE, TRANSACTION_TABLE);
       }else{
-        $scope.getDataByTable('transactions', 'transactions');
+        $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
       }
     }
     
-    $scope.getDataByTable('transactions', 'transactions');
-    $scope.getDataByTable('customers', 'customers');
+    $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+    $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
     
   });

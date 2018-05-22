@@ -1,8 +1,8 @@
 
-jhora.controller('customerCtrl', function($scope) {
+jhora.controller('customerCtrl', function($scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
     
-    $scope.limits = ['All', 'Deleted'];
-    $scope.queryFor = 'All';
+    $scope.limits = VIEW_LIMITS;
+    $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
     $scope.editCustomer = (customer)=>{
@@ -21,12 +21,12 @@ jhora.controller('customerCtrl', function($scope) {
             let  {name, mobile, address, father, rate, guarantor, date, pageNo, remarks } = customer;
             let keys = ['name', 'mobile', 'address', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks'];
             let values =[name, mobile, address, father, rate, guarantor, date, pageNo, remarks];
-            q.insert('delcustomers', keys, values)
+            q.insert(DELCUSTOMERS_TABLE, keys, values)
             .then((data)=>{
-              return q.deleteRowById('customers', customer.id);
+              return q.deleteRowById(CUSTOMERS_TABLE, customer.id);
             })
             .then((data)=>{
-              $scope.getCustomers('customers');
+              $scope.getCustomers(CUSTOMERS_TABLE);
               dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
             })
             .catch((err)=>{
@@ -50,9 +50,9 @@ jhora.controller('customerCtrl', function($scope) {
     $scope.submitCustomer = ()=>{
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
-      q.insert('customers', keys, values)
+      q.insert(CUSTOMERS_TABLE, keys, values)
       .then((data)=>{
-          $scope.getCustomers('customers');
+          $scope.getCustomers(CUSTOMERS_TABLE);
           $scope.resetCustomer();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       })
@@ -72,12 +72,12 @@ jhora.controller('customerCtrl', function($scope) {
     };
     
     $scope.getNewData= (queryFor)=>{
-      if(queryFor == 'Deleted') {
-        $scope.getCustomers('delcustomers');
+      if(queryFor == $scope.limits[1]) {
+        $scope.getCustomers(DELCUSTOMERS_TABLE);
       }else{
-        $scope.getCustomers('customers');
+        $scope.getCustomers(CUSTOMERS_TABLE);
       }
     }
-    $scope.getCustomers('customers');
+    $scope.getCustomers(CUSTOMERS_TABLE);
     
   });
