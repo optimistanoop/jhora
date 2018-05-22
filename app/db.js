@@ -17,5 +17,7 @@ ipcRenderer.on('close-db', (event, message) => {
  ipcRenderer.send('closed-db', 'thanks');
 });
 
-q.createCustomerTable();
-q.createTransactionTable();
+q.createCustomerTable('customers');
+q.createCustomerTable('delcustomers');
+q.createTransactionTable('transactions');
+q.createTransactionTable('deltransactions');

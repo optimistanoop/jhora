@@ -1,4 +1,17 @@
 <div ng-controller="customerCtrl">
+    <md-input-container flex-xs>
+      <label>Results for</label>
+      <md-icon><i class="material-icons">sort</i></md-icon>
+      <md-select name="type" ng-model="queryFor" ng-change="getNewDate(queryFor)">
+        <md-option><em>None</em></md-option>
+        <md-option ng-repeat="limit in limits" ng-value="limit">
+          {{limit}}
+        </md-option>
+      </md-select>
+      <div ng-messages="transactionForm.type.$error" role="alert" multiple>
+        <div ng-message="required" class="my-message">You must supply a type.</div>
+      </div>
+    </md-input-container>
   <md-content layout-padding layout="row" ng-show="customers.length">
   <md-input-container flex-xs>
     <label>Search</label>

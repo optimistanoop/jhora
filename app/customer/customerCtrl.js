@@ -1,6 +1,8 @@
 
 jhora.controller('customerCtrl', function($scope) {
-
+    
+    $scope.limits = ['All', 'deleted'];
+    $scope.queryFor = 'All';
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
     $scope.editCustomer = (customer)=>{
@@ -16,6 +18,7 @@ jhora.controller('customerCtrl', function($scope) {
           message: `Are you sure you want to delete ${customer.name}?`
       }, function (response) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
+            //q.insert()
             q.deleteRowById('customers', customer.id).then((data)=>{
               $scope.getCustomers();
               dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
@@ -52,12 +55,22 @@ jhora.controller('customerCtrl', function($scope) {
       });
     };
     
-    $scope.getCustomers = ()=>{
-      q.selectAll('customers', (rows)=>{
-        $scope.customers = rows;  
+    $scope.getCustomers = (tableName)=>{
+      q.selectAll(tableName, (rows)=>{
+        $scope.customers = rows; 
+        console.log(tableName, rows); 
       });
     };
     
-    $scope.getCustomers();
+    $scope.getNewDate= (queryFor)=>{
+      if(queryFor == 'All') {
+        $scope.getCustomers('customers');
+          console.log('customers'); 
+      }else{
+        $scope.getCustomers('delcustomers');
+        console.log('delcustomers'); 
+      }
+    }
+    $scope.getCustomers('customers');
     
   });

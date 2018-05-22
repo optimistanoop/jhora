@@ -9,8 +9,8 @@ class Query {
     this.db.close();
   }
   
-  createCustomerTable(){
-    this.db.run(`CREATE TABLE IF NOT EXISTS customers(
+  createCustomerTable(tableName){
+    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
        pageNo         TEXT     NOT NULL,
@@ -23,8 +23,8 @@ class Query {
        remarks        CHAR(80) )`
      );
   }
-  createTransactionTable(){
-    this.db.run(`CREATE TABLE IF NOT EXISTS transactions(
+  createTransactionTable(tableName){
+    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
        date           TEXT   NOT NULL, 
