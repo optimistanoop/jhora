@@ -61,12 +61,12 @@
           </md-input-container>
           </div>
           <div layout-gt-xs="row">
-              <md-whiteframe flex-gt-sm="35">
-                <label>Name</label>
-               <span>{{customer.name}} - A/c-{{customer.id}}-</span>
+              <md-whiteframe flex-gt-sm="35" ng-show="customer.name">
+                <label>A/c-</label>
+               <span>{{customer.id}} - Name-{{customer.name}}</span>
              </md-whiteframe>
-              <md-whiteframe flex-gt-sm="35">
-                <label>Address</label>
+              <md-whiteframe flex-gt-sm="35" ng-show="customer.address">
+                <label>Address-</label>
                <span>{{customer.address}}</span>
              </md-whiteframe>
       </div>
