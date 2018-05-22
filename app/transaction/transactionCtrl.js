@@ -1,5 +1,5 @@
 
-jhora.controller('transectionCtrl', function($scope) {
+jhora.controller('transactionCtrl', function($scope) {
 
     $scope.types = ['Cr', 'Dr', 'Settle'];
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', 
@@ -7,30 +7,30 @@ jhora.controller('transectionCtrl', function($scope) {
     };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
-    $scope.editTransection = (transection)=>{
-      console.log('anp edit', transection);
+    $scope.editTransaction = (transaction)=>{
+      console.log('anp edit', transaction);
     };
     
-    $scope.deleteTransection = (transection)=>{
+    $scope.deleteTransaction = (transaction)=>{
       shell.beep
       dialog.showMessageBox({
           type: 'question',
           buttons: ['Yes', 'No'],
           title: 'Confirm',
-          message: `Are you sure you want to delete ${transection.customer}'s transaction'?`
+          message: `Are you sure you want to delete ${transaction.customer}'s transaction'?`
       }, function (response) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
-            q.deleteRowById('transection', transection.id).then((data)=>{
+            q.deleteRowById('transaction', transaction.id).then((data)=>{
               $scope.getDataByTable('transection');
-              dialog.showMessageBox({type :'info', message:`${transection.customer}'s transaction deleted`, buttons:[]});
+              dialog.showMessageBox({type :'info', message:`${transaction.customer}'s transaction deleted`, buttons:[]});
             }).catch((err)=>{
-              console.error('anp an err occured while deleting', transection);
+              console.error('anp an err occured while deleting', transaction);
             });
           }
       })
     };
     
-    $scope.resetTransection = ()=>{
+    $scope.resetTransaction = ()=>{
       $scope.transaction ={};
       $scope.customer ={};
       $scope.transactionForm.$setPristine();
@@ -42,7 +42,7 @@ jhora.controller('transectionCtrl', function($scope) {
       $scope.propertyName = propertyName;
     };
     
-    $scope.submitTransection = ()=>{
+    $scope.submitTransaction = ()=>{
       $scope.transaction.customerId = $scope.customer.id;
       $scope.transaction.customer = $scope.customer.name;
       $scope.transaction.address = $scope.customer.address;
@@ -50,10 +50,10 @@ jhora.controller('transectionCtrl', function($scope) {
       let values = Object.values($scope.transaction);
       q.insert('transection', keys, values, (err)=>{
         if (err){
-          console.error('anp err, transection insertion', err);
+          console.error('anp err, transaction insertion', err);
         }else{
           $scope.getDataByTable('transection');
-          $scope.resetTransection();
+          $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
         } 
       });

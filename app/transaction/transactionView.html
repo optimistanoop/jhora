@@ -1,4 +1,4 @@
-<div ng-controller="transectionCtrl">  
+<div ng-controller="transactionCtrl">  
    <md-content layout-padding layout="row">
      <md-input-container flex-xs>
        <label>Search</label>
@@ -41,8 +41,8 @@
       <td>{{ tran.customer }}</td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-click="editTransection(tran)"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
-      <td ng-click="deleteTransection(tran)"><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-click="editTransaction(tran)"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-click="deleteTransaction(tran)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
 </div>
