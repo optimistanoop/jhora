@@ -2,10 +2,10 @@
 jhora.controller('transectionCtrl', function($scope) {
 
     $scope.types = ['Cr', 'Dr', 'Settle'];
-    $scope.transection = { amount: 100, rate: 2, date: new Date(), promiseDate: new Date(), type: 'Cr', customerId: 1, 
-      customer: '', address:'', remarks: 'remarks here!'
+    $scope.transection = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', 
+      customer: '', address:'', remarks: ''
     };
-    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', date: '', pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
     $scope.editTransection = (transection)=>{
       console.log('anp edit', transection);
@@ -51,7 +51,8 @@ jhora.controller('transectionCtrl', function($scope) {
           console.error('anp err, transection insertion', err);
         }else{
           $scope.getDataByTable('transection');
-          //dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+          $scope.resetTransection();
+          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
         } 
       });
     };

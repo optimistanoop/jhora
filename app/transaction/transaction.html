@@ -1,66 +1,78 @@
 <div ng-controller="transectionCtrl" ng-cloak class="md-inline-form">
   <md-content layout-padding>
     <div>
-      <form name="transectionForm">
+      <form novalidate name="transactionForm">
         <div layout-gt-xs="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Amount</label>
             <md-icon><i class="material-icons">money</i></md-icon>
-            <input ng-model="transection.amount">
+            <input name="amount" type="number" ng-model="transection.amount" ng-minlength="3" ng-maxlength="6" required>
+            <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply an amount.</div>
+              <div ng-message="ng-minlength" class="my-message">You must supply minimum amount.</div>
+            </div>
           </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Rate</label>
-            <md-icon><i class="material-icons">trending_up</i></md-icon>
-            <input ng-model="transection.rate">
-          </md-input-container>  
           <md-input-container flex-gt-sm>
             <label>Type</label>
             <md-icon><i class="material-icons">credit_card</i></md-icon>
-            <md-select ng-model="transection.type">
+            <md-select name="type" ng-model="transection.type" required>
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="type in types" ng-value="type">
                 {{type}}
               </md-option>
             </md-select>
+            <div ng-messages="transactionForm.type.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a type.</div>
+            </div>
           </md-input-container>
-        </div>
-        <div layout-gt-xs="row">
           <md-input-container flex-gt-sm>
             <label>Customer</label>
             <md-icon><i class="material-icons">person</i></md-icon>
-            <md-select ng-model="customer">
+            <md-select name="customer" ng-model="customer" required>
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="cust in customers" ng-value="cust">
                 {{cust.name}}
               </md-option>
             </md-select>
+            <div ng-messages="transactionForm.customer.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a customer.</div>
+            </div>
           </md-input-container flex-gt-sm>
+        </div>
+        <div layout-gt-xs="row">
           <md-input-container>
             <label>Date</label>
-            <!-- <md-icon><i class="material-icons">calender</i></md-icon> -->
-            <md-datepicker ng-model="transection.date" md-placeholder="Enter date" md-open-on-focus></md-datepicker>
+            <md-datepicker name="date" ng-model="transection.date" md-open-on-focus required></md-datepicker>
+            <div ng-messages="transactionForm.date.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a dateo.</div>
+            </div>
           </md-input-container>
           <md-input-container flex-gt-sm>
             <label>Promise Date</label>
-            <!-- <md-icon><i class="material-icons">schedule</i></md-icon> -->
-            <md-datepicker ng-model="transection.promiseDate" md-placeholder="Enter promise date" md-open-on-focus></md-datepicker>
+            <md-datepicker name="promiseDate" ng-model="transection.promiseDate" md-open-on-focus required></md-datepicker>
+            <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a promise date.</div>
+            </div>
+          </md-input-container>
+          <md-input-container flex-gt-sm>
+            <label>Remarks</label>
+            <md-icon><i class="material-icons">note</i></md-icon>
+            <textarea ng-model="transection.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
           </md-input-container>
           </div>
           <div layout-gt-xs="row">
-          <md-input-container flex-gt-sm>
-            <md-whiteframe flex-gt-sm="35">
-             <span>{{customer.id}}-{{customer.name}}-{{customer.address}}</span>
-           </md-whiteframe>
-          </md-input-container>
-        <md-input-container flex-gt-sm>
-          <label>Remarks</label>
-          <md-icon><i class="material-icons">note</i></md-icon>
-          <textarea ng-model="transection.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
-        </md-input-container>
+              <md-whiteframe flex-gt-sm="35">
+                <label>Name</label>
+               <span>{{customer.name}} - A/c-{{customer.id}}-</span>
+             </md-whiteframe>
+              <md-whiteframe flex-gt-sm="35">
+                <label>Address</label>
+               <span>{{customer.address}}</span>
+             </md-whiteframe>
       </div>
       </div>
       </form>
-      <md-button class="md-raised md-primary" ng-click="submitTransection()">Submit</md-button>
+      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="submitTransection()">Submit</md-button>
       <md-button class="md-raised md-warn" ng-click="resetTransection()">Reset</md-button>
     </div>
     

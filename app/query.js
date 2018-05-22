@@ -13,10 +13,11 @@ class Query {
     this.db.run(`CREATE TABLE IF NOT EXISTS customer(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
-       pageNo         INT     NOT NULL,
+       pageNo         TEXT     NOT NULL,
        address        CHAR(50) NOT NULL,
        mobile         INT NOT NULL,
-       father    TEXT NOT NULL,
+       father         TEXT NOT NULL,
+       rate           INT    NOT NULL,
        guarantor      TEXT NOT NULL,
        date           TEXT,
        remarks        CHAR(80) )`
@@ -26,13 +27,12 @@ class Query {
     this.db.run(`CREATE TABLE IF NOT EXISTS transection(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
-       rate           INT    NOT NULL,
        date           TEXT   NOT NULL, 
        promiseDate    TEXT   NOT NULL,
        type           TEXT   NOT NULL,
        customerId     INTEGER NOT NULL,
        customer       TEXT    NOT NULL,
-       address       TEXT    ,
+       address        TEXT    NOT NULL,
        remarks        CHAR(80) )`
      );
   }

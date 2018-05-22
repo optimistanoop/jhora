@@ -29,22 +29,22 @@ app.on('ready', ()=> {
   
   mainWindow.on('close', (e) => {
       console.log('anp close');
-      // if (app.showExitPrompt) {
-      //     e.preventDefault() // Prevents the window from closing 
-      //     dialog.showMessageBox({
-      //         type: 'question',
-      //         buttons: ['Yes', 'No'],
-      //         title: 'Confirm',
-      //         message: 'Are you sure you want to quit?'
-      //     }, function (response) {
-      //         if (response === 0) { // Runs the following if 'Yes' is clicked
-      //             console.log('anp exit yes');
-      //             mainWindow.webContents.send('close-db', 'bye');
-      //             app.showExitPrompt = false
-      //             mainWindow.close()
-      //         }
-      //     })
-      // }
+      if (app.showExitPrompt) {
+          e.preventDefault() // Prevents the window from closing 
+          dialog.showMessageBox({
+              type: 'question',
+              buttons: ['Yes', 'No'],
+              title: 'Confirm',
+              message: 'Are you sure you want to quit?'
+          }, function (response) {
+              if (response === 0) { // Runs the following if 'Yes' is clicked
+                  console.log('anp exit yes');
+                  mainWindow.webContents.send('close-db', 'bye');
+                  app.showExitPrompt = false
+                  mainWindow.close()
+              }
+          })
+      }
   })
   
   app.on('before-quit', (event)=> {

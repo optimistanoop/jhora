@@ -1,16 +1,7 @@
 
 jhora.controller('customerCtrl', function($scope) {
 
-    $scope.customer = {
-      name: 'Addu',
-      mobile: '9738275930',
-      address: 'Daniyari',
-      father: 'Pita G',
-      guarantor: 'Naresh',
-      date: new Date(),
-      pageNo: '1',
-      remarks: 'remarks here!'
-    };
+    $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
     $scope.editCustomer = (customer)=>{
       console.log('anp edit', customer);
@@ -53,7 +44,8 @@ jhora.controller('customerCtrl', function($scope) {
           console.error('anp err occured while insertion')
         }else{
           $scope.getCustomers();
-          //dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+          $scope.resetCustomer();
+          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
         } 
       });
     };
