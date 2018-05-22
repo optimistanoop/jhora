@@ -1,7 +1,7 @@
 
 jhora.controller('customerCtrl', function($scope) {
     
-    $scope.limits = ['All', 'deleted'];
+    $scope.limits = ['All', 'Deleted'];
     $scope.queryFor = 'All';
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
@@ -72,10 +72,10 @@ jhora.controller('customerCtrl', function($scope) {
     };
     
     $scope.getNewData= (queryFor)=>{
-      if(queryFor == 'All') {
-        $scope.getCustomers('customers');
-      }else{
+      if(queryFor == 'Deleted') {
         $scope.getCustomers('delcustomers');
+      }else{
+        $scope.getCustomers('customers');
       }
     }
     $scope.getCustomers('customers');

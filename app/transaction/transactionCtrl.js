@@ -2,7 +2,7 @@
 jhora.controller('transactionCtrl', function($scope) {
 
     $scope.types = ['Dr', 'Cr', 'Settle'];
-    $scope.limits = ['All', 'deleted'];
+    $scope.limits = ['All', 'Deleted'];
     $scope.queryFor = 'All';
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', customer: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
@@ -85,10 +85,10 @@ jhora.controller('transactionCtrl', function($scope) {
     };
     
     $scope.getNewData= (queryFor)=>{
-      if(queryFor == 'All') {
-        $scope.getDataByTable('transactions', 'transactions');
-      }else{
+      if(queryFor == 'Deleted') {
         $scope.getDataByTable('deltransactions', 'transactions');
+      }else{
+        $scope.getDataByTable('transactions', 'transactions');
       }
     }
     
