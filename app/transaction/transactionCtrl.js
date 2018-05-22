@@ -2,6 +2,8 @@
 jhora.controller('transactionCtrl', function($scope) {
 
     $scope.types = ['Dr', 'Cr', 'Settle'];
+    $scope.limits = ['All', 'deleted'];
+    $scope.queryFor = 'All';
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', customer: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
@@ -19,7 +21,7 @@ jhora.controller('transactionCtrl', function($scope) {
       }, function (response) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
             q.deleteRowById('transactions', transaction.id).then((data)=>{
-              $scope.getDataByTable('transactions');
+              $scope.getDataByTable('transactions', 'transactions');
               dialog.showMessageBox({type :'info', message:`${transaction.customer}'s transaction deleted`, buttons:[]});
             }).catch((err)=>{
               console.error('anp an err occured while deleting', transaction);
@@ -47,7 +49,7 @@ jhora.controller('transactionCtrl', function($scope) {
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       q.insert('transactions', keys, values).then((data)=>{
-          $scope.getDataByTable('transactions');
+          $scope.getDataByTable('transactions', 'transactions');
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       }).catch((err)=>{
@@ -55,21 +57,31 @@ jhora.controller('transactionCtrl', function($scope) {
       });
     };
     
-    $scope.getDataByTable = (table)=>{
-      q.selectAll(table).then((rows)=>{  
+    $scope.getDataByTable = (tableName, modelName)=>{
+      q.selectAll(tableName).then((rows)=>{  
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
-          if(table == 'transactions')  
+          if(tableName == 'transactions')  
           row.promiseDate = new Date(row.promiseDate);
         }
-        $scope[table] = rows;  
+        $scope[modelName] = rows;  
       }).catch((err)=>{
         console.error(err);
       });
     };
     
-    $scope.getDataByTable('transactions');
-    $scope.getDataByTable('customers');
+    $scope.getNewData= (queryFor)=>{
+      if(queryFor == 'All') {
+        $scope.getDataByTable('transactions', 'transactions');
+        console.log('transactions'); 
+      }else{
+        $scope.getDataByTable('deltransactions', 'transactions');
+        console.log('deltransactions'); 
+      }
+    }
+    
+    $scope.getDataByTable('transactions', 'transactions');
+    $scope.getDataByTable('customers', 'customers');
     
   });

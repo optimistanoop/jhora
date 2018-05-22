@@ -62,10 +62,10 @@ jhora.controller('customerCtrl', function($scope) {
       });
     };
     
-    $scope.getNewDate= (queryFor)=>{
+    $scope.getNewData= (queryFor)=>{
       if(queryFor == 'All') {
         $scope.getCustomers('customers');
-          console.log('customers'); 
+        console.log('customers'); 
       }else{
         $scope.getCustomers('delcustomers');
         console.log('delcustomers'); 
