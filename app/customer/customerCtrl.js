@@ -19,10 +19,12 @@ jhora.controller('customerCtrl', function($scope) {
       }, function (response) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
             //q.insert()
-            q.deleteRowById('customers', customer.id).then((data)=>{
+            q.deleteRowById('customers', customer.id)
+            .then((data)=>{
               $scope.getCustomers();
               dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
-            }).catch((err)=>{
+            })
+            .catch((err)=>{
               console.error('anp an err occured while deleting', customer);
             });
           }
@@ -44,20 +46,24 @@ jhora.controller('customerCtrl', function($scope) {
       console.log('anp customer', $scope.customer);
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
-      q.insert('customers', keys, values).then((data)=>{
+      q.insert('customers', keys, values)
+      .then((data)=>{
           $scope.getCustomers();
           $scope.resetCustomer();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      }).catch((err)=>{
+      })
+      .catch((err)=>{
           console.error('anp err occured while insertion')
       });
     };
     
     $scope.getCustomers = (tableName)=>{
-      q.selectAll(tableName).then((rows)=>{
+      q.selectAll(tableName)
+      .then((rows)=>{
         $scope.customers = rows; 
         console.log(tableName, rows); 
-      }).catch((err)=>{
+      })
+      .catch((err)=>{
         console.error(err);
       });
     };

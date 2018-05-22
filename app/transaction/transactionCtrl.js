@@ -19,11 +19,20 @@ jhora.controller('transactionCtrl', function($scope) {
           title: 'Confirm',
           message: `Are you sure you want to delete ${transaction.customer}'s transaction'?`
       }, function (response) {
-          if (response === 0) { // Runs the following if 'Yes' is clicked
-            q.deleteRowById('transactions', transaction.id).then((data)=>{
+          if (response === 0) {
+          // let  {amount, date, promiseDate, type, customerId, customer, address, remarks } = $scope.transaction;
+          // let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'customer', 'address', 'remarks' ];
+          // let values =[amount, date, promiseDate, type, customerId, customer, address, remarks];
+            // q.insert('deltransaction', keys, values)
+            // .then((data)=>{
+            //   return q.deleteRowById('transactions', transaction.id);
+            // })
+            q.deleteRowById('transactions', transaction.id)
+            .then((data)=>{
               $scope.getDataByTable('transactions', 'transactions');
               dialog.showMessageBox({type :'info', message:`${transaction.customer}'s transaction deleted`, buttons:[]});
-            }).catch((err)=>{
+            })
+            .catch((err)=>{
               console.error('anp an err occured while deleting', transaction);
             });
           }
@@ -48,17 +57,20 @@ jhora.controller('transactionCtrl', function($scope) {
       $scope.transaction.address = $scope.customer.address;
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
-      q.insert('transactions', keys, values).then((data)=>{
+      q.insert('transactions', keys, values)
+      .then((data)=>{
           $scope.getDataByTable('transactions', 'transactions');
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      }).catch((err)=>{
+      })
+      .catch((err)=>{
           console.error('anp err, transaction insertion', err);
       });
     };
     
     $scope.getDataByTable = (tableName, modelName)=>{
-      q.selectAll(tableName).then((rows)=>{  
+      q.selectAll(tableName)
+      .then((rows)=>{  
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
@@ -66,7 +78,9 @@ jhora.controller('transactionCtrl', function($scope) {
           row.promiseDate = new Date(row.promiseDate);
         }
         $scope[modelName] = rows;  
-      }).catch((err)=>{
+        console.log(modelName, rows);
+      })
+      .catch((err)=>{
         console.error(err);
       });
     };
