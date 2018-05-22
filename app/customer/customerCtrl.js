@@ -16,7 +16,7 @@ jhora.controller('customerCtrl', function($scope) {
           message: `Are you sure you want to delete ${customer.name}?`
       }, function (response) {
           if (response === 0) { // Runs the following if 'Yes' is clicked
-            q.deleteRowById('customer', customer.id).then((data)=>{
+            q.deleteRowById('customers', customer.id).then((data)=>{
               $scope.getCustomers();
               dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
             }).catch((err)=>{
@@ -41,7 +41,7 @@ jhora.controller('customerCtrl', function($scope) {
       console.log('anp customer', $scope.customer);
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
-      q.insert('customer', keys, values, (err)=>{
+      q.insert('customers', keys, values, (err)=>{
         if (err){
           console.error('anp err occured while insertion')
         }else{
@@ -53,7 +53,7 @@ jhora.controller('customerCtrl', function($scope) {
     };
     
     $scope.getCustomers = ()=>{
-      q.selectAll('customer', (rows)=>{
+      q.selectAll('customers', (rows)=>{
         $scope.customers = rows;  
       });
     };

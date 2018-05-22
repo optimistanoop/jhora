@@ -10,7 +10,7 @@ class Query {
   }
   
   createCustomerTable(){
-    this.db.run(`CREATE TABLE IF NOT EXISTS customer(
+    this.db.run(`CREATE TABLE IF NOT EXISTS customers(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
        pageNo         TEXT     NOT NULL,
@@ -23,8 +23,8 @@ class Query {
        remarks        CHAR(80) )`
      );
   }
-  createTransectionTable(){
-    this.db.run(`CREATE TABLE IF NOT EXISTS transection(
+  createTransactionTable(){
+    this.db.run(`CREATE TABLE IF NOT EXISTS transactions(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
        date           TEXT   NOT NULL, 

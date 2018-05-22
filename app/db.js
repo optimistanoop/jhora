@@ -18,4 +18,4 @@ ipcRenderer.on('close-db', (event, message) => {
 });
 
 q.createCustomerTable();
-q.createTransectionTable();
+q.createTransactionTable();
