@@ -17,11 +17,16 @@ jhora.controller('customerCtrl', function($scope) {
           title: 'Confirm',
           message: `Are you sure you want to delete ${customer.name}?`
       }, function (response) {
-          if (response === 0) { // Runs the following if 'Yes' is clicked
-            //q.insert()
-            q.deleteRowById('customers', customer.id)
+          if (response === 0) {
+            let  {name, mobile, address, father, rate, guarantor, date, pageNo, remarks } = customer;
+            let keys = ['name', 'mobile', 'address', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks'];
+            let values =[name, mobile, address, father, rate, guarantor, date, pageNo, remarks];
+            q.insert('delcustomers', keys, values)
             .then((data)=>{
-              $scope.getCustomers();
+              return q.deleteRowById('customers', customer.id);
+            })
+            .then((data)=>{
+              $scope.getCustomers('customers');
               dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
             })
             .catch((err)=>{
@@ -43,12 +48,11 @@ jhora.controller('customerCtrl', function($scope) {
     };
     
     $scope.submitCustomer = ()=>{
-      console.log('anp customer', $scope.customer);
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
       q.insert('customers', keys, values)
       .then((data)=>{
-          $scope.getCustomers();
+          $scope.getCustomers('customers');
           $scope.resetCustomer();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       })
@@ -61,7 +65,6 @@ jhora.controller('customerCtrl', function($scope) {
       q.selectAll(tableName)
       .then((rows)=>{
         $scope.customers = rows; 
-        console.log(tableName, rows); 
       })
       .catch((err)=>{
         console.error(err);
@@ -71,10 +74,8 @@ jhora.controller('customerCtrl', function($scope) {
     $scope.getNewData= (queryFor)=>{
       if(queryFor == 'All') {
         $scope.getCustomers('customers');
-        console.log('customers'); 
       }else{
         $scope.getCustomers('delcustomers');
-        console.log('delcustomers'); 
       }
     }
     $scope.getCustomers('customers');

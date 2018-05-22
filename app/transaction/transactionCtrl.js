@@ -20,14 +20,14 @@ jhora.controller('transactionCtrl', function($scope) {
           message: `Are you sure you want to delete ${transaction.customer}'s transaction'?`
       }, function (response) {
           if (response === 0) {
-          // let  {amount, date, promiseDate, type, customerId, customer, address, remarks } = $scope.transaction;
-          // let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'customer', 'address', 'remarks' ];
-          // let values =[amount, date, promiseDate, type, customerId, customer, address, remarks];
-            // q.insert('deltransaction', keys, values)
-            // .then((data)=>{
-            //   return q.deleteRowById('transactions', transaction.id);
-            // })
-            q.deleteRowById('transactions', transaction.id)
+           let  {amount, date, promiseDate, type, customerId, customer, address, remarks } = transaction;
+           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'customer', 'address', 'remarks' ];
+           let values =[amount, date, promiseDate, type, customerId, customer, address, remarks];
+            q.insert('deltransactions', keys, values)
+            .then((data)=>{
+              return q.deleteRowById('transactions', transaction.id);
+            })
+            //q.deleteRowById('transactions', transaction.id)
             .then((data)=>{
               $scope.getDataByTable('transactions', 'transactions');
               dialog.showMessageBox({type :'info', message:`${transaction.customer}'s transaction deleted`, buttons:[]});
@@ -74,11 +74,10 @@ jhora.controller('transactionCtrl', function($scope) {
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
-          if(tableName == 'transactions')  
+          if(tableName == 'transactions' || tableName == 'deltransactions')  
           row.promiseDate = new Date(row.promiseDate);
         }
         $scope[modelName] = rows;  
-        console.log(modelName, rows);
       })
       .catch((err)=>{
         console.error(err);
@@ -88,10 +87,8 @@ jhora.controller('transactionCtrl', function($scope) {
     $scope.getNewData= (queryFor)=>{
       if(queryFor == 'All') {
         $scope.getDataByTable('transactions', 'transactions');
-        console.log('transactions'); 
       }else{
         $scope.getDataByTable('deltransactions', 'transactions');
-        console.log('deltransactions'); 
       }
     }
     

@@ -8,9 +8,6 @@
         {{limit}}
       </md-option>
     </md-select>
-    <div ng-messages="transactionForm.type.$error" role="alert" multiple>
-      <div ng-message="required" class="my-message">You must supply a type.</div>
-    </div>
   </md-input-container>
    <md-content layout-padding layout="row" ng-show="transactions.length">
      <md-input-container flex-xs>
@@ -44,8 +41,8 @@
         <button ng-click="sortBy('promiseDate')">Promise Date</button>
         <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
       </th>
-      <th>Edit</th>
-      <th>Delete</th>
+      <th ng-show="queryFor == 'All'">Edit</th>
+      <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
@@ -53,12 +50,12 @@
       <td>{{ tran.customer }}</td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-click="editTransaction(tran)"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
-      <td ng-click="deleteTransaction(tran)"><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-click="editTransaction(tran)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-click="deleteTransaction(tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
 </md-content>
-  <md-content style="width:80%;margin: 10px auto;" ng-hide="transactions.length">
+  <md-content style="width:80%;margin: 0px auto;" ng-hide="transactions.length">
     <h1>Sorry !! No data found</h1>
   </md-content>
 </div>
