@@ -1,11 +1,10 @@
 <div ng-controller="transactionCtrl">  
-   <md-content layout-padding layout="row">
+   <md-content layout-padding layout="row" ng-show="transactions.length">
      <md-input-container flex-xs>
        <label>Search</label>
        <md-icon> <i class="material-icons">search</i> </md-icon>
        <input ng-model="$ctrl.query" type="text">
      </md-input-container> 
- </md-content> 
  <div style="width:80%;margin: 10px auto;">
      <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }} </label>
      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }} % </label>
@@ -45,4 +44,8 @@
       <td ng-click="deleteTransaction(tran)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
+</md-content>
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="transactions.length">
+    <h1>Sorry !! No data found</h1>
+  </md-content>
 </div>
