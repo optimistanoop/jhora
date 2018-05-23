@@ -1,5 +1,5 @@
 
-jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE) {
+jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
     
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editMode = $rootScope.editMode;
@@ -8,6 +8,14 @@ jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, CUSTOMERS
     $rootScope.editModeData = {};
     $scope.customer = $scope.editMode ? $scope.editModeData : $scope.customer;
     $scope.customer.date = undefined;
+    
+    $scope.querySearch = (search)=>{
+      let result = [];
+      for(let vil of VILLAGES){
+        vil.toLowerCase().indexOf(search.toLowerCase()) > -1 ? result.push(vil) :'';
+      }
+      return result.length > 0 ? result :VILLAGES;;
+    };
     
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Customer', content :'customer/customerView.html'};

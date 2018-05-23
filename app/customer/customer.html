@@ -30,6 +30,21 @@
             <div ng-messages="customerForm.address.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply an address.</div>
             </div>
+            <!-- <md-autocomplete
+                md-floating-label="Address"
+                md-no-cache="true"
+                md-search-text="searchText"
+                md-items="item in querySearch(searchText)"
+                md-item-text="item"
+                md-min-length="0"
+                flex-xs>
+              <md-item-template>
+                <span md-highlight-text="searchText" md-highlight-flags="^i">{{item}}</span>
+              </md-item-template>
+              <md-not-found>
+                No address matching "{{searchText}}" were found.
+              </md-not-found>
+            </md-autocomplete> -->
           </md-input-container>
           </md-content> 
           
