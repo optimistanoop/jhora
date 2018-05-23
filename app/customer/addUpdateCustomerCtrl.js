@@ -1,5 +1,5 @@
 
-jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE) {
     
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editMode = $rootScope.editMode;
@@ -42,10 +42,15 @@ jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMI
         keys.splice(index1, 1);
         values.splice(index1, 1);
       }
-      q.update(CUSTOMERS_TABLE, keys, values, $scope.customer.id)
+      q.update(CUSTOMERS_TABLE, keys, values, 'id', $scope.customer.id)
       .then((data)=>{
-          $scope.resetCustomer();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+          keys = ['name', 'address'];
+          values = [$scope.customer.name, $scope.customer.address];
+          return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
+      })
+      .then((data)=>{
+        $scope.resetCustomer();
+        dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       })
       .catch((err)=>{
           console.error('anp err occured while insertion')

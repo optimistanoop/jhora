@@ -14,6 +14,10 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
     $scope.transaction.promiseDate = new Date($scope.transaction.promiseDate);
     $scope.submitBtnName = $scope.editMode ? 'Update' :'Submit';
     
+    $scope.updateSelectedCust = (cust)=>{
+      $scope.customer = cust;
+      console.log('anp cust', cust);
+    }
     $scope.resetTransaction = ()=>{
       $scope.transaction ={};
       $scope.customer ={};
@@ -38,6 +42,8 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
     };
     
     $scope.updateTransaction= ()=>{
+      $scope.transaction.name = $scope.customer.name;
+      $scope.transaction.address = $scope.customer.address;
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       let index = keys.indexOf('$$hashKey');
@@ -45,12 +51,22 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
         keys.splice(index, 1);
         values.splice(index, 1);
       }
-      let index1 = keys.indexOf('id');
-      if (index1 > -1) {
-        keys.splice(index1, 1);
-        values.splice(index1, 1);
+      index = keys.indexOf('id');
+      if (index > -1) {
+        keys.splice(index, 1);
+        values.splice(index, 1);
       }
-      q.update(TRANSACTION_TABLE, keys, values, $scope.transaction.id)
+      index = keys.indexOf('customerId');
+      if (index > -1) {
+        keys.splice(index, 1);
+        values.splice(index, 1);
+      }
+      q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
+      .then((data)=>{
+        keys = ['name', 'address'];
+        values = [$scope.transaction.name, $scope.transaction.address];
+        return q.update(CUSTOMERS_TABLE, keys, values, 'id', $scope.transaction.customerId);
+      })
       .then((data)=>{
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
