@@ -60,7 +60,7 @@ jhora.controller('customerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTO
       }else{
         $scope.getCustomers(CUSTOMERS_TABLE);
       }
-    }
+    };
     $scope.getCustomers(CUSTOMERS_TABLE);
     
   });

@@ -1,5 +1,5 @@
 
-jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
     
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
@@ -12,7 +12,7 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
     $scope.transaction = $scope.editMode ? $scope.editModeData : $scope.transaction;
     $scope.transaction.date = new Date($scope.transaction.date);
     $scope.transaction.promiseDate = new Date($scope.transaction.promiseDate);
-    $scope.submitBtnName = $scope.editMode ? 'Update' :'Submit';
+    
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/transactionView.html'};
     };
@@ -33,7 +33,6 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
     };
     
     $scope.addTransaction = ()=>{
-      $scope.transaction.customerId = $scope.customer.id;
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.address = $scope.customer.address;
       let keys = Object.keys($scope.transaction);

@@ -1,5 +1,5 @@
 
-jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE) {
+jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE) {
     
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editMode = $rootScope.editMode;
@@ -8,7 +8,6 @@ jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMI
     $rootScope.editModeData = {};
     $scope.customer = $scope.editMode ? $scope.editModeData : $scope.customer;
     $scope.customer.date = undefined;
-    $scope.submitBtnName = $scope.editMode ? 'Update' :'Submit';
     
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Customer', content :'customer/customerView.html'};

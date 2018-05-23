@@ -28,7 +28,7 @@
           <md-input-container flex-gt-sm>
             <label>Name</label>
             <md-icon><i class="material-icons">person</i></md-icon>
-            <md-select name="name" ng-model="transaction.customerId" ng-change="updateSelectedCust(transaction.customerId)" ng-disabled="editMode" required>
+            <md-select name="name" ng-model="transaction.customerId" ng-change="updateSelectedCust(transaction.customerId)" required>
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="cust in customers" ng-value="cust.id">
                 {{cust.name}}
@@ -72,8 +72,8 @@
       </div>
       </div>
       </form>
-      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="submitTransaction()">{{submitBtnName}}</md-button>
-      <md-button class="md-raised md-warn" ng-click="resetTransaction()" ng-disabled="editMode">Reset</md-button>
+      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="submitTransaction()">Submit</md-button>
+      <md-button class="md-raised md-warn" ng-click="resetTransaction()">Reset</md-button>
     </div>
     
   </md-content>
