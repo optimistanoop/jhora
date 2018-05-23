@@ -1,5 +1,5 @@
 
-jhora.controller('transactionCtrl', function($scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -8,7 +8,9 @@ jhora.controller('transactionCtrl', function($scope, TRANSACTION_TYPES, VIEW_LIM
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
     $scope.editTransaction = (transaction)=>{
-      console.log('anp edit', transaction);
+      $rootScope.editMode = true;
+      $rootScope.editModeData = transaction;
+      $rootScope.template = {title: 'Edit Transaction', content :'transaction/transaction.html'};
     };
     
     $scope.deleteTransaction = (transaction)=>{
@@ -39,33 +41,9 @@ jhora.controller('transactionCtrl', function($scope, TRANSACTION_TYPES, VIEW_LIM
       })
     };
     
-    $scope.resetTransaction = ()=>{
-      $scope.transaction ={};
-      $scope.customer ={};
-      $scope.transactionForm.$setPristine();
-      $scope.transactionForm.$setUntouched(); 
-    };
-    
     $scope.sortBy = function(propertyName) {
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
-    };
-    
-    $scope.submitTransaction = ()=>{
-      $scope.transaction.customerId = $scope.customer.id;
-      $scope.transaction.customer = $scope.customer.name;
-      $scope.transaction.address = $scope.customer.address;
-      let keys = Object.keys($scope.transaction);
-      let values = Object.values($scope.transaction);
-      q.insert(TRANSACTION_TABLE, keys, values)
-      .then((data)=>{
-          $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-          $scope.resetTransaction();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      })
-      .catch((err)=>{
-          console.error('anp err, transaction insertion', err);
-      });
     };
     
     $scope.getDataByTable = (tableName, modelName)=>{

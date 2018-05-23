@@ -15,15 +15,17 @@ jhora.config(function($routeProvider, $locationProvider) {
     //   requireBase: false
     // });
 });
-jhora.controller('jhoraCtrl', function($scope, VILLAGES, TABS) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   $scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
   $scope.tabs = TABS;
+  $rootScope.editMode = false;
+  $rootScope.editModeData = {};
   
-  $scope.template = $scope.tabs[0];
+  $rootScope.template = $scope.tabs[0];
   $scope.goto = function(page) {
-    $scope.template = $scope.tabs[page];
+    $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
   };
   

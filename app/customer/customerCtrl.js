@@ -1,12 +1,15 @@
 
-jhora.controller('customerCtrl', function($scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('customerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
     
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
     $scope.editCustomer = (customer)=>{
-      console.log('anp edit', customer);
+      $rootScope.editMode = true;
+      $rootScope.editModeData = customer;
+      $rootScope.template = {title: 'Edit Customer', content :'customer/customer.html'};
+      
     };
     
     $scope.deleteCustomer = (customer)=>{
@@ -36,29 +39,9 @@ jhora.controller('customerCtrl', function($scope, VIEW_LIMITS, CUSTOMERS_TABLE, 
       })
     };
     
-    $scope.resetCustomer = ()=>{
-      $scope.customer ={};
-      $scope.customerForm.$setPristine();
-      $scope.customerForm.$setUntouched(); 
-    };
-    
     $scope.sortBy = function(propertyName) {
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
-    };
-    
-    $scope.submitCustomer = ()=>{
-      let keys = Object.keys($scope.customer);
-      let values = Object.values($scope.customer);
-      q.insert(CUSTOMERS_TABLE, keys, values)
-      .then((data)=>{
-          $scope.getCustomers(CUSTOMERS_TABLE);
-          $scope.resetCustomer();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      })
-      .catch((err)=>{
-          console.error('anp err occured while insertion')
-      });
     };
     
     $scope.getCustomers = (tableName)=>{

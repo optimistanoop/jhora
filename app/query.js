@@ -62,6 +62,18 @@ class Query {
     });
     return p;
   }
+  update(tableName ='', keys = [], values =[], id){
+    let p = new Promise((resolve, reject)=>{
+      let columns = keys.map((key,index) => `${key}='${values[index]}'`).join(`,`);
+      let sql = `UPDATE ${tableName} SET ${columns} WHERE id =${id}`;
+      console.log(sql);
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });  
+    });
+    return p;
+  }
   
   deleteRowById(tableName, id){
     let p = new Promise( (resolve, reject)=>{
