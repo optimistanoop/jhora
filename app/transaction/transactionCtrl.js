@@ -1,38 +1,44 @@
 
-jhora.controller('transectionCtrl', function($scope) {
+jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
-    $scope.types = ['Cr', 'Dr', 'Settle'];
-    $scope.transection = { amount: 100, rate: 2, date: new Date(), promiseDate: new Date(), type: 'Cr', customerId: 1, 
-      customer: '', address:'', remarks: 'remarks here!'
-    };
-    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', date: '', pageNo: '', remarks: '' };
+    $scope.types = TRANSACTION_TYPES;
+    $scope.limits = VIEW_LIMITS;
+    $scope.queryFor = $scope.limits[0];
+    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
-    $scope.editTransection = (transection)=>{
-      console.log('anp edit', transection);
+    $scope.editTransaction = (transaction)=>{
+      $rootScope.editMode = true;
+      $rootScope.editModeData = transaction;
+      $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
     };
     
-    $scope.deleteTransection = (transection)=>{
-      shell.beep
+    $scope.deleteTransaction = (transaction)=>{
+      shell.beep()
       dialog.showMessageBox({
           type: 'question',
           buttons: ['Yes', 'No'],
           title: 'Confirm',
-          message: `Are you sure you want to delete ${transection.customer}'s transaction'?`
+          message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
       }, function (response) {
-          if (response === 0) { // Runs the following if 'Yes' is clicked
-            q.deleteRowById('transection', transection.id).then((data)=>{
-              $scope.getDataByTable('transection');
-              dialog.showMessageBox({type :'info', message:`${transection.customer}'s transaction deleted`, buttons:[]});
-            }).catch((err)=>{
-              console.error('anp an err occured while deleting', transection);
+          if (response === 0) {
+           let  {amount, date, promiseDate, type, customerId, name, address, remarks } = transaction;
+           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'name', 'address', 'remarks' ];
+           let values =[amount, date, promiseDate, type, customerId, name, address, remarks];
+            q.insert(DELTRANSACTION_TABLE, keys, values)
+            .then((data)=>{
+              return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
+            })
+            //q.deleteRowById('transactions', transaction.id)
+            .then((data)=>{
+              $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+              dialog.showMessageBox({type :'info', message:`${transaction.name}'s transaction deleted`, buttons:[]});
+            })
+            .catch((err)=>{
+              console.error('anp an err occured while deleting', transaction);
             });
           }
       })
-    };
-    
-    $scope.resetTransection = ()=>{
-      $scope.transection ={};
-      $scope.customer ={};
     };
     
     $scope.sortBy = function(propertyName) {
@@ -40,35 +46,31 @@ jhora.controller('transectionCtrl', function($scope) {
       $scope.propertyName = propertyName;
     };
     
-    $scope.submitTransection = ()=>{
-      $scope.transection.customerId = $scope.customer.id;
-      $scope.transection.customer = $scope.customer.name;
-      $scope.transection.address = $scope.customer.address;
-      let keys = Object.keys($scope.transection);
-      let values = Object.values($scope.transection);
-      q.insert('transection', keys, values, (err)=>{
-        if (err){
-          console.error('anp err, transection insertion', err);
-        }else{
-          $scope.getDataByTable('transection');
-          //dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-        } 
-      });
-    };
-    
-    $scope.getDataByTable = (table)=>{
-      q.selectAll(table, (rows)=>{  
+    $scope.getDataByTable = (tableName, modelName)=>{
+      q.selectAll(tableName)
+      .then((rows)=>{  
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
-          if(table == 'transection')  
+          if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)  
           row.promiseDate = new Date(row.promiseDate);
         }
-        $scope[table+'s'] = rows;  
+        $scope[modelName] = rows;  
+      })
+      .catch((err)=>{
+        console.error(err);
       });
     };
     
-    $scope.getDataByTable('transection');
-    $scope.getDataByTable('customer');
+    $scope.getNewData= (queryFor)=>{
+      if(queryFor == $scope.limits[1]) {
+        $scope.getDataByTable(DELTRANSACTION_TABLE, TRANSACTION_TABLE);
+      }else{
+        $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+      }
+    }
+    
+    $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+    $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
     
   });

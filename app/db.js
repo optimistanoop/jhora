@@ -4,7 +4,6 @@ const {app} = require('electron').remote;
 const path = require('path');
 let dir = app.getPath("appData");
 let dbPath = path.join(dir, 'db.db');
-console.log('anp dbPath', dbPath);
 let db = new sqlite3.Database(dbPath);
 let q = new Query(db);
 let ipcRenderer = require('electron').ipcRenderer;
@@ -18,5 +17,7 @@ ipcRenderer.on('close-db', (event, message) => {
  ipcRenderer.send('closed-db', 'thanks');
 });
 
-q.createCustomerTable();
-q.createTransectionTable();
+q.createCustomerTable('customers');
+q.createCustomerTable('delcustomers');
+q.createTransactionTable('transactions');
+q.createTransactionTable('deltransactions');

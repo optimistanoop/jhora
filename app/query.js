@@ -9,51 +9,70 @@ class Query {
     this.db.close();
   }
   
-  createCustomerTable(){
-    this.db.run(`CREATE TABLE IF NOT EXISTS customer(
+  createCustomerTable(tableName){
+    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
-       pageNo         INT     NOT NULL,
+       pageNo         TEXT     NOT NULL,
        address        CHAR(50) NOT NULL,
        mobile         INT NOT NULL,
-       father    TEXT NOT NULL,
-       guarantor      TEXT NOT NULL,
+       father         TEXT NOT NULL,
+       rate           INT    NOT NULL,
+       guarantor      TEXT,
        date           TEXT,
        remarks        CHAR(80) )`
      );
   }
-  createTransectionTable(){
-    this.db.run(`CREATE TABLE IF NOT EXISTS transection(
+  createTransactionTable(tableName){
+    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
-       rate           INT    NOT NULL,
        date           TEXT   NOT NULL, 
        promiseDate    TEXT   NOT NULL,
        type           TEXT   NOT NULL,
        customerId     INTEGER NOT NULL,
-       customer       TEXT    NOT NULL,
-       address       TEXT    ,
+       name           TEXT    NOT NULL,
+       address        TEXT    NOT NULL,
        remarks        CHAR(80) )`
      );
   }
   
-  getTotalCountForTable(tableName, cb){
-    let sql = `select count(id) from ${tableName}`;
-    this.db.get(sql, (err, data)=>{
-      cb ? cb(err, data) :'';
-    })
+  getTotalCountForTable(tableName){
+    let p = new Promise((resolve, reject)=>{
+      let sql = `select count(id) from ${tableName}`;
+      this.db.get(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      })
+    });
+    return p;
   }
   
-  insert(tableName ='', keys = [], values =[], cb = {} ){
+  insert(tableName ='', keys = [], values =[]){
     //INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
     //this.db.run(`INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHER, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 9738275930, 'prahlad', 'arun', '02-10-1991', 'demo')`);
-    
-    let columns = keys.map((key) => `${key}`).join(',');
-    values = values.map((value) => `'${value}'`).join(',');
-    let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
-    this.db.run(sql, [], (err)=>{
-      cb(err);
+    let p = new Promise((resolve, reject)=>{
+      let columns = keys.map((key) => `${key}`).join(',');
+      values = values.map((value) => `'${value}'`).join(',');
+      let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });  
     });
+    return p;
+  }
+  update(tableName ='', keys = [], values =[], conditionOn, id){
+    let p = new Promise((resolve, reject)=>{
+      let columns = keys.map((key,index) => `${key}='${values[index]}'`).join(`,`);
+      let sql = `UPDATE ${tableName} SET ${columns} WHERE ${conditionOn} =${id}`;
+      console.log(sql);
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });  
+    });
+    return p;
   }
   
   deleteRowById(tableName, id){
@@ -67,10 +86,14 @@ class Query {
     return p;
   }
   
-  selectAll(tableName, cb){
+  selectAll(tableName){
+    let p = new Promise( (resolve, reject)=>{
       this.db.all(`select * from ${tableName}`, (err, data)=>{
-        cb ? cb(data) :'';
+        if(err) reject(err);
+        resolve(data);
+      });
     });
+    return p;
   }
 };
 

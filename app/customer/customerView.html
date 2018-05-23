@@ -1,12 +1,20 @@
 <div ng-controller="customerCtrl">
-  <md-content layout-padding layout="row">
+    <md-input-container flex-xs>
+      <label>Results for</label>
+      <md-icon><i class="material-icons">sort</i></md-icon>
+      <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
+        <md-option><em>None</em></md-option>
+        <md-option ng-repeat="limit in limits" ng-value="limit">
+          {{limit}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  <md-content layout-padding layout="row" ng-show="customers.length">
   <md-input-container flex-xs>
     <label>Search</label>
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container> 
-
-</md-content>
   <div style="width:80%;margin: 10px auto;">
       <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
       <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
@@ -41,4 +49,8 @@
       <td ng-click="deleteCustomer(cust)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
+  </md-content>
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="customers.length">
+    <h1>Sorry !! No data found</h1>
+  </md-content>
 </div>

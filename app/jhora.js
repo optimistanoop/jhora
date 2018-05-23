@@ -15,20 +15,17 @@ jhora.config(function($routeProvider, $locationProvider) {
     //   requireBase: false
     // });
 });
-jhora.controller('jhoraCtrl', function($scope) {
-  $scope.villages = ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'];
+jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
+  $scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
-  $scope.tabs = [
-    {title:'Customer', content:'customer/customer.html'},
-    {title:'Transaction', content:'transaction/transaction.html'},
-    {title:'View Customer', content:'customer/customerView.html'},
-    {title:'View Transaction', content:'transaction/transactionView.html'}
-  ];
+  $scope.tabs = TABS;
+  $rootScope.editMode = false;
+  $rootScope.editModeData = {};
   
-  $scope.template = $scope.tabs[0];
+  $rootScope.template = $scope.tabs[0];
   $scope.goto = function(page) {
-    $scope.template = $scope.tabs[page];
+    $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
   };
   
@@ -48,7 +45,20 @@ jhora.controller('jhoraCtrl', function($scope) {
     document.getElementById("main").style.marginLeft = "0px";
   };
                
-});
+})
+.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
+.constant('TABS', [
+  {title:'Add Customer', content:'customer/customer.html'},
+  {title:'Add Transaction', content:'transaction/transaction.html'},
+  {title:'Customers', content:'customer/customerView.html'},
+  {title:'Transactions', content:'transaction/transactionView.html'}
+])
+.constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
+.constant('VIEW_LIMITS', ['All', 'Deleted'])
+.constant('CUSTOMERS_TABLE', 'customers')
+.constant('DELCUSTOMERS_TABLE', 'delcustomers')
+.constant('TRANSACTION_TABLE', 'transactions')
+.constant('DELTRANSACTION_TABLE', 'deltransactions');
 // .config(function($mdThemingProvider) {
 //   $mdThemingProvider.theme('docs-dark', 'default')
 //     .primaryPalette('yellow')

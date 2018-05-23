@@ -1,19 +1,15 @@
 
-jhora.controller('customerCtrl', function($scope) {
-
-    $scope.customer = {
-      name: 'Addu',
-      mobile: '9738275930',
-      address: 'Daniyari',
-      father: 'Pita G',
-      guarantor: 'Naresh',
-      date: new Date(),
-      pageNo: '1',
-      remarks: 'remarks here!'
-    };
+jhora.controller('customerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+    
+    $scope.limits = VIEW_LIMITS;
+    $scope.queryFor = $scope.limits[0];
+    $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
     $scope.editCustomer = (customer)=>{
-      console.log('anp edit', customer);
+      $rootScope.editMode = true;
+      $rootScope.editModeData = customer;
+      $rootScope.template = {title: 'Edit Customer', content :'customer/updateCustomer.html'};
+      
     };
     
     $scope.deleteCustomer = (customer)=>{
@@ -24,19 +20,23 @@ jhora.controller('customerCtrl', function($scope) {
           title: 'Confirm',
           message: `Are you sure you want to delete ${customer.name}?`
       }, function (response) {
-          if (response === 0) { // Runs the following if 'Yes' is clicked
-            q.deleteRowById('customer', customer.id).then((data)=>{
-              $scope.getCustomers();
+          if (response === 0) {
+            let  {name, mobile, address, father, rate, guarantor, date, pageNo, remarks } = customer;
+            let keys = ['name', 'mobile', 'address', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks'];
+            let values =[name, mobile, address, father, rate, guarantor, date, pageNo, remarks];
+            q.insert(DELCUSTOMERS_TABLE, keys, values)
+            .then((data)=>{
+              return q.deleteRowById(CUSTOMERS_TABLE, customer.id);
+            })
+            .then((data)=>{
+              $scope.getCustomers(CUSTOMERS_TABLE);
               dialog.showMessageBox({type :'info', message:`${customer.name} deleted`, buttons:[]});
-            }).catch((err)=>{
+            })
+            .catch((err)=>{
               console.error('anp an err occured while deleting', customer);
             });
           }
       })
-    };
-    
-    $scope.resetCustomer = ()=>{
-      $scope.customer ={};
     };
     
     $scope.sortBy = function(propertyName) {
@@ -44,26 +44,23 @@ jhora.controller('customerCtrl', function($scope) {
       $scope.propertyName = propertyName;
     };
     
-    $scope.submitCustomer = ()=>{
-      console.log('anp customer', $scope.customer);
-      let keys = Object.keys($scope.customer);
-      let values = Object.values($scope.customer);
-      q.insert('customer', keys, values, (err)=>{
-        if (err){
-          console.error('anp err occured while insertion')
-        }else{
-          $scope.getCustomers();
-          //dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-        } 
+    $scope.getCustomers = (tableName)=>{
+      q.selectAll(tableName)
+      .then((rows)=>{
+        $scope.customers = rows; 
+      })
+      .catch((err)=>{
+        console.error(err);
       });
     };
     
-    $scope.getCustomers = ()=>{
-      q.selectAll('customer', (rows)=>{
-        $scope.customers = rows;  
-      });
-    };
-    
-    $scope.getCustomers();
+    $scope.getNewData= (queryFor)=>{
+      if(queryFor == $scope.limits[1]) {
+        $scope.getCustomers(DELCUSTOMERS_TABLE);
+      }else{
+        $scope.getCustomers(CUSTOMERS_TABLE);
+      }
+    }
+    $scope.getCustomers(CUSTOMERS_TABLE);
     
   });

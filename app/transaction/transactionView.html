@@ -1,14 +1,23 @@
-<div ng-controller="transectionCtrl">  
-   <md-content layout-padding layout="row">
+<div ng-controller="transactionCtrl">  
+  <md-input-container flex-xs>
+    <label>Results for</label>
+    <md-icon><i class="material-icons">sort</i></md-icon>
+    <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
+      <md-option><em>None</em></md-option>
+      <md-option ng-repeat="limit in limits" ng-value="limit">
+        {{limit}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+   <md-content layout-padding layout="row" ng-show="transactions.length">
      <md-input-container flex-xs>
        <label>Search</label>
        <md-icon> <i class="material-icons">search</i> </md-icon>
        <input ng-model="$ctrl.query" type="text">
      </md-input-container> 
- </md-content> 
  <div style="width:80%;margin: 10px auto;">
-     <label>Total : {{ (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }} </label>
-     <label> Percentage : {{ (100 / transections.length  ) * (transections | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }} % </label>
+     <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }} </label>
+     <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }} % </label>
  </div>
   <table style="width:80%;margin: 0px auto;">
     <tr>
@@ -21,8 +30,8 @@
         <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('customer')">Customer</button>
-        <span class="sortorder" ng-show="propertyName === 'customer'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('name')">Name</button>
+        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
         <button ng-click="sortBy('type')">Type</button>
@@ -32,17 +41,21 @@
         <button ng-click="sortBy('promiseDate')">Promise Date</button>
         <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
       </th>
-      <th>Edit</th>
-      <th>Delete</th>
+      <th ng-show="queryFor == 'All'">Edit</th>
+      <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
-    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transections | filter:$ctrl.query | orderBy:$ctrl.orderProp">
+    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ tran.customer }}</td>
+      <td>{{ tran.name }}</td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-click="editTransection(tran)"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
-      <td ng-click="deleteTransection(tran)"><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-click="editTransaction(tran)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-click="deleteTransaction(tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
+</md-content>
+  <md-content style="width:80%;margin: 0px auto;" ng-hide="transactions.length">
+    <h1>Sorry !! No data found</h1>
+  </md-content>
 </div>
