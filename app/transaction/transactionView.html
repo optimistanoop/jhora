@@ -30,8 +30,8 @@
         <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('customer')">Customer</button>
-        <span class="sortorder" ng-show="propertyName === 'customer'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('name')">Name</button>
+        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
         <button ng-click="sortBy('type')">Type</button>
@@ -47,7 +47,7 @@
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ tran.customer }}</td>
+      <td>{{ tran.name }}</td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td ng-click="editTransaction(tran)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>

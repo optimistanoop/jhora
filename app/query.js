@@ -31,7 +31,7 @@ class Query {
        promiseDate    TEXT   NOT NULL,
        type           TEXT   NOT NULL,
        customerId     INTEGER NOT NULL,
-       customer       TEXT    NOT NULL,
+       name           TEXT    NOT NULL,
        address        TEXT    NOT NULL,
        remarks        CHAR(80) )`
      );

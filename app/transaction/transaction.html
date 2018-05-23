@@ -26,9 +26,9 @@
             </div>
           </md-input-container>
           <md-input-container flex-gt-sm>
-            <label>Customer</label>
+            <label>Name</label>
             <md-icon><i class="material-icons">person</i></md-icon>
-            <md-select name="customer" ng-model="customer" required>
+            <md-select name="name" ng-model="customer" required>
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="cust in customers" ng-value="cust">
                 {{cust.name}}

@@ -4,7 +4,7 @@ jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYP
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', customer: '', address:'', remarks: '' };
+    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
     $scope.editTransaction = (transaction)=>{
@@ -19,12 +19,12 @@ jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYP
           type: 'question',
           buttons: ['Yes', 'No'],
           title: 'Confirm',
-          message: `Are you sure you want to delete ${transaction.customer}'s transaction'?`
+          message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
       }, function (response) {
           if (response === 0) {
-           let  {amount, date, promiseDate, type, customerId, customer, address, remarks } = transaction;
-           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'customer', 'address', 'remarks' ];
-           let values =[amount, date, promiseDate, type, customerId, customer, address, remarks];
+           let  {amount, date, promiseDate, type, customerId, name, address, remarks } = transaction;
+           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'name', 'address', 'remarks' ];
+           let values =[amount, date, promiseDate, type, customerId, name, address, remarks];
             q.insert(DELTRANSACTION_TABLE, keys, values)
             .then((data)=>{
               return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
@@ -32,7 +32,7 @@ jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYP
             //q.deleteRowById('transactions', transaction.id)
             .then((data)=>{
               $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-              dialog.showMessageBox({type :'info', message:`${transaction.customer}'s transaction deleted`, buttons:[]});
+              dialog.showMessageBox({type :'info', message:`${transaction.name}'s transaction deleted`, buttons:[]});
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', transaction);

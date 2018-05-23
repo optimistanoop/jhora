@@ -2,7 +2,7 @@
 jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
     
     $scope.types = TRANSACTION_TYPES;
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', customer: '', address:'', remarks: '' };
+    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
     $scope.editMode = $rootScope.editMode;
@@ -23,7 +23,7 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
     
     $scope.addTransaction = ()=>{
       $scope.transaction.customerId = $scope.customer.id;
-      $scope.transaction.customer = $scope.customer.name;
+      $scope.transaction.name = $scope.customer.name;
       $scope.transaction.address = $scope.customer.address;
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
