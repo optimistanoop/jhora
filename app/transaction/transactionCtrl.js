@@ -10,7 +10,7 @@ jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYP
     $scope.editTransaction = (transaction)=>{
       $rootScope.editMode = true;
       $rootScope.editModeData = transaction;
-      $rootScope.template = {title: 'Edit Transaction', content :'transaction/transaction.html'};
+      $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
     };
     
     $scope.deleteTransaction = (transaction)=>{

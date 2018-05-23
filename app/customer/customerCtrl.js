@@ -8,7 +8,7 @@ jhora.controller('customerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTO
     $scope.editCustomer = (customer)=>{
       $rootScope.editMode = true;
       $rootScope.editModeData = customer;
-      $rootScope.template = {title: 'Edit Customer', content :'customer/customer.html'};
+      $rootScope.template = {title: 'Edit Customer', content :'customer/updateCustomer.html'};
       
     };
     

@@ -10,6 +10,10 @@ jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMI
     $scope.customer.date = undefined;
     $scope.submitBtnName = $scope.editMode ? 'Update' :'Submit';
     
+    $scope.cancelUpdate = () =>{
+      $rootScope.template = {title: 'Customer', content :'customer/customerView.html'};
+    };
+    
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
       $scope.customerForm.$setPristine();
