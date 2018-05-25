@@ -1,4 +1,4 @@
-<div ng-controller="addUpdateCustomerCtrl"  ng-cloak class="md-inline-form">
+<div ng-controller="addCustomerCtrl"  ng-cloak class="md-inline-form">
       <form novalidate name="customerForm">
         
         <md-content layout-padding layout="row">
@@ -13,9 +13,10 @@
           <md-input-container class="md-block" flex-xs>
             <label>Mobile No</label>
             <md-icon><i class="material-icons">phone</i></md-icon>
-            <input name="mobile" type="number" ng-model="customer.mobile" ng-minlength="10" ng-maxlength="10" ng-required="true">
+            <input name="mobile" type="number" ng-model="customer.mobile" ng-minlength="10" ng-maxlength="10" ng-min="6000000000" ng-max="9999999999" ng-required="true">
             <div ng-messages="customerForm.mobile.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a mobile No.</div>
+              <div ng-message="min" class="my-message">You must supply a valid mobile No.</div>
             </div>
           </md-input-container> 
           <md-input-container flex-xs>
@@ -60,7 +61,7 @@
           <md-input-container class="md-block" flex-xs>
             <label>Rate</label>
             <md-icon><i class="material-icons">trending_up</i></md-icon>
-            <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="1" ng-required="true">
+            <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="1" ng-min="1" ng-max="9" ng-required="true">
             <div ng-messages="customerForm.rate.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply rate.</div>
             </div>
@@ -84,7 +85,7 @@
             </md-input-container>
           <md-input-container flex-xs>
             <label>Enter date</label>
-            <md-datepicker ng-model="customer.date" md-open-on-focus></md-datepicker>
+            <md-datepicker ng-model="customer.date" md-min-date="minDate" md-max-date="maxDate" md-open-on-focus></md-datepicker>
           </md-input-container>
         <md-input-container class="md-block" flex-xs>
           <label>Remarks</label>
@@ -92,7 +93,7 @@
           <textarea name="remarks" type="text" ng-model="customer.remarks" md-maxlength="80" rows="1" md-select-on-focus ng-required="false"></textarea>
         </md-input-container>
       </md-content>
-        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="submitCustomer()">Submit</md-button>
+        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="addCustomer()">Submit</md-button>
         <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
       </form>
 </div>

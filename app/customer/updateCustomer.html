@@ -1,4 +1,4 @@
-<div ng-controller="addUpdateCustomerCtrl"  ng-cloak class="md-inline-form">
+<div ng-controller="updateCustomerCtrl"  ng-cloak class="md-inline-form">
       <form novalidate name="customerForm">
         
         <md-content layout-padding layout="row">
@@ -77,7 +77,7 @@
           <textarea name="remarks" type="text" ng-model="customer.remarks" md-maxlength="80" rows="1" md-select-on-focus ng-required="false"></textarea>
         </md-input-container>
       </md-content>
-        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="submitCustomer()">Update</md-button>
+        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="updateCustomer()">Update</md-button>
         <md-button class="md-raised md-warn" ng-click="cancelUpdate()">Cancel</md-button>
       </form>
 </div>

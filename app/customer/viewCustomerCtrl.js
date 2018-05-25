@@ -1,5 +1,5 @@
 
-jhora.controller('customerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
     
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
