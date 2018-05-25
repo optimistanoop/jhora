@@ -1,20 +1,15 @@
 
-jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
     
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
-    $scope.editMode = $rootScope.editMode;
-    $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editMode = false;
-    $rootScope.editModeData = {};
-    $scope.transaction = $scope.editMode ? $scope.editModeData : $scope.transaction;
-    $scope.transaction.date = new Date($scope.transaction.date);
-    $scope.transaction.promiseDate = new Date($scope.transaction.promiseDate);
-    
+    $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
+    $scope.maxDate = new Date();
+        
     $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Transaction', content :'transaction/transactionView.html'};
+      $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
     };
     
     $scope.updateSelectedCust = (customerId)=>{
@@ -45,41 +40,6 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);
       });
-    };
-    
-    $scope.updateTransaction= ()=>{
-      $scope.updateSelectedCust($scope.transaction.customerId)
-      $scope.transaction.name = $scope.customer.name;
-      $scope.transaction.address = $scope.customer.address;
-      let keys = Object.keys($scope.transaction);
-      let values = Object.values($scope.transaction);
-      let index = keys.indexOf('$$hashKey');
-      if (index > -1) {
-        keys.splice(index, 1);
-        values.splice(index, 1);
-      }
-      index = keys.indexOf('id');
-      if (index > -1) {
-        keys.splice(index, 1);
-        values.splice(index, 1);
-      }
-      index = keys.indexOf('customerId');
-      if (index > -1) {
-        keys.splice(index, 1);
-        values.splice(index, 1);
-      }
-      q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
-      .then((data)=>{
-          $scope.resetTransaction();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      })
-      .catch((err)=>{
-          console.error('anp err occured while insertion')
-      });
-    };
-    
-    $scope.submitTransaction = ()=>{
-      $scope.editMode ?  $scope.updateTransaction(): $scope.addTransaction();
     };
     
     $scope.getDataByTable = (tableName, modelName)=>{

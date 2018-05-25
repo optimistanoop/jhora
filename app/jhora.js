@@ -49,9 +49,9 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
 .constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
   {title:'Add Customer', content:'customer/addCustomer.html'},
-  {title:'Add Transaction', content:'transaction/transaction.html'},
+  {title:'Add Transaction', content:'transaction/addTransaction.html'},
   {title:'Customers', content:'customer/viewCustomer.html'},
-  {title:'Transactions', content:'transaction/transactionView.html'}
+  {title:'Transactions', content:'transaction/viewTransaction.html'}
 ])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
