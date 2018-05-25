@@ -1,5 +1,5 @@
 
-jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -29,7 +29,6 @@ jhora.controller('transactionCtrl', function($rootScope, $scope, TRANSACTION_TYP
             .then((data)=>{
               return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
             })
-            //q.deleteRowById('transactions', transaction.id)
             .then((data)=>{
               $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
               dialog.showMessageBox({type :'info', message:`${transaction.name}'s transaction deleted`, buttons:[]});

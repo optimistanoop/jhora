@@ -1,15 +1,17 @@
-<div ng-controller="addUpdateTransactionCtrl" ng-cloak class="md-inline-form">
+<div ng-controller="addTransactionCtrl" ng-cloak class="md-inline-form">
   <md-content layout-padding>
-    <div>
       <form novalidate name="transactionForm">
         <div layout-gt-xs="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Amount</label>
             <md-icon><i class="material-icons">money</i></md-icon>
-            <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" required>
+            <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
             <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply an amount.</div>
-              <div ng-message="ng-minlength" class="my-message">You must supply minimum amount.</div>
+              <div ng-message="minlength" class="my-message">Amount should be minimum of 3 digits.</div>
+              <div ng-message="min" class="my-message">Amount should be greater than 100.</div>
+              <div ng-message="max" class="my-message">Amount should be less than 2,00,000.</div>
+              <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
             </div>
           </md-input-container>
           <md-input-container flex-gt-sm>
@@ -28,7 +30,7 @@
           <md-input-container flex-gt-sm>
             <label>Name</label>
             <md-icon><i class="material-icons">person</i></md-icon>
-            <md-select name="name" ng-model="transaction.customerId" ng-change="updateSelectedCust(transaction.customerId)" ng-disabled="editMode" required>
+            <md-select name="name" ng-model="transaction.customerId" ng-change="updateSelectedCust(transaction.customerId)" required>
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="cust in customers" ng-value="cust.id">
                 {{cust.name}}
@@ -42,14 +44,14 @@
         <div layout-gt-xs="row">
           <md-input-container>
             <label>Date</label>
-            <md-datepicker name="date" ng-model="transaction.date" md-open-on-focus required></md-datepicker>
+            <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
             <div ng-messages="transactionForm.date.$error" role="alert" multiple>
-              <div ng-message="required" class="my-message">You must supply a dateo.</div>
+              <div ng-message="required" class="my-message">You must supply a date.</div>
             </div>
           </md-input-container>
           <md-input-container flex-gt-sm>
             <label>Promise Date</label>
-            <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-open-on-focus required></md-datepicker>
+            <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-disabled="disablePromiseDate" md-open-on-focus required></md-datepicker>
             <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a promise date.</div>
             </div>
@@ -57,7 +59,11 @@
           <md-input-container flex-gt-sm>
             <label>Remarks</label>
             <md-icon><i class="material-icons">note</i></md-icon>
-            <textarea ng-model="transaction.remarks" md-maxlength="80" rows="1" md-select-on-focus></textarea>
+            <textarea ng-model="transaction.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus></textarea>
+            <div ng-messages="transactionForm.remarks.$error" role="alert" multiple>
+              <div ng-message="minlength" class="my-message">Remarks should be of minimum 4 alphabets.</div>
+              <div ng-message="md-maxlength" class="my-message">Father'sName should not be greater 80 alphabets.</div>
+            </div>
           </md-input-container>
           </div>
           <div layout-gt-xs="row">
@@ -70,11 +76,8 @@
                <span>{{customer.address}} - Rate-{{customer.rate}}%</span>
              </md-whiteframe>
       </div>
-      </div>
       </form>
-      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="submitTransaction()">{{submitBtnName}}</md-button>
-      <md-button class="md-raised md-warn" ng-click="resetTransaction()" ng-disabled="editMode">Reset</md-button>
-    </div>
-    
+      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="addTransaction()">Submit</md-button>
+      <md-button class="md-raised md-warn" ng-click="resetTransaction()">Reset</md-button>
   </md-content>
 </div>

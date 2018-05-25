@@ -1,5 +1,5 @@
 
-jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
     
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
@@ -10,11 +10,21 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
     $rootScope.editMode = false;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editMode ? $scope.editModeData : $scope.transaction;
-    $scope.transaction.date = new Date($scope.transaction.date);
-    $scope.transaction.promiseDate = new Date($scope.transaction.promiseDate);
-    $scope.submitBtnName = $scope.editMode ? 'Update' :'Submit';
+    
+    $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
+    $scope.maxDate = new Date();
+    $scope.minPromiseDate = new Date();
+    $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
+    $scope.disablePromiseDate = true;
+    
     $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Transaction', content :'transaction/transactionView.html'};
+      $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
+    };
+    
+    $scope.dateSelected =()=>{
+      $scope.minPromiseDate = $scope.transaction.date;
+      $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
+      $scope.disablePromiseDate = false;
     };
     
     $scope.updateSelectedCust = (customerId)=>{
@@ -30,22 +40,6 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
       $scope.customer ={};
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched(); 
-    };
-    
-    $scope.addTransaction = ()=>{
-      $scope.transaction.customerId = $scope.customer.id;
-      $scope.transaction.name = $scope.customer.name;
-      $scope.transaction.address = $scope.customer.address;
-      let keys = Object.keys($scope.transaction);
-      let values = Object.values($scope.transaction);
-      q.insert(TRANSACTION_TABLE, keys, values)
-      .then((data)=>{
-          $scope.resetTransaction();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      })
-      .catch((err)=>{
-          console.error('anp err, transaction insertion', err);
-      });
     };
     
     $scope.updateTransaction= ()=>{
@@ -73,14 +67,11 @@ jhora.controller('addUpdateTransactionCtrl', function($rootScope, $scope, TRANSA
       .then((data)=>{
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+          $rootScope.template = {title: 'Trasactions', content:'transaction/viewTransaction.html'}
       })
       .catch((err)=>{
           console.error('anp err occured while insertion')
       });
-    };
-    
-    $scope.submitTransaction = ()=>{
-      $scope.editMode ?  $scope.updateTransaction(): $scope.addTransaction();
     };
     
     $scope.getDataByTable = (tableName, modelName)=>{

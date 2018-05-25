@@ -1,5 +1,5 @@
 
-jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE) {
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
     
     $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editMode = $rootScope.editMode;
@@ -8,29 +8,26 @@ jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMI
     $rootScope.editModeData = {};
     $scope.customer = $scope.editMode ? $scope.editModeData : $scope.customer;
     $scope.customer.date = undefined;
-    $scope.submitBtnName = $scope.editMode ? 'Update' :'Submit';
+    
+    $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
+    $scope.maxDate = new Date();
+    
+    $scope.querySearch = (search)=>{
+      let result = [];
+      for(let vil of VILLAGES){
+        vil.toLowerCase().indexOf(search.toLowerCase()) > -1 ? result.push(vil) :'';
+      }
+      return result.length > 0 ? result :VILLAGES;;
+    };
     
     $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Customer', content :'customer/customerView.html'};
+      $rootScope.template = {title: 'Customer', content :'customer/viewCustomer.html'};
     };
     
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
       $scope.customerForm.$setPristine();
       $scope.customerForm.$setUntouched(); 
-    };
-    
-    $scope.addCustomer = ()=>{
-      let keys = Object.keys($scope.customer);
-      let values = Object.values($scope.customer);
-      q.insert(CUSTOMERS_TABLE, keys, values)
-      .then((data)=>{
-          $scope.resetCustomer();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-      })
-      .catch((err)=>{
-          console.error('anp err occured while insertion')
-      });  
     };
     
     $scope.updateCustomer = ()=>{
@@ -59,10 +56,6 @@ jhora.controller('addUpdateCustomerCtrl', function($rootScope, $scope, VIEW_LIMI
       .catch((err)=>{
           console.error('anp err occured while insertion')
       });
-    };
-    
-    $scope.submitCustomer = ()=>{
-      $scope.editMode ?  $scope.updateCustomer(): $scope.addCustomer();
     };
     
   });
