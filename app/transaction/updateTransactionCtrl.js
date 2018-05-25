@@ -10,11 +10,21 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $rootScope.editMode = false;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editMode ? $scope.editModeData : $scope.transaction;
-    $scope.transaction.date = new Date($scope.transaction.date);
-    $scope.transaction.promiseDate = new Date($scope.transaction.promiseDate);
+    
+    $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
+    $scope.maxDate = new Date();
+    $scope.minPromiseDate = new Date();
+    $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
+    $scope.disablePromiseDate = true;
     
     $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Transaction', content :'transaction/transactionView.html'};
+      $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
+    };
+    
+    $scope.dateSelected =()=>{
+      $scope.minPromiseDate = $scope.transaction.date;
+      $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
+      $scope.disablePromiseDate = false;
     };
     
     $scope.updateSelectedCust = (customerId)=>{

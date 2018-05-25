@@ -7,9 +7,18 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
+    $scope.minPromiseDate = new Date();
+    $scope.maxPromiseDate = new Date();
+    $scope.disablePromiseDate = true;
         
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
+    };
+    
+    $scope.dateSelected =()=>{
+      $scope.minPromiseDate = $scope.transaction.date;
+      $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
+      $scope.disablePromiseDate = false;
     };
     
     $scope.updateSelectedCust = (customerId)=>{
