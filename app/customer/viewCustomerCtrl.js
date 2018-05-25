@@ -3,7 +3,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
     
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-    $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
         
     $scope.editCustomer = (customer)=>{
       $rootScope.editMode = true;
@@ -21,9 +21,9 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
           message: `Are you sure you want to delete ${customer.name}?`
       }, function (response) {
           if (response === 0) {
-            let  {name, mobile, address, father, rate, guarantor, date, pageNo, remarks } = customer;
-            let keys = ['name', 'mobile', 'address', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks'];
-            let values =[name, mobile, address, father, rate, guarantor, date, pageNo, remarks];
+            let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks } = customer;
+            let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks'];
+            let values =[name, mobile, village, father, rate, guarantor, date, pageNo, remarks];
             q.insert(DELCUSTOMERS_TABLE, keys, values)
             .then((data)=>{
               return q.deleteRowById(CUSTOMERS_TABLE, customer.id);

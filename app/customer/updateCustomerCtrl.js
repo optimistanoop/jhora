@@ -1,7 +1,7 @@
 
 jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
     
-    $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editMode = $rootScope.editMode;
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editMode = false;
@@ -45,13 +45,14 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
       }
       q.update(CUSTOMERS_TABLE, keys, values, 'id', $scope.customer.id)
       .then((data)=>{
-          keys = ['name', 'address'];
-          values = [$scope.customer.name, $scope.customer.address];
+          keys = ['name', 'village'];
+          values = [$scope.customer.name, $scope.customer.village];
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
         $scope.resetCustomer();
         dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+        $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
           console.error('anp err occured while insertion')
