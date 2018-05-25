@@ -2,19 +2,6 @@ const {shell} = require('electron')
 const {dialog} = require('electron').remote
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.config(function($routeProvider, $locationProvider) {
-    $routeProvider
-    .when("/", {
-        templateUrl : "index2.html"
-    });
-    //$locationProvider.hashPrefix('!');
-    //$locationProvider.html5Mode({enabled: false, requireBase: false});
-    //$locationProvider.html5Mode(true);
-    // $locationProvider.html5Mode({
-    //   enabled: true,
-    //   requireBase: false
-    // });
-});
 jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   $scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
@@ -59,7 +46,21 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')
 .constant('TRANSACTION_TABLE', 'transactions')
 .constant('DELTRANSACTION_TABLE', 'deltransactions');
-// .config(function($mdThemingProvider) {
+
+// jhora.config(function($routeProvider, $locationProvider) {
+//     $routeProvider
+//     .when("/", {
+//         templateUrl : "index2.html"
+//     });
+//     $locationProvider.hashPrefix('!');
+//     $locationProvider.html5Mode({enabled: false, requireBase: false});
+//     $locationProvider.html5Mode(true);
+//     $locationProvider.html5Mode({
+//       enabled: true,
+//       requireBase: false
+//     });
+// });
+// jhora.config(function($mdThemingProvider) {
 //   $mdThemingProvider.theme('docs-dark', 'default')
 //     .primaryPalette('yellow')
 //     .dark();
