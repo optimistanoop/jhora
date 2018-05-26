@@ -16,9 +16,11 @@
        <input ng-model="$ctrl.query" type="text">
      </md-input-container> 
  <div style="width:80%;margin: 10px auto;">
-     <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp).length }} </label>
-     <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp ).length }} % </label>
+     <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+     <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
  </div>
+</md-content>
+<md-content layout-padding layout="row">
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th> 
@@ -44,7 +46,7 @@
       <th ng-show="queryFor == 'All'">Edit</th>
       <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
-    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:$ctrl.orderProp">
+    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.name }}</td>

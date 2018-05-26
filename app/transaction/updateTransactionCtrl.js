@@ -2,18 +2,16 @@
 jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
     
     $scope.types = TRANSACTION_TYPES;
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
-    $scope.editMode = $rootScope.editMode;
     $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editMode = false;
     $rootScope.editModeData = {};
-    $scope.transaction = $scope.editMode ? $scope.editModeData : $scope.transaction;
+    $scope.transaction = $scope.editModeData ;
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
-    $scope.minPromiseDate = new Date();
+    $scope.minPromiseDate = $scope.transaction.date ? $scope.transaction.date : new Date();
     $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
     $scope.disablePromiseDate = true;
     
@@ -45,7 +43,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $scope.updateTransaction= ()=>{
       $scope.updateSelectedCust($scope.transaction.customerId)
       $scope.transaction.name = $scope.customer.name;
-      $scope.transaction.address = $scope.customer.address;
+      $scope.transaction.village = $scope.customer.village;
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       let index = keys.indexOf('$$hashKey');

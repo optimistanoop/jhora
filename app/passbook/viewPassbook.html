@@ -1,0 +1,82 @@
+<div ng-controller="viewPassbookCtrl">  
+
+  <md-content layout-padding layout="row">
+  	<table style="width:80%;margin: 0px auto;">
+  		<tr><td style="background-color: rgb(57, 73, 171); width: 200px;color:#E0ECF8;text-align: center;" colspan="6"><h4>Customer Detail</h4></td></tr>
+  		<tr style="background-color:#283593;color:#E0ECF8">
+        <td>A/c No.</td>
+  			<td>Name</td>
+  			<td>Village</td>
+        <td>Father's Name</td>
+  			<td>Rate</td>
+  		</tr>
+  		<tr style="">
+        <td>{{customer.id}}</td>
+    		<td>{{customer.name}}</td>
+    		<td>{{customer.village}}</td>
+        <td>{{customer.father}}</td>
+        <td>{{customer.rate}}%</td>
+      </tr>
+  	</table>
+  </md-content>
+  <md-content layout-padding layout="row">
+    <table style="width:80%;margin: 0px auto;">
+      <tr style="background-color:#283593;color:#E0ECF8">
+        <td>Page No.</td>
+        <td>Mobile</td>
+        <td>Guarantor</td>
+        <td>Date</td>
+        <td>Remarks</td>
+      </tr>
+      <tr style="">
+        <td>{{customer.pageNo}}</td>
+        <td>{{customer.mobile}}</td>
+        <td>{{customer.guarantor}}</td>
+        <td>{{customer.date | date:"EEE,d/M/yy"}}</td>
+        <td>{{customer.remarks}}</td>
+      </tr>
+    </table>
+  </md-content>
+  <md-content layout-padding layout="row" ng-show="transactions.length">
+  <md-input-container flex-xs>
+    <label>Search</label>
+    <md-icon> <i class="material-icons">search</i> </md-icon>
+    <input ng-model="$ctrl.query" type="text">
+  </md-input-container> 
+<div style="width:80%;margin: 10px auto;">
+      <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+  </div>   
+  </md-content>
+  <md-content layout-padding layout="row">
+  <table style="width:80%;margin: 0px auto;">
+    <tr>
+      <th> 
+        <button ng-click="sortBy('amount')">Amount</button>
+        <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('date')">Date</button>
+        <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('promiseDate')">Promise Date</button>
+        <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('type')">Type</button>
+        <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
+      </th>
+    </tr>
+    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
+      <td>{{ tran.amount }}</td>
+      <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
+      <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+      <td>{{ tran.type }}</td>      
+    </tr>
+  </table>
+  </md-content>
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="transactions.length">
+    <h1>Sorry !! No data found</h1>
+  </md-content>
+</div>

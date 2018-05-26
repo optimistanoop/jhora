@@ -15,10 +15,12 @@
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container> 
-  <div style="width:80%;margin: 10px auto;">
+<div style="width:80%;margin: 10px auto;">
       <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
       <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
-  </div>     
+  </div>   
+  </md-content><md-content layout-padding layout="row">
+    
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th> 
@@ -30,8 +32,8 @@
         <span class="sortorder" ng-show="propertyName === 'father'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('address')">Address</button>
-        <span class="sortorder" ng-show="propertyName === 'address'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('village')">Village</button>
+        <span class="sortorder" ng-show="propertyName === 'village'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
         <button ng-click="sortBy('mobile')">Mobile</button>
@@ -41,9 +43,9 @@
       <th>Delete</th>
     </tr>
     <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
-      <td>{{ cust.name }}</td>
+      <td ng-click="viewCustomerPassbook(cust)"><a href="#">{{ cust.name }}</a></td>
       <td>{{ cust.father }}</td>
-      <td>{{ cust.address }}</td>
+      <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
       <td ng-click="editCustomer(cust)"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></td>
       <td ng-click="deleteCustomer(cust)"><i class="material-icons" style="color:red">delete</i></td>

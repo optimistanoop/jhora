@@ -25,19 +25,19 @@
             </div>
           </md-input-container> 
           <md-input-container flex-xs>
-            <label>Adress</label>
+            <label>Village</label>
             <md-icon><i class="material-icons">place</i></md-icon>
-            <md-select name="address" ng-model="customer.address" ng-required="true">
+            <md-select name="village" ng-model="customer.village" ng-required="true">
               <md-option><em>None</em></md-option>
               <md-option ng-repeat="vil in villages" ng-value="vil">
                 {{vil}}
               </md-option>
             </md-select>
-            <div ng-messages="customerForm.address.$error" role="alert" multiple>
-              <div ng-message="required" class="my-message">You must supply an address.</div>
+            <div ng-messages="customerForm.village.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a village.</div>
             </div>
             <!-- <md-autocomplete
-                md-floating-label="Address"
+                md-floating-label="Village"
                 md-no-cache="true"
                 md-search-text="searchText"
                 md-items="item in querySearch(searchText)"
@@ -48,7 +48,7 @@
                 <span md-highlight-text="searchText" md-highlight-flags="^i">{{item}}</span>
               </md-item-template>
               <md-not-found>
-                No address matching "{{searchText}}" were found.
+                No village matching "{{searchText}}" were found.
               </md-not-found>
             </md-autocomplete> -->
           </md-input-container>

@@ -4,11 +4,11 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, TRANSACTION
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', address:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', address: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
     $scope.editTransaction = (transaction)=>{
-      $rootScope.editMode = true;
+      //TODO
       $rootScope.editModeData = transaction;
       $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
     };
@@ -22,9 +22,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, TRANSACTION
           message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
       }, function (response) {
           if (response === 0) {
-           let  {amount, date, promiseDate, type, customerId, name, address, remarks } = transaction;
-           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'name', 'address', 'remarks' ];
-           let values =[amount, date, promiseDate, type, customerId, name, address, remarks];
+           let  {amount, date, promiseDate, type, customerId, name, village, remarks } = transaction;
+           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
+           let values =[amount, date, promiseDate, type, customerId, name, village, remarks];
             q.insert(DELTRANSACTION_TABLE, keys, values)
             .then((data)=>{
               return q.deleteRowById(TRANSACTION_TABLE, transaction.id);

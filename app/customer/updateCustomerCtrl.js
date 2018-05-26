@@ -1,13 +1,10 @@
 
 jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
     
-    $scope.customer = { name: '', mobile: '', address: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
-    $scope.editMode = $rootScope.editMode;
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editMode = false;
     $rootScope.editModeData = {};
-    $scope.customer = $scope.editMode ? $scope.editModeData : $scope.customer;
-    $scope.customer.date = undefined;
+    $scope.customer = $scope.editModeData;
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
@@ -45,13 +42,14 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
       }
       q.update(CUSTOMERS_TABLE, keys, values, 'id', $scope.customer.id)
       .then((data)=>{
-          keys = ['name', 'address'];
-          values = [$scope.customer.name, $scope.customer.address];
+          keys = ['name', 'village'];
+          values = [$scope.customer.name, $scope.customer.village];
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
         $scope.resetCustomer();
         dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+        $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
           console.error('anp err occured while insertion')

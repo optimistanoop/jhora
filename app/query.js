@@ -14,7 +14,7 @@ class Query {
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
        pageNo         TEXT     NOT NULL,
-       address        CHAR(50) NOT NULL,
+       village        CHAR(50) NOT NULL,
        mobile         INT NOT NULL,
        father         TEXT NOT NULL,
        rate           INT    NOT NULL,
@@ -32,7 +32,7 @@ class Query {
        type           TEXT   NOT NULL,
        customerId     INTEGER NOT NULL,
        name           TEXT    NOT NULL,
-       address        TEXT    NOT NULL,
+       village        TEXT    NOT NULL,
        remarks        CHAR(80) )`
      );
   }
@@ -49,8 +49,8 @@ class Query {
   }
   
   insert(tableName ='', keys = [], values =[]){
-    //INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
-    //this.db.run(`INSERT INTO CUSTOMER (NAME, PAGENO, ADDRESS, MOBILE, FATHER, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 9738275930, 'prahlad', 'arun', '02-10-1991', 'demo')`);
+    //INSERT INTO CUSTOMER (NAME, PAGENO, village, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
+    //this.db.run(`INSERT INTO CUSTOMER (NAME, PAGENO, village, MOBILE, FATHER, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 9738275930, 'prahlad', 'arun', '02-10-1991', 'demo')`);
     let p = new Promise((resolve, reject)=>{
       let columns = keys.map((key) => `${key}`).join(',');
       values = values.map((value) => `'${value}'`).join(',');
@@ -89,6 +89,17 @@ class Query {
   selectAll(tableName){
     let p = new Promise( (resolve, reject)=>{
       this.db.all(`select * from ${tableName}`, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
+
+  selectAllById(tableName, key, value){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = ${value}`
+      this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
       });
