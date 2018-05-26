@@ -2,7 +2,11 @@
 jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
  $scope.customer = $rootScope.viewPassbookData;
- $rootScope.viewPassbookData = {};
+ 
+ $scope.sortBy = function(propertyName) {
+   $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+   $scope.propertyName = propertyName;
+ };
  
  $scope.getCustomerPassbook = (tableName)=>{
       q.selectAllById(tableName, 'customerId', $rootScope.viewPassbookData.id)

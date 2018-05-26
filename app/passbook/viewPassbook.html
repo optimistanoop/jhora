@@ -36,7 +36,7 @@
     		<td>{{customer.village}}</td>
         <td>{{customer.mobile}}</td>
         <td>{{customer.father}}</td>
-        <td>{{customer.rate}}</td>
+        <td>{{customer.rate}}%</td>
         <td>{{customer.guarantor}}</td>
       </tr>
   	</table>
@@ -45,20 +45,20 @@
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th> 
-        <button ng-click="sortBy('name')">Amount</button>
-        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('amount')">Amount</button>
+        <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('father')">Date</button>
-        <span class="sortorder" ng-show="propertyName === 'father'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('date')">Date</button>
+        <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('village')">Promise Date</button>
-        <span class="sortorder" ng-show="propertyName === 'village'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('promiseDate')">Promise Date</button>
+        <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('mobile')">Type</button>
-        <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
+        <button ng-click="sortBy('type')">Type</button>
+        <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
       </th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
