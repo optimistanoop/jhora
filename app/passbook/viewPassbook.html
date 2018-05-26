@@ -9,15 +9,15 @@
         </md-option>
       </md-select>
     </md-input-container>
-  <md-content layout-padding layout="row" ng-show="passbooks.length">
+  <md-content layout-padding layout="row" ng-show="transactions.length">
   <md-input-container flex-xs>
     <label>Search</label>
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container> 
 <div style="width:80%;margin: 10px auto;">
-      <label>Total : {{ (passbooks | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
-      <label> Percentage : {{ (100 / passbooks.length  ) * (passbooks | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+      <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
   </div>   
   </md-content>
   <md-content layout-padding layout="row">
@@ -32,15 +32,13 @@
   			<td>Guarantor</td>
   		</tr>
   		<tr style="">
-  		<td>{{viewPassbookData.name}}</td>
-  		<td>{{viewPassbookData.village}}</td>
-  	    <td>{{viewPassbookData.mobile}}</td>
-        <td>{{viewPassbookData.father}}</td>
-        <td>{{viewPassbookData.rate}}</td>
-        <td>{{viewPassbookData.guarantor}}</td>
-        
-
-        </tr>
+    		<td>{{customer.name}}</td>
+    		<td>{{customer.village}}</td>
+        <td>{{customer.mobile}}</td>
+        <td>{{customer.father}}</td>
+        <td>{{customer.rate}}</td>
+        <td>{{customer.guarantor}}</td>
+      </tr>
   	</table>
   </md-content>
   <md-content layout-padding layout="row">
@@ -62,18 +60,16 @@
         <button ng-click="sortBy('mobile')">Type</button>
         <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
       </th>
-     
     </tr>
-    <tr ng-class="{trcr: passbook.type == 'Cr', trdr: passbook.type == 'Dr', trst: passbook.type == 'Settle' }" ng-repeat="passbook in passbooks | filter:$ctrl.query | orderBy:propertyName:reverse">
-      <td>{{ passbook.amount }}</td>
-      <td>{{ passbook.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ passbook.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td>{{ passbook.type }}</td>
-      
+    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
+      <td>{{ tran.amount }}</td>
+      <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
+      <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+      <td>{{ tran.type }}</td>      
     </tr>
   </table>
   </md-content>
-  <md-content style="width:80%;margin: 10px auto;" ng-hide="passbooks.length">
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="transactions.length">
     <h1>Sorry !! No data found</h1>
   </md-content>
 </div>

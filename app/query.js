@@ -96,9 +96,9 @@ class Query {
     return p;
   }
 
-  selectAllById(tableName, id){
+  selectAllById(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE customerId = ${id}`
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = ${value}`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
