@@ -7,6 +7,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TY
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
+          row.promiseDate = new Date(row.promiseDate);
         }
         $scope.passbooks = rows; 
       })

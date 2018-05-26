@@ -66,8 +66,8 @@
     </tr>
     <tr ng-repeat="passbook in passbooks | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ passbook.amount }}</td>
-      <td>{{ passbook.date }}</td>
-      <td>{{ passbook.promiseDate }}</td>
+      <td>{{ passbook.date | date:"EEE,d/M/yy" }}</td>
+      <td>{{ passbook.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td>{{ passbook.type }}</td>
       
     </tr>
