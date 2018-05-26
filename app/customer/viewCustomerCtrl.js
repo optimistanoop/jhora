@@ -47,6 +47,10 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
     $scope.getCustomers = (tableName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
+        if(rows)
+        for(let row of rows){
+          row.date = new Date(row.date);
+        }
         $scope.customers = rows; 
       })
       .catch((err)=>{

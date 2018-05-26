@@ -5,7 +5,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.customer = $scope.editModeData;
-    $scope.customer.date = undefined;
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
