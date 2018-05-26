@@ -11,7 +11,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
-    $scope.minPromiseDate = new Date();
+    $scope.minPromiseDate = $scope.transaction.date ? $scope.transaction.date : new Date();
     $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
     $scope.disablePromiseDate = true;
     
