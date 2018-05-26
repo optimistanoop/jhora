@@ -66,5 +66,12 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
       }
     };
     $scope.getCustomers(CUSTOMERS_TABLE);
+
+     $scope.viewPassbookCustomer = (customer)=>{
+      // TODO
+      $rootScope.viewPassbookData = customer;
+      $rootScope.template = {title: 'View Passbook', content :'passbook/viewPassbook.html'};
+      
+    };
     
   });

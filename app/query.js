@@ -95,6 +95,17 @@ class Query {
     });
     return p;
   }
+
+  selectAllById(tableName, id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE customerId = ${id}`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 };
 
 module.exports = Query;

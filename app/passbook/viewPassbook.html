@@ -1,3 +1,79 @@
 <div ng-controller="viewPassbookCtrl">  
+<md-input-container flex-xs>
+      <label>Results for</label>
+      <md-icon><i class="material-icons">sort</i></md-icon>
+      <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
+        <md-option><em>None</em></md-option>
+        <md-option ng-repeat="limit in limits" ng-value="limit">
+          {{limit}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  <md-content layout-padding layout="row" ng-show="passbooks.length">
+  <md-input-container flex-xs>
+    <label>Search</label>
+    <md-icon> <i class="material-icons">search</i> </md-icon>
+    <input ng-model="$ctrl.query" type="text">
+  </md-input-container> 
+<div style="width:80%;margin: 10px auto;">
+      <label>Total : {{ (passbooks | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+      <label> Percentage : {{ (100 / passbooks.length  ) * (passbooks | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+  </div>   
+  </md-content>
+  <md-content layout-padding layout="row">
+  	<table style="width:80%;margin: 0px auto;">
+  		<tr><td style="background-color: rgb(57, 73, 171); width: 250px;color:#E0ECF8;text-align: center;" colspan="6"><h6 >Customer Detail</h6></td></tr>
+  		<tr>
+  			<td>Customer Name</td>
+  			<td>Address</td>
+  			<td>Mobile</td>
+  			<td>Father Name</td>
+  			<td>Rate</td>
+  			<td>Guarantor</td>
+  		</tr>
+  		<tr style="">
+  		<td>{{viewPassbookData.name}}</td>
+  		<td>{{viewPassbookData.village}}</td>
+  	    <td>{{viewPassbookData.mobile}}</td>
+        <td>{{viewPassbookData.father}}</td>
+        <td>{{viewPassbookData.rate}}</td>
+        <td>{{viewPassbookData.guarantor}}</td>
+        
 
+        </tr>
+  	</table>
+  </md-content>
+  <md-content layout-padding layout="row">
+  <table style="width:80%;margin: 0px auto;">
+    <tr>
+      <th> 
+        <button ng-click="sortBy('name')">Amount</button>
+        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('father')">Date</button>
+        <span class="sortorder" ng-show="propertyName === 'father'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('village')">Promise Date</button>
+        <span class="sortorder" ng-show="propertyName === 'village'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <button ng-click="sortBy('mobile')">Type</button>
+        <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
+      </th>
+     
+    </tr>
+    <tr ng-repeat="passbook in passbooks | filter:$ctrl.query | orderBy:propertyName:reverse">
+      <td>{{ passbook.amount }}</td>
+      <td>{{ passbook.date }}</td>
+      <td>{{ passbook.promiseDate }}</td>
+      <td>{{ passbook.type }}</td>
+      
+    </tr>
+  </table>
+  </md-content>
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="passbooks.length">
+    <h1>Sorry !! No data found</h1>
+  </md-content>
 </div>
