@@ -2,11 +2,9 @@
 jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
     
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
-    $scope.editMode = $rootScope.editMode;
     $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editMode = false;
     $rootScope.editModeData = {};
-    $scope.customer = $scope.editMode ? $scope.editModeData : $scope.customer;
+    $scope.customer = $scope.editModeData;
     $scope.customer.date = undefined;
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());

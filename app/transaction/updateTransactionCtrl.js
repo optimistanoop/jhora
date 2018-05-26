@@ -5,11 +5,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     
-    $scope.editMode = $rootScope.editMode;
     $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editMode = false;
     $rootScope.editModeData = {};
-    $scope.transaction = $scope.editMode ? $scope.editModeData : $scope.transaction;
+    $scope.transaction = $scope.editModeData ;
     
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
