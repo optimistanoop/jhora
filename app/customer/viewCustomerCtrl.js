@@ -70,7 +70,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
    $scope.viewCustomerPassbook = (customer)=>{
     // TODO
     $rootScope.viewPassbookData = customer;
-    $rootScope.template = {title: `A/c No.-${customer.id}'s passbook` , content :'passbook/viewPassbook.html'};
+    $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
     
   };
     
