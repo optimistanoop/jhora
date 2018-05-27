@@ -71,7 +71,6 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
     // TODO
     $rootScope.viewPassbookData = customer;
     $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
-    
-  };
+   };
     
   });

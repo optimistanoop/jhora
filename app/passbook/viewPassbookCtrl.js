@@ -54,7 +54,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TY
       .catch((err)=>{
         console.error(err);
       });
-    };
+  };
 
-    $scope.getCustomerPassbook(TRANSACTION_TABLE);
+  $scope.getCustomerPassbook(TRANSACTION_TABLE);
   });

@@ -15,6 +15,17 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
     };
     
+    $scope.sortBy = function(propertyName) {
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
+    
+    $scope.viewCustomerPassbook = (customer)=>{
+     // TODO
+     $rootScope.viewPassbookData = customer;
+     $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
+    };
+    
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
@@ -26,6 +37,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
         if(cust.id == customerId){
           $scope.customer = cust;
           console.log('cust',$scope.customer);
+          $scope.getCustomerPassbook(TRANSACTION_TABLE);
         }
       }
     };
@@ -67,6 +79,21 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
       });
     };
     
+    $scope.getCustomerPassbook = (tableName)=>{
+         q.selectAllById(tableName, 'customerId', $scope.customer.id)
+         .then((rows)=>{
+           if(rows)
+           for(let row of rows){
+             row.date = new Date(row.date);
+             row.promiseDate = new Date(row.promiseDate);
+           }
+           $scope.transactions = rows; 
+         })
+         .catch((err)=>{
+           console.error(err);
+         });
+     };
+         
     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
     
   });

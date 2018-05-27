@@ -19,6 +19,17 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
     };
     
+    $scope.sortBy = function(propertyName) {
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
+    
+    $scope.viewCustomerPassbook = (customer)=>{
+     // TODO
+     $rootScope.viewPassbookData = customer;
+     $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
+    };
+    
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
@@ -41,7 +52,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     };
     
     $scope.updateTransaction= ()=>{
-      $scope.updateSelectedCust($scope.transaction.customerId)
+      $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
       let keys = Object.keys($scope.transaction);
@@ -81,13 +92,31 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)  
           row.promiseDate = new Date(row.promiseDate);
         }
-        $scope[modelName] = rows;  
+        $scope[modelName] = rows;
+        if(tableName == CUSTOMERS_TABLE)
+        $scope.updateSelectedCust($scope.transaction.customerId);  
       })
       .catch((err)=>{
         console.error(err);
       });
     };
     
+    $scope.getCustomerPassbook = (tableName)=>{
+         q.selectAllById(tableName, 'customerId', $scope.transaction.customerId)
+         .then((rows)=>{
+           if(rows)
+           for(let row of rows){
+             row.date = new Date(row.date);
+             row.promiseDate = new Date(row.promiseDate);
+           }
+           $scope.transactions = rows; 
+         })
+         .catch((err)=>{
+           console.error(err);
+         });
+     };
+    
     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
+    $scope.getCustomerPassbook(TRANSACTION_TABLE);
     
   });
