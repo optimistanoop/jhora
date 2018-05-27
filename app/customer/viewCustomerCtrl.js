@@ -67,11 +67,11 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
     };
     $scope.getCustomers(CUSTOMERS_TABLE);
 
-     $scope.viewCustomerPassbook = (customer)=>{
-      // TODO
-      $rootScope.viewPassbookData = customer;
-      $rootScope.template = {title: 'View Passbook', content :'passbook/viewPassbook.html'};
-      
-    };
+   $scope.viewCustomerPassbook = (customer)=>{
+    // TODO
+    $rootScope.viewPassbookData = customer;
+    $rootScope.template = {title: `A/c No.-${customer.id}'s passbook` , content :'passbook/viewPassbook.html'};
+    
+  };
     
   });
