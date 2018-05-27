@@ -46,19 +46,23 @@
         <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('promiseDate')">Promise Date</button>
-        <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
-      </th>
-      <th>
         <button ng-click="sortBy('type')">Type</button>
         <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
       </th>
+      <th>
+        <button ng-click="sortBy('promiseDate')">Promise Date</button>
+        <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ tran.amount }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.type }}</td>      
+      <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+      <td ng-click="editTransaction(tran)"><i class="material-icons">edit</i></td>
+      <td ng-click="deleteTransaction(tran)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
   </md-content>
