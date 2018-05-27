@@ -9,7 +9,7 @@
       </md-option>
     </md-select>
   </md-input-container>
-   <md-content layout-padding layout="row" ng-show="transactions.length">
+   <md-content layout-padding layout="row" ng-show="hideNoDataFound">
      <md-input-container flex-xs>
        <label>Search</label>
        <md-icon> <i class="material-icons">search</i> </md-icon>
@@ -20,7 +20,7 @@
      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
  </div>
 </md-content>
-<md-content layout-padding layout="row">
+<md-content layout-padding layout="row" ng-show="hideNoDataFound">
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th> 
@@ -57,7 +57,7 @@
     </tr>
   </table>
 </md-content>
-  <md-content style="width:80%;margin: 0px auto;" ng-hide="transactions.length">
-    <h1>Sorry !! No data found</h1>
+  <md-content style="width:80%;margin: 0px auto;" ng-hide="hideNoDataFound">
+    <h1>Sorry !! No transaction data found</h1>
   </md-content>
 </div>

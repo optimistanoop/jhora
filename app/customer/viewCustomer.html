@@ -9,19 +9,19 @@
         </md-option>
       </md-select>
     </md-input-container>
-  <md-content layout-padding layout="row" ng-show="customers.length">
+  <md-content layout-padding layout="row" ng-show="hideNoDataFound">
   <md-input-container flex-xs>
     <label>Search</label>
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container> 
-<div style="width:80%;margin: 10px auto;">
+  <div style="width:80%;margin: 10px auto;">
       <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
       <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
   </div>   
-  </md-content><md-content layout-padding layout="row">
-    
-  <table style="width:80%;margin: 0px auto;">
+  </md-content>
+  <md-content layout-padding layout="row" ng-show="hideNoDataFound">
+  <table style="width:80%;margin: 0px auto;" >
     <tr>
       <th> 
         <button ng-click="sortBy('name')">Name</button>
@@ -50,9 +50,9 @@
       <td ng-click="editCustomer(cust)"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></td>
       <td ng-click="deleteCustomer(cust)"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
-  </table>
+   </table>
   </md-content>
-  <md-content style="width:80%;margin: 10px auto;" ng-hide="customers.length">
-    <h1>Sorry !! No data found</h1>
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
+    <h1>Sorry !! No customer data found</h1>
   </md-content>
 </div>

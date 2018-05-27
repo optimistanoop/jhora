@@ -1,7 +1,9 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
  $scope.customer = $rootScope.viewPassbookData;
+ $scope.hideNoDataFound = true;
+
  
  $scope.sortBy = function(propertyName) {
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
@@ -49,7 +51,11 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TY
           row.date = new Date(row.date);
           row.promiseDate = new Date(row.promiseDate);
         }
-        $scope.transactions = rows; 
+        $timeout(()=>{
+          $scope.transactions = rows;
+          if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+          $scope.hideNoDataFound = false; 
+        },0);
       })
       .catch((err)=>{
         console.error(err);
