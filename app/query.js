@@ -4,18 +4,18 @@ class Query {
   constructor(db){
      this.db = db;
   }
-  
+
   closeDB(){
     this.db.close();
   }
-  
+
   createCustomerTable(tableName){
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name           TEXT    NOT NULL,
        pageNo         TEXT     NOT NULL,
        village        CHAR(50) NOT NULL,
-       mobile         INT NOT NULL,
+       mobile         INT NOT NULL UNIQUE,
        father         TEXT NOT NULL,
        rate           INT    NOT NULL,
        guarantor      TEXT,
@@ -27,7 +27,7 @@ class Query {
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
-       date           TEXT   NOT NULL, 
+       date           TEXT   NOT NULL,
        promiseDate    TEXT   NOT NULL,
        type           TEXT   NOT NULL,
        rate           INT    NOT NULL,
@@ -37,7 +37,7 @@ class Query {
        remarks        CHAR(80) )`
      );
   }
-  
+
   getTotalCountForTable(tableName){
     let p = new Promise((resolve, reject)=>{
       let sql = `select count(id) from ${tableName}`;
@@ -48,7 +48,7 @@ class Query {
     });
     return p;
   }
-  
+
   insert(tableName ='', keys = [], values =[]){
     //INSERT INTO CUSTOMER (NAME, PAGENO, village, MOBILE, FATHERSNAME, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 8, 'prahlad', 'arun', 'sdsd', 'dfff');
     //this.db.run(`INSERT INTO CUSTOMER (NAME, PAGENO, village, MOBILE, FATHER, GUARANTOR, DATE, REMARKS) VALUES ('anop', 2, 'bang', 9738275930, 'prahlad', 'arun', '02-10-1991', 'demo')`);
@@ -59,7 +59,7 @@ class Query {
       this.db.run(sql, [], (err, data)=>{
         if(err) reject(err);
         resolve(data);
-      });  
+      });
     });
     return p;
   }
@@ -71,11 +71,11 @@ class Query {
       this.db.run(sql, [], (err, data)=>{
         if(err) reject(err);
         resolve(data);
-      });  
+      });
     });
     return p;
   }
-  
+
   deleteRowById(tableName, id){
     let p = new Promise( (resolve, reject)=>{
       let sql = `DELETE FROM ${tableName} WHERE ID = ${id}`
@@ -86,7 +86,7 @@ class Query {
     });
     return p;
   }
-  
+
   selectAll(tableName){
     let p = new Promise( (resolve, reject)=>{
       this.db.all(`select * from ${tableName}`, (err, data)=>{

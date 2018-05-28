@@ -4,18 +4,18 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
  $scope.customer = $rootScope.viewPassbookData;
  $scope.hideNoDataFound = true;
 
- 
+
  $scope.sortBy = function(propertyName) {
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
  };
- 
+
  $scope.editTransaction = (transaction)=>{
    //TODO
    $rootScope.editModeData = transaction;
    $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
  };
- 
+
  $scope.deleteTransaction = (transaction)=>{
    shell.beep()
    dialog.showMessageBox({
@@ -42,7 +42,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
        }
    })
  };
- 
+
  $scope.getCustomerPassbook = (tableName)=>{
       q.selectAllById(tableName, 'customerId', $rootScope.viewPassbookData.id)
       .then((rows)=>{
@@ -54,7 +54,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
         $timeout(()=>{
           $scope.transactions = rows;
           if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
-          $scope.hideNoDataFound = false; 
+          $scope.hideNoDataFound = false;
         },0);
       })
       .catch((err)=>{
@@ -63,4 +63,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
   };
 
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
+  $scope.Back = ()=>{
+    $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
+  }
   });

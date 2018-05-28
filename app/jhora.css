@@ -1,6 +1,6 @@
 md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
     min-height: 800px;
-} 
+}
 
 table, th , td  {
   border: 1px solid grey;
@@ -11,10 +11,10 @@ table, th , td  {
   background-color: #C4E690;
 }
 .trdr {
-  background-color: rgb(244,81,30);
+  background-color: rgb(253,156,142);
 }
 .trst {
-  background-color: #70D145;
+  background-color: rgb(128,255,255);
 }
 
 table tr:hover td {

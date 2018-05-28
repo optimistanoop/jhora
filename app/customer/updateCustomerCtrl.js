@@ -1,14 +1,14 @@
 
-jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
-    
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
+
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.customer = $scope.editModeData;
-    
+
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
-    
+
     $scope.querySearch = (search)=>{
       let result = [];
       for(let vil of VILLAGES){
@@ -16,17 +16,17 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
       }
       return result.length > 0 ? result :VILLAGES;;
     };
-    
+
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Customer', content :'customer/viewCustomer.html'};
     };
-    
+
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
       $scope.customerForm.$setPristine();
-      $scope.customerForm.$setUntouched(); 
+      $scope.customerForm.$setUntouched();
     };
-    
+
     $scope.updateCustomer = ()=>{
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
@@ -47,13 +47,15 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
-        $scope.resetCustomer();
+        $timeout(()=>{
+          $scope.resetCustomer();
+        },0);
         dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
         $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
-          console.error('anp err occured while insertion')
+          console.error('anp err occured while insertion',err);
       });
     };
-    
+
   });
