@@ -32,6 +32,9 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,CUSTOM
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
+          if (err.code=="SQLITE_CONSTRAINT") {
+            dialog.showMessageBox({type :'info', message:'Mobile number is already in use', buttons:[]});
+          }
       });
     };
 
