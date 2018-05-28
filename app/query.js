@@ -28,7 +28,7 @@ class Query {
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        amount         INT    NOT NULL,
        date           TEXT   NOT NULL,
-       promiseDate    TEXT   NOT NULL,
+       promiseDate    TEXT           ,
        type           TEXT   NOT NULL,
        rate           INT    NOT NULL,
        customerId     INTEGER NOT NULL,
