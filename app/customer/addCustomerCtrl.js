@@ -31,7 +31,7 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,CUSTOM
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       })
       .catch((err)=>{
-          console.error('anp err occured while insertion')
+          console.error('anp err occured while insertion',err);
       });
     };
 

@@ -52,7 +52,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
         $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
-          console.error('anp err occured while insertion')
+          console.error('anp err occured while insertion',err);
       });
     };
 
