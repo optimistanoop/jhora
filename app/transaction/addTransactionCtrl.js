@@ -1,37 +1,37 @@
 
 jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-    
+
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
-    
+
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
-        
+
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
     };
-    
+
     $scope.sortBy = function(propertyName) {
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };
-    
+
     $scope.viewCustomerPassbook = (customer)=>{
      // TODO
      $rootScope.viewPassbookData = customer;
      $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
     };
-    
+
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
       $scope.disablePromiseDate = false;
     };
-    
+
     $scope.updateSelectedCust = (customerId)=>{
       for(let cust of $scope.customers){
         if(cust.id == customerId){
@@ -45,9 +45,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
       $scope.transaction ={};
       $scope.customer ={};
       $scope.transactionForm.$setPristine();
-      $scope.transactionForm.$setUntouched(); 
+      $scope.transactionForm.$setUntouched();
     };
-    
+
     $scope.addTransaction = ()=>{
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
@@ -62,23 +62,23 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
           console.error('anp err, transaction insertion', err);
       });
     };
-    
+
     $scope.getDataByTable = (tableName, modelName)=>{
       q.selectAll(tableName)
-      .then((rows)=>{  
+      .then((rows)=>{
         if(rows)
         for(let row of rows){
           row.date = new Date(row.date);
-          if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)  
+          if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
           row.promiseDate = new Date(row.promiseDate);
         }
-        $scope[modelName] = rows;  
+        $scope[modelName] = rows;
       })
       .catch((err)=>{
         console.error(err);
       });
     };
-    
+
     $scope.getCustomerPassbook = (tableName)=>{
          q.selectAllById(tableName, 'customerId', $scope.customer.id)
          .then((rows)=>{
@@ -87,13 +87,23 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
              row.date = new Date(row.date);
              row.promiseDate = new Date(row.promiseDate);
            }
-           $scope.transactions = rows; 
+           $scope.transactions = rows;
          })
          .catch((err)=>{
            console.error(err);
          });
      };
-         
+     $scope.typeSelected= ()=>{
+       // console.log("in function");
+       $scope.promiseDateDisable = false;
+       if ($scope.transaction.type == "Settle") {
+         $scope.promiseDateDisable = true;
+       }
+       else {
+         $scope.promiseDateDisable = false;
+       }
+
+     }
     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
-    
+
   });
