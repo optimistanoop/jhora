@@ -47,9 +47,9 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
-        $scope.resetCustomer();
         dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-        $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'};
+        $scope.resetCustomer();
+        $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
