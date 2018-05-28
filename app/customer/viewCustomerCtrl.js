@@ -1,9 +1,10 @@
 
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
     
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
+    $scope.hideNoDataFound = true; 
         
     $scope.editCustomer = (customer)=>{
       // TODO
@@ -49,9 +50,13 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = new Date(row.date);
+          row.date = row.date ? new Date(row.date) : undefined;
         }
-        $scope.customers = rows; 
+        $timeout(()=>{
+          $scope.customers = rows;
+          if(tableName == CUSTOMERS_TABLE && rows && rows.length == 0)
+          $scope.hideNoDataFound = false; 
+        },0); 
       })
       .catch((err)=>{
         console.error(err);
@@ -71,7 +76,6 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, VIEW_LIMITS, C
     // TODO
     $rootScope.viewPassbookData = customer;
     $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
-    
-  };
+   };
     
   });

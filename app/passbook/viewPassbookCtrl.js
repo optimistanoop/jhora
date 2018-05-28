@@ -1,19 +1,21 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
  $scope.customer = $rootScope.viewPassbookData;
- 
+ $scope.hideNoDataFound = true;
+
+
  $scope.sortBy = function(propertyName) {
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
  };
- 
+
  $scope.editTransaction = (transaction)=>{
    //TODO
    $rootScope.editModeData = transaction;
    $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
  };
- 
+
  $scope.deleteTransaction = (transaction)=>{
    shell.beep()
    dialog.showMessageBox({
@@ -40,21 +42,28 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, TRANSACTION_TY
        }
    })
  };
- 
+
  $scope.getCustomerPassbook = (tableName)=>{
       q.selectAllById(tableName, 'customerId', $rootScope.viewPassbookData.id)
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = new Date(row.date);
-          row.promiseDate = new Date(row.promiseDate);
+          row.date = row.date ? new Date(row.date) : undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
-        $scope.transactions = rows; 
+        $timeout(()=>{
+          $scope.transactions = rows;
+          if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+          $scope.hideNoDataFound = false;
+        },0);
       })
       .catch((err)=>{
         console.error(err);
       });
-    };
+  };
 
-    $scope.getCustomerPassbook(TRANSACTION_TABLE);
+  $scope.getCustomerPassbook(TRANSACTION_TABLE);
+  $scope.Back = ()=>{
+    $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
+  }
   });

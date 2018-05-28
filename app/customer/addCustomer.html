@@ -68,13 +68,13 @@
           <md-input-container class="md-block" flex-xs>
             <label>Rate</label>
             <md-icon><i class="material-icons">trending_up</i></md-icon>
-            <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="1" ng-min="1" ng-max="6" ng-required="true">
+            <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
             <div ng-messages="customerForm.rate.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply rate.</div>
-              <div ng-message="min" class="my-message">Rate should be greater than 0.</div>
+              <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
               <div ng-message="max" class="my-message">Rate should be less than 6.</div>
-              <div ng-message="minlength" class="my-message">Rate should be of 1 digit.</div>
-              <div ng-message="maxlength" class="my-message">Rate should be of 1 digit.</div>
+              <div ng-message="minlength" class="my-message">Rate should be of minimum 1 digit.</div>
+              <div ng-message="maxlength" class="my-message">Rate should be of maximum 3 digits.</div>
             </div>
           </md-input-container>
           <md-input-container class="md-block" flex-xs>

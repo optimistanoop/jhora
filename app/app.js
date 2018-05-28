@@ -26,11 +26,11 @@ app.on('ready', ()=> {
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.webContents.openDevTools()
-  
+
   mainWindow.on('close', (e) => {
       console.log('anp close');
       if (app.showExitPrompt) {
-          e.preventDefault() // Prevents the window from closing 
+          e.preventDefault() // Prevents the window from closing
           dialog.showMessageBox({
               type: 'question',
               buttons: ['Yes', 'No'],
@@ -46,11 +46,13 @@ app.on('ready', ()=> {
           })
       }
   })
-  
+
+
+   
   app.on('before-quit', (event)=> {
       console.log('anp before-quit');
   });
-  
+
   // Emitted when the window is closed.
   mainWindow.on('closed', ()=> {
     // Dereference the window object, usually you would store windows
@@ -60,5 +62,3 @@ app.on('ready', ()=> {
     mainWindow = null;
   });
 });
-
-
