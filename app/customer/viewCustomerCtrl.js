@@ -50,7 +50,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = new Date(row.date);
+          row.date = row.date ? new Date(row.date) : undefined;
         }
         $timeout(()=>{
           $scope.customers = rows;

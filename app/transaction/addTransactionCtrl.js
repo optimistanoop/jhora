@@ -29,14 +29,19 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      $scope.disablePromiseDate = false;
+      if ($scope.transaction.type == "Settle") {
+        $scope.disablePromiseDate = true;
+      }
+      else {
+        $scope.disablePromiseDate = false;
+      }
     };
 
     $scope.updateSelectedCust = (customerId)=>{
       for(let cust of $scope.customers){
         if(cust.id == customerId){
           $scope.customer = cust;
-          console.log('cust',$scope.customer);
+          $scope.transaction.rate = $scope.customer.rate;
           $scope.getCustomerPassbook(TRANSACTION_TABLE);
         }
       }
@@ -51,6 +56,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
     $scope.addTransaction = ()=>{
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
+      $scope.transaction.promiseDate = $scope.transaction.promiseDate ? $scope.transaction.promiseDate: '';
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       q.insert(TRANSACTION_TABLE, keys, values)
@@ -68,9 +74,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = new Date(row.date);
+          row.date = row.date ? new Date(row.date) : undefined;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = new Date(row.promiseDate);
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
         $scope[modelName] = rows;
       })
@@ -84,8 +90,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = new Date(row.date);
-             row.promiseDate = new Date(row.promiseDate);
+             row.date = row.date ? new Date(row.date) : undefined;
+             row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : undefined;
            }
            $scope.transactions = rows;
          })
@@ -93,17 +99,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
            console.error(err);
          });
      };
-     $scope.typeSelected= ()=>{
-       // console.log("in function");
-       $scope.promiseDateDisable = false;
-       if ($scope.transaction.type == "Settle") {
-         $scope.promiseDateDisable = true;
-       }
-       else {
-         $scope.promiseDateDisable = false;
-       }
-
-     }
     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
 
   });

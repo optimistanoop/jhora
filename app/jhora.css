@@ -17,6 +17,10 @@ table, th , td  {
   background-color: rgb(128,255,255);
 }
 
+table tr:hover td {
+  font-weight: bold;
+}
+
 md-toolbar:not(.md-menu-toolbar){
   background-color: rgb(57,73,171);
 }
