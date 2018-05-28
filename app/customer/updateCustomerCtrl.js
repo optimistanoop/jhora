@@ -1,5 +1,5 @@
 
-jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
 
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
@@ -47,8 +47,10 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, CUSTOMERS_TA
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
+        $timeout(()=>{
+          $scope.resetCustomer();
+        },0);
         dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
-        $scope.resetCustomer();
         $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
