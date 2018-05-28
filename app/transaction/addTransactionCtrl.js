@@ -1,5 +1,5 @@
 
-jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
@@ -61,7 +61,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
       let values = Object.values($scope.transaction);
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
+        $timeout(()=>{
           $scope.resetTransaction();
+        },0);
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
       })
       .catch((err)=>{
