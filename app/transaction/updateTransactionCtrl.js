@@ -13,7 +13,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $scope.maxDate = new Date();
     $scope.minPromiseDate = $scope.transaction.date ? $scope.transaction.date : new Date();
     $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
-    $scope.disablePromiseDate = true;
+    $scope.disablePromiseDate = $scope.transaction.type == 'Settle' ? true :false;
 
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
@@ -24,6 +24,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       $scope.propertyName = propertyName;
     };
 
+    $scope.typeSelected= ()=>{
+      if ($scope.transaction.type == "Settle") {
+        $scope.disablePromiseDate = true;
+      } else {
+        $scope.disablePromiseDate = false;
+      }
+    }
     $scope.viewCustomerPassbook = (customer)=>{
      // TODO
      $rootScope.viewPassbookData = customer;

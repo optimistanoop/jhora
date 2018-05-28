@@ -32,7 +32,7 @@
             <md-input-container flex-xs>
               <label>Type</label>
               <md-icon><i class="material-icons">credit_card</i></md-icon>
-              <md-select name="type" ng-model="transaction.type" required>
+              <md-select name="type" ng-model="transaction.type" ng-change="typeSelected()" required>
                 <md-option><em>None</em></md-option>
                 <md-option ng-repeat="type in types" ng-value="type">
                   {{type}}
