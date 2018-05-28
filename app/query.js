@@ -30,6 +30,7 @@ class Query {
        date           TEXT   NOT NULL, 
        promiseDate    TEXT   NOT NULL,
        type           TEXT   NOT NULL,
+       rate           INT    NOT NULL,
        customerId     INTEGER NOT NULL,
        name           TEXT    NOT NULL,
        village        TEXT    NOT NULL,

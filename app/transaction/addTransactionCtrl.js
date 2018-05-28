@@ -36,7 +36,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
       for(let cust of $scope.customers){
         if(cust.id == customerId){
           $scope.customer = cust;
-          console.log('cust',$scope.customer);
+          $scope.transaction.rate = $scope.customer.rate;
           $scope.getCustomerPassbook(TRANSACTION_TABLE);
         }
       }
