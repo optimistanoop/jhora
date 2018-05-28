@@ -24,9 +24,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
           message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
       }, function (response) {
           if (response === 0) {
-           let  {amount, date, promiseDate, type, customerId, name, village, remarks } = transaction;
-           let keys = ['amount', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
-           let values =[amount, date, promiseDate, type, customerId, name, village, remarks];
+           let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
+           let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
+           let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
             q.insert(DELTRANSACTION_TABLE, keys, values)
             .then((data)=>{
               return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
@@ -36,7 +36,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
               dialog.showMessageBox({type :'info', message:`${transaction.name}'s transaction deleted`, buttons:[]});
             })
             .catch((err)=>{
-              console.error('anp an err occured while deleting',transaction);
+              console.error('anp an err occured while deleting',err);
             });
           }
       })

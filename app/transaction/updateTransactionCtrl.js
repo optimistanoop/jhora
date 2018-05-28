@@ -89,9 +89,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) undefined;
+          row.date = row.date ? new Date(row.date): undefined;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
         $scope[modelName] = rows;
         if(tableName == CUSTOMERS_TABLE)

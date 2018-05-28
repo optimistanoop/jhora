@@ -51,7 +51,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
     $scope.addTransaction = ()=>{
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $scope.customer.date ? $scope.customer.date: '';
+      $scope.transaction.promiseDate = $scope.transaction.promiseDate ? $scope.transaction.promiseDate: '';
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       q.insert(TRANSACTION_TABLE, keys, values)
@@ -85,7 +85,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = ow.date ? new Date(row.date) : undefined;
+             row.date = row.date ? new Date(row.date) : undefined;
              row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : undefined;
            }
            $scope.transactions = rows;
