@@ -29,7 +29,12 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      $scope.disablePromiseDate = false;
+      if ($scope.transaction.type == "Settle") {
+        $scope.disablePromiseDate = true;
+      }
+      else {
+        $scope.disablePromiseDate = false;
+      }
     };
 
     $scope.updateSelectedCust = (customerId)=>{
@@ -94,17 +99,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, TRANSACTION_
            console.error(err);
          });
      };
-     $scope.typeSelected= ()=>{
-       // console.log("in function");
-       $scope.promiseDateDisable = false;
-       if ($scope.transaction.type == "Settle") {
-         $scope.promiseDateDisable = true;
-       }
-       else {
-         $scope.promiseDateDisable = false;
-       }
-
-     }
     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
 
   });

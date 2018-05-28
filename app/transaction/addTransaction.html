@@ -32,7 +32,7 @@
               <md-input-container flex-xs>
                 <label>Type</label>
                 <md-icon><i class="material-icons">credit_card</i></md-icon>
-                <md-select name="type" ng-model="transaction.type" ng-change="typeSelected()" required>
+                <md-select name="type" ng-model="transaction.type" required>
                   <md-option><em>None</em></md-option>
                   <md-option ng-repeat="type in types" ng-value="type">
                     {{type}}
@@ -65,7 +65,7 @@
               </md-input-container>
               <md-input-container flex-xs>
                 <label>Promise Date</label>
-                <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" ng-disabled= "promiseDateDisable" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-required =!"disablePromiseDate" md-open-on-focus ></md-datepicker>
+                <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" ng-disabled= "disablePromiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-required ="!disablePromiseDate" md-open-on-focus ></md-datepicker>
                 <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
                   <div ng-message="required" class="my-message">You must supply a promise date.</div>
                 </div>

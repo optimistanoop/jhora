@@ -33,7 +33,12 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      $scope.disablePromiseDate = false;
+      if ($scope.transaction.type == "Settle") {
+        $scope.disablePromiseDate = true;
+      }
+      else {
+        $scope.disablePromiseDate = false;
+      }
     };
 
     $scope.updateSelectedCust = (customerId)=>{
@@ -55,7 +60,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $scope.customer.date ? $scope.customer.date: '';
+      $scope.transaction.promiseDate = $scope.transaction.promiseDate ? $scope.transaction.promiseDate: '';
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       let index = keys.indexOf('$$hashKey');
