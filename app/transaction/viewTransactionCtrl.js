@@ -52,9 +52,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = new Date(row.date);
+          row.date = row.date ? new Date(row.date) : undefined;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = new Date(row.promiseDate);
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
         $timeout(()=>{
           $scope[modelName] = rows;

@@ -55,6 +55,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
+      $scope.transaction.date = $scope.customer.date ? $scope.customer.date: '';
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       let index = keys.indexOf('$$hashKey');
@@ -88,9 +89,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = new Date(row.date);
+          row.date = row.date ? new Date(row.date) undefined;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = new Date(row.promiseDate);
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) undefined;
         }
         $scope[modelName] = rows;
         if(tableName == CUSTOMERS_TABLE)
@@ -106,8 +107,8 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = new Date(row.date);
-             row.promiseDate = new Date(row.promiseDate);
+             row.date = row.date ? new Date(row.date) : undefined;
+             row.promiseDate = row.promiseDate ? new Date(row.promiseDate) :undefined;
            }
            $scope.transactions = rows;
          })
