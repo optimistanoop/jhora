@@ -1,4 +1,7 @@
 <div ng-controller="addViewVillageCtrl"  ng-cloak class="md-inline-form">
+  <div layout="row">
+    <div flex="40">
+      <md-content layout-padding>
       <form novalidate name="villageForm">
         
          <md-content layout-padding layout="row">
@@ -17,7 +20,10 @@
         <md-button class="md-raised md-primary" ng-disabled="villageForm.$invalid" ng-click="addVillage()">Submit</md-button>
         <md-button class="md-raised md-warn" ng-click="resetVillage()">Reset</md-button>
       </form>
+    </md-content>
+  </div>
 
+<div flex="60">
       <md-content layout-padding layout="row" ng-show="hideNoDataFound">
   <table style="width:80%;margin: 0px auto;" >
     <tr>
@@ -39,4 +45,5 @@
   <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
     <h1>Sorry !! No village data found</h1>
   </md-content>
+</div>
 </div>
