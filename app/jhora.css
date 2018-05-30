@@ -7,6 +7,10 @@ table, th , td  {
   border-collapse: collapse;
   padding: 5px;
 }
+.customertable tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
 .trcr {
   background-color: #C4E690;
 }
