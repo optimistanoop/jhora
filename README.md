@@ -1,10 +1,11 @@
-# jhora
 
-Truly tiny jhora app that includes SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
+# Jhora
+
+Truly tiny jhora app for educational purpose that included SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
 
 ```
 git clone https://github.com/optimistanoop/jhora.git
-cd electron-boilerplate-sqlite
+cd jhora
 npm install
 npm start
 ```
@@ -13,7 +14,7 @@ npm start
 
 `npm i -g windows-build-tools`
 
-## After that
+## After that (if required)
 
 `npm i sqlite3 --build-from-source`
 
@@ -26,7 +27,9 @@ Releases can only be built on the target platform.
 ## DB path
 
 Windows -  `C:\Users\Administrator\AppData\Roaming\db.db`
+
 Mac -  `/Users/<USER_NAME>/Library/Application Support/db.db`
+
 Linux -  ``
 
 ## Using native modules
