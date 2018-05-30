@@ -38,14 +38,16 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   {title:'Add Customer', content:'customer/addCustomer.html'},
   {title:'Add Transaction', content:'transaction/addTransaction.html'},
   {title:'Customers', content:'customer/viewCustomer.html'},
-  {title:'Transactions', content:'transaction/viewTransaction.html'}
+  {title:'Transactions', content:'transaction/viewTransaction.html'},
+  {title:'Villages', content:'village/addViewVillage.html'}
 ])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
 .constant('CUSTOMERS_TABLE', 'customers')
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')
 .constant('TRANSACTION_TABLE', 'transactions')
-.constant('DELTRANSACTION_TABLE', 'deltransactions');
+.constant('DELTRANSACTION_TABLE', 'deltransactions')
+.constant('VILLAGE_TABLE', 'village');
 
 // jhora.config(function($routeProvider, $locationProvider) {
 //     $routeProvider
