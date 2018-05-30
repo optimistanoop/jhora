@@ -10,7 +10,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
   
-  $rootScope.template = $scope.tabs[0];
+  $rootScope.template = $scope.tabs[5];
   $scope.goto = function(page) {
     $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
@@ -39,7 +39,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   {title:'Add Transaction', content:'transaction/addTransaction.html'},
   {title:'Customers', content:'customer/viewCustomer.html'},
   {title:'Transactions', content:'transaction/viewTransaction.html'},
-  {title:'Villages', content:'village/addViewVillage.html'}
+  {title:'Villages', content:'village/addViewVillage.html'},
+  {title:'Dashboard', content:'dashboard/dashboard.html'}
 ])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
