@@ -37,6 +37,12 @@ class Query {
        remarks        CHAR(80) )`
      );
   }
+  createVillageTable(tableName){
+    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
+       name TEXT NOT NULL UNIQUE)`
+    );
+  }
 
   getTotalCountForTable(tableName){
     let p = new Promise((resolve, reject)=>{

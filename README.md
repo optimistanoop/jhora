@@ -1,6 +1,6 @@
-# electron-boilerplate-sqlite
+# jhora
 
-Truly tiny boilerplate for an Electron app that includes SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
+Truly tiny jhora app that includes SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
 
 ```
 git clone https://github.com/optimistanoop/jhora.git
