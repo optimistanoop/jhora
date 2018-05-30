@@ -1,5 +1,5 @@
 
-jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
 
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
@@ -28,6 +28,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, CU
     };
 
     $scope.updateCustomer = ()=>{
+      $scope.customer.date = $mdDateLocale.parseDate($scope.customer.date);
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
       let index = keys.indexOf('$$hashKey');

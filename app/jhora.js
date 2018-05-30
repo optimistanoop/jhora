@@ -70,16 +70,20 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
   
   $mdDateLocaleProvider.parseDate = function(dateString) {
+    
+    // d.toISOString()
+    // "2018-05-30T19:54:46.756Z"
+    // d.toLocaleDateString()
+    // "5/31/2018"
     let dd = dateString ? new Date(dateString) : undefined;
     let formattedDate = '';
     if(dd){
       let d = dd.getDate();
       let m = dd.getMonth();
       let y = dd.getFullYear();
-      formattedDate = `${d}-${m + 1}-${y}`
+      formattedDate = `${y}-${m +1 }-${d}`
     }
-    
-    return formattedDate ? formattedDate : undefined;
+    return formattedDate ? formattedDate : '';
   };
   
   $mdDateLocaleProvider.formatDate = function(date) {
@@ -91,7 +95,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     let y = dd.getFullYear();
     formattedDate = `${d}-${m + 1}-${y}`
   }
-  
+
   return formattedDate ? formattedDate : undefined;
 };
 });
