@@ -1,4 +1,4 @@
-<div ng-controller="viewTransactionCtrl">  
+<div ng-controller="viewTransactionCtrl">
   <md-input-container flex-xs>
     <label>Results for</label>
     <md-icon><i class="material-icons">sort</i></md-icon>
@@ -14,7 +14,7 @@
        <label>Search</label>
        <md-icon> <i class="material-icons">search</i> </md-icon>
        <input ng-model="$ctrl.query" type="text">
-     </md-input-container> 
+     </md-input-container>
  <div style="width:80%;margin: 10px auto;">
      <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
@@ -23,7 +23,7 @@
 <md-content layout-padding layout="row" ng-show="hideNoDataFound">
   <table style="width:80%;margin: 0px auto;">
     <tr>
-      <th> 
+      <th>
         <button ng-click="sortBy('amount')">Amount</button>
         <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
       </th>

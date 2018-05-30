@@ -21,3 +21,4 @@ q.createCustomerTable('customers');
 q.createCustomerTable('delcustomers');
 q.createTransactionTable('transactions');
 q.createTransactionTable('deltransactions');
+q.createVillageTable('village');

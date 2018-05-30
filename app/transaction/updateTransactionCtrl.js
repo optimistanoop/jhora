@@ -1,5 +1,5 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
@@ -13,7 +13,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $scope.maxDate = new Date();
     $scope.minPromiseDate = $scope.transaction.date ? $scope.transaction.date : new Date();
     $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
-    $scope.disablePromiseDate = true;
+    $scope.disablePromiseDate = $scope.transaction.type == 'Settle' ? true :false;
 
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
@@ -24,6 +24,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       $scope.propertyName = propertyName;
     };
 
+    $scope.typeSelected= ()=>{
+      if ($scope.transaction.type == "Settle") {
+        $scope.disablePromiseDate = true;
+      } else {
+        $scope.disablePromiseDate = false;
+      }
+    }
     $scope.viewCustomerPassbook = (customer)=>{
      // TODO
      $rootScope.viewPassbookData = customer;
@@ -33,7 +40,12 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      $scope.disablePromiseDate = false;
+      if ($scope.transaction.type == "Settle") {
+        $scope.disablePromiseDate = true;
+      }
+      else {
+        $scope.disablePromiseDate = false;
+      }
     };
 
     $scope.updateSelectedCust = (customerId)=>{
@@ -55,7 +67,8 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $scope.customer.date ? $scope.customer.date: '';
+      $scope.transaction.date = $mdDateLocale.parseDate($scope.transaction.date);
+      $scope.transaction.promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       let index = keys.indexOf('$$hashKey');
@@ -89,9 +102,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, TRANSACTI
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) undefined;
+          row.date = row.date ? new Date(row.date): undefined;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
         $scope[modelName] = rows;
         if(tableName == CUSTOMERS_TABLE)

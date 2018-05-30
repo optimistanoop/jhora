@@ -38,14 +38,16 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   {title:'Add Customer', content:'customer/addCustomer.html'},
   {title:'Add Transaction', content:'transaction/addTransaction.html'},
   {title:'Customers', content:'customer/viewCustomer.html'},
-  {title:'Transactions', content:'transaction/viewTransaction.html'}
+  {title:'Transactions', content:'transaction/viewTransaction.html'},
+  {title:'Villages', content:'village/addViewVillage.html'}
 ])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
 .constant('CUSTOMERS_TABLE', 'customers')
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')
 .constant('TRANSACTION_TABLE', 'transactions')
-.constant('DELTRANSACTION_TABLE', 'deltransactions');
+.constant('DELTRANSACTION_TABLE', 'deltransactions')
+.constant('VILLAGE_TABLE', 'village');
 
 // jhora.config(function($routeProvider, $locationProvider) {
 //     $routeProvider
@@ -60,10 +62,40 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
 //       requireBase: false
 //     });
 // });
-jhora.config(function($mdThemingProvider) {
+jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow') .dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
+  
+  $mdDateLocaleProvider.parseDate = function(dateString) {
+    
+    // d.toISOString()
+    // "2018-05-30T19:54:46.756Z"
+    // d.toLocaleDateString()
+    // "5/31/2018"
+    let dd = dateString ? new Date(dateString) : undefined;
+    let formattedDate = '';
+    if(dd){
+      let d = dd.getDate();
+      let m = dd.getMonth();
+      let y = dd.getFullYear();
+      formattedDate = `${y}-${m +1 }-${d}`
+    }
+    return formattedDate ? formattedDate : '';
+  };
+  
+  $mdDateLocaleProvider.formatDate = function(date) {
+  let dd = date ? date : undefined;
+  let formattedDate = '';
+  if(dd){
+    let d = dd.getDate();
+    let m = dd.getMonth();
+    let y = dd.getFullYear();
+    formattedDate = `${d}-${m + 1}-${y}`
+  }
+
+  return formattedDate ? formattedDate : undefined;
+};
 });
