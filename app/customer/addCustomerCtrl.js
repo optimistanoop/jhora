@@ -1,5 +1,5 @@
 
-jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
+jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
 
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
 
@@ -21,7 +21,8 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,CUSTOM
     };
 
     $scope.addCustomer = ()=>{
-      if(!$scope.customer.date)$scope.customer.date = '';
+      $scope.customer.date = $mdDateLocale.parseDate($scope.customer.date);
+      // if(!$scope.customer.date)$scope.customer.date = '';
       let keys = Object.keys($scope.customer);
       let values = Object.values($scope.customer);
       q.insert(CUSTOMERS_TABLE, keys, values)
