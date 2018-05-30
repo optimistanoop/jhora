@@ -109,4 +109,9 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
           }
       })
     };
+
+     $scope.sortBy = function(propertyName) {
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
 });
