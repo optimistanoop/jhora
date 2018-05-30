@@ -1,5 +1,5 @@
 
-jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
@@ -56,7 +56,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, TR
     $scope.addTransaction = ()=>{
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.promiseDate = $scope.transaction.promiseDate ? $scope.transaction.promiseDate: '';
+      $scope.transaction.date = $scope.transaction.date ? $mdDateLocale.date($scope.transaction.date): '';
+      $scope.transaction.promiseDate = $scope.transaction.promiseDate ? $mdDateLocale.parseDate($scope.transaction.promiseDate): '';
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
       q.insert(TRANSACTION_TABLE, keys, values)
@@ -76,9 +77,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, TR
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
-          if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          // row.date = row.date ? new Date(row.date) : undefined;
+          // if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
+          // row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
         $scope[modelName] = rows;
       })
@@ -92,8 +93,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, TR
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = row.date ? new Date(row.date) : undefined;
-             row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : undefined;
+             row.date = $mdDateLocale.parseDate(row.date);
+             // row.date = row.date ? new Date(row.date) : undefined;
+             // row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : undefined;
            }
            $scope.transactions = rows;
          })
