@@ -4,7 +4,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
-
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
@@ -60,6 +59,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       $scope.transaction.promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
       let keys = Object.keys($scope.transaction);
       let values = Object.values($scope.transaction);
+      console.log($scope.transaction.date);
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{
