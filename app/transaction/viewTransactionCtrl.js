@@ -9,8 +9,8 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.transactions = [];
     $scope.hideNoDataFound = true;
     $scope.tran = {FromDate: undefined, ToDate: undefined};
-    $scope.tran.FromDate = new Date();
-    $scope.tran.ToDate = new Date();
+    $scope.maxDate = new Date();
+
 
     $scope.editTransaction = (transaction)=>{
       //TODO
@@ -88,13 +88,12 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
        .then((rows)=>{
          console.log(rows);
          $timeout(()=>{
-         if(rows){
          $scope.transactions= rows;
-         console.log($scope.transactions);
-         $scope.hideNoDataFound = false;
-       } else {
          $scope.hideNoDataFound = true;
-       }
+         console.log($scope.transactions);
+         if (rows.length == 0){
+          $scope.hideNoDataFound = false;
+        }
      },0)
      })
       console.log($scope.transactions);
