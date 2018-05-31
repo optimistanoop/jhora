@@ -79,8 +79,8 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     let dd = dateString ? new Date(dateString) : undefined;
     let formattedDate = '';
     if(dd){
-      let d = dd.getDate();
-      let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth()
+      let d = dd.getDate()< 9 ?  '0'+ (dd.getDate()) : dd.getDate();
+      let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth();
       let y = dd.getFullYear();
       formattedDate = `${y}-${m}-${d}`
     }
