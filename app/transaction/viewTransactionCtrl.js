@@ -64,6 +64,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
       })
       .catch((err)=>{
         console.error(err);
+        console.log(err);
       });
     };
 
@@ -76,5 +77,25 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
     }
 
     $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+    let FDate = $scope.tran.Fro
+    $scope.getTransaction=()=>{
+      q.selectAllTransactionByDate(TRANSACTION_TABLE,substring(toString($scope.tran.FromDate),5,12),substring(toString($scope.tran.ToDate),5,12))
+       .then($scope.transactions) //=>{
+      //   if(rows)
+      //   for(let row of rows){
+      //     row.date = row.date ? new Date(row.date) : undefined;
+      //     if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
+      //     row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+      //   }
+      //   $timeout(()=>{
+      //     $scope[modelName] = rows;
+      //     if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+      //     $scope.hideNoDataFound = false;
+      //   }, 0);
+      // })
+      console.log($scope.transactions);
+      console.log($scope.tran.FromDate);
+      console.log($scope.tran.ToDate);
 
+    }
   });

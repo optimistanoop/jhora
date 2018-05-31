@@ -113,6 +113,16 @@ class Query {
     });
     return p;
   }
+  selectAllTransactionByDate(tableName, key, value1,value2){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = BETWEEN toDate(${value1}) AND toDate(${value2})`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 };
 
 module.exports = Query;
