@@ -10,7 +10,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
   
-  $rootScope.template = $scope.tabs[0];
+  $rootScope.template = $scope.tabs[5];
   $scope.goto = function(page) {
     $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
@@ -39,7 +39,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   {title:'Add Transaction', content:'transaction/addTransaction.html'},
   {title:'Customers', content:'customer/viewCustomer.html'},
   {title:'Transactions', content:'transaction/viewTransaction.html'},
-  {title:'Villages', content:'village/addViewVillage.html'}
+  {title:'Villages', content:'village/addViewVillage.html'},
+  {title:'Dashboard', content:'dashboard/dashboard.html'}
 ])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
@@ -78,10 +79,10 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     let dd = dateString ? new Date(dateString) : undefined;
     let formattedDate = '';
     if(dd){
-      let d = dd.getDate();
-      let m = dd.getMonth();
+      let d = dd.getDate()< 9 ?  '0'+ (dd.getDate()) : dd.getDate();
+      let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth();
       let y = dd.getFullYear();
-      formattedDate = `${y}-${m +1 }-${d}`
+      formattedDate = `${y}-${m}-${d}`
     }
     return formattedDate ? formattedDate : '';
   };

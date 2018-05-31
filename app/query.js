@@ -113,6 +113,63 @@ class Query {
     });
     return p;
   }
+
+  // selectAllTransactionByDate(tableName, key, value1,value2){
+  //   let p = new Promise( (resolve, reject)=>{
+  //     let sql = `SELECT * FROM ${tableName} WHERE ${key} = BETWEEN toDate(${value1}) AND toDate(${value2})`
+
+  //get data by year and month of selected data
+   selectAllByYearMonth(tableName, key, value){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE strftime('%Y', ${key}) = strftime('%Y', ${key}) AND strftime('%m', ${key}) = strftime('%m', ${key})`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
+
+  //get data between two dates
+   selectDataByDates(tableName, key, value1, value2){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE date(${key}) BETWEEN '${value1}' AND '${value2}'`
+      console.log(sql);
+      this.db.all(sql, (err, data)=>{
+        console.log(data);
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
+
+//get greater data and equal of selected date
+  selectGreaterDataByDate(tableName,key,value){
+    let p = new Promise( (resolve, reject)=>{
+    let sql = `SELECT * from ${tableName} where date(${key}) >= date(${value})`
+
+    this.db.all(sql, (err, data)=>{
+      if(err) reject(err);
+      resolve(data);
+    });
+  });
+    return p;
+  }
+
+  //get less data of selected date
+  selectLessDataByDate(tableName,key,value){
+    let p = new Promise( (resolve, reject)=>{
+    let sql = `SELECT * from ${tableName} where date(${key}) < date(${value})`
+    this.db.all(sql, (err, data)=>{
+      if(err) reject(err);
+      resolve(data);
+    });
+  });
+    return p;
+  }
+
+
 };
 
 module.exports = Query;

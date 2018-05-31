@@ -9,6 +9,21 @@
       </md-option>
     </md-select>
   </md-input-container>
+  <md-input-container>
+    <label>From Date</label>
+    <md-datepicker name="FromDate" ng-model="tran.FromDate" md-min-date="minDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
+    <div ng-messages="transactionForm.date.$error" role="alert" multiple>
+      <div ng-message="required" class="my-message">You must supply a date.</div>
+    </div>
+  </md-input-container>
+    <md-input-container>
+      <label>To Date</label>
+      <md-datepicker name="ToDate" ng-model="tran.ToDate" md-min-date="minDate" md-max-date="maxDate" ng-change="getTransaction()" md-open-on-focus required></md-datepicker>
+      <div ng-messages="transactionForm.date.$error" role="alert" multiple>
+        <div ng-message="required" class="my-message">You must supply a date.</div>
+      </div>
+    </md-input-container>
+
    <md-content layout-padding layout="row" ng-show="hideNoDataFound">
      <md-input-container flex-xs>
        <label>Search</label>
