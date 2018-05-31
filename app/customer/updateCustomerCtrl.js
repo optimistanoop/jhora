@@ -51,11 +51,14 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         $timeout(()=>{
           $scope.resetCustomer();
         },0);
-        dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+        dialog.showMessageBox({type :'info', message:'Data updated', buttons:[]});
         $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
+          if (err.code=="SQLITE_CONSTRAINT") {
+            dialog.showMessageBox({type :'info', message:'Mobile number is already in use', buttons:[]});
+          }
       });
     };
 
