@@ -113,11 +113,6 @@ class Query {
     });
     return p;
   }
-
-  // selectAllTransactionByDate(tableName, key, value1,value2){
-  //   let p = new Promise( (resolve, reject)=>{
-  //     let sql = `SELECT * FROM ${tableName} WHERE ${key} = BETWEEN toDate(${value1}) AND toDate(${value2})`
-
   //get data by year and month of selected data
    selectAllByYearMonth(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
@@ -134,9 +129,7 @@ class Query {
    selectDataByDates(tableName, key, value1, value2){
     let p = new Promise( (resolve, reject)=>{
       let sql = `SELECT * FROM ${tableName} WHERE date(${key}) BETWEEN '${value1}' AND '${value2}'`
-      console.log(sql);
       this.db.all(sql, (err, data)=>{
-        console.log(data);
         if(err) reject(err);
         resolve(data);
       });
