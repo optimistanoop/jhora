@@ -28,7 +28,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      if ($scope.transaction.type == "Settle") {
+      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr" ) {
         $scope.disablePromiseDate = true;
       }
       else {
