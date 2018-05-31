@@ -29,8 +29,8 @@
             <md-icon><i class="material-icons">place</i></md-icon>
             <md-select name="village" ng-model="customer.village" ng-required="true">
               <md-option><em>None</em></md-option>
-              <md-option ng-repeat="vil in villages" ng-value="vil">
-                {{vil}}
+              <md-option ng-repeat="vil in villages" ng-value="vil.id">
+                {{vil.name}}
               </md-option>
             </md-select>
             <div ng-messages="customerForm.village.$error" role="alert" multiple>

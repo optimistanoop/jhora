@@ -2,8 +2,8 @@ const {shell} = require('electron')
 const {dialog} = require('electron').remote
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
-  $scope.villages = VILLAGES;
+jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS) {
+  //$scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
   $scope.tabs = TABS;
@@ -33,7 +33,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   };
                
 })
-.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
+//.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
   {title:'Add Customer', content:'customer/addCustomer.html'},
   {title:'Add Transaction', content:'transaction/addTransaction.html'},
