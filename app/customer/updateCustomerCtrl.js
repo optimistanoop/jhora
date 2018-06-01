@@ -28,9 +28,11 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.updateCustomer = ()=>{
-      $scope.customer.date = $mdDateLocale.parseDate($scope.customer.date);
+      let date = $mdDateLocale.parseDate($scope.customer.date);
       let keys = Object.keys($scope.customer);
+      let indexDate = keys.indexOf('date');
       let values = Object.values($scope.customer);
+      values[indexDate] = date;
       let index = keys.indexOf('$$hashKey');
       if (index > -1) {
         keys.splice(index, 1);
