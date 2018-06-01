@@ -78,3 +78,6 @@ md-toolbar:not(.md-menu-toolbar){
 .sortorder.reverse:after {
   content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
 }
+.tabs:hover {
+  cursor: pointer;
+}
