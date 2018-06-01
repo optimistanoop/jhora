@@ -13,7 +13,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
 
 
     $scope.editTransaction = (transaction)=>{
-      //TODO
       $rootScope.editModeData = transaction;
       $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
     };
@@ -88,27 +87,11 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
        .then((rows)=>{
          $timeout(()=>{
          $scope.transactions= rows;
-<<<<<<< HEAD
-         console.log($scope.transactions);
          $scope.hideNoDataFound = true;
-       } else {
+        if (rows.length == 0) {
          $scope.hideNoDataFound = false;
        }
      },0)
      })
-      console.log($scope.transactions);
-      console.log($scope.tran.FromDate);
-      console.log($scope.tran.ToDate);
-
     }
   });
-=======
-         $scope.hideNoDataFound = true;
-         if (rows.length == 0){
-          $scope.hideNoDataFound = false;
-             }
-          },0)
-        })
-      }
-});
->>>>>>> d62dfd8bdd0775bc4b4c75b68fe248207217c0a0
