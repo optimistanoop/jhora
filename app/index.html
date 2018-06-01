@@ -11,7 +11,7 @@
     <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
           <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()" >&times;</a>
-            <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs">{{tab.title}}  
+            <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs">{{tab.title}}
               <md-tooltip md-direction="right">{{tab.title}}</md-tooltip>
             </a>
           </div>
@@ -21,8 +21,8 @@
               	&#9776;Jhora</h1>
                 <div  style="text-align:center;margin-top: -41px;">{{template.title}}</div>
             </md-toolbar>
-            <div ng-include="template.content" ng-cloak></div>
-          </div>  
+            <div ng-include="template.content" ng-click="closeNav()" ng-cloak></div>
+          </div>
     </div>
     <script src="./db.js"></script>
     <script src="lib/angular.min.js"></script>
