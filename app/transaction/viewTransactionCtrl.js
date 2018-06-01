@@ -91,9 +91,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
          if(rows){
          $scope.transactions= rows;
          console.log($scope.transactions);
-         $scope.hideNoDataFound = false;
-       } else {
          $scope.hideNoDataFound = true;
+       } else {
+         $scope.hideNoDataFound = false;
        }
      },0)
      })

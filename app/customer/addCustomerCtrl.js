@@ -21,9 +21,11 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDat
     };
 
     $scope.addCustomer = ()=>{
-      $scope.customer.date = $mdDateLocale.parseDate($scope.customer.date);
+      let date = $mdDateLocale.parseDate($scope.customer.date);
       let keys = Object.keys($scope.customer);
+      let index = keys.indexOf('date')
       let values = Object.values($scope.customer);
+      values[index] = date;
       q.insert(CUSTOMERS_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{

@@ -1,5 +1,5 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
@@ -40,7 +40,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      if ($scope.transaction.type == "Settle") {
+      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
       }
       else {
@@ -67,10 +67,14 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $mdDateLocale.parseDate($scope.transaction.date);
-      $scope.transaction.promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
+      let date = $mdDateLocale.parseDate($scope.transaction.date);
+      let promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
       let keys = Object.keys($scope.transaction);
+      let indexDate = keys.indexOf('date');
+      let indexPdate = keys.indexOf('promiseDate');
       let values = Object.values($scope.transaction);
+      values[indexDate] = date;
+      values[indexPdate] = promiseDate;
       let index = keys.indexOf('$$hashKey');
       if (index > -1) {
         keys.splice(index, 1);
@@ -88,9 +92,11 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       }
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
+        $timeout (()=>{
           $scope.resetTransaction();
           dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
           $rootScope.template = {title: 'Trasactions', content:'transaction/viewTransaction.html'}
+        },0)
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
