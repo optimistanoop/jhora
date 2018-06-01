@@ -56,7 +56,7 @@
       <th>Delete</th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
-      <td>{{ tran.amount }}</td>
+      <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.type }}</td>
       <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
