@@ -48,7 +48,7 @@
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
       <td ng-click="editCustomer(cust)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></td>
-      <td ng-click="deleteCustomer(cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
    </table>
   </md-content>

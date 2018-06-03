@@ -1,8 +1,8 @@
-<md-dialog aria-label="Preview Transaction">
+<md-dialog aria-label="Preview Customer">
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>Preview Transaction</h2>
+        <h2>Preview Customer</h2>
         <span flex></span>
       </div>
     </md-toolbar>
@@ -12,12 +12,10 @@
         <md-card md-theme="dark-orange" md-theme-watch>
          <md-card-title>
            <md-card-title-text>
-             <span class="md-headline">Customer Name: {{transaction.name}}</span>
-             <span class="md-subhead">Amount: {{transaction.amount}}</span>
-             <span class="md-subhead">Rate: {{transaction.rate}}%</span>
-             <span class="md-subhead">Type: {{transaction.type}}</span>
-             <span class="md-subhead">Date: {{transaction.date | date:"EEE,d/M/yy" }}</span>
-             <span class="md-subhead">Promise Date: {{transaction.promiseDate | date:"EEE,d/M/yy"}}</span>
+             <span class="md-headline">Customer Name: {{Customer.name}}</span>
+             <span class="md-subhead">Father Name: {{Customer.father}}</span>
+             <span class="md-subhead">Village: {{Customer.village}}%</span>
+             <span class="md-subhead">Mobile: {{Customer.mobile}}</span>
            </md-card-title-text>
          </md-card-title>
        </md-card>
