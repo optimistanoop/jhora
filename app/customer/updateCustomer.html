@@ -3,6 +3,16 @@
     
     <md-content layout-padding layout="row">
       <md-input-container class="md-block" flex-xs>
+             <label>salutation</label> 
+            <md-icon><i class="material-icons">person</i></md-icon>
+            <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
+             
+             <md-option ng-repeat="salutation in salutation" ng-value="salutation">
+               {{salutation}}
+             </md-option>
+           </md-select>
+                     </md-input-container>
+      <md-input-container class="md-block" flex-xs>
         <label>Name</label>
         <md-icon><i class="material-icons">person</i></md-icon>
         <input name="name" type="text" ng-model="customer.name" ng-minlength="4" md-maxlength="20" ng-required="true">
@@ -29,7 +39,7 @@
         <md-icon><i class="material-icons">place</i></md-icon>
         <md-select name="village" ng-model="customer.village" ng-required="true">
           <md-option><em>None</em></md-option>
-          <md-option ng-repeat="vil in villages" ng-selected="customer.village" ng-value="vil.name">
+          <md-option ng-repeat="vil in villages" ng-value="vil.name">
             {{vil.name}}
           </md-option>
         </md-select>
