@@ -1,4 +1,4 @@
-<md-dialog aria-label="Mango (Fruit)">
+<md-dialog aria-label="Preview Transaction">
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -9,15 +9,28 @@
     <md-dialog-content>
       <div class="md-dialog-content">
         <h2>Please review the Transaction before update</h2>
+        <md-card md-theme="dark-grey" md-theme-watch>
+         <md-card-title>
+           <md-card-title-text>
+             <span class="md-headline">Customer Name: {{transaction.name}}</span>
+             <span class="md-subhead">Amount: {{transaction.amount}}</span>
+             <span class="md-subhead">Rate: {{transaction.rate}}%</span>
+             <span class="md-subhead">Type: {{transaction.type}}</span>
+             <span class="md-subhead">Date: {{transaction.date | date:"EEE,d/M/yy" }}</span>
+             <span class="md-subhead">Promise Date: {{transaction.promiseDate | date:"EEE,d/M/yy"}}</span>
+           </md-card-title-text>
+         </md-card-title>
+       </md-card>
+
       </div>
       </md-dialog-content>
       <md-dialog-actions layout="row">
           <span flex></span>
-          <md-button ng-click="answer('submit');">
-           Submit
-          </md-button>
           <md-button ng-click="answer('cancel');">
             Cancel
+          </md-button>
+          <md-button ng-click="answer('submit');">
+           Submit
           </md-button>
         </md-dialog-actions>
       </form>

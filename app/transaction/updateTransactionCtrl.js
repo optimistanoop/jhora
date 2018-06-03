@@ -1,10 +1,9 @@
 
 jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-
+    let vm = $scope;
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
-
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editModeData ;
@@ -62,14 +61,14 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched();
     };
-    function DialogController($scope, $mdDialog) {
-    $scope.answer = function(answer) {
-     $mdDialog.hide(answer);
-   };
- }
     $scope.confirmTransaction=(ev)=>{
       $mdDialog.show({
-     controller: DialogController,
+     controller: ($scope, $mdDialog)=>{
+       $scope.transaction = vm.transaction;
+     $scope.answer = function(answer) {
+      $mdDialog.hide(answer);
+    };
+  },
      templateUrl: 'transaction/previewTransaction.html',
      parent: angular.element(document.body),
      targetEvent: ev,
@@ -77,16 +76,11 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
    })
    .then(function(answer) {
-     console.log('maa ki aankh' ,answer);
      if(answer == 'submit') {
        $scope.updateTransaction();
      }
-     $scope.status = 'You click on .' + answer;
-   }, function() {
-     console.log('you clicked outside');
-     $scope.status = 'You cancelled the dialog.';
    });
-    }
+  }
 
     $scope.updateTransaction= ()=>{
       $scope.updateSelectedCust($scope.transaction.customerId);
