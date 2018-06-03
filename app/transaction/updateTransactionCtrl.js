@@ -55,7 +55,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
           $scope.customer = cust;
           if($scope.customer.salutation == 'Mrs'){
           $scope.salutation = 'W/o' ;
-          }else if($scope.customer.salutation == 'Mr.'){
+          }else if($scope.customer.salutation == 'Mr'){
           $scope.salutation = 'S/o' ;
           }else{
           $scope.salutation = 'D/o' ;
