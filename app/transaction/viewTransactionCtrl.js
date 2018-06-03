@@ -83,8 +83,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
         }, 0);
       })
       .catch((err)=>{
-        console.error(err);
-        console.log(err);
+        console.error('anp got error while fetching data',err);
       });
     };
 

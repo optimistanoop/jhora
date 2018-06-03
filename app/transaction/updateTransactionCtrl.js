@@ -51,7 +51,6 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       for(let cust of $scope.customers){
         if(cust.id == customerId){
           $scope.customer = cust;
-          console.log('cust',$scope.customer);
         }
       }
     };

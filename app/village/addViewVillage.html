@@ -3,7 +3,7 @@
     <div flex="40">
       <md-content layout-padding>
       <form novalidate name="villageForm">
-        
+
          <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
             <label>Name</label>
@@ -15,8 +15,8 @@
               <div ng-message="md-maxlength" class="my-message">Name should not be greater than 20 alphabets.</div>
             </div>
           </md-input-container>
-          </md-content> 
-         
+          </md-content>
+
         <md-button class="md-raised md-primary" ng-disabled="villageForm.$invalid" ng-click="addVillage()">Submit</md-button>
         <md-button class="md-raised md-warn" ng-click="resetVillage()">Reset</md-button>
       </form>
@@ -36,9 +36,9 @@
     </tr>
     <tr ng-repeat="village in villages | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ village.name }}</td>
-      
+
       <td ng-click="editVillage(village)" ng-show="queryFor == 'All'"><i class="material-icons">edit</i></td>
-      <td ng-click="deleteVillage(village)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-click="deleteVillage($event,village)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
    </table>
   </md-content>
