@@ -35,7 +35,7 @@
         },0);
         $mdToast.show(
         $mdToast.simple()
-        .textContent('Trasaction Added.')
+        .textContent('Customer Added.')
         .position('bottom right')
         .hideDelay(3000)
         );
