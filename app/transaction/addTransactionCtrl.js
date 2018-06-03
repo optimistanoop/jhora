@@ -9,6 +9,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.minPromiseDate = new Date();
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
+    $scope.salutation = '';
 
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
@@ -42,6 +43,13 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         if(cust.id == customerId){
           $scope.customer = cust;
           $scope.transaction.rate = $scope.customer.rate;
+          if($scope.customer.salutation == 'Mrs'){
+            $scope.salutation = 'W/o' ;
+           }else if($scope.customer.salutation == 'Mr.'){
+             $scope.salutation = 'S/o' ;
+          }else{
+            $scope.salutation = 'D/o' ;
+          }
           $scope.getCustomerPassbook(TRANSACTION_TABLE);
         }
       }

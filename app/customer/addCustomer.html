@@ -3,8 +3,17 @@
 
         <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
-            <label>Name</label>
+             <label>salutation</label> 
             <md-icon><i class="material-icons">person</i></md-icon>
+            <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
+             
+             <md-option ng-repeat="salutation in salutation" ng-value="salutation">
+               {{salutation}}
+             </md-option>
+           </md-select>
+                     </md-input-container>
+            <md-input-container class="md-block" flex-xs>  
+              <label>Name</label>
             <input name="name" type="text" ng-model="customer.name" ng-minlength="4" md-maxlength="20" ng-required="true">
             <div ng-messages="customerForm.name.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a name.</div>

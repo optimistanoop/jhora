@@ -20,7 +20,8 @@ class Query {
        rate           INT    NOT NULL,
        guarantor      TEXT,
        date           TEXT,
-       remarks        CHAR(80) )`
+       remarks        CHAR(80),
+       salutation           TEXT    NOT NULL )`
      );
   }
   createTransactionTable(tableName){
