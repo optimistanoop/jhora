@@ -1,5 +1,5 @@
 
-jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
+  jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
@@ -28,7 +28,27 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       $scope.customerForm.$setUntouched();
     };
 
-    $scope.updateCustomer = ()=>{
+    $scope.updateCustomer=(ev,Customer)=>{
+        $mdDialog.show({
+        controller: ($scope, $mdDialog)=>{
+          $scope.Customer = Customer;
+          $scope.answer = function(answer) {
+          $mdDialog.hide(answer);
+          };
+        },
+     templateUrl: 'customer/previewCustomer.html',
+     parent: angular.element(document.body),
+     targetEvent: ev,
+     clickOutsideToClose:false,
+     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+   })
+   .then(function(answer) {
+     if(answer == 'submit') {
+       $scope.confirmCustomer(ev);
+     }
+   });
+  }
+    $scope.confirmCustomer = (ev)=>{
       let date = $mdDateLocale.parseDate($scope.customer.date);
       let keys = Object.keys($scope.customer);
       let indexDate = keys.indexOf('date');
@@ -54,7 +74,12 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         $timeout(()=>{
           $scope.resetCustomer();
         },0);
-        dialog.showMessageBox({type :'info', message:'Data updated', buttons:[]});
+        $mdToast.show(
+        $mdToast.simple()
+        .textContent('Customer updated.')
+        .position('bottom right')
+        .hideDelay(3000)
+        );
         $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
       })
       .catch((err)=>{
@@ -75,8 +100,8 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         $timeout(()=>{
           $scope.villages = rows;
           if(tableName == VILLAGE_TABLE && rows && rows.length == 0)
-          $scope.hideNoDataFound = false; 
-        },0); 
+          $scope.hideNoDataFound = false;
+        },0);
       })
       .catch((err)=>{
         console.error(err);
