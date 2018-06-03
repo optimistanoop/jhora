@@ -3,23 +3,16 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '',salutation: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editModeData ;
-    $scope.type = '';
-     if($scope.customer.type == 'Mrs'){
-  $scope.type = 'W/o' ;
- }else if($scope.customer.type == 'Mr.'){
-  $scope.type = 'S/o' ;
-}else{
-  $scope.type = 'D/o' ;
-}
+    $scope.salutation = '';
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = $scope.transaction.date ? $scope.transaction.date : new Date();
-   // $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
+    $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
     $scope.disablePromiseDate = $scope.transaction.type == 'Settle' ? true :false;
 
     $scope.cancelUpdate = () =>{
@@ -60,6 +53,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         if(cust.id == customerId){
           $scope.customer = cust;
           console.log('cust',$scope.customer);
+          if($scope.customer.salutation == 'Mrs'){
+          $scope.salutation = 'W/o' ;
+          }else if($scope.customer.salutation == 'Mr.'){
+          $scope.salutation = 'S/o' ;
+          }else{
+          $scope.salutation = 'D/o' ;
+          }
         }
       }
     };
