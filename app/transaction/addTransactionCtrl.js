@@ -43,7 +43,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         if(cust.id == customerId){
           $scope.customer = cust;
           $scope.transaction.rate = $scope.customer.rate;
-          if($scope.customer.salutation == 'Mrs'){
+          if($scope.customer.salutation == 'Mrs.'){
             $scope.salutation = 'W/o' ;
            }else if($scope.customer.salutation == 'Mr.'){
              $scope.salutation = 'S/o' ;
