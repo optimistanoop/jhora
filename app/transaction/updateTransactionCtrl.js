@@ -72,7 +72,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
      templateUrl: 'transaction/previewTransaction.html',
      parent: angular.element(document.body),
      targetEvent: ev,
-     clickOutsideToClose:true,
+     clickOutsideToClose:false,
      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
    })
    .then(function(answer) {
@@ -131,9 +131,11 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
           row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
         }
+        $timeout( ()=>{
         $scope[modelName] = rows;
         if(tableName == CUSTOMERS_TABLE)
         $scope.updateSelectedCust($scope.transaction.customerId);
+      },0)
       })
       .catch((err)=>{
         console.error(err);
