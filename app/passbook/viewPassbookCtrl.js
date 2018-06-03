@@ -56,8 +56,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout(()=>{
           $scope.transactions = rows;

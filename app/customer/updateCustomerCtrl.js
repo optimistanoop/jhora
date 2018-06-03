@@ -1,7 +1,7 @@
 
   jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
-    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.customer = $scope.editModeData;

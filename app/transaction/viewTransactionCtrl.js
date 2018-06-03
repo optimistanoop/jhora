@@ -4,11 +4,11 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.transactions = [];
     $scope.hideNoDataFound = true;
-    $scope.tran = {fromDate: undefined, toDate: undefined};
+    $scope.tran = {fromDate: null, toDate: null};
     $scope.maxDate = new Date();
 
 
@@ -72,9 +72,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout(()=>{
           $scope[modelName] = rows;
