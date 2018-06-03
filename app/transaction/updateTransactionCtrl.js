@@ -1,17 +1,25 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-    let vm = $scope;
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$mdToast, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editModeData ;
+    $scope.type = '';
+     if($scope.customer.type == 'Mrs'){
+  $scope.type = 'W/o' ;
+ }else if($scope.customer.type == 'Mr.'){
+  $scope.type = 'S/o' ;
+}else{
+  $scope.type = 'D/o' ;
+}
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = $scope.transaction.date ? $scope.transaction.date : new Date();
-    $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
+   // $scope.maxPromiseDate = $scope.transaction.date ? new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate()) : new Date($scope.transaction.date.getFullYear() , $scope.transaction.date.getMonth() +1 , $scope.transaction.date.getDate());
     $scope.disablePromiseDate = $scope.transaction.type == 'Settle' ? true :false;
 
     $scope.cancelUpdate = () =>{
@@ -61,14 +69,14 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched();
     };
-    $scope.confirmTransaction=(ev)=>{
+    $scope.confirmTransaction=(ev,transaction)=>{
       $mdDialog.show({
      controller: ($scope, $mdDialog)=>{
-       $scope.transaction = vm.transaction;
-     $scope.answer = function(answer) {
-      $mdDialog.hide(answer);
-    };
-  },
+       $scope.transaction = transaction;
+       $scope.answer = function(answer) {
+       $mdDialog.hide(answer);
+     };
+   },
      templateUrl: 'transaction/previewTransaction.html',
      parent: angular.element(document.body),
      targetEvent: ev,
@@ -77,12 +85,12 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
    })
    .then(function(answer) {
      if(answer == 'submit') {
-       $scope.updateTransaction();
+       $scope.updateTransaction(ev);
      }
    });
   }
 
-    $scope.updateTransaction= ()=>{
+    $scope.updateTransaction= (ev)=>{
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
@@ -112,8 +120,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
         $timeout (()=>{
+          $mdToast.show(
+          $mdToast.simple()
+          .textContent('Trasaction updated.')
+          .position('bottom right')
+          .hideDelay(3000)
+          );
           $scope.resetTransaction();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
           $rootScope.template = {title: 'Trasactions', content:'transaction/viewTransaction.html'}
         },0)
       })

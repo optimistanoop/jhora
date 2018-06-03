@@ -1,5 +1,5 @@
 
-jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
@@ -9,6 +9,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.minPromiseDate = new Date();
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
+    $scope.salutation = '';
 
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
@@ -42,6 +43,13 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         if(cust.id == customerId){
           $scope.customer = cust;
           $scope.transaction.rate = $scope.customer.rate;
+          if($scope.customer.salutation == 'Mrs'){
+            $scope.salutation = 'W/o' ;
+           }else if($scope.customer.salutation == 'Mr.'){
+             $scope.salutation = 'S/o' ;
+          }else{
+            $scope.salutation = 'D/o' ;
+          }
           $scope.getCustomerPassbook(TRANSACTION_TABLE);
         }
       }
@@ -69,7 +77,12 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $timeout(()=>{
           $scope.resetTransaction();
         },0);
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+        $mdToast.show(
+        $mdToast.simple()
+        .textContent('Trasaction Added.')
+        .position('bottom right')
+        .hideDelay(3000)
+        );
       })
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);

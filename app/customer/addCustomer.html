@@ -1,10 +1,19 @@
 <div ng-controller="addCustomerCtrl"  ng-cloak class="md-inline-form">
       <form novalidate name="customerForm">
-        
+
         <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
-            <label>Name</label>
+             <label>salutation</label> 
             <md-icon><i class="material-icons">person</i></md-icon>
+            <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
+             
+             <md-option ng-repeat="salutation in salutation" ng-value="salutation">
+               {{salutation}}
+             </md-option>
+           </md-select>
+                     </md-input-container>
+            <md-input-container class="md-block" flex-xs>  
+              <label>Name</label>
             <input name="name" type="text" ng-model="customer.name" ng-minlength="4" md-maxlength="20" ng-required="true">
             <div ng-messages="customerForm.name.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a name.</div>
@@ -23,13 +32,13 @@
               <div ng-message="min" class="my-message">Mobile No. should be greater than 6,00,00,00,000.</div>
               <div ng-message="max" class="my-message">Mobile No. should be less than 9,99,99,99,999.</div>
             </div>
-          </md-input-container> 
+          </md-input-container>
           <md-input-container flex-xs>
             <label>Village</label>
             <md-icon><i class="material-icons">place</i></md-icon>
             <md-select name="village" ng-model="customer.village" ng-required="true">
               <md-option><em>None</em></md-option>
-              <md-option ng-repeat="vil in villages" ng-value="vil.id">
+              <md-option ng-repeat="vil in villages" ng-value="vil.name">
                 {{vil.name}}
               </md-option>
             </md-select>
@@ -52,8 +61,8 @@
               </md-not-found>
             </md-autocomplete> -->
           </md-input-container>
-          </md-content> 
-          
+          </md-content>
+
           <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
             <label>Father's Name</label>
@@ -86,7 +95,7 @@
               <div ng-message="minlength" class="my-message">Page No. should be of minimum 1 digit.</div>
               <div ng-message="md-maxlength" class="my-message"> Page No. should be of maximum 4 digit.</div>
             </div>
-          </md-input-container>    
+          </md-input-container>
           </md-content>
           <md-content layout-padding layout="row">
             <md-input-container class="md-block" flex-xs>
@@ -112,7 +121,7 @@
           </div>
         </md-input-container>
       </md-content>
-        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="addCustomer()">Submit</md-button>
+        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="addCustomer($event)">Submit</md-button>
         <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
       </form>
 </div>

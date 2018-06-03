@@ -3,6 +3,14 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
 
  $scope.customer = $rootScope.viewPassbookData;
  $scope.hideNoDataFound = true;
+ $scope.salutation = '';
+ if($scope.customer.salutation == 'Mrs'){
+  $scope.salutation = 'W/o' ;
+ }else if($scope.customer.salutation == 'Mr.'){
+  $scope.salutation = 'S/o' ;
+}else{
+  $scope.salutation = 'D/o' ;
+}
 
 
  $scope.sortBy = function(propertyName) {

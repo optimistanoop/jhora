@@ -1,10 +1,12 @@
 
-jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE) {
+  jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
-    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '', salutation: '' };
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
+    $scope.salutation = CUSTOMER_SALUTATION;
+    console.log("types :",$scope.salutation);
 
     /*$scope.querySearch = (search)=>{
       let result = [];
@@ -20,7 +22,7 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDat
       $scope.customerForm.$setUntouched();
     };
 
-    $scope.addCustomer = ()=>{
+    $scope.addCustomer = (ev)=>{
       let date = $mdDateLocale.parseDate($scope.customer.date);
       let keys = Object.keys($scope.customer);
       let index = keys.indexOf('date')
@@ -31,12 +33,27 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDat
         $timeout(()=>{
           $scope.resetCustomer();
         },0);
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+        $mdToast.show(
+        $mdToast.simple()
+        .textContent('Trasaction Added.')
+        .position('bottom right')
+        .hideDelay(3000)
+        );
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
           if (err.code=="SQLITE_CONSTRAINT") {
-            dialog.showMessageBox({type :'info', message:'Mobile number is already in use', buttons:[]});
+            $mdDialog.show(
+              $mdDialog.alert()
+              .parent(angular.element(document.querySelector('#popupContainer')))
+              .clickOutsideToClose(false)
+              .title('Duplicate Mobile Number Found')
+              .textContent(`Mobile Number : ${$scope.customer.mobile} is already in use.`)
+              .ariaLabel('Alert Dialog Demo')
+              .ok('Change It!')
+              .theme('dark-orange')
+              .targetEvent(ev)
+    );
           }
       });
     };
@@ -51,8 +68,8 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDat
         $timeout(()=>{
           $scope.villages = rows;
           if(tableName == VILLAGE_TABLE && rows && rows.length == 0)
-          $scope.hideNoDataFound = false; 
-        },0); 
+          $scope.hideNoDataFound = false;
+        },0);
       })
       .catch((err)=>{
         console.error(err);

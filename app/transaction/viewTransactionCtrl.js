@@ -1,5 +1,5 @@
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -15,18 +15,32 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.editTransaction = (transaction)=>{
       $rootScope.editModeData = transaction;
       $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
+
     };
 
-    $scope.deleteTransaction = (transaction)=>{
+    $scope.deleteTransaction=(ev,transaction)=>{
       shell.beep()
-      let param1 = {
-          type: 'question',
-          buttons: ['Yes', 'No'],
-          title: 'Confirm',
-          message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
-      }
-      let param2 = (response)=>{
-          if (response === 0) {
+      $mdDialog.show({
+      controller: ($scope, $mdDialog)=>{
+      $scope.message = 'Are you sure to delete...?'
+      $scope.transaction = transaction;
+      $scope.answer = function(answer) {
+      $mdDialog.hide(answer);
+     };
+   },
+     templateUrl: 'transaction/previewTransaction.html',
+     parent: angular.element(document.body),
+     targetEvent: ev,
+     clickOutsideToClose:false,
+     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+   })
+   .then(function(answer) {
+     if(answer == 'submit') {
+       $scope.confirmTransaction(transaction);
+     }
+   });
+  }
+    $scope.confirmTransaction = (transaction)=>{
            let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
            let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
            let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
@@ -36,15 +50,17 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
             })
             .then((data)=>{
               $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-              dialog.showMessageBox({type :'info', message:`${transaction.name}'s transaction deleted`, buttons:[]});
+              $mdToast.show(
+              $mdToast.simple()
+              .textContent(`${transaction.name}'s Transaction Deleted.`)
+              .position('bottom right')
+              .hideDelay(3000)
+              );
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting',err);
             });
           }
-      }
-      dialog.showMessageBox(param1, param2)
-    };
 
     $scope.sortBy = function(propertyName) {
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
