@@ -19,12 +19,13 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
 
     $scope.deleteTransaction = (transaction)=>{
       shell.beep()
-      dialog.showMessageBox({
+      let param1 = {
           type: 'question',
           buttons: ['Yes', 'No'],
           title: 'Confirm',
           message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
-      }, function (response) {
+      }
+      let param2 = (response)=>{
           if (response === 0) {
            let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
            let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
@@ -41,7 +42,8 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
               console.error('anp an err occured while deleting',err);
             });
           }
-      })
+      }
+      dialog.showMessageBox(param1, param2)
     };
 
     $scope.sortBy = function(propertyName) {

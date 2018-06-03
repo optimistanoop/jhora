@@ -1,0 +1,36 @@
+<md-dialog aria-label="Preview Transaction">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Preview Transaction</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <md-card md-theme="dark-orange" md-theme-watch>
+         <md-card-title>
+           <md-card-title-text>
+             <span class="md-headline">Customer Name: {{transaction.name}}</span>
+             <span class="md-subhead">Amount: {{transaction.amount}}</span>
+             <span class="md-subhead">Rate: {{transaction.rate}}%</span>
+             <span class="md-subhead">Type: {{transaction.type}}</span>
+             <span class="md-subhead">Date: {{transaction.date | date:"EEE,d/M/yy" }}</span>
+             <span class="md-subhead">Promise Date: {{transaction.promiseDate | date:"EEE,d/M/yy"}}</span>
+           </md-card-title-text>
+         </md-card-title>
+       </md-card>
+
+      </div>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="answer('cancel');">
+            Cancel
+          </md-button>
+          <md-button ng-click="answer('submit');">
+           Submit
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
