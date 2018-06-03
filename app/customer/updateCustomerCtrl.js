@@ -1,5 +1,5 @@
 
-jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGES) {
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE) {
 
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
@@ -63,5 +63,25 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
           }
       });
     };
+
+    $scope.getVillages = (tableName)=>{
+      q.selectAll(tableName)
+      .then((rows)=>{
+        if(rows)
+        for(let row of rows){
+          row.date = row.date ? new Date(row.date) : undefined;
+        }
+        $timeout(()=>{
+          $scope.villages = rows;
+          if(tableName == VILLAGE_TABLE && rows && rows.length == 0)
+          $scope.hideNoDataFound = false; 
+        },0); 
+      })
+      .catch((err)=>{
+        console.error(err);
+      });
+    };
+
+    $scope.getVillages(VILLAGE_TABLE);
 
   });
