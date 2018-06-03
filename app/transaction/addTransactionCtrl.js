@@ -2,8 +2,8 @@
 jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
@@ -81,9 +81,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $scope[modelName] = rows;
       })
@@ -97,8 +97,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = row.date ? new Date(row.date) : undefined;
-             row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : undefined;
+             row.date = row.date ? new Date(row.date) : null;
+             row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : null;
            }
            $scope.transactions = rows;
          })

@@ -3,7 +3,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.hideNoDataFound = true; 
         
     $scope.editCustomer = (customer)=>{
@@ -50,7 +50,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
         }
         $timeout(()=>{
           $scope.customers = rows;

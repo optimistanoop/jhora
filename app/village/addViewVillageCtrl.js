@@ -65,7 +65,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
         }
         $timeout(()=>{
           $scope.villages = rows;

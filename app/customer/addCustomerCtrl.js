@@ -1,7 +1,7 @@
 
 jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE) {
 
-    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: undefined, pageNo: '', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
@@ -46,7 +46,7 @@ jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDat
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
         }
         $timeout(()=>{
           $scope.villages = rows;

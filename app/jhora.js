@@ -82,7 +82,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
       let d = dd.getDate()< 9 ?  '0'+ (dd.getDate()) : dd.getDate();
       let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth();
       let y = dd.getFullYear();
-      formattedDate = `${y}-${m}-${d}`
+      formattedDate = !isNaN(d) ? `${y}-${m}-${d}` :'';
     }
     return formattedDate ? formattedDate : '';
   };
@@ -94,9 +94,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     let d = dd.getDate();
     let m = dd.getMonth();
     let y = dd.getFullYear();
-    formattedDate = `${d}-${m + 1}-${y}`
+    formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
   }
 
-  return formattedDate ? formattedDate : undefined;
+  return formattedDate ? formattedDate : null;
 };
 });
