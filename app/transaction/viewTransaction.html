@@ -68,7 +68,7 @@
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td ng-click="editTransaction(tran)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
-      <td ng-click="deleteTransaction(tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
 </md-content>

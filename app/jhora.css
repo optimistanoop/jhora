@@ -1,3 +1,4 @@
+/*=======Common CSS Starts Here==========*/
 md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
     min-height: 800px;
 }
@@ -61,7 +62,9 @@ md-toolbar:not(.md-menu-toolbar){
     font-size: 36px;
     margin-left: 50px;
 }
-
+.error {
+  color: red;
+}
 #main {
     transition: margin-left .5s;
 }
