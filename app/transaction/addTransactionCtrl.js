@@ -1,14 +1,15 @@
 
-jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
+    $scope.salutation = '';
 
     $scope.cancelUpdate = () =>{
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
@@ -28,6 +29,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
+
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr" ) {
         $scope.disablePromiseDate = true;
       }
@@ -41,6 +43,13 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         if(cust.id == customerId){
           $scope.customer = cust;
           $scope.transaction.rate = $scope.customer.rate;
+          if($scope.customer.salutation == 'Mrs'){
+            $scope.salutation = 'W/o' ;
+           }else if($scope.customer.salutation == 'Mr.'){
+             $scope.salutation = 'S/o' ;
+          }else{
+            $scope.salutation = 'D/o' ;
+          }
           $scope.getCustomerPassbook(TRANSACTION_TABLE);
         }
       }
@@ -55,17 +64,25 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.addTransaction = ()=>{
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $mdDateLocale.parseDate($scope.transaction.date);
-      $scope.transaction.promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
+      let date = $mdDateLocale.parseDate($scope.transaction.date);
+      let promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
       let keys = Object.keys($scope.transaction);
+      let indexDate = keys.indexOf('date');
+      let indexPdate = keys.indexOf('promiseDate');
       let values = Object.values($scope.transaction);
-      console.log($scope.transaction.date);
+      values[indexDate] = date;
+      values[indexPdate] = promiseDate;
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{
           $scope.resetTransaction();
         },0);
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+        $mdToast.show(
+        $mdToast.simple()
+        .textContent('Transaction Added.')
+        .position('bottom right')
+        .hideDelay(3000)
+        );
       })
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);
@@ -77,9 +94,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $scope[modelName] = rows;
       })
@@ -93,8 +110,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = row.date ? new Date(row.date) : undefined;
-             row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : undefined;
+             row.date = row.date ? new Date(row.date) : null;
+             row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : null;
            }
            $scope.transactions = rows;
          })

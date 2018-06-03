@@ -2,20 +2,21 @@ const {shell} = require('electron')
 const {dialog} = require('electron').remote
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
-  $scope.villages = VILLAGES;
+jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTATION) {
+  $scope.salutation = CUSTOMER_SALUTATION;
+  //$scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
   $scope.tabs = TABS;
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
-  
-  $rootScope.template = $scope.tabs[5];
+
+  $rootScope.template = $scope.tabs[3];
   $scope.goto = function(page) {
     $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
   };
-  
+
   $scope.openNav = ()=> {
     if($scope.navClosed){
       document.getElementById("mySidenav").style.width = "250px";
@@ -31,9 +32,10 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
     document.getElementById("mySidenav").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
   };
-               
+
 })
-.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
+//.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
+.constant('CUSTOMER_SALUTATION',['Mr.', 'Mrs.', 'Miss'])
 .constant('TABS', [
   {title:'Add Customer', content:'customer/addCustomer.html'},
   {title:'Add Transaction', content:'transaction/addTransaction.html'},
@@ -69,9 +71,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
-  
+
   $mdDateLocaleProvider.parseDate = function(dateString) {
-    
+
     // d.toISOString()
     // "2018-05-30T19:54:46.756Z"
     // d.toLocaleDateString()
@@ -82,11 +84,11 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
       let d = dd.getDate()< 9 ?  '0'+ (dd.getDate()) : dd.getDate();
       let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth();
       let y = dd.getFullYear();
-      formattedDate = `${y}-${m}-${d}`
+      formattedDate = !isNaN(d) ? `${y}-${m}-${d}` :'';
     }
     return formattedDate ? formattedDate : '';
   };
-  
+
   $mdDateLocaleProvider.formatDate = function(date) {
   let dd = date ? date : undefined;
   let formattedDate = '';
@@ -94,9 +96,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     let d = dd.getDate();
     let m = dd.getMonth();
     let y = dd.getFullYear();
-    formattedDate = `${d}-${m + 1}-${y}`
+    formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
   }
 
-  return formattedDate ? formattedDate : undefined;
+  return formattedDate ? formattedDate : null;
 };
 });

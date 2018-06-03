@@ -1,32 +1,46 @@
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
+    $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.transactions = [];
     $scope.hideNoDataFound = true;
-    $scope.tran = {fromDate: undefined, toDate: undefined};
+    $scope.tran = {fromDate: null, toDate: null};
     $scope.maxDate = new Date();
 
 
     $scope.editTransaction = (transaction)=>{
-      //TODO
       $rootScope.editModeData = transaction;
       $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
+
     };
 
-    $scope.deleteTransaction = (transaction)=>{
+    $scope.deleteTransaction=(ev,transaction)=>{
       shell.beep()
-      dialog.showMessageBox({
-          type: 'question',
-          buttons: ['Yes', 'No'],
-          title: 'Confirm',
-          message: `Are you sure you want to delete ${transaction.name}'s transaction'?`
-      }, function (response) {
-          if (response === 0) {
+      $mdDialog.show({
+      controller: ($scope, $mdDialog)=>{
+      $scope.message = 'Are you sure to delete...?'
+      $scope.transaction = transaction;
+      $scope.answer = function(answer) {
+      $mdDialog.hide(answer);
+     };
+   },
+     templateUrl: 'transaction/previewTransaction.html',
+     parent: angular.element(document.body),
+     targetEvent: ev,
+     clickOutsideToClose:false,
+     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+   })
+   .then(function(answer) {
+     if(answer == 'submit') {
+       $scope.confirmTransaction(transaction);
+     }
+   });
+  }
+    $scope.confirmTransaction = (transaction)=>{
            let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
            let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
            let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
@@ -36,14 +50,17 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
             })
             .then((data)=>{
               $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-              dialog.showMessageBox({type :'info', message:`${transaction.name}'s transaction deleted`, buttons:[]});
+              $mdToast.show(
+              $mdToast.simple()
+              .textContent(`${transaction.name}'s Transaction Deleted.`)
+              .position('bottom right')
+              .hideDelay(3000)
+              );
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting',err);
             });
           }
-      })
-    };
 
     $scope.sortBy = function(propertyName) {
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
@@ -55,19 +72,19 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout(()=>{
           $scope[modelName] = rows;
+          $scope.hideNoDataFound = true;
           if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         }, 0);
       })
       .catch((err)=>{
-        console.error(err);
-        console.log(err);
+        console.error('anp got error while fetching data',err);
       });
     };
 
@@ -82,17 +99,32 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
 
     $scope.getTransaction=()=>{
+    if ($scope.tran.toDate) {
+      $scope.startFilter = true;
       let fromDate = $mdDateLocale.parseDate($scope.tran.fromDate);
       let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
       q.selectDataByDates(TRANSACTION_TABLE,'date',fromDate,toDate)
        .then((rows)=>{
          $timeout(()=>{
+           if(rows)
+           for(let row of rows){
+             row.date = row.date ? new Date(row.date) : undefined;
+             row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+           }
          $scope.transactions= rows;
          $scope.hideNoDataFound = true;
-         if (rows.length == 0){
-          $scope.hideNoDataFound = false;
-             }
-          },0)
-        })
-      }
-});
+        if (rows.length == 0) {
+         $scope.hideNoDataFound = false;
+       }
+     },0)
+     })
+    }
+  }
+    $scope.clearFilter =(queryFor)=>{
+        $scope.startFilter = false;
+        $scope.tran.toDate = null;
+        $scope.tran.fromDate = null;
+      $scope.getNewData(queryFor);
+    };
+
+  });

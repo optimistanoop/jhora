@@ -91,7 +91,7 @@
                </md-whiteframe>
         </div> -->
         </form>
-          <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="updateTransaction()">Submit</md-button>
+          <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="confirmTransaction($event,transaction)">Submit</md-button>
           <md-button class="md-raised md-warn" ng-click="cancelUpdate()">Cancel</md-button>
       </md-content>
     </div>
@@ -99,7 +99,7 @@
       <md-card md-theme="dark-blue"  md-theme-watch>
        <md-card-title>
          <md-card-title-text>
-           <span class="md-headline">{{customer.name}} S/o {{customer.father}}</span>
+           <span class="md-headline">{{customer.name}} {{salutation}} {{customer.father}}</span>
            <span class="md-subhead">{{customer.village}}</span>
            <span class="md-subhead">A/c No.-{{customer.id}}</span>
            <span class="md-subhead">Rate -{{customer.rate}}%</span>
@@ -119,7 +119,7 @@
              <button ng-click="sortBy('name')">Name</button>
              <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
            </th>
-           <th> 
+           <th>
              <button ng-click="sortBy('amount')">Amount</button>
              <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
            </th>
@@ -140,6 +140,6 @@
          </tr>
        </table>
      </md-content>
-    </div>    
+    </div>
   </div>
 </div>

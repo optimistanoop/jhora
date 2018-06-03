@@ -1,13 +1,13 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$mdToast, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
-    $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
-
+    $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.customer = { salutation: '', name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editModeData ;
+    $scope.salutation = '';
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
@@ -25,8 +25,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.typeSelected= ()=>{
-      if ($scope.transaction.type == "Settle") {
+      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
+        $scope.transaction.promiseDate = null;
       } else {
         $scope.disablePromiseDate = false;
       }
@@ -52,7 +53,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       for(let cust of $scope.customers){
         if(cust.id == customerId){
           $scope.customer = cust;
-          console.log('cust',$scope.customer);
+          if($scope.customer.salutation == 'Mrs'){
+          $scope.salutation = 'W/o' ;
+          }else if($scope.customer.salutation == 'Mr.'){
+          $scope.salutation = 'S/o' ;
+          }else{
+          $scope.salutation = 'D/o' ;
+          }
         }
       }
     };
@@ -62,15 +69,39 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched();
     };
+    $scope.confirmTransaction=(ev,transaction)=>{
+      $mdDialog.show({
+     controller: ($scope, $mdDialog)=>{
+       $scope.transaction = transaction;
+       $scope.answer = function(answer) {
+       $mdDialog.hide(answer);
+     };
+   },
+     templateUrl: 'transaction/previewTransaction.html',
+     parent: angular.element(document.body),
+     targetEvent: ev,
+     clickOutsideToClose:false,
+     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+   })
+   .then(function(answer) {
+     if(answer == 'submit') {
+       $scope.updateTransaction(ev);
+     }
+   });
+  }
 
-    $scope.updateTransaction= ()=>{
+    $scope.updateTransaction= (ev)=>{
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $mdDateLocale.parseDate($scope.transaction.date);
-      $scope.transaction.promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
+      let date = $mdDateLocale.parseDate($scope.transaction.date);
+      let promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
       let keys = Object.keys($scope.transaction);
+      let indexDate = keys.indexOf('date');
+      let indexPdate = keys.indexOf('promiseDate');
       let values = Object.values($scope.transaction);
+      values[indexDate] = date;
+      values[indexPdate] = promiseDate;
       let index = keys.indexOf('$$hashKey');
       if (index > -1) {
         keys.splice(index, 1);
@@ -88,9 +119,16 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       }
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
+        $timeout (()=>{
+          $mdToast.show(
+          $mdToast.simple()
+          .textContent('Transaction updated.')
+          .position('bottom right')
+          .hideDelay(3000)
+          );
           $scope.resetTransaction();
-          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
           $rootScope.template = {title: 'Trasactions', content:'transaction/viewTransaction.html'}
+        },0)
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
@@ -102,13 +140,15 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date): undefined;
+          row.date = row.date ? new Date(row.date): null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
+        $timeout( ()=>{
         $scope[modelName] = rows;
         if(tableName == CUSTOMERS_TABLE)
         $scope.updateSelectedCust($scope.transaction.customerId);
+      },0)
       })
       .catch((err)=>{
         console.error(err);
@@ -120,8 +160,8 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
          .then((rows)=>{
            if(rows)
            for(let row of rows){
-             row.date = row.date ? new Date(row.date) : undefined;
-             row.promiseDate = row.promiseDate ? new Date(row.promiseDate) :undefined;
+             row.date = row.date ? new Date(row.date) : null;
+             row.promiseDate = row.promiseDate ? new Date(row.promiseDate) :null;
            }
            $scope.transactions = rows;
          })

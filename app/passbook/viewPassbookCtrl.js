@@ -3,6 +3,14 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
 
  $scope.customer = $rootScope.viewPassbookData;
  $scope.hideNoDataFound = true;
+ $scope.salutation = '';
+ if($scope.customer.salutation == 'Mrs'){
+  $scope.salutation = 'W/o' ;
+ }else if($scope.customer.salutation == 'Mr.'){
+  $scope.salutation = 'S/o' ;
+}else{
+  $scope.salutation = 'D/o' ;
+}
 
 
  $scope.sortBy = function(propertyName) {
@@ -48,8 +56,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
+          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout(()=>{
           $scope.transactions = rows;

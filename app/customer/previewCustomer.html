@@ -1,0 +1,35 @@
+<md-dialog aria-label="Preview Customer">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Preview Customer</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h3 class="error" >{{message}}</h3>
+        <md-card md-theme="dark-orange" md-theme-watch>
+         <md-card-title>
+           <md-card-title-text>
+             <span class="md-headline">Name: {{Customer.name}}</span>
+             <span class="md-subhead">Father Name: {{Customer.father}}</span>
+             <span class="md-subhead">Village: {{Customer.village}}</span>
+             <span class="md-subhead">Mobile: {{Customer.mobile}}</span>
+           </md-card-title-text>
+         </md-card-title>
+       </md-card>
+
+      </div>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="answer('cancel');">
+            Cancel
+          </md-button>
+          <md-button ng-click="answer('submit');">
+           Submit
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>

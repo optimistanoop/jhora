@@ -1,8 +1,8 @@
-jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
+jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, $mdToast, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
-    $scope.queryFor = $scope.limits[0];
-	$scope.hideNoDataFound = true; 
+  $scope.queryFor = $scope.limits[0];
+	$scope.hideNoDataFound = true;
 	$rootScope.editModeData = false;
 
 	$scope.resetVillage = ()=>{
@@ -21,7 +21,12 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
 		      	$timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-		           dialog.showMessageBox({type :'info', message:'Data Updated', buttons:[]});
+							$mdToast.show(
+							$mdToast.simple()
+							.textContent('Village updated.')
+							.position('bottom right')
+							.hideDelay(3000)
+							);
 		           $scope.getVillages(VILLAGE_TABLE);
 		    })
 		    .catch((err)=>{
@@ -35,7 +40,12 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
 			        $timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-			          dialog.showMessageBox({type :'info', message:'Data submitted', buttons:[]});
+							$mdToast.show(
+							$mdToast.simple()
+							.textContent('Village Added.')
+							.position('bottom right')
+							.hideDelay(3000)
+							);
 			          $scope.getVillages(VILLAGE_TABLE);
 			    })
 			    .catch((err)=>{
@@ -65,13 +75,14 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
       .then((rows)=>{
         if(rows)
         for(let row of rows){
-          row.date = row.date ? new Date(row.date) : undefined;
+          row.date = row.date ? new Date(row.date) : null;
         }
         $timeout(()=>{
           $scope.villages = rows;
+					$scope.hideNoDataFound = true;
           if(tableName == VILLAGE_TABLE && rows && rows.length == 0)
-          $scope.hideNoDataFound = false; 
-        },0); 
+          $scope.hideNoDataFound = false;
+        },0);
       })
       .catch((err)=>{
         console.error(err);
@@ -80,35 +91,42 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
     $scope.getVillages(VILLAGE_TABLE);
 
     $scope.editVillage = (village)=>{
-		console.log("KV village"+village.name);
-		$rootScope.editModeData = true;
-	    $scope.village.name = village.name;
-	    $scope.village.id = village.id;
+			$rootScope.editModeData = true;
+	  	$scope.village.name = village.name;
+	  	$scope.village.id = village.id;
     };
-
-    $scope.deleteVillage = (village)=>{
-      shell.beep();
-      dialog.showMessageBox({
-          type: 'question',
-          buttons: ['Yes', 'No'],
-          title: 'Confirm',
-          message: `Are you sure you want to delete ${village.name}?`
-      }, function (response) {
-          if (response === 0) {
+		$scope.deleteVillage = (ev,village)=>{
+			shell.beep();
+			let confirm = $mdDialog.confirm()
+		         .title('Delete Village')
+		         .textContent(`Are you sure to delete village: ${village.name} ?`)
+		         .ariaLabel('Delete')
+		         .targetEvent(ev)
+		         .ok('Submit')
+		         .cancel('Cancel');
+			$mdDialog.show(confirm,village).then(function() {
+				      $scope.confirmVillage(village);
+				   },function() {
+        });
+			};
+    $scope.confirmVillage = (village)=>{
             let  {name} = village;
             let keys = ['name'];
             let values =[name];
             return q.deleteRowById(VILLAGE_TABLE, village.id)
               .then((data)=>{
               $scope.getVillages(VILLAGE_TABLE);
-              dialog.showMessageBox({type :'info', message:`${village.name} deleted`, buttons:[]});
+							$mdToast.show(
+							$mdToast.simple()
+							.textContent('Village Deleted.')
+							.position('bottom right')
+							.hideDelay(3000)
+							);
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', village);
             });
           }
-      })
-    };
 
      $scope.sortBy = function(propertyName) {
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
