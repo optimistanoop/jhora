@@ -113,7 +113,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         $timeout (()=>{
           $mdToast.show(
           $mdToast.simple()
-          .textContent('Trasaction updated.')
+          .textContent('Transaction updated.')
           .position('bottom right')
           .hideDelay(3000)
           );

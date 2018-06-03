@@ -99,7 +99,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 			shell.beep();
 			let confirm = $mdDialog.confirm()
 		         .title('Delete Village')
-		         .textContent(`Are you sure to delete village: ${village.name}`)
+		         .textContent(`Are you sure to delete village: ${village.name} ?`)
 		         .ariaLabel('Delete')
 		         .targetEvent(ev)
 		         .ok('Submit')
