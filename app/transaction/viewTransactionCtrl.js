@@ -122,8 +122,8 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
   }
     $scope.clearFilter =(queryFor)=>{
         $scope.startFilter = false;
-        $scope.tran.toDate = undefined;
-        $scope.tran.fromDate = undefined;
+        $scope.tran.toDate = null;
+        $scope.tran.fromDate = null;
       $scope.getNewData(queryFor);
     };
 
