@@ -9,13 +9,13 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
   $scope.tabs = TABS;
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
-  
-  $rootScope.template = $scope.tabs[5];
+
+  $rootScope.template = $scope.tabs[3];
   $scope.goto = function(page) {
     $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
   };
-  
+
   $scope.openNav = ()=> {
     if($scope.navClosed){
       document.getElementById("mySidenav").style.width = "250px";
@@ -31,7 +31,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, VILLAGES, TABS) {
     document.getElementById("mySidenav").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
   };
-               
+
 })
 .constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
@@ -69,9 +69,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
-  
+
   $mdDateLocaleProvider.parseDate = function(dateString) {
-    
+
     // d.toISOString()
     // "2018-05-30T19:54:46.756Z"
     // d.toLocaleDateString()
@@ -86,7 +86,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     }
     return formattedDate ? formattedDate : '';
   };
-  
+
   $mdDateLocaleProvider.formatDate = function(date) {
   let dd = date ? date : undefined;
   let formattedDate = '';

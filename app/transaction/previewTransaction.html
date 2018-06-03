@@ -1,0 +1,24 @@
+<md-dialog aria-label="Mango (Fruit)">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Preview Transaction</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2>Please review the Transaction before update</h2>
+      </div>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="answer('submit');">
+           Submit
+          </md-button>
+          <md-button ng-click="answer('cancel');">
+            Cancel
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
