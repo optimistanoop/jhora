@@ -1,12 +1,12 @@
 
   jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
-    $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '', salutation: '' };
+    $scope.salutations = CUSTOMER_SALUTATION;
+    $scope.customer = {salutation: $scope.salutations[0], name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
-    $scope.salutation = CUSTOMER_SALUTATION;
-    console.log("types :",$scope.salutation);
+    console.log("types :",$scope.salutations);
 
     /*$scope.querySearch = (search)=>{
       let result = [];
