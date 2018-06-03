@@ -2,7 +2,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
-	$scope.hideNoDataFound = true; 
+	$scope.hideNoDataFound = true;
 	$rootScope.editModeData = false;
 
 	$scope.resetVillage = ()=>{
@@ -69,9 +69,10 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, VI
         }
         $timeout(()=>{
           $scope.villages = rows;
+					$scope.hideNoDataFound = true; 
           if(tableName == VILLAGE_TABLE && rows && rows.length == 0)
-          $scope.hideNoDataFound = false; 
-        },0); 
+          $scope.hideNoDataFound = false;
+        },0);
       })
       .catch((err)=>{
         console.error(err);

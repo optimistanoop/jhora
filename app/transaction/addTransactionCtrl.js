@@ -4,7 +4,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: undefined, promiseDate: undefined, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
-
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
@@ -29,7 +28,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      if ($scope.transaction.type == "Settle") {
+
+      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr" ) {
         $scope.disablePromiseDate = true;
       }
       else {
@@ -56,10 +56,14 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.addTransaction = ()=>{
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
-      $scope.transaction.date = $mdDateLocale.parseDate($scope.transaction.date);
-      $scope.transaction.promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
+      let date = $mdDateLocale.parseDate($scope.transaction.date);
+      let promiseDate = $mdDateLocale.parseDate($scope.transaction.promiseDate);
       let keys = Object.keys($scope.transaction);
+      let indexDate = keys.indexOf('date');
+      let indexPdate = keys.indexOf('promiseDate');
       let values = Object.values($scope.transaction);
+      values[indexDate] = date;
+      values[indexPdate] = promiseDate;
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{

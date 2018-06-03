@@ -1,5 +1,5 @@
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -8,9 +8,11 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
     $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: undefined, pageNo: '', remarks: '' };
     $scope.transactions = [];
     $scope.hideNoDataFound = true;
+    $scope.tran = {fromDate: undefined, toDate: undefined};
+    $scope.maxDate = new Date();
+
 
     $scope.editTransaction = (transaction)=>{
-      //TODO
       $rootScope.editModeData = transaction;
       $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
     };
@@ -64,6 +66,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
       })
       .catch((err)=>{
         console.error(err);
+        console.log(err);
       });
     };
 
@@ -77,4 +80,18 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, T
 
     $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
 
+    $scope.getTransaction=()=>{
+      let fromDate = $mdDateLocale.parseDate($scope.tran.fromDate);
+      let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
+      q.selectDataByDates(TRANSACTION_TABLE,'date',fromDate,toDate)
+       .then((rows)=>{
+         $timeout(()=>{
+         $scope.transactions= rows;
+         $scope.hideNoDataFound = true;
+        if (rows.length == 0) {
+         $scope.hideNoDataFound = false;
+       }
+     },0)
+     })
+    }
   });
