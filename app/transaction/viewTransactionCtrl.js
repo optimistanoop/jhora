@@ -78,13 +78,13 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
         }
         $timeout(()=>{
           $scope[modelName] = rows;
+          $scope.hideNoDataFound = true;
           if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         }, 0);
       })
       .catch((err)=>{
-        console.error(err);
-        console.log(err);
+        console.error('anp got error while fetching data',err);
       });
     };
 
@@ -99,11 +99,18 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
 
     $scope.getTransaction=()=>{
+    if ($scope.tran.toDate) {
+      $scope.startFilter = true;
       let fromDate = $mdDateLocale.parseDate($scope.tran.fromDate);
       let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
       q.selectDataByDates(TRANSACTION_TABLE,'date',fromDate,toDate)
        .then((rows)=>{
          $timeout(()=>{
+           if(rows)
+           for(let row of rows){
+             row.date = row.date ? new Date(row.date) : undefined;
+             row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+           }
          $scope.transactions= rows;
          $scope.hideNoDataFound = true;
         if (rows.length == 0) {
@@ -112,4 +119,12 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
      },0)
      })
     }
+  }
+    $scope.clearFilter =(queryFor)=>{
+        $scope.startFilter = false;
+        $scope.tran.toDate = null;
+        $scope.tran.fromDate = null;
+      $scope.getNewData(queryFor);
+    };
+
   });

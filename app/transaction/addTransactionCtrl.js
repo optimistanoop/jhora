@@ -79,7 +79,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         },0);
         $mdToast.show(
         $mdToast.simple()
-        .textContent('Trasaction Added.')
+        .textContent('Transaction Added.')
         .position('bottom right')
         .hideDelay(3000)
         );

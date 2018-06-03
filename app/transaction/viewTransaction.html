@@ -11,19 +11,22 @@
   </md-input-container>
   <md-input-container>
     <label>From Date</label>
-    <md-datepicker name="fromDate" ng-model="tran.fromDate" md-max-date="maxDate" md-open-on-focus required></md-datepicker>
+    <md-datepicker name="fromDate" ng-model="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" md-open-on-focus ></md-datepicker>
     <div ng-messages="transactionForm.date.$error" role="alert" multiple>
       <div ng-message="required" class="my-message">You must supply a date.</div>
     </div>
   </md-input-container>
     <md-input-container>
       <label>To Date</label>
-      <md-datepicker name="toDate" ng-model="tran.toDate" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" ng-disabled ="!tran.fromDate" md-open-on-focus required ></md-datepicker>
+      <md-datepicker name="toDate" ng-model="tran.toDate" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" ng-disabled ="!tran.fromDate" md-open-on-focus ></md-datepicker>
       <div ng-messages="transactionForm.date.$error" role="alert" multiple>
         <div ng-message="required" class="my-message">You must supply a date.</div>
       </div>
-    </md-input-container>
 
+    </md-input-container>
+    <md-input-container>
+    <md-button class="md-raised md-warn" ng-click="clearFilter(queryFor)" ng-show="startFilter">Clear Filter</md-button>
+  </md-input-container>
    <md-content layout-padding layout="row" ng-show="hideNoDataFound">
      <md-input-container flex-xs>
        <label>Search</label>
