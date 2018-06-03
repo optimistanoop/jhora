@@ -7,11 +7,14 @@
             <md-icon><i class="material-icons">person</i></md-icon>
             <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
              
-             <md-option ng-repeat="salutation in salutation" ng-value="salutation">
+             <md-option ng-repeat="salutation in salutations" ng-value="salutation">
                {{salutation}}
              </md-option>
            </md-select>
-                     </md-input-container>
+           <div ng-messages="customerForm.salutation.$error" role="alert" multiple>
+             <div ng-message="required" class="my-message">You must supply a title.</div>
+           </div>
+      </md-input-container>
       <md-input-container class="md-block" flex-xs>
         <label>Name</label>
         <md-icon><i class="material-icons">person</i></md-icon>

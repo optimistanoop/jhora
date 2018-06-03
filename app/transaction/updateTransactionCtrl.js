@@ -3,7 +3,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '',salutation: '' };
+    $scope.customer = { salutation: '', name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
     $scope.transaction = $scope.editModeData ;
@@ -25,8 +25,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.typeSelected= ()=>{
-      if ($scope.transaction.type == "Settle") {
+      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
+        $scope.transaction.promiseDate = null;
       } else {
         $scope.disablePromiseDate = false;
       }
@@ -52,7 +53,6 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       for(let cust of $scope.customers){
         if(cust.id == customerId){
           $scope.customer = cust;
-          console.log('cust',$scope.customer);
           if($scope.customer.salutation == 'Mrs'){
           $scope.salutation = 'W/o' ;
           }else if($scope.customer.salutation == 'Mr.'){
