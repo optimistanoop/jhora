@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./jhora.css">
     <title>Jhora</title>
   <body>
-    <div  ng-app="jhora" ng-controller="jhoraCtrl" ng-cloak>
+    <div ng-controller="jhoraCtrl" ng-cloak>
           <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()" >&times;</a>
             <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs" class="tabs">{{tab.title}}
@@ -16,15 +16,14 @@
             </a>
           </div>
           <div id="main">
-          	<md-toolbar   class="md-theme-light _md _md-toolbar-transitions" ng-click="openNav()">
-              	<h1 class="md-toolbar-tools tabs">
+          	<md-toolbar   class="md-theme-light _md _md-toolbar-transitions tabs" ng-click="openNav()">
+              	<h1 class="md-toolbar-tools">
               	&#9776; Jhora</h1>
                 <div  style="text-align:center;margin-top: -41px;">{{template.title}}</div>
             </md-toolbar>
             <div ng-include="template.content" ng-click="closeNav()" ng-cloak></div>
           </div>
     </div>
-    <script src="./db.js"></script>
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-route.min.js"></script>
     <script src="lib/angular-animate.min.js"></script>
@@ -41,5 +40,7 @@
     <script src="./passbook/viewPassbookCtrl.js"></script>
     <script src="./village/addViewVillageCtrl.js"></script>
     <script src="./dashboard/dashboardCtrl.js"></script>
+    <!-- this db.js will always be the last dependency added -->
+    <script src="./db.js"></script>
   </body>
 </html>

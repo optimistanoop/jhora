@@ -69,8 +69,9 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDi
           row.date = row.date ? new Date(row.date) : null;
         }
         $timeout(()=>{
+          $scope.hideNoDataFound = true;
           $scope.customers = rows;
-          if(tableName == CUSTOMERS_TABLE && rows && rows.length == 0)
+          if(rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         },0);
       })

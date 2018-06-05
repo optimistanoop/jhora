@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#cbccc8)) fixed;
+}
+/* html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: linear-gradient(#185694, #106cc8);
+} */
+/* body {
+  margin:0;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background: linear-gradient(#185694, #106cc8);
+} */
+
+.main {
+  /* border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  vertical-align: middle;
+  margin-left: 40%;
+  margin-top: 20%;
+  animation: spin 2s linear infinite; */
+  
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid pink;
+  width: 120px;
+  height: 120px;
+  align:centre;
+  vertical-align: middle;
+  margin-left: 40%;
+  margin-top: 20%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+  <div class="main">
+    <!-- <div class="loader"></div> -->
+  </div>
+</body>
+</html>
