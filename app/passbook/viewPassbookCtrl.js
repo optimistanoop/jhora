@@ -75,7 +75,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
     $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
   }
   
-  let getMonthDiff = (from, to)=>{
+  let getMonthDiff1 = (from, to)=>{
     from = new Date(from);
     to = new Date(to);
     let valid = !isNaN(from) && !isNaN(to) && from < to ;
