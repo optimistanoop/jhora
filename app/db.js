@@ -17,8 +17,15 @@ ipcRenderer.on('close-db', (event, message) => {
  ipcRenderer.send('closed-db', 'thanks');
 });
 
-q.createCustomerTable('customers');
-q.createCustomerTable('delcustomers');
-q.createTransactionTable('transactions');
-q.createTransactionTable('deltransactions');
-q.createVillageTable('village');
+Promise.all([
+  q.createCustomerTable('customers'),
+  q.createTransactionTable('transactions'),
+  q.createVillageTable('village'),
+  q.createCustomerTable('delcustomers'),
+  q.createTransactionTable('deltransactions')
+]).then((data)=>{
+  angular.bootstrap(document, ['jhora']);
+})
+.catch((err)=>{
+  console.error('anp an error occured while creating table', err);
+})

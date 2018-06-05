@@ -74,4 +74,54 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
   $scope.Back = ()=>{
     $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
   }
+  
+  let getMonthDiff = (from, to)=>{
+    from = new Date(from);
+    to = new Date(to);
+    let valid = !isNaN(from) && !isNaN(to) && from < to ;
+    if(! valid) return [];
+    let months = 0;
+    let firstMonth = 0;
+    let lastMonth = 0;
+    months = (to.getFullYear() - from.getFullYear()) * 12;
+    months -= from.getMonth() + 1;
+    months += to.getMonth();
+    months = months <= 0 ? 0 : months;
+    
+    firstMonth = from.getDate() <= 15 ? 1 :0.5;
+    lastMonth = to.getDate() >= 15 ? 1 :0.5;
+    return [firstMonth, months, lastMonth];
+  }
+
+  
+  function getMonthDiff(from, to) {
+    from = new Date(from);
+    to = new Date(to);
+    let valid = !isNaN(from) && !isNaN(to) && from < to ;
+    if(! valid) return [];
+    let months = 0;
+    let firstMonth = 0;
+    let lastMonth = 0;
+    months = (to.getFullYear() - from.getFullYear()) * 12;
+    months -= from.getMonth() + 1;
+    months += to.getMonth();
+    months = months <= 0 ? 0 : months;
+    
+    firstMonth = from.getDate() <= 15 ? 1 :0.5;
+    lastMonth = to.getDate() >= 15 ? 1 :0.5;
+    return [firstMonth, months, lastMonth];
+  }
+
+
+  let transactions = [
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' }
+  ];
+
+
   });
