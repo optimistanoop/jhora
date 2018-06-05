@@ -74,16 +74,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
   $scope.Back = ()=>{
     $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
-  
-  let getMonthDiff1 = (from, to)=>{
-=======
-=======
->>>>>>> 2856db5... Date filter margin fixed
-
   let getMonthDiff = (from, to)=>{
->>>>>>> 2856db5... Date filter margin fixed
+
     from = new Date(from);
     to = new Date(to);
     let valid = !isNaN(from) && !isNaN(to) && from < to ;
@@ -119,6 +111,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
     lastMonth = to.getDate() >= 15 ? 1 :0.5;
     return [firstMonth, months, lastMonth];
   }
+  
 
 
   let transactions = [
