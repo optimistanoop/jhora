@@ -75,9 +75,12 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
     $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   
   let getMonthDiff1 = (from, to)=>{
 =======
+=======
+>>>>>>> 2856db5... Date filter margin fixed
 
   let getMonthDiff = (from, to)=>{
 >>>>>>> 2856db5... Date filter margin fixed
