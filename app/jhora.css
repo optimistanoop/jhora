@@ -83,4 +83,5 @@ md-toolbar:not(.md-menu-toolbar){
 }
 .tabs:hover {
   cursor: pointer;
+  background-color: #267ED5;
 }
