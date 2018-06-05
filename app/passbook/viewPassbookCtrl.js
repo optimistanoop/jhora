@@ -74,7 +74,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
   $scope.Back = ()=>{
     $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
   }
-  let getMonthDiff = (from, to)=>{
+  let getMonthDiff2 = (from, to)=>{
 
     from = new Date(from);
     to = new Date(to);
@@ -111,7 +111,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
     lastMonth = to.getDate() >= 15 ? 1 :0.5;
     return [firstMonth, months, lastMonth];
   }
-  
+
 
 
   let transactions = [
