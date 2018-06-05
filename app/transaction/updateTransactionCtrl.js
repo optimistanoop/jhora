@@ -127,7 +127,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
           .hideDelay(3000)
           );
           $scope.resetTransaction();
-          $rootScope.template = {title: 'Trasactions', content:'transaction/viewTransaction.html'}
+          $rootScope.template = {title: 'Transactions', content:'transaction/viewTransaction.html'}
         },0)
       })
       .catch((err)=>{

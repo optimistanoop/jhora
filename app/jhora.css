@@ -27,7 +27,9 @@ table tr:hover td {
 }
 
 md-toolbar:not(.md-menu-toolbar){
-  background-color: rgb(57,73,171);
+  /* background-color: rgb(57,73,171); */
+  background-color: #106CC8;
+  background: linear-gradient(#185694, #106cc8);
 }
 .sidenav {
     height: 100%;
@@ -36,10 +38,18 @@ md-toolbar:not(.md-menu-toolbar){
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: rgb(57,73,171);
+    /* border-bottom: 1px solid #267ED5;
+    border-top: 1px solid #267ED5;
+    border-right: 1px solid #267ED5;
+    border-left: 1px solid #267ED5;
+    border: 1px solid #267ED5;
+    background-color: rgb(57,73,171); */
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    background-color: #106CC8;
+    background: -webkit-linear-gradient(#185694, #106cc8);
+    background: linear-gradient(#185694, #106cc8);
 }
 
 .sidenav a {
@@ -81,6 +91,7 @@ md-toolbar:not(.md-menu-toolbar){
 .sortorder.reverse:after {
   content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
 }
+
 .tabs:hover {
   cursor: pointer;
   background-color: #267ED5;
