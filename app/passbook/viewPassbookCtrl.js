@@ -6,7 +6,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
  $scope.salutation = '';
  if($scope.customer.salutation == 'Mrs'){
   $scope.salutation = 'W/o' ;
- }else if($scope.customer.salutation == 'Mr.'){
+ }else if($scope.customer.salutation == 'Mr'){
   $scope.salutation = 'S/o' ;
 }else{
   $scope.salutation = 'D/o' ;
