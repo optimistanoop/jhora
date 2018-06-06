@@ -26,11 +26,11 @@ app.on('ready', ()=> {
 
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
   
   // create a new `splash`-Window backgroundColor:'#267ED5'
   splash = new BrowserWindow({width: 800, height: 600, alwaysOnTop: true});
-  splash.webContents.openDevTools()
+  //splash.webContents.openDevTools()
 
   splash.loadURL(`file://${__dirname}/loader.html`);
 
@@ -39,7 +39,7 @@ app.on('ready', ()=> {
     setTimeout(function () {
       splash.destroy();
       mainWindow.show();
-    }, 2000);
+    }, 5000);
 
   });
 
