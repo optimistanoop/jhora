@@ -7,9 +7,8 @@
 body,html{
   margin:0;
   height: 100%;
-  background: linear-gradient(#185694, #106cc8);
+  background: linear-gradient(to top, #185694, #106cc8); 
 }
-
 .loader {  
   border: 16px solid #f3f3f3;
   border-radius: 50%;
@@ -21,9 +20,10 @@ body,html{
   height: 120px;
   align:centre;
   vertical-align: middle;
-  margin-left: 40%;
-  margin-top: 20%;
   animation: spin 2s linear infinite;
+  position: absolute;
+  top: 40%;
+  left: 40%;
 }
 
 @keyframes spin {
@@ -33,8 +33,8 @@ body,html{
 </style>
 </head>
 <body>
-  <div>
-    <div class="loader"></div>
+  <div class="loader_m">
+      <div class="loader"></div>
   </div>
 </body>
 </html>
