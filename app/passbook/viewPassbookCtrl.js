@@ -1,19 +1,29 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-
- $scope.customer = $rootScope.viewPassbookData;
- $scope.hideNoDataFound = true;
- $scope.salutation = '';
- if($scope.customer.salutation == 'Mrs'){
-  $scope.salutation = 'W/o' ;
- }else if($scope.customer.salutation == 'Mr'){
-  $scope.salutation = 'S/o' ;
-}else{
-  $scope.salutation = 'D/o' ;
-}
-
-console.log($scope.salutation);
- $scope.sortBy = function(propertyName) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams, $location, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+  $scope.custid=$routeParams.id;
+  $scope.customer ={};
+  $scope.init = ()=> {
+    q.selectAllById('customers', 'id', $scope.custid)
+    .then((rows)=>{
+      $timeout(()=> {
+      console.log('logging rows',rows[0]);
+      $scope.customer = rows[0];
+      console.log('inside logging Customer',$scope.customer);
+    },0)
+  })
+  };
+  $scope.init();
+  $scope.hideNoDataFound = true;
+  $scope.salutation = '';
+      if($scope.customer.salutation == 'Mrs'){
+          $scope.salutation = 'W/o' ;
+      }else if($scope.customer.salutation == 'Mr'){
+          $scope.salutation = 'S/o' ;
+      }else{
+          $scope.salutation = 'D/o' ;
+        }
+console.log('outside logging customer',$scope.customer);
+$scope.sortBy = function(propertyName) {
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
  };
@@ -52,7 +62,7 @@ console.log($scope.salutation);
  };
 
  $scope.getCustomerPassbook = (tableName)=>{
-      q.selectAllById(tableName, 'customerId', $rootScope.viewPassbookData.id)
+      q.selectAllById(tableName, 'customerId', $scope.customer.id)
       .then((rows)=>{
         if(rows)
         for(let row of rows){

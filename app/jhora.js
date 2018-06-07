@@ -67,6 +67,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 //     });
 // });
 
+
+
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
   $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow') .dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
@@ -127,7 +129,8 @@ $routeProvider
         templateUrl : 'file://' + __dirname + '/transaction/updateTransactions.html'
     })
     .when("/passbook/view/:id", {
-        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
+        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html',
+        controller : 'viewPassbookCtrl'
     });
     $locationProvider.hashPrefix('!');
     $locationProvider.html5Mode({enabled: false, requireBase: false});
