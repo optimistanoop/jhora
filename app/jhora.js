@@ -1,10 +1,7 @@
-const {shell} = require('electron')
-const {dialog} = require('electron').remote
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
 jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTATION) {
   $scope.salutation = CUSTOMER_SALUTATION;
-  //$scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
   $scope.tabs = TABS;
@@ -53,19 +50,6 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village');
 
-// jhora.config(function($routeProvider, $locationProvider) {
-//     $routeProvider
-//     .when("/", {
-//         templateUrl : "index2.html"
-//     });
-//     $locationProvider.hashPrefix('!');
-//     $locationProvider.html5Mode({enabled: false, requireBase: false});
-//     $locationProvider.html5Mode(true);
-//     $locationProvider.html5Mode({
-//       enabled: true,
-//       requireBase: false
-//     });
-// });
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow') .dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
@@ -74,11 +58,6 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 
   $mdDateLocaleProvider.parseDate = function(dateString) {
-
-    // d.toISOString()
-    // "2018-05-30T19:54:46.756Z"
-    // d.toLocaleDateString()
-    // "5/31/2018"
     let dd = dateString ? new Date(dateString) : undefined;
     let formattedDate = '';
     if(dd){
@@ -91,15 +70,15 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
   };
 
   $mdDateLocaleProvider.formatDate = function(date) {
-  let dd = date ? date : undefined;
-  let formattedDate = '';
-  if(dd){
-    let d = dd.getDate();
-    let m = dd.getMonth();
-    let y = dd.getFullYear();
-    formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
-  }
+    let dd = date ? date : undefined;
+    let formattedDate = '';
+    if(dd){
+      let d = dd.getDate();
+      let m = dd.getMonth();
+      let y = dd.getFullYear();
+      formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
+    }
 
-  return formattedDate ? formattedDate : null;
-};
+    return formattedDate ? formattedDate : null;
+  };
 });

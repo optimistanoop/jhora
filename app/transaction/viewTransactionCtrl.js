@@ -1,6 +1,6 @@
 
 jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-
+    const {shell} = require('electron');
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
