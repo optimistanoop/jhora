@@ -1,6 +1,7 @@
 
 jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-
+ const {dialog} = require('electron').remote;
+ const {shell} = require('electron');
  $scope.customer = $rootScope.viewPassbookData;
  $scope.hideNoDataFound = true;
  $scope.salutation = '';
@@ -13,7 +14,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
 }
 
 
- $scope.sortBy = function(propertyName) {
+ $scope.sortBy = (propertyName)=>{
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
  };
