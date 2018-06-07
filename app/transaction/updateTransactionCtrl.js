@@ -25,13 +25,14 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.typeSelected= ()=>{
+      $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
-        $scope.transaction.promiseDate = null;
-      } else {
+      } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
       }
-    }
+    };
+    
     $scope.viewCustomerPassbook = (customer)=>{
      // TODO
      $rootScope.viewPassbookData = customer;
@@ -43,8 +44,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
-      }
-      else {
+      }else if($scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
       }
     };
