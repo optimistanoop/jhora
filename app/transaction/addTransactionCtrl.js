@@ -40,7 +40,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
 
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr" ) {
         $scope.disablePromiseDate = true;
-      }else if($scope.transaction.type) {
+      }else if($scope.transaction.type == 'Dr') {
         $scope.disablePromiseDate = false;
       }
     };

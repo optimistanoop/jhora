@@ -44,7 +44,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
-      }else if($scope.transaction.type){
+      }else if($scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
       }
     };
