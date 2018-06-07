@@ -52,19 +52,19 @@
               md-item-text="item"
               md-require-match
               md-floating-label="Village">
-          <md-item-template>
-            <span md-highlight-text="searchText">{{item}}</span>
-          </md-item-template>
-          <md-not-found>
-            No village found for "{{searchText}}".
-          </md-not-found>
-          <div ng-messages="customerForm.village.$error" ng-if="customerForm.village.$touched">
-            <div ng-message="required">You <b>must</b> supply a village.</div>
-            <div ng-message="md-require-match">Please select an existing village.</div>
-            <div ng-message="minlength">Your entry is not long enough.</div>
-            <div ng-message="maxlength">Your entry is too long.</div>
-          </div>
-        </md-autocomplete>
+              <md-item-template>
+                <span md-highlight-text="searchText">{{item}}</span>
+              </md-item-template>
+              <md-not-found>
+                No village found for "{{searchText}}".
+              </md-not-found>
+              <div ng-messages="customerForm.village.$error" ng-if="customerForm.village.$touched">
+                <div ng-message="required">You <b>must</b> supply a village.</div>
+                <div ng-message="md-require-match">Please select an existing village.</div>
+                <div ng-message="minlength">Your entry is not long enough.</div>
+                <div ng-message="maxlength">Your entry is too long.</div>
+              </div>
+            </md-autocomplete>
         
           </md-content>
 

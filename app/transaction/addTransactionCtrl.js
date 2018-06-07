@@ -3,7 +3,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
-    $scope.customer = { name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
@@ -15,7 +14,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
     };
 
-    $scope.sortBy = function(propertyName) {
+    $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };
@@ -37,11 +36,20 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $scope.disablePromiseDate = false;
       }
     };
-
-    $scope.updateSelectedCust = (customerId)=>{
+    
+    $scope.searchCustomer = (keyword)=>{
+      let result = [];
+      let customers = [];
       for(let cust of $scope.customers){
-        if(cust.id == customerId){
-          $scope.customer = cust;
+        cust.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ? result.push(cust) : customers.push(cust);
+      }
+      return result.length > 0 ? result :customers;
+    };
+
+    $scope.updateSelectedCust = (customer)=>{
+        if(customer && customer.id){
+          
+          $scope.customer = customer;
           $scope.transaction.rate = $scope.customer.rate;
           if($scope.customer.salutation == 'Mrs'){
             $scope.salutation = 'W/o' ;
@@ -51,17 +59,20 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
             $scope.salutation = 'D/o' ;
           }
           $scope.getCustomerPassbook(TRANSACTION_TABLE);
+        }else{
+          $scope.customer = null;
+          $scope.transactions = [];
         }
-      }
     };
     $scope.resetTransaction = ()=>{
       $scope.transaction ={};
-      $scope.customer ={};
+      $scope.customer = null;
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched();
     };
 
     $scope.addTransaction = ()=>{
+      $scope.transaction.customerId = $scope.customer.id;
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
       let date = $mdDateLocale.parseDate($scope.transaction.date);

@@ -10,12 +10,13 @@
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
 
-    $scope.querySearch = (search)=>{
+    $scope.searchVillage = (keyword)=>{
       let result = [];
-      for(let vil of VILLAGES){
-        vil.toLowerCase().indexOf(search.toLowerCase()) > -1 ? result.push(vil) :'';
+      let villages = [];
+      for(let vil of $scope.villages){
+        vil.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ? result.push(vil.name) : villages.push(vil.name);
       }
-      return result.length > 0 ? result :VILLAGES;;
+      return result.length > 0 ? result :villages;
     };
 
     $scope.cancelUpdate = () =>{
