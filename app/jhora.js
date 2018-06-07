@@ -41,7 +41,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
   {title:'Customers', content:'customer/viewCustomer.html'},
   {title:'Transactions', content:'transaction/viewTransaction.html'},
   {title:'Villages', content:'village/addViewVillage.html'},
-  {title:'Dashboard', content:'dashboard/dashboard.html'}
+  {title:'Dashboard Demo', content:'dashboard/dashboard.html'},
+  {title:'Passbook Demo', content:'passbook/viewPassbook1.html'}
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])

@@ -99,3 +99,6 @@ md-toolbar:not(.md-menu-toolbar){
 .movedown {
   margin-top: 50px;
 }
+.width {
+  width: 100px;
+}
