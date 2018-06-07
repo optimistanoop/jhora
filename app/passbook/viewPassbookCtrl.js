@@ -1,14 +1,12 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams, $location, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams, $location,$window, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
   $scope.custid=$routeParams.id;
   $scope.customer ={};
   $scope.init = ()=> {
     q.selectAllById('customers', 'id', $scope.custid)
     .then((rows)=>{
       $timeout(()=> {
-      console.log('logging rows',rows[0]);
       $scope.customer = rows[0];
-      console.log('inside logging Customer',$scope.customer);
     },0)
   })
   };
@@ -22,7 +20,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }else{
           $scope.salutation = 'D/o' ;
         }
-console.log('outside logging customer',$scope.customer);
 $scope.sortBy = function(propertyName) {
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
@@ -62,7 +59,7 @@ $scope.sortBy = function(propertyName) {
  };
 
  $scope.getCustomerPassbook = (tableName)=>{
-      q.selectAllById(tableName, 'customerId', $scope.customer.id)
+      q.selectAllById(tableName, 'customerId', $scope.custid)
       .then((rows)=>{
         if(rows)
         for(let row of rows){
@@ -82,7 +79,8 @@ $scope.sortBy = function(propertyName) {
 
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
   $scope.Back = ()=>{
-    $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
+    // $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
+    $window.history.back();
   }
   let getMonthDiff2 = (from, to)=>{
 

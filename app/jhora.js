@@ -129,8 +129,7 @@ $routeProvider
         templateUrl : 'file://' + __dirname + '/transaction/updateTransactions.html'
     })
     .when("/passbook/view/:id", {
-        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html',
-        controller : 'viewPassbookCtrl'
+        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
     });
     $locationProvider.hashPrefix('!');
     $locationProvider.html5Mode({enabled: false, requireBase: false});
