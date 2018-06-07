@@ -82,3 +82,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
     return formattedDate ? formattedDate : null;
   };
 });
+
+jhora.service('queryService', function(){
+    this.selectAll = (tableName)=>{
+        return q.selectAll(tableName);
+    }
+});
