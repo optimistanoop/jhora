@@ -12,7 +12,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
   $scope.salutation = 'D/o' ;
 }
 
-
+console.log($scope.salutation);
  $scope.sortBy = function(propertyName) {
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;

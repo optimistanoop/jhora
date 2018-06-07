@@ -43,7 +43,7 @@
       <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
     <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
-      <td ng-click="viewCustomerPassbook(cust)"><a href="#">{{ cust.name }}</a></td>
+      <td ><a ng-href="#!/passbook/view/{{cust.id}}">{{ cust.name }}</a></td>
       <td>{{ cust.father }}</td>
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>

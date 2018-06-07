@@ -66,7 +66,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 //       requireBase: false
 //     });
 // });
-jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
+
+jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
   $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow') .dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
@@ -102,4 +103,34 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
 
   return formattedDate ? formattedDate : null;
 };
+$routeProvider
+    .when("/", {
+        templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
+        //templateUrl : 'file://' + __dirname + '/index2.html'
+    })
+    .when("/customers", {
+        templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
+    })
+    .when("/customers/add", {
+        templateUrl : 'file://' + __dirname + '/customer/addCustomers.html'
+    })
+    .when("/customers/update/:id", {
+        templateUrl : 'file://' + __dirname + '/customer/updateCustomers.html'
+    })
+    .when("/transactions", {
+        templateUrl : 'file://' + __dirname + '/transaction/viewTransactions.html'
+    })
+    .when("/transactions/add", {
+        templateUrl : 'file://' + __dirname + '/transaction/addTransactions.html'
+    })
+    .when("/transactions/update/:id", {
+        templateUrl : 'file://' + __dirname + '/transaction/updateTransactions.html'
+    })
+    .when("/passbook/view/:id", {
+        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
+    });
+    $locationProvider.hashPrefix('!');
+    $locationProvider.html5Mode({enabled: false, requireBase: false});
+    // $locationProvider.html5Mode(true);
+    // $locationProvider.html5Mode({ enabled: true, requireBase: false
 });
