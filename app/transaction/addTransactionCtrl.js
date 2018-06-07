@@ -24,6 +24,15 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
      $rootScope.viewPassbookData = customer;
      $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
     };
+    
+    $scope.typeSelected= ()=>{
+      $scope.disablePromiseDate = true;
+      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
+        $scope.disablePromiseDate = true;
+      } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
+        $scope.disablePromiseDate = false;
+      }
+    };
 
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
@@ -31,8 +40,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
 
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr" ) {
         $scope.disablePromiseDate = true;
-      }
-      else {
+      }else if($scope.transaction.type) {
         $scope.disablePromiseDate = false;
       }
     };
