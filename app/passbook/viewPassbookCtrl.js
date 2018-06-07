@@ -13,7 +13,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, TRAN
 }
 
 
- $scope.sortBy = function(propertyName) {
+ $scope.sortBy = (propertyName)=>{
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
  };

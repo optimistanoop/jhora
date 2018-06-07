@@ -128,7 +128,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
             });
           }
 
-     $scope.sortBy = function(propertyName) {
+     $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };
