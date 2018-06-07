@@ -11,7 +11,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
 
-  $rootScope.template = $scope.tabs[3];
+  $rootScope.template = $scope.tabs[0];
   $scope.goto = function(page) {
     $rootScope.template = $scope.tabs[page];
     $scope.closeNav();

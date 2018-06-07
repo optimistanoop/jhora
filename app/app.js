@@ -39,7 +39,7 @@ app.on('ready', ()=> {
     setTimeout(function () {
       splash.destroy();
       mainWindow.show();
-    }, 5000);
+    }, 0);
 
   });
 
