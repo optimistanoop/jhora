@@ -107,7 +107,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
 };
 $routeProvider
     .when("/", {
-        templateUrl : 'file://' + __dirname + '/transaction/viewTransaction.html'
+        templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
         //templateUrl : 'file://' + __dirname + '/index2.html'
     })
     .when("/customers", {
