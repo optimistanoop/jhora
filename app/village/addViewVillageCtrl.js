@@ -12,7 +12,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       $rootScope.editModeData = false;
     };
 
-    $scope.addVillage = ()=>{
+    $scope.addVillage = (ev)=>{
       let keys = Object.keys($scope.village);
       let values = Object.values($scope.village);
       if($rootScope.editModeData == true){
@@ -53,15 +53,25 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 			          $scope.getError(err);
 			});
       }
-    };
+
 
     $scope.getError = (error) => {
     	if (error.code=="SQLITE_CONSTRAINT") {
-            dialog.showMessageBox({type :'info', message:'Village name already exist', buttons:[]});
-            $scope.village.name ='';
+				$mdDialog.show(
+					$mdDialog.alert()
+					.parent(angular.element(document.querySelector('#popupContainer')))
+					.clickOutsideToClose(false)
+					.title('Duplicate Village Found')
+					.textContent(`Village : ${$scope.village.name} is already exists.`)
+					.ariaLabel('Alert Dialog Demo')
+					.ok('Try Again!')
+					.theme('dark-orange')
+					.targetEvent(ev)
+						);
+						$scope.village.name ='';
 		}
     }
-
+};
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getVillages(VILLAGE_TABLE);

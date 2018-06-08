@@ -107,7 +107,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
 };
 $routeProvider
     .when("/", {
-        templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
+        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
         //templateUrl : 'file://' + __dirname + '/index2.html'
     })
     .when("/customers", {
@@ -130,6 +130,9 @@ $routeProvider
     })
     .when("/passbook/view/:id", {
         templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
+    })
+    .when("/village/:id", {
+        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
     });
     $locationProvider.hashPrefix('!');
     $locationProvider.html5Mode({enabled: false, requireBase: false});
