@@ -5,7 +5,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDi
     $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.hideNoDataFound = true;
-
+    $rootScope.template = {title: 'Customers'}
     $scope.editCustomer = (customer)=>{
       // TODO
       $rootScope.editModeData = customer;

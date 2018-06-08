@@ -1,5 +1,5 @@
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -77,7 +77,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
           row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout(()=>{
-          $scope[modelName] = rows;
+          // $scope[modelName] = rows;
+          $scope.transactions= rows;
+          // console.log('data',$scope[modelName]);
           $scope.hideNoDataFound = true;
           if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
           $scope.hideNoDataFound = false;
