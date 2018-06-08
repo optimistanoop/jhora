@@ -1,4 +1,6 @@
 jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, $mdToast, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
+
+	$rootScope.template = {title: 'Villages'};
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
   $scope.queryFor = $scope.limits[0];
@@ -28,6 +30,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 							.hideDelay(3000)
 							);
 		           $scope.getVillages(VILLAGE_TABLE);
+							 $rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
 		          console.error('anp err occured while updation',err);
@@ -47,6 +50,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 							.hideDelay(3000)
 							);
 			          $scope.getVillages(VILLAGE_TABLE);
+								$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
 			          console.error('anp err occured while insertion',err);
@@ -101,6 +105,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     $scope.getVillages(VILLAGE_TABLE);
 
     $scope.editVillage = (village)=>{
+			$rootScope.template = {title: 'Edit Village'};
 			$rootScope.editModeData = true;
 	  	$scope.village.name = village.name;
 	  	$scope.village.id = village.id;
