@@ -102,3 +102,6 @@ md-toolbar:not(.md-menu-toolbar){
 .width {
   width: 100px;
 }
+.padding {
+  padding-left: 20px;
+}
