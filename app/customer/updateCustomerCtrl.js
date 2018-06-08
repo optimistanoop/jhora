@@ -1,11 +1,19 @@
 
-  jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
+  jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog,$routeParams,$window, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
+    $scope.custid = $routeParams.id;
+    $scope.customer = {date:'',father:'',guarantor:'',id:'',mobile:'',name:'',pageNo:'',rate:'',remarks:'',salutation:'',village:''};
+    $scope.init = ()=> {
+      q.selectAllById('customers', 'id', $scope.custid)
+      .then((rows)=>
+        $timeout(()=> {
+        $scope.customer = rows[0];
+        $scope.customer.date = $scope.customer ? new Date($scope.customer.date) : undefined;
+        $scope.date = $mdDateLocale.parseDate($scope.date);
     $scope.salutations = CUSTOMER_SALUTATION;
-    $scope.customer = { salutations: '', name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.editModeData = $rootScope.editModeData;
     $rootScope.editModeData = {};
-    $scope.customer = $scope.editModeData;
+    // $scope.customer = $scope.editModeData;
 
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
@@ -19,7 +27,8 @@
     };
 
     $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Customer', content :'customer/viewCustomer.html'};
+      // $rootScope.template = {title: 'Customer', content :'customer/viewCustomer.html'};
+      $window.history.back();
     };
 
     $scope.resetCustomer = ()=>{
@@ -68,20 +77,21 @@
       .then((data)=>{
           keys = ['name', 'village'];
           values = [$scope.customer.name, $scope.customer.village];
+          // $scope.date = $scope.date ? new Date($scope.date): null;
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
         $timeout(()=>{
           $scope.resetCustomer();
-        },0);
-        $mdToast.show(
-        $mdToast.simple()
-        .textContent('Customer updated.')
-        .position('bottom right')
-        .hideDelay(3000)
-        );
-        $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
-      })
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Customer updated.')
+            .position('bottom right')
+            .hideDelay(3000)
+          );
+          $window.history.back();
+          },0);
+        })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
           if (err.code=="SQLITE_CONSTRAINT") {
@@ -109,5 +119,7 @@
     };
 
     $scope.getVillages(VILLAGE_TABLE);
-
+  },0)
+)};
+  $scope.init();
   });

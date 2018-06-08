@@ -1,16 +1,13 @@
 
 jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams, $location,$window, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+
   $scope.custid=$routeParams.id;
-  $scope.customer ={};
+  $scope.customer = {};
   $scope.init = ()=> {
     q.selectAllById('customers', 'id', $scope.custid)
     .then((rows)=>{
       $timeout(()=> {
       $scope.customer = rows[0];
-    },0)
-  })
-  };
-  $scope.init();
   $scope.hideNoDataFound = true;
   $scope.salutation = '';
       if($scope.customer.salutation == 'Mrs'){
@@ -119,9 +116,10 @@ $scope.sortBy = function(propertyName) {
     lastMonth = to.getDate() >= 15 ? 1 :0.5;
     return [firstMonth, months, lastMonth];
   }
-
-
-
+},0)
+})
+};
+$scope.init();
   let transactions = [
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },

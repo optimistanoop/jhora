@@ -116,8 +116,8 @@ $routeProvider
     .when("/customers/add", {
         templateUrl : 'file://' + __dirname + '/customer/addCustomers.html'
     })
-    .when("/customers/update/:id", {
-        templateUrl : 'file://' + __dirname + '/customer/updateCustomers.html'
+    .when("/customer/update/:id", {
+        templateUrl : 'file://' + __dirname + '/customer/updateCustomer.html'
     })
     .when("/transactions", {
         templateUrl : 'file://' + __dirname + '/transaction/viewTransactions.html'
