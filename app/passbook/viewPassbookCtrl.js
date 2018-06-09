@@ -1,6 +1,8 @@
 
 jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDialog,$mdToast, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
+  const {dialog} = require('electron').remote;
+  const {shell} = require('electron');
   $scope.custid=$routeParams.id;
   $scope.customer = {};
   $scope.init = ()=> {
@@ -17,15 +19,9 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }else{
           $scope.salutation = 'D/o' ;
         }
-$scope.sortBy = function(propertyName) {
+ $scope.sortBy = (propertyName)=>{
    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
    $scope.propertyName = propertyName;
- };
-
- $scope.editTransaction = (transaction)=>{
-   //TODO
-   $rootScope.editModeData = transaction;
-   $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
  };
 
  $scope.deleteTransaction=(ev,transaction)=>{
@@ -116,7 +112,6 @@ $scope.sortBy = function(propertyName) {
 
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
   $scope.Back = ()=>{
-    // $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
     $window.history.back();
   }
   let getMonthDiff2 = (from, to)=>{

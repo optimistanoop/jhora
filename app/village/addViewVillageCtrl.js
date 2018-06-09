@@ -1,6 +1,8 @@
 jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, $mdToast, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
 
 	$rootScope.template = {title: 'Villages'};
+  const {dialog} = require('electron').remote;
+	const {shell} = require('electron');
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
   $scope.queryFor = $scope.limits[0];
@@ -143,7 +145,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
             });
           }
 
-     $scope.sortBy = function(propertyName) {
+     $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };

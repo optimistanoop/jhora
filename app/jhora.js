@@ -1,17 +1,14 @@
-const {shell} = require('electron')
-const {dialog} = require('electron').remote
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
 jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTATION) {
   $scope.salutation = CUSTOMER_SALUTATION;
-  //$scope.villages = VILLAGES;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
   $scope.tabs = TABS;
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
 
-  $rootScope.template = $scope.tabs[3];
+  $rootScope.template = $scope.tabs[0];
   $scope.goto = function(page) {
     $rootScope.template = $scope.tabs[page];
     $scope.closeNav();
@@ -53,23 +50,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village');
 
-// jhora.config(function($routeProvider, $locationProvider) {
-//     $routeProvider
-//     .when("/", {
-//         templateUrl : "index2.html"
-//     });
-//     $locationProvider.hashPrefix('!');
-//     $locationProvider.html5Mode({enabled: false, requireBase: false});
-//     $locationProvider.html5Mode(true);
-//     $locationProvider.html5Mode({
-//       enabled: true,
-//       requireBase: false
-//     });
-// });
-
-
-
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
+
   $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow') .dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
@@ -77,11 +59,6 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 
   $mdDateLocaleProvider.parseDate = function(dateString) {
-
-    // d.toISOString()
-    // "2018-05-30T19:54:46.756Z"
-    // d.toLocaleDateString()
-    // "5/31/2018"
     let dd = dateString ? new Date(dateString) : undefined;
     let formattedDate = '';
     if(dd){
@@ -94,15 +71,14 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
   };
 
   $mdDateLocaleProvider.formatDate = function(date) {
-  let dd = date ? date : undefined;
-  let formattedDate = '';
-  if(dd){
-    let d = dd.getDate();
-    let m = dd.getMonth();
-    let y = dd.getFullYear();
-    formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
-  }
-
+    let dd = date ? date : undefined;
+    let formattedDate = '';
+    if(dd){
+      let d = dd.getDate();
+      let m = dd.getMonth();
+      let y = dd.getFullYear();
+      formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
+    }
   return formattedDate ? formattedDate : null;
 };
 $routeProvider
@@ -147,4 +123,5 @@ $routeProvider
     $locationProvider.html5Mode({enabled: false, requireBase: false});
     // $locationProvider.html5Mode(true);
     // $locationProvider.html5Mode({ enabled: true, requireBase: false
+
 });

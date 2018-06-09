@@ -1,6 +1,8 @@
 
+
 jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
+    const {shell} = require('electron');
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
@@ -10,13 +12,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.hideNoDataFound = true;
     $scope.tran = {fromDate: null, toDate: null};
     $scope.maxDate = new Date();
-
-
-    $scope.editTransaction = (transaction)=>{
-      $rootScope.editModeData = transaction;
-      $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
-
-    };
 
     $scope.deleteTransaction=(ev,transaction)=>{
       shell.beep()
@@ -62,7 +57,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
             });
           }
 
-    $scope.sortBy = function(propertyName) {
+    $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };
