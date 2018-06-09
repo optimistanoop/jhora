@@ -1,5 +1,7 @@
 jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, $mdToast, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
-	const {dialog} = require('electron').remote;
+
+	$rootScope.template = {title: 'Villages'};
+  const {dialog} = require('electron').remote;
 	const {shell} = require('electron');
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
@@ -14,7 +16,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       $rootScope.editModeData = false;
     };
 
-    $scope.addVillage = ()=>{
+    $scope.addVillage = (ev)=>{
       let keys = Object.keys($scope.village);
       let values = Object.values($scope.village);
       if($rootScope.editModeData == true){
@@ -30,6 +32,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 							.hideDelay(3000)
 							);
 		           $scope.getVillages(VILLAGE_TABLE);
+							 $rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
 		          console.error('anp err occured while updation',err);
@@ -49,21 +52,32 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 							.hideDelay(3000)
 							);
 			          $scope.getVillages(VILLAGE_TABLE);
+								$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
 			          console.error('anp err occured while insertion',err);
 			          $scope.getError(err);
 			});
       }
-    };
+
 
     $scope.getError = (error) => {
     	if (error.code=="SQLITE_CONSTRAINT") {
-            dialog.showMessageBox({type :'info', message:'Village name already exist', buttons:[]});
-            $scope.village.name ='';
+				$mdDialog.show(
+					$mdDialog.alert()
+					.parent(angular.element(document.querySelector('#popupContainer')))
+					.clickOutsideToClose(false)
+					.title('Duplicate Village Found')
+					.textContent(`Village : ${$scope.village.name} is already exists.`)
+					.ariaLabel('Alert Dialog Demo')
+					.ok('Try Again!')
+					.theme('dark-orange')
+					.targetEvent(ev)
+						);
+						$scope.village.name ='';
 		}
     }
-
+};
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getVillages(VILLAGE_TABLE);
@@ -93,6 +107,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     $scope.getVillages(VILLAGE_TABLE);
 
     $scope.editVillage = (village)=>{
+			$rootScope.template = {title: 'Edit Village'};
 			$rootScope.editModeData = true;
 	  	$scope.village.name = village.name;
 	  	$scope.village.id = village.id;

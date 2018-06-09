@@ -33,13 +33,13 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
-  {title:'Add Customer', content:'customer/addCustomer.html'},
-  {title:'Add Transaction', content:'transaction/addTransaction.html'},
-  {title:'Customers', content:'customer/viewCustomer.html'},
-  {title:'Transactions', content:'transaction/viewTransaction.html'},
-  {title:'Villages', content:'village/addViewVillage.html'},
-  {title:'Dashboard Demo', content:'dashboard/dashboard.html'},
-  {title:'Passbook Demo', content:'passbook/viewPassbook1.html'}
+  {title:'Add Customer',route:'/customer/add'},
+  {title:'Add Transaction',route:'/transactions/add'},
+  {title:'Customers',route:'/customer'},
+  {title:'Transactions',route:'/transactions'},
+  {title:'Villages',route:'/villages/'},
+  {title:'Dashboard Demo',route:'/dashboard/view/'},
+  {title:'Passbook Demo',route:'/passbook1/view/'}
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
@@ -50,7 +50,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village');
 
-jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
+jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
+
   $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow') .dark();
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
   $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
@@ -78,13 +79,49 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider) {
       let y = dd.getFullYear();
       formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
     }
+  return formattedDate ? formattedDate : null;
+};
+$routeProvider
+    .when("/", {
+        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
+        //templateUrl : 'file://' + __dirname + '/index2.html'
+    })
+    .when("/customer", {
+        templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
+    })
+    .when("/customer/add", {
+        templateUrl : 'file://' + __dirname + '/customer/addCustomer.html'
+    })
+    .when("/customer/update/:id", {
+        templateUrl : 'file://' + __dirname + '/customer/updateCustomer.html'
+    })
+    .when("/transactions", {
+        templateUrl : 'file://' + __dirname + '/transaction/viewTransaction.html'
+    })
+    .when("/transactions/add", {
+        templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
+    })
+    .when("/transaction/update/:id", {
+        templateUrl : 'file://' + __dirname + '/transaction/updateTransaction.html'
+    })
+    .when("/passbook/view/:id", {
+        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
+    })
+    .when("/villages/", {
+        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
+    })
+    .when("/village/:id", {
+        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
+    })
+    .when("/passbook1/view/", {
+        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook1.html'
+    })
+    .when("/dashboard/view/", {
+        templateUrl : 'file://' + __dirname + '/dashboard/dashboard.html'
+    });
+    $locationProvider.hashPrefix('!');
+    $locationProvider.html5Mode({enabled: false, requireBase: false});
+    // $locationProvider.html5Mode(true);
+    // $locationProvider.html5Mode({ enabled: true, requireBase: false
 
-    return formattedDate ? formattedDate : null;
-  };
-});
-
-jhora.service('queryService', function(){
-    this.selectAll = (tableName)=>{
-        return q.selectAll(tableName);
-    }
 });

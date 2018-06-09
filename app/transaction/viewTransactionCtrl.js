@@ -1,5 +1,7 @@
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+
     const {shell} = require('electron');
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -10,13 +12,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.hideNoDataFound = true;
     $scope.tran = {fromDate: null, toDate: null};
     $scope.maxDate = new Date();
-
-
-    $scope.editTransaction = (transaction)=>{
-      $rootScope.editModeData = transaction;
-      $rootScope.template = {title: 'Edit Transaction', content :'transaction/updateTransaction.html'};
-
-    };
 
     $scope.deleteTransaction=(ev,transaction)=>{
       shell.beep()
@@ -77,7 +72,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
           row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout(()=>{
-          $scope[modelName] = rows;
+          // $scope[modelName] = rows;
+          $scope.transactions= rows;
+          // console.log('data',$scope[modelName]);
           $scope.hideNoDataFound = true;
           if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
           $scope.hideNoDataFound = false;
