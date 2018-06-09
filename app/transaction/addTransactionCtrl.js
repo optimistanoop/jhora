@@ -75,7 +75,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       $scope.transactionForm.$setUntouched();
     };
 
-    $scope.addTransaction = ()=>{
+    $scope.dataMassage = ()=>{
       $scope.transaction.customerId = $scope.customer.id;
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
@@ -87,6 +87,11 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       let values = Object.values($scope.transaction);
       values[indexDate] = date;
       values[indexPdate] = promiseDate;
+      return {keys, values};
+    }
+
+    $scope.addTransaction = ()=>{
+      let {keys, values} = $scope.dataMassage();
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{
