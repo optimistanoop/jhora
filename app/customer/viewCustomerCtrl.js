@@ -1,5 +1,5 @@
 
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDialog,$mdToast, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDialog, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
     const {shell} = require('electron');
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
@@ -44,12 +44,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDi
             })
             .then((data)=>{
               $scope.getCustomers(CUSTOMERS_TABLE);
-              $mdToast.show(
-              $mdToast.simple()
-              .textContent(`${customer.name}'s Customer Deleted.`)
-              .position('bottom right')
-              .hideDelay(3000)
-              );
+              $rootScope.showToast(`${customer.name}'s Customer Deleted.`);
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', err);

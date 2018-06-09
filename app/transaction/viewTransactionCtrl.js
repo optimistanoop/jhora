@@ -1,6 +1,6 @@
 
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     const {shell} = require('electron');
     $scope.types = TRANSACTION_TYPES;
@@ -46,12 +46,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     })
     .then((data)=>{
       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-      $mdToast.show(
-      $mdToast.simple()
-      .textContent(`${transaction.name}'s Transaction Deleted.`)
-      .position('bottom right')
-      .hideDelay(3000)
-      );
+      $rootScope.showToast(`${transaction.name}'s Transaction Deleted.`);
     })
     .catch((err)=>{
       console.error('anp an err occured while deleting',err);

@@ -1,5 +1,5 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDialog,$mdToast, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDialog, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
   const {dialog} = require('electron').remote;
   const {shell} = require('electron');
@@ -56,12 +56,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
          })
          .then((data)=>{
            $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-           $mdToast.show(
-           $mdToast.simple()
-           .textContent(`${transaction.name}'s Transaction Deleted.`)
-           .position('bottom right')
-           .hideDelay(3000)
-           );
+           $rootScope.showToast(`${transaction.name}'s Transaction Deleted.`);
          })
          .catch((err)=>{
            console.error('anp an err occured while deleting',err);

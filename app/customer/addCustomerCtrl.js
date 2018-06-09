@@ -1,5 +1,5 @@
 
-  jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE, CUSTOMER_SALUTATION) {
+  jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale, $mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
     $scope.salutations = CUSTOMER_SALUTATION;
     $scope.customer = {salutation: $scope.salutations[0], name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
@@ -33,12 +33,7 @@
         $timeout(()=>{
           $scope.resetCustomer();
         },0);
-        $mdToast.show(
-        $mdToast.simple()
-        .textContent('Customer Added.')
-        .position('bottom right')
-        .hideDelay(3000)
-        );
+        $rootScope.showToast('Customer Added.');
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);

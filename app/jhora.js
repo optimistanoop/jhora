@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTATION) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -30,6 +30,10 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
     document.getElementById("main").style.marginLeft = "0px";
   };
 
+$rootScope.showToast = (msg)=>{
+    $mdToast.show($mdToast.simple().textContent(msg).position(TOAST_POS).hideDelay(TOAST_DELAY));
+} 
+
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
@@ -48,7 +52,9 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')
 .constant('TRANSACTION_TABLE', 'transactions')
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
-.constant('VILLAGE_TABLE', 'village');
+.constant('VILLAGE_TABLE', 'village')
+.constant('TOAST_DELAY', 3000)
+.constant('TOAST_POS', 'bottom right');
 
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
 
@@ -120,7 +126,4 @@ $routeProvider
     });
     $locationProvider.hashPrefix('!');
     $locationProvider.html5Mode({enabled: false, requireBase: false});
-    // $locationProvider.html5Mode(true);
-    // $locationProvider.html5Mode({ enabled: true, requireBase: false
-
 });

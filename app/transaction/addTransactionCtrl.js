@@ -1,5 +1,5 @@
 
-jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
@@ -97,12 +97,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $timeout(()=>{
           $scope.resetTransaction();
         },0);
-        $mdToast.show(
-        $mdToast.simple()
-        .textContent('Transaction Added.')
-        .position('bottom right')
-        .hideDelay(3000)
-        );
+        $rootScope.showToast('Transaction Added.');
       })
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);
