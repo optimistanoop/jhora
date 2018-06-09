@@ -1,6 +1,7 @@
 
 jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
+    $rootScope.template = {title:'Add Transaction'};
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
@@ -14,13 +15,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };
-
-    $scope.viewCustomerPassbook = (customer)=>{
-     // TODO
-     $rootScope.viewPassbookData = customer;
-     $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
-    };
-    
     $scope.typeSelected= ()=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
@@ -40,7 +34,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $scope.disablePromiseDate = false;
       }
     };
-    
+
     $scope.searchCustomer = (keyword)=>{
       let result = [];
       let customers = [];
@@ -52,7 +46,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
 
     $scope.updateSelectedCust = (customer)=>{
         if(customer && customer.id){
-          
+
           $scope.customer = customer;
           $scope.transaction.rate = $scope.customer.rate;
           if($scope.customer.salutation == 'Mrs'){

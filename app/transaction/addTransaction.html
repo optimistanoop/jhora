@@ -118,7 +118,7 @@
          </md-card-title-media>
        </md-card-title>
        <md-card-actions layout="row" layout-align="end center">
-         <md-button  ng-click="viewCustomerPassbook(customer)">Passbook</md-button>
+         <md-button ><a ng-href="#!/passbook/view/{{customer.id}}" class="nolink">Passbook</a></md-button>
        </md-card-actions>
      </md-card>
      <md-content layout-padding layout="row" ng-show="transactions.length >0">
