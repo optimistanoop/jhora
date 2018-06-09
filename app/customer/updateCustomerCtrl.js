@@ -11,11 +11,9 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         $scope.customer = rows[0];
         $scope.customer.date = $scope.customer ? new Date($scope.customer.date) : undefined;
         $scope.date = $mdDateLocale.parseDate($scope.date);
+      },0)
+    )};
     $scope.salutations = CUSTOMER_SALUTATION;
-    $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editModeData = {};
-    // $scope.customer = $scope.editModeData;
-
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
 
@@ -29,7 +27,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.cancelUpdate = () =>{
-      // $rootScope.template = {title: 'Customer', content :'customer/viewCustomer.html'};
       $window.history.back();
     };
 
@@ -67,7 +64,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       .then((data)=>{
           keys = ['name', 'village'];
           values = [$scope.customer.name, $scope.customer.village];
-          // $scope.date = $scope.date ? new Date($scope.date): null;
           return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
       })
       .then((data)=>{
@@ -104,7 +100,5 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.getVillages(VILLAGE_TABLE);
-  },0)
-)};
-  $scope.init();
+    $scope.init();
   });

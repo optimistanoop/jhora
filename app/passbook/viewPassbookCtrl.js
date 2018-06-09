@@ -3,26 +3,34 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
 
   const {dialog} = require('electron').remote;
   const {shell} = require('electron');
+  $rootScope.template = {title: 'Passbook'};
   $scope.custid=$routeParams.id;
   $scope.customer = {};
   $scope.init = ()=> {
     q.selectAllById('customers', 'id', $scope.custid)
     .then((rows)=>{
       $timeout(()=> {
-      $scope.customer = rows[0];
+        $scope.customer = rows[0];
+        $rootScope.template.title=`${$scope.customer.name}'s Passbook`;
+        $scope.setSalutation();
+      },0)
+      })
+    };
   $scope.hideNoDataFound = true;
-  $scope.salutation = '';
-      if($scope.customer.salutation == 'Mrs'){
+  $scope.setSalutation =()=> {
+      $scope.salutation = '';
+        if($scope.customer.salutation == 'Mrs'){
           $scope.salutation = 'W/o' ;
-      }else if($scope.customer.salutation == 'Mr'){
+        }else if($scope.customer.salutation == 'Mr'){
           $scope.salutation = 'S/o' ;
-      }else{
+        }else{
           $scope.salutation = 'D/o' ;
         }
- $scope.sortBy = (propertyName)=>{
-   $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-   $scope.propertyName = propertyName;
- };
+      }
+  $scope.sortBy = (propertyName)=>{
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
 
  $scope.deleteTransaction=(ev,transaction)=>{
   shell.beep();
@@ -71,72 +79,49 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
            console.error('anp got error while fetching data',err);
          });
        };
-
-       
- $scope.getCustomerPassbook = (tableName)=>{
-      q.selectAllById(tableName, 'customerId', $scope.custid)
-      .then((rows)=>{
-        if(rows)
-        for(let row of rows){
-          row.date = row.date ? new Date(row.date) : null;
-          row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
+      $scope.Back = ()=>{
+          $window.history.back();
         }
-        $timeout(()=>{
-          $scope.transactions = rows;
-          if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
-          $scope.hideNoDataFound = false;
-        },0);
-      })
-      .catch((err)=>{
-        console.error(err);
-      });
-  };
+        let getMonthDiff2 = (from, to)=>{
 
+          from = new Date(from);
+          to = new Date(to);
+          let valid = !isNaN(from) && !isNaN(to) && from < to ;
+          if(! valid) return [];
+          let months = 0;
+          let firstMonth = 0;
+          let lastMonth = 0;
+          months = (to.getFullYear() - from.getFullYear()) * 12;
+          months -= from.getMonth() + 1;
+          months += to.getMonth();
+          months = months <= 0 ? 0 : months;
+
+          firstMonth = from.getDate() <= 15 ? 1 :0.5;
+          lastMonth = to.getDate() >= 15 ? 1 :0.5;
+          return [firstMonth, months, lastMonth];
+        }
+
+
+    function getMonthDiff (from, to) {
+          from = new Date(from);
+          to = new Date(to);
+          let valid = !isNaN(from) && !isNaN(to) && from < to ;
+          if(! valid) return [];
+          let months = 0;
+          let firstMonth = 0;
+          let lastMonth = 0;
+          months = (to.getFullYear() - from.getFullYear()) * 12;
+          months -= from.getMonth() + 1;
+          months += to.getMonth();
+          months = months <= 0 ? 0 : months;
+
+          firstMonth = from.getDate() <= 15 ? 1 :0.5;
+          lastMonth = to.getDate() >= 15 ? 1 :0.5;
+          return [firstMonth, months, lastMonth];
+        }
+
+  $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
-  $scope.Back = ()=>{
-    $window.history.back();
-  }
-  let getMonthDiff2 = (from, to)=>{
-
-    from = new Date(from);
-    to = new Date(to);
-    let valid = !isNaN(from) && !isNaN(to) && from < to ;
-    if(! valid) return [];
-    let months = 0;
-    let firstMonth = 0;
-    let lastMonth = 0;
-    months = (to.getFullYear() - from.getFullYear()) * 12;
-    months -= from.getMonth() + 1;
-    months += to.getMonth();
-    months = months <= 0 ? 0 : months;
-
-    firstMonth = from.getDate() <= 15 ? 1 :0.5;
-    lastMonth = to.getDate() >= 15 ? 1 :0.5;
-    return [firstMonth, months, lastMonth];
-  }
-
-
-  function getMonthDiff (from, to) {
-    from = new Date(from);
-    to = new Date(to);
-    let valid = !isNaN(from) && !isNaN(to) && from < to ;
-    if(! valid) return [];
-    let months = 0;
-    let firstMonth = 0;
-    let lastMonth = 0;
-    months = (to.getFullYear() - from.getFullYear()) * 12;
-    months -= from.getMonth() + 1;
-    months += to.getMonth();
-    months = months <= 0 ? 0 : months;
-
-    firstMonth = from.getDate() <= 15 ? 1 :0.5;
-    lastMonth = to.getDate() >= 15 ? 1 :0.5;
-    return [firstMonth, months, lastMonth];
-  }
-},0)
-})
-};
-$scope.init();
   let transactions = [
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
@@ -146,6 +131,4 @@ $scope.init();
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' }
   ];
-
-
-  });
+});
