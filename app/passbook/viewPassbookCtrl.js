@@ -79,6 +79,24 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
            console.error('anp got error while fetching data',err);
          });
        };
+    $scope.getCustomerPassbook = (tableName)=>{
+        q.selectAllById(tableName, 'customerId', $scope.custid)
+        .then((rows)=>{
+          if(rows)
+          for(let row of rows){
+            row.date = row.date ? new Date(row.date) : null;
+            row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
+          }
+          $timeout(()=>{
+            $scope.transactions = rows;
+            if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+            $scope.hideNoDataFound = false;
+          },0);
+        })
+        .catch((err)=>{
+          console.error(err);
+        });
+      };
       $scope.Back = ()=>{
           $window.history.back();
         }
