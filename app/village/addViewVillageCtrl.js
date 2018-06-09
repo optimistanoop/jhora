@@ -14,7 +14,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       $scope.villageForm.$setPristine();
       $scope.villageForm.$setUntouched();
       $rootScope.editModeData = false;
-    };
+  };
 
     $scope.addVillage = (ev)=>{
       let keys = Object.keys($scope.village);
@@ -31,7 +31,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 		    })
 		    .catch((err)=>{
 		          console.error('anp err occured while updation',err);
-		          $scope.getError(err);
+		          $scope.getError(ev, err);
 		    });
         }
         else{
@@ -46,28 +46,18 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 			    })
 			    .catch((err)=>{
 			          console.error('anp err occured while insertion',err);
-			          $scope.getError(err);
+			          $scope.getError(ev, err);
 			});
-      }
+    };
+	};
 
-
-    $scope.getError = (error) => {
-    	if (error.code=="SQLITE_CONSTRAINT") {
-				$mdDialog.show(
-					$mdDialog.alert()
-					.parent(angular.element(document.querySelector('#popupContainer')))
-					.clickOutsideToClose(false)
-					.title('Duplicate Village Found')
-					.textContent(`Village : ${$scope.village.name} is already exists.`)
-					.ariaLabel('Alert Dialog Demo')
-					.ok('Try Again!')
-					.theme('dark-orange')
-					.targetEvent(ev)
-						);
-						$scope.village.name ='';
+	$scope.getError = (ev, error) => {
+		if (error.code=="SQLITE_CONSTRAINT") {
+			$rootScope.showAlertDialog(ev,'Duplicate Village Found', `Village : ${$scope.village.name} is already exists.`);
+			$scope.resetVillage();
 		}
-    }
-};
+	};
+
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getVillages(VILLAGE_TABLE);

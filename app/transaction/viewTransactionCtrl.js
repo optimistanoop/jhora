@@ -1,6 +1,6 @@
 
 
-jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     const {shell} = require('electron');
     $scope.types = TRANSACTION_TYPES;
@@ -15,25 +15,12 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
 
     $scope.deleteTransaction=(ev,transaction)=>{
       shell.beep()
-      $mdDialog.show({
-        controller: ($scope, $mdDialog)=>{
-          $scope.message = 'Are you sure to delete...?'
-          $scope.transaction = transaction;
-          $scope.answer = function(answer) {
-            $mdDialog.hide(answer);
-          };
-        },
-        templateUrl: 'transaction/previewTransaction.html',
-        parent: angular.element(document.body),
-        targetEvent: ev,
-        clickOutsideToClose:false,
-        fullscreen: true // Only for -xs, -sm breakpoints.
-    })
-    .then(function(answer) {
-      if(answer == 'submit') {
-        $scope.confirmTransaction(transaction);
-      }
-    });
+      $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
+      .then(function(answer) {
+        if(answer == 'submit') {
+          $scope.confirmTransaction(transaction);
+        }
+      });
   }
 
   $scope.confirmTransaction = (transaction)=>{

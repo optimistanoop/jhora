@@ -79,24 +79,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setUntouched();
     };
     $scope.confirmTransaction=(ev,transaction)=>{
-      $mdDialog.show({
-     controller: ($scope, $mdDialog)=>{
-       $scope.transaction = transaction;
-       $scope.answer = function(answer) {
-       $mdDialog.hide(answer);
-     };
-   },
-     templateUrl: 'transaction/previewTransaction.html',
-     parent: angular.element(document.body),
-     targetEvent: ev,
-     clickOutsideToClose:false,
-     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-   })
-   .then(function(answer) {
-     if(answer == 'submit') {
-       $scope.updateTransaction(ev);
-     }
-   });
+
+      $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html')
+      .then((answer)=>{
+        if(answer == 'submit') {
+          $scope.updateTransaction(ev);
+        }
+      });
   }
 
     $scope.updateTransaction= (ev)=>{

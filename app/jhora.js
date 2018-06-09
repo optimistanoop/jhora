@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -32,7 +32,45 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, TABS,CUSTOM
 
 $rootScope.showToast = (msg)=>{
     $mdToast.show($mdToast.simple().textContent(msg).position(TOAST_POS).hideDelay(TOAST_DELAY));
-} 
+};
+
+$rootScope.showAlertDialog = (ev, title, msg)=>{
+    $mdDialog.show(
+        $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(false)
+        .title(title)
+        .textContent(msg)
+        .ariaLabel('Alert Dialog Demo')
+        .ok('Got it!')
+        .theme('dark-orange')
+        .targetEvent(ev)
+    );
+};
+
+$rootScope.showDialog = (ev,modelName, data, templateUrl, msg ='')=>{
+    let p =new Promise( (resolve, reject)=>{
+        $mdDialog.show({
+            controller: ($scope, $mdDialog)=>{
+                $scope.message = msg,
+                $scope[modelName] = data;
+                $scope.answer = function(answer) {
+                    $mdDialog.hide(answer);
+                };
+            },
+            templateUrl: templateUrl,
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:false,
+            fullscreen: true
+        })
+        .then(function(answer) {
+            resolve(answer);
+        })
+    });
+
+    return p;
+};
 
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])

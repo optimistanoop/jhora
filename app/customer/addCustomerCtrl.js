@@ -38,17 +38,8 @@
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
           if (err.code=="SQLITE_CONSTRAINT") {
-            $mdDialog.show(
-              $mdDialog.alert()
-              .parent(angular.element(document.querySelector('#popupContainer')))
-              .clickOutsideToClose(false)
-              .title('Duplicate Mobile Number Found')
-              .textContent(`Mobile Number : ${$scope.customer.mobile} is already in use.`)
-              .ariaLabel('Alert Dialog Demo')
-              .ok('Change It!')
-              .theme('dark-orange')
-              .targetEvent(ev)
-    );
+            $rootScope.showAlertDialog(ev,'Duplicate Mobile Number Found', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
+            $scope.customer.mobile = '';
           }
       });
     };
