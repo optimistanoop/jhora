@@ -1,5 +1,5 @@
 
-jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog,$routeParams,$window, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
     const {dialog} = require('electron').remote;
     $rootScope.template = {title: 'Edit Customer'};
     $scope.custid = $routeParams.id;
@@ -36,25 +36,13 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       $scope.customerForm.$setUntouched();
     };
 
-    $scope.updateCustomer=(ev,Customer)=>{
-        $mdDialog.show({
-        controller: ($scope, $mdDialog)=>{
-          $scope.Customer = Customer;
-          $scope.answer = function(answer) {
-          $mdDialog.hide(answer);
-          };
-        },
-     templateUrl: 'customer/previewCustomer.html',
-     parent: angular.element(document.body),
-     targetEvent: ev,
-     clickOutsideToClose:false,
-     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-   })
-   .then(function(answer) {
-     if(answer == 'submit') {
-       $scope.confirmCustomer(ev);
-     }
-   });
+    $scope.updateCustomer=(ev,customer)=>{
+      $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html')
+      .then(function(answer) {
+        if(answer == 'submit') {
+          $scope.confirmCustomer(ev);
+        }
+      });
   }
     $scope.confirmCustomer = (ev)=>{
       let date = $mdDateLocale.parseDate($scope.customer.date);
@@ -81,12 +69,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       .then((data)=>{
         $timeout(()=>{
           $scope.resetCustomer();
-          $mdToast.show(
-            $mdToast.simple()
-            .textContent('Customer updated.')
-            .position('bottom right')
-            .hideDelay(3000)
-          );
+          $rootScope.showToast('Customer updated.');
           $window.history.back();
           },0);
         })

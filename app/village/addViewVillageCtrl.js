@@ -1,4 +1,4 @@
-jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, $mdToast, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
+jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
 
 	$rootScope.template = {title: 'Add / View Villages'};
   const {dialog} = require('electron').remote;
@@ -14,7 +14,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       $scope.villageForm.$setPristine();
       $scope.villageForm.$setUntouched();
       $rootScope.editModeData = false;
-			$rootScope.template.title = 'Add / View Villages';
+      $rootScope.template.title = 'Add / View Villages';
     };
 
     $scope.addVillage = (ev)=>{
@@ -26,18 +26,13 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 		      	$timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$mdToast.show(
-							$mdToast.simple()
-							.textContent('Village updated.')
-							.position('bottom right')
-							.hideDelay(3000)
-							);
+							$rootScope.showToast('Village updated.');
 		           $scope.getVillages(VILLAGE_TABLE);
 							 $rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
 		          console.error('anp err occured while updation',err);
-		          $scope.getError(err);
+		          $scope.getError(ev, err);
 		    });
         }
         else{
@@ -46,39 +41,24 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 			        $timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$mdToast.show(
-							$mdToast.simple()
-							.textContent('Village Added.')
-							.position('bottom right')
-							.hideDelay(3000)
-							);
+							$rootScope.showToast('Village Added.');
 			          $scope.getVillages(VILLAGE_TABLE);
 								$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
 			          console.error('anp err occured while insertion',err);
-			          $scope.getError(err);
+			          $scope.getError(ev, err);
 			});
-      }
+    };
+	};
 
-
-    $scope.getError = (error) => {
-    	if (error.code=="SQLITE_CONSTRAINT") {
-				$mdDialog.show(
-					$mdDialog.alert()
-					.parent(angular.element(document.querySelector('#popupContainer')))
-					.clickOutsideToClose(false)
-					.title('Duplicate Village Found')
-					.textContent(`Village : ${$scope.village.name} is already exists.`)
-					.ariaLabel('Alert Dialog Demo')
-					.ok('Try Again!')
-					.theme('dark-orange')
-					.targetEvent(ev)
-						);
-						$scope.village.name ='';
+	$scope.getError = (ev, error) => {
+		if (error.code=="SQLITE_CONSTRAINT") {
+			$rootScope.showAlertDialog(ev,'Duplicate Village Found', `Village : ${$scope.village.name} is already exists.`);
+			$scope.resetVillage();
 		}
-    }
-};
+	};
+
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getVillages(VILLAGE_TABLE);
@@ -134,12 +114,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
             return q.deleteRowById(VILLAGE_TABLE, village.id)
               .then((data)=>{
               $scope.getVillages(VILLAGE_TABLE);
-							$mdToast.show(
-							$mdToast.simple()
-							.textContent('Village Deleted.')
-							.position('bottom right')
-							.hideDelay(3000)
-							);
+							$rootScope.showToast('Village Deleted.');
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', village);

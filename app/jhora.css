@@ -86,10 +86,10 @@ md-toolbar:not(.md-menu-toolbar){
 
 
 .sortorder:after {
-  content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+  content: '\25b2';
 }
 .sortorder.reverse:after {
-  content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+  content: '\25bc';
 }
 
 .tabs:hover {

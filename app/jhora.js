@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTATION) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -30,6 +30,48 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
     document.getElementById("main").style.marginLeft = "0px";
   };
 
+$rootScope.showToast = (msg)=>{
+    $mdToast.show($mdToast.simple().textContent(msg).position(TOAST_POS).hideDelay(TOAST_DELAY));
+};
+
+$rootScope.showAlertDialog = (ev, title, msg)=>{
+    $mdDialog.show(
+        $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(false)
+        .title(title)
+        .textContent(msg)
+        .ariaLabel('Alert Dialog Demo')
+        .ok('Got it!')
+        .theme('dark-orange')
+        .targetEvent(ev)
+    );
+};
+
+$rootScope.showDialog = (ev,modelName, data, templateUrl, msg ='')=>{
+    let p =new Promise( (resolve, reject)=>{
+        $mdDialog.show({
+            controller: ($scope, $mdDialog)=>{
+                $scope.message = msg,
+                $scope[modelName] = data;
+                $scope.answer = function(answer) {
+                    $mdDialog.hide(answer);
+                };
+            },
+            templateUrl: templateUrl,
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:false,
+            fullscreen: true
+        })
+        .then(function(answer) {
+            resolve(answer);
+        })
+    });
+
+    return p;
+};
+
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
@@ -48,7 +90,9 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, TABS,CUSTOMER_SALUTAT
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')
 .constant('TRANSACTION_TABLE', 'transactions')
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
-.constant('VILLAGE_TABLE', 'village');
+.constant('VILLAGE_TABLE', 'village')
+.constant('TOAST_DELAY', 3000)
+.constant('TOAST_POS', 'bottom right');
 
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
 
@@ -120,7 +164,4 @@ $routeProvider
     });
     $locationProvider.hashPrefix('!');
     $locationProvider.html5Mode({enabled: false, requireBase: false});
-    // $locationProvider.html5Mode(true);
-    // $locationProvider.html5Mode({ enabled: true, requireBase: false
-
 });

@@ -1,5 +1,5 @@
 
-jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $rootScope.template = {title:'Add Transaction'};
     $scope.types = TRANSACTION_TYPES;
@@ -69,7 +69,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       $scope.transactionForm.$setUntouched();
     };
 
-    $scope.addTransaction = ()=>{
+    $scope.dataMassage = ()=>{
       $scope.transaction.customerId = $scope.customer.id;
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
@@ -81,17 +81,17 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       let values = Object.values($scope.transaction);
       values[indexDate] = date;
       values[indexPdate] = promiseDate;
+      return {keys, values};
+    }
+
+    $scope.addTransaction = ()=>{
+      let {keys, values} = $scope.dataMassage();
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{
           $scope.resetTransaction();
         },0);
-        $mdToast.show(
-        $mdToast.simple()
-        .textContent('Transaction Added.')
-        .position('bottom right')
-        .hideDelay(3000)
-        );
+        $rootScope.showToast('Transaction Added.');
       })
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);

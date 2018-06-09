@@ -1,5 +1,5 @@
 
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDialog,$mdToast, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
     const {shell} = require('electron');
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
@@ -12,27 +12,14 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDi
       $rootScope.template = {title: 'Edit Customer', content :'customer/updateCustomer.html'};
 
     };
-    $scope.deleteCustomer=(ev,Customer)=>{
-      shell.beep()
-      $mdDialog.show({
-      controller: ($scope, $mdDialog)=>{
-        $scope.message = 'Are you sure to delete...?'
-        $scope.Customer = Customer;
-        $scope.answer = function(answer) {
-          $mdDialog.hide(answer);
-        };
-      },
-     templateUrl: 'customer/previewCustomer.html',
-     parent: angular.element(document.body),
-     targetEvent: ev,
-     clickOutsideToClose:false,
-     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-   })
-   .then(function(answer) {
-     if(answer == 'submit') {
-       $scope.confirmCustomer(Customer);
-     }
-   });
+    $scope.deleteCustomer=(ev,customer)=>{
+      shell.beep();
+      $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html','Are you sure to delete...?')
+      .then((answer)=>{
+        if(answer == 'submit') {
+          $scope.confirmCustomer(customer);
+        }
+      });
   }
     $scope.confirmCustomer = (customer)=>{
             let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation } = customer;
@@ -44,12 +31,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDi
             })
             .then((data)=>{
               $scope.getCustomers(CUSTOMERS_TABLE);
-              $mdToast.show(
-              $mdToast.simple()
-              .textContent(`${customer.name}'s Customer Deleted.`)
-              .position('bottom right')
-              .hideDelay(3000)
-              );
+              $rootScope.showToast(`${customer.name}'s Customer Deleted.`);
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', err);

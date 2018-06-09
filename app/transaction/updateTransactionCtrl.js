@@ -1,5 +1,5 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$mdToast,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     $rootScope.template = {title: 'Edit Transaction'};
     $scope.transid = $routeParams.id;
@@ -79,24 +79,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setUntouched();
     };
     $scope.confirmTransaction=(ev,transaction)=>{
-      $mdDialog.show({
-     controller: ($scope, $mdDialog)=>{
-       $scope.transaction = transaction;
-       $scope.answer = function(answer) {
-       $mdDialog.hide(answer);
-     };
-   },
-     templateUrl: 'transaction/previewTransaction.html',
-     parent: angular.element(document.body),
-     targetEvent: ev,
-     clickOutsideToClose:false,
-     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-   })
-   .then(function(answer) {
-     if(answer == 'submit') {
-       $scope.updateTransaction(ev);
-     }
-   });
+
+      $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html')
+      .then((answer)=>{
+        if(answer == 'submit') {
+          $scope.updateTransaction(ev);
+        }
+      });
   }
 
     $scope.updateTransaction= (ev)=>{
@@ -129,12 +118,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
         $timeout (()=>{
-          $mdToast.show(
-          $mdToast.simple()
-          .textContent('Transaction updated.')
-          .position('bottom right')
-          .hideDelay(3000)
-          );
+          $rootScope.showToast('Transaction updated.');
           $scope.resetTransaction();
           $window.history.back();
         },0)
