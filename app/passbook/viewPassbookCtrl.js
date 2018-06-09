@@ -12,8 +12,13 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       $timeout(()=> {
         $scope.customer = rows[0];
         $rootScope.template.title=`${$scope.customer.name}'s Passbook`;
-        $scope.hideNoDataFound = true;
-        $scope.salutation = '';
+        $scope.setSalutation();
+      },0)
+      })
+    };
+  $scope.hideNoDataFound = true;
+  $scope.setSalutation =()=> {
+      $scope.salutation = '';
         if($scope.customer.salutation == 'Mrs'){
           $scope.salutation = 'W/o' ;
         }else if($scope.customer.salutation == 'Mr'){
@@ -21,34 +26,35 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         }else{
           $scope.salutation = 'D/o' ;
         }
-        $scope.sortBy = (propertyName)=>{
-          $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-          $scope.propertyName = propertyName;
-        };
+      }
+  $scope.sortBy = (propertyName)=>{
+      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+      $scope.propertyName = propertyName;
+    };
 
-        $scope.deleteTransaction=(ev,transaction)=>{
-          shell.beep()
-          $mdDialog.show({
-            controller: ($scope, $mdDialog)=>{
+  $scope.deleteTransaction=(ev,transaction)=>{
+      shell.beep()
+      $mdDialog.show({
+          controller: ($scope, $mdDialog)=>{
               $scope.message = 'Are you sure to delete...?'
               $scope.transaction = transaction;
               $scope.answer = function(answer) {
                 $mdDialog.hide(answer);
               };
             },
-            templateUrl: 'transaction/previewTransaction.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose:false,
-            fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-          })
-          .then(function(answer) {
+          templateUrl: 'transaction/previewTransaction.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose:false,
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
             if(answer == 'submit') {
               $scope.confirmTransaction(transaction);
             }
           });
         }
-        $scope.confirmTransaction = (transaction)=>{
+    $scope.confirmTransaction = (transaction)=>{
           let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
           let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
           let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
@@ -136,7 +142,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         }
 
 
-        function getMonthDiff (from, to) {
+    function getMonthDiff (from, to) {
           from = new Date(from);
           to = new Date(to);
           let valid = !isNaN(from) && !isNaN(to) && from < to ;
@@ -153,9 +159,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
           lastMonth = to.getDate() >= 15 ? 1 :0.5;
           return [firstMonth, months, lastMonth];
         }
-      },0)
-    })
-  };
+
   $scope.init();
   let transactions = [
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
@@ -166,6 +170,4 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' }
   ];
-
-
 });
