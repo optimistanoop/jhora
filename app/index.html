@@ -15,14 +15,13 @@
               <md-tooltip md-direction="right" >{{tab.title}}</md-tooltip>
             </a>
           </div>
-          <div id="main" ng-href="{{template.route}}">
+          <div id="main">
           	<md-toolbar   class="md-theme-light _md _md-toolbar-transitions tabs" ng-click="openNav()">
               	<h1 class="md-toolbar-tools">
               	&#9776; Jhora</h1>
                 <div  style="text-align:center;margin-top: -41px;"  > {{template.title}}</div>
             </md-toolbar>
-            <!-- <div ng-include="template.content" ng-click="closeNav()" ng-cloak></div> -->
-<div ng-view ></div>
+              <div ng-view ng-click="closeNav()"></div>
           </div>
     </div>
     <script src="lib/angular.min.js"></script>
