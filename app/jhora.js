@@ -84,7 +84,6 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
 $routeProvider
     .when("/", {
         templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
-        //templateUrl : 'file://' + __dirname + '/index2.html'
     })
     .when("/customer", {
         templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'

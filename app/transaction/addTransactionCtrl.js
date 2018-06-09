@@ -10,10 +10,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.disablePromiseDate = true;
     $scope.salutation = '';
 
-    $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Transaction', content :'transaction/viewTransaction.html'};
-    };
-
     $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
