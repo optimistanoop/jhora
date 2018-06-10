@@ -3,10 +3,10 @@
 
         <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
-             <label>Title</label> 
+             <label>Title</label>
             <md-icon><i class="material-icons">person</i></md-icon>
             <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
-             
+
              <md-option ng-repeat="salutation in salutations" ng-value="salutation">
                {{salutation}}
              </md-option>
@@ -15,7 +15,7 @@
              <div ng-message="required" class="my-message">You must supply a title.</div>
            </div>
           </md-input-container>
-            <md-input-container class="md-block" flex-xs>  
+            <md-input-container class="md-block" flex-xs>
               <label>Name</label>
             <input name="name" type="text" ng-model="customer.name" ng-minlength="4" md-maxlength="20" ng-required="true">
             <div ng-messages="customerForm.name.$error" role="alert" multiple>
@@ -36,34 +36,36 @@
               <div ng-message="max" class="my-message">Mobile No. should be less than 9,99,99,99,999.</div>
             </div>
           </md-input-container>
-          <md-input-container flex-xs>
-            <label>Village</label>
-            <md-icon><i class="material-icons">place</i></md-icon>
-            <md-select name="village" ng-model="customer.village" ng-required="true">
-              <md-option><em>None</em></md-option>
-              <md-option ng-repeat="vil in villages" ng-value="vil.name">
-                {{vil.name}}
-              </md-option>
-            </md-select>
-            <div ng-messages="customerForm.village.$error" role="alert" multiple>
-              <div ng-message="required" class="my-message">You must supply a village.</div>
-            </div>
-            <!-- <md-autocomplete
-                md-floating-label="Village"
-                md-no-cache="true"
-                md-search-text="searchText"
-                md-items="item in querySearch(searchText)"
-                md-item-text="item"
-                md-min-length="0"
-                flex-xs>
+            
+            <md-input-container flex-xs>
+              <md-icon><i class="material-icons">home</i></md-icon>
+            </md-input-container>
+
+            <md-autocomplete flex-xs required
+              md-no-cache="true"
+              md-input-name="village"
+              md-input-minlength="4"
+              md-input-maxlength="20"
+              md-selected-item="customer.village"
+              md-search-text="searchText"
+              md-items="item in searchVillage(searchText)"
+              md-item-text="item"
+              md-require-match
+              md-floating-label="Village">
               <md-item-template>
-                <span md-highlight-text="searchText" md-highlight-flags="^i">{{item}}</span>
+                <span md-highlight-text="searchText">{{item}}</span>
               </md-item-template>
               <md-not-found>
-                No village matching "{{searchText}}" were found.
+                No village found for "{{searchText}}".
               </md-not-found>
-            </md-autocomplete> -->
-          </md-input-container>
+              <div ng-messages="customerForm.village.$error" ng-if="customerForm.village.$touched">
+                <div ng-message="required">You <b>must</b> supply a village.</div>
+                <div ng-message="md-require-match">Please select an existing village.</div>
+                <div ng-message="minlength">Your entry is not long enough.</div>
+                <div ng-message="maxlength">Your entry is too long.</div>
+              </div>
+            </md-autocomplete>
+        
           </md-content>
 
           <md-content layout-padding layout="row">

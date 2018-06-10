@@ -60,8 +60,8 @@
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.type }}</td>
       <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-click="editTransaction(tran)"><i class="material-icons">edit</i></td>
-      <td ng-click="deleteTransaction(tran)"><i class="material-icons" style="color:red">delete</i></td>
+      <td><a ng-href="#!/transaction/update/{{tran.id}}"><i class="material-icons">edit</i></a></td>
+      <td ng-click="deleteTransaction($event,tran)" ><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
   </md-content>

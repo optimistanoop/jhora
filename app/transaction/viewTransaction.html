@@ -1,5 +1,5 @@
 <div ng-controller="viewTransactionCtrl">
-  <md-input-container flex-xs>
+  <md-input-container flex-xs  class="width">
     <label>Results for</label>
     <md-icon><i class="material-icons">sort</i></md-icon>
     <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
@@ -9,21 +9,14 @@
       </md-option>
     </md-select>
   </md-input-container>
-  <md-input-container>
+  <md-input-container flex-xs class="movedown">
     <label>From Date</label>
     <md-datepicker name="fromDate" ng-model="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" md-open-on-focus ></md-datepicker>
-    <div ng-messages="transactionForm.date.$error" role="alert" multiple>
-      <div ng-message="required" class="my-message">You must supply a date.</div>
-    </div>
   </md-input-container>
-    <md-input-container>
+    <md-input-container flex-xs class="movedown">
       <label>To Date</label>
       <md-datepicker name="toDate" ng-model="tran.toDate" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" ng-disabled ="!tran.fromDate" md-open-on-focus ></md-datepicker>
-      <div ng-messages="transactionForm.date.$error" role="alert" multiple>
-        <div ng-message="required" class="my-message">You must supply a date.</div>
-      </div>
-
-    </md-input-container>
+    </md-input-container flex-xs>
     <md-input-container>
     <md-button class="md-raised md-warn" ng-click="clearFilter(queryFor)" ng-show="startFilter">Clear Filter</md-button>
   </md-input-container>
@@ -67,10 +60,10 @@
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ tran.name }}</td>
+      <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{tran.customerId}}">{{ tran.name }}</a></span><span ng-hide="queryFor == 'All'">{{ tran.name }}</span></td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-click="editTransaction(tran)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/transaction/update/{{tran.id}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>

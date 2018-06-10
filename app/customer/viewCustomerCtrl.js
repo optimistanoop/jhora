@@ -1,62 +1,44 @@
 
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDialog,$mdToast, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
-
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+    const {shell} = require('electron');
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
-    $scope.hideNoDataFound = true; 
-        
+    $scope.hideNoDataFound = true;
+    $rootScope.template = {title: 'Customers'}
     $scope.editCustomer = (customer)=>{
       // TODO
       $rootScope.editModeData = customer;
       $rootScope.template = {title: 'Edit Customer', content :'customer/updateCustomer.html'};
 
     };
-    $scope.deleteCustomer=(ev,Customer)=>{
-      shell.beep()
-      $mdDialog.show({
-      controller: ($scope, $mdDialog)=>{
-        $scope.message = 'Are you sure to delete...?'
-        $scope.Customer = Customer;
-        $scope.answer = function(answer) {
-          $mdDialog.hide(answer);
-        };
-      },
-     templateUrl: 'customer/previewCustomer.html',
-     parent: angular.element(document.body),
-     targetEvent: ev,
-     clickOutsideToClose:false,
-     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-   })
-   .then(function(answer) {
-     if(answer == 'submit') {
-       $scope.confirmCustomer(Customer);
-     }
-   });
+    $scope.deleteCustomer=(ev,customer)=>{
+      shell.beep();
+      $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html','Are you sure to delete...?')
+      .then((answer)=>{
+        if(answer == 'submit') {
+          $scope.confirmCustomer(customer);
+        }
+      });
   }
     $scope.confirmCustomer = (customer)=>{
-            let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks } = customer;
-            let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks'];
-            let values =[name, mobile, village, father, rate, guarantor, date, pageNo, remarks];
+            let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation } = customer;
+            let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks','salutation'];
+            let values =[name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation];
             q.insert(DELCUSTOMERS_TABLE, keys, values)
             .then((data)=>{
               return q.deleteRowById(CUSTOMERS_TABLE, customer.id);
             })
             .then((data)=>{
               $scope.getCustomers(CUSTOMERS_TABLE);
-              $mdToast.show(
-              $mdToast.simple()
-              .textContent(`${customer.name}'s Customer Deleted.`)
-              .position('bottom right')
-              .hideDelay(3000)
-              );
+              $rootScope.showToast(`${customer.name}'s Customer Deleted`);
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', err);
             });
           }
 
-    $scope.sortBy = function(propertyName) {
+    $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };
@@ -69,8 +51,9 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout,$mdDi
           row.date = row.date ? new Date(row.date) : null;
         }
         $timeout(()=>{
+          $scope.hideNoDataFound = true;
           $scope.customers = rows;
-          if(tableName == CUSTOMERS_TABLE && rows && rows.length == 0)
+          if(rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         },0);
       })

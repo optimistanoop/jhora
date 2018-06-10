@@ -1,4 +1,8 @@
-jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, $mdToast, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
+jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
+
+	$rootScope.template = {title: 'Add / View Villages'};
+  const {dialog} = require('electron').remote;
+	const {shell} = require('electron');
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
   $scope.queryFor = $scope.limits[0];
@@ -9,10 +13,12 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       $scope.village ={};
       $scope.villageForm.$setPristine();
       $scope.villageForm.$setUntouched();
+      //$scope.villageForm.name.$error = false;
       $rootScope.editModeData = false;
+      $rootScope.template.title = 'Add / View Villages';
     };
 
-    $scope.addVillage = ()=>{
+    $scope.addVillage = (ev)=>{
       let keys = Object.keys($scope.village);
       let values = Object.values($scope.village);
       if($rootScope.editModeData == true){
@@ -21,17 +27,13 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 		      	$timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$mdToast.show(
-							$mdToast.simple()
-							.textContent('Village updated.')
-							.position('bottom right')
-							.hideDelay(3000)
-							);
+							$rootScope.showToast('Village updated');
 		           $scope.getVillages(VILLAGE_TABLE);
+							 $rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
 		          console.error('anp err occured while updation',err);
-		          $scope.getError(err);
+		          $scope.getError(ev, err);
 		    });
         }
         else{
@@ -40,27 +42,23 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 			        $timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$mdToast.show(
-							$mdToast.simple()
-							.textContent('Village Added.')
-							.position('bottom right')
-							.hideDelay(3000)
-							);
+							$rootScope.showToast('Village Added');
 			          $scope.getVillages(VILLAGE_TABLE);
+								$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
 			          console.error('anp err occured while insertion',err);
-			          $scope.getError(err);
+			          $scope.getError(ev, err);
 			});
-      }
     };
+	};
 
-    $scope.getError = (error) => {
-    	if (error.code=="SQLITE_CONSTRAINT") {
-            dialog.showMessageBox({type :'info', message:'Village name already exist', buttons:[]});
-            $scope.village.name ='';
+	$scope.getError = (ev, error) => {
+		if (error.code=="SQLITE_CONSTRAINT") {
+			$rootScope.showAlertDialog(ev,'Duplicate Village Found', `Village : ${$scope.village.name} is already exists.`);
+			$scope.resetVillage();
 		}
-    }
+	};
 
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
@@ -91,6 +89,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     $scope.getVillages(VILLAGE_TABLE);
 
     $scope.editVillage = (village)=>{
+			$rootScope.template = {title: 'Edit Village'};
 			$rootScope.editModeData = true;
 	  	$scope.village.name = village.name;
 	  	$scope.village.id = village.id;
@@ -116,19 +115,14 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
             return q.deleteRowById(VILLAGE_TABLE, village.id)
               .then((data)=>{
               $scope.getVillages(VILLAGE_TABLE);
-							$mdToast.show(
-							$mdToast.simple()
-							.textContent('Village Deleted.')
-							.position('bottom right')
-							.hideDelay(3000)
-							);
+							$rootScope.showToast('Village Deleted');
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', village);
             });
           }
 
-     $scope.sortBy = function(propertyName) {
+     $scope.sortBy = (propertyName)=>{
       $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
       $scope.propertyName = propertyName;
     };

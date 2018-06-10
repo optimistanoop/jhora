@@ -2,6 +2,7 @@ const {app, dialog, ipcMain, BrowserWindow} = require('electron');
 app.showExitPrompt = true
 
 let mainWindow;
+let splash;
 app.on('window-all-closed', ()=> {
   console.log('anp window-all-closed');
   app.quit();
@@ -21,11 +22,30 @@ ipcMain.on('closed-db', (event, message)=>{
 // initialization and ready for creating browser windows.
 app.on('ready', ()=> {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({show:false});
 
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');
-  mainWindow.webContents.openDevTools()
+
+  //mainWindow.webContents.openDevTools()
+
+  // create a new `splash`-Window backgroundColor:'#267ED5'
+  splash = new BrowserWindow({show:false});
+  //splash.webContents.openDevTools()
+  splash.maximize();
+  splash.show();
+  splash.loadURL(`file://${__dirname}/loader.html`);
+
+
+  // if main window is ready to show, then destroy the splash window and show up the main window
+  mainWindow.once('ready-to-show', () => {
+    setTimeout(function () {
+      splash.destroy();
+      mainWindow.maximize();
+      mainWindow.show();
+    }, 3000);
+
+  });
 
   mainWindow.on('close', (e) => {
       console.log('anp close');
@@ -48,7 +68,7 @@ app.on('ready', ()=> {
   })
 
 
-   
+
   app.on('before-quit', (event)=> {
       console.log('anp before-quit');
   });

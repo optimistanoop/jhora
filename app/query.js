@@ -6,43 +6,70 @@ class Query {
   }
 
   closeDB(){
-    this.db.close();
+    let p = new Promise((resolve, reject)=>{
+      this.db.close((err, data)=>{
+       if(err) reject(err);
+       resolve(data);
+      }); 
+   });
+   return p;
   }
 
-  createCustomerTable(tableName){
-    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
-       id INTEGER PRIMARY KEY AUTOINCREMENT,
-       name           TEXT    NOT NULL,
-       pageNo         TEXT     NOT NULL,
-       village        CHAR(50) NOT NULL,
-       mobile         INT NOT NULL UNIQUE,
-       father         TEXT NOT NULL,
-       rate           INT    NOT NULL,
-       guarantor      TEXT,
-       date           TEXT,
-       remarks        CHAR(80),
-       salutation           TEXT    NOT NULL )`
-     );
+  createCustomerTable(tableName, unique =''){
+    let p = new Promise((resolve, reject)=>{
+      this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         name           TEXT    NOT NULL,
+         pageNo         TEXT     NOT NULL ${unique},
+         village        CHAR(50) NOT NULL,
+         mobile         INT NOT NULL ${unique},
+         father         TEXT NOT NULL,
+         rate           INT    NOT NULL,
+         guarantor      TEXT,
+         date           TEXT,
+         remarks        CHAR(80),
+         salutation     TEXT    NOT NULL )`
+         , [], (err, data)=>{
+         if(err) reject(err);
+         resolve(data);
+       }); 
+     });
+     return p;
   }
+  
   createTransactionTable(tableName){
-    this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
-       id INTEGER PRIMARY KEY AUTOINCREMENT,
-       amount         INT    NOT NULL,
-       date           TEXT   NOT NULL,
-       promiseDate    TEXT           ,
-       type           TEXT   NOT NULL,
-       rate           INT    NOT NULL,
-       customerId     INTEGER NOT NULL,
-       name           TEXT    NOT NULL,
-       village        TEXT    NOT NULL,
-       remarks        CHAR(80) )`
-     );
+    let p = new Promise((resolve, reject)=>{
+      this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         amount         INT    NOT NULL,
+         date           TEXT   NOT NULL,
+         promiseDate    TEXT           ,
+         type           TEXT   NOT NULL,
+         rate           INT    NOT NULL,
+         customerId     INTEGER NOT NULL,
+         name           TEXT    NOT NULL,
+         village        TEXT    NOT NULL,
+         remarks        CHAR(80) )`
+         , [], (err, data)=>{
+         if(err) reject(err);
+         resolve(data);
+       });
+     });
+     return p; 
   }
+  
   createVillageTable(tableName){
+    let p = new Promise((resolve, reject)=>{
+
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name TEXT NOT NULL UNIQUE)`
-    );
+       , [], (err, data)=>{
+       if(err) reject(err);
+       resolve(data);
+     }); 
+   });
+   return p;
   }
 
   getTotalCountForTable(tableName){
@@ -70,6 +97,7 @@ class Query {
     });
     return p;
   }
+  
   update(tableName ='', keys = [], values =[], conditionOn, id){
     let p = new Promise((resolve, reject)=>{
       let columns = keys.map((key,index) => `${key}='${values[index]}'`).join(`,`);

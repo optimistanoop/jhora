@@ -1,5 +1,5 @@
 <div ng-controller="viewCustomerCtrl">
-    <md-input-container flex-xs>
+    <md-input-container flex-xs class="width">
       <label>Results for</label>
       <md-icon><i class="material-icons">sort</i></md-icon>
       <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
@@ -43,11 +43,11 @@
       <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
     <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
-      <td ng-click="viewCustomerPassbook(cust)"><a href="#">{{ cust.name }}</a></td>
+      <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{cust.id}}">{{ cust.name }}</a></span><span ng-hide="queryFor == 'All'">{{ cust.name }}</span></td>
       <td>{{ cust.father }}</td>
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
-      <td ng-click="editCustomer(cust)" ng-show="queryFor == 'All'"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/customer/update/{{cust.id}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
    </table>

@@ -1,25 +1,24 @@
 
-  jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$mdToast,$mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
-
+jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
+    const {dialog} = require('electron').remote;
+    $rootScope.template = {title: 'Edit Customer'};
+    $scope.custid = $routeParams.id;
+    $scope.customer = {date:'',father:'',guarantor:'',id:'',mobile:'',name:'',pageNo:'',rate:'',remarks:'',salutation:'',village:''};
     $scope.salutations = CUSTOMER_SALUTATION;
-    $scope.customer = { salutations: '', name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
-    $scope.editModeData = $rootScope.editModeData;
-    $rootScope.editModeData = {};
-    $scope.customer = $scope.editModeData;
-
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
 
-    $scope.querySearch = (search)=>{
+    $scope.searchVillage = (keyword)=>{
       let result = [];
-      for(let vil of VILLAGES){
-        vil.toLowerCase().indexOf(search.toLowerCase()) > -1 ? result.push(vil) :'';
+      let villages = [];
+      for(let vil of $scope.villages){
+        vil.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ? result.push(vil.name) : villages.push(vil.name);
       }
-      return result.length > 0 ? result :VILLAGES;;
+      return result.length > 0 ? result :villages;
     };
 
     $scope.cancelUpdate = () =>{
-      $rootScope.template = {title: 'Customer', content :'customer/viewCustomer.html'};
+      $window.history.back();
     };
 
     $scope.resetCustomer = ()=>{
@@ -28,25 +27,13 @@
       $scope.customerForm.$setUntouched();
     };
 
-    $scope.updateCustomer=(ev,Customer)=>{
-        $mdDialog.show({
-        controller: ($scope, $mdDialog)=>{
-          $scope.Customer = Customer;
-          $scope.answer = function(answer) {
-          $mdDialog.hide(answer);
-          };
-        },
-     templateUrl: 'customer/previewCustomer.html',
-     parent: angular.element(document.body),
-     targetEvent: ev,
-     clickOutsideToClose:false,
-     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-   })
-   .then(function(answer) {
-     if(answer == 'submit') {
-       $scope.confirmCustomer(ev);
-     }
-   });
+    $scope.updateCustomer=(ev,customer)=>{
+      $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html')
+      .then(function(answer) {
+        if(answer == 'submit') {
+          $scope.confirmCustomer(ev);
+        }
+      });
   }
     $scope.confirmCustomer = (ev)=>{
       let date = $mdDateLocale.parseDate($scope.customer.date);
@@ -73,19 +60,18 @@
       .then((data)=>{
         $timeout(()=>{
           $scope.resetCustomer();
-        },0);
-        $mdToast.show(
-        $mdToast.simple()
-        .textContent('Customer updated.')
-        .position('bottom right')
-        .hideDelay(3000)
-        );
-        $rootScope.template = {title: 'Customers', content:'customer/viewCustomer.html'}
-      })
+          $rootScope.showToast('Customer updated');
+          $window.history.back();
+          },0);
+        })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
-          if (err.code=="SQLITE_CONSTRAINT") {
-            dialog.showMessageBox({type :'info', message:'Mobile number is already in use', buttons:[]});
+          if (err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.mobile')) {
+            $rootScope.showAlertDialog(ev,'Duplicate Mobile Number Found', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
+            $scope.customer.mobile = '';
+          }else if(err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.pageNo')){
+            $rootScope.showAlertDialog(ev,'Duplicate Page Number Found', `Page Number : ${$scope.customer.pageNo} is already in use.`);
+            $scope.customer.pageNo = '';
           }
       });
     };
@@ -108,6 +94,15 @@
       });
     };
 
-    $scope.getVillages(VILLAGE_TABLE);
+    $scope.init = ()=> {
+      q.selectAllById(CUSTOMERS_TABLE, 'id', $scope.custid)
+      .then((rows)=>
+        $timeout(()=> {
+        $scope.customer = rows[0];
+        $scope.customer.date = $scope.customer.date ? new Date($scope.customer.date) : null;
+      },0)
+    )};
 
+    $scope.getVillages(VILLAGE_TABLE);
+    $scope.init();
   });
