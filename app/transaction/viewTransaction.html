@@ -60,7 +60,7 @@
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ tran.name }}</td>
+      <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{tran.customerId}}">{{ tran.name }}</a></span><span ng-hide="queryFor == 'All'">{{ tran.name }}</span></td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/transaction/update/{{tran.id}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>

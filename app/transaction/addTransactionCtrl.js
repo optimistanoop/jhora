@@ -91,7 +91,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $timeout(()=>{
           $scope.resetTransaction();
         },0);
-        $rootScope.showToast('Transaction Added.');
+        $rootScope.showToast('Transaction Added');
       })
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);

@@ -13,6 +13,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       $scope.village ={};
       $scope.villageForm.$setPristine();
       $scope.villageForm.$setUntouched();
+      //$scope.villageForm.name.$error = false;
       $rootScope.editModeData = false;
       $rootScope.template.title = 'Add / View Villages';
     };
@@ -26,7 +27,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 		      	$timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$rootScope.showToast('Village updated.');
+							$rootScope.showToast('Village updated');
 		           $scope.getVillages(VILLAGE_TABLE);
 							 $rootScope.template = {title: 'Villages'};
 		    })
@@ -41,7 +42,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 			        $timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$rootScope.showToast('Village Added.');
+							$rootScope.showToast('Village Added');
 			          $scope.getVillages(VILLAGE_TABLE);
 								$rootScope.template = {title: 'Villages'};
 			    })
@@ -114,7 +115,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
             return q.deleteRowById(VILLAGE_TABLE, village.id)
               .then((data)=>{
               $scope.getVillages(VILLAGE_TABLE);
-							$rootScope.showToast('Village Deleted.');
+							$rootScope.showToast('Village Deleted');
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', village);

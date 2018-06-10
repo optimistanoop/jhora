@@ -4,15 +4,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     $rootScope.template = {title: 'Edit Customer'};
     $scope.custid = $routeParams.id;
     $scope.customer = {date:'',father:'',guarantor:'',id:'',mobile:'',name:'',pageNo:'',rate:'',remarks:'',salutation:'',village:''};
-    $scope.init = ()=> {
-      q.selectAllById('customers', 'id', $scope.custid)
-      .then((rows)=>
-        $timeout(()=> {
-        $scope.customer = rows[0];
-        $scope.customer.date = $scope.customer ? new Date($scope.customer.date) : undefined;
-        $scope.date = $mdDateLocale.parseDate($scope.date);
-      },0)
-    )};
     $scope.salutations = CUSTOMER_SALUTATION;
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
@@ -69,7 +60,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       .then((data)=>{
         $timeout(()=>{
           $scope.resetCustomer();
-          $rootScope.showToast('Customer updated.');
+          $rootScope.showToast('Customer updated');
           $window.history.back();
           },0);
         })
@@ -98,6 +89,15 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         console.error(err);
       });
     };
+
+    $scope.init = ()=> {
+      q.selectAllById(CUSTOMERS_TABLE, 'id', $scope.custid)
+      .then((rows)=>
+        $timeout(()=> {
+        $scope.customer = rows[0];
+        $scope.customer.date = $scope.customer.date ? new Date($scope.customer.date) : null;
+      },0)
+    )};
 
     $scope.getVillages(VILLAGE_TABLE);
     $scope.init();

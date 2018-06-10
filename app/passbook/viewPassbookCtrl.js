@@ -51,7 +51,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
          })
          .then((data)=>{
            $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-           $rootScope.showToast(`${transaction.name}'s Transaction Deleted.`);
+           $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
          })
          .catch((err)=>{
            console.error('anp an err occured while deleting',err);

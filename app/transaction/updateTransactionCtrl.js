@@ -118,7 +118,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
         $timeout (()=>{
-          $rootScope.showToast('Transaction updated.');
+          $rootScope.showToast('Transaction updated');
           $scope.resetTransaction();
           $window.history.back();
         },0)

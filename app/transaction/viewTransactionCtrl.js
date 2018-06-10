@@ -3,6 +3,7 @@
 jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
     const {shell} = require('electron');
+    $rootScope.template = {title: 'Transactions'};
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
@@ -33,7 +34,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     })
     .then((data)=>{
       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
-      $rootScope.showToast(`${transaction.name}'s Transaction Deleted.`);
+      $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
     })
     .catch((err)=>{
       console.error('anp an err occured while deleting',err);

@@ -31,7 +31,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
             })
             .then((data)=>{
               $scope.getCustomers(CUSTOMERS_TABLE);
-              $rootScope.showToast(`${customer.name}'s Customer Deleted.`);
+              $rootScope.showToast(`${customer.name}'s Customer Deleted`);
             })
             .catch((err)=>{
               console.error('anp an err occured while deleting', err);

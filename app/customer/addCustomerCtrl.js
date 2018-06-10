@@ -18,6 +18,7 @@
 
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
+      $scope.customer.salutation = $scope.salutations[0];
       $scope.customerForm.$setPristine();
       $scope.customerForm.$setUntouched();
     };
@@ -33,7 +34,7 @@
         $timeout(()=>{
           $scope.resetCustomer();
         },0);
-        $rootScope.showToast('Customer Added.');
+        $rootScope.showToast('Customer Added');
       })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
