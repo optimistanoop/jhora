@@ -66,8 +66,12 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         })
       .catch((err)=>{
           console.error('anp err occured while insertion',err);
-          if (err.code=="SQLITE_CONSTRAINT") {
-            dialog.showMessageBox({type :'info', message:'Mobile number is already in use', buttons:[]});
+          if (err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.mobile')) {
+            $rootScope.showAlertDialog(ev,'Duplicate Mobile Number Found', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
+            $scope.customer.mobile = '';
+          }else if(err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.pageNo')){
+            $rootScope.showAlertDialog(ev,'Duplicate Page Number Found', `Page Number : ${$scope.customer.pageNo} is already in use.`);
+            $scope.customer.pageNo = '';
           }
       });
     };

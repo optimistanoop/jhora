@@ -15,14 +15,14 @@ class Query {
    return p;
   }
 
-  createCustomerTable(tableName){
+  createCustomerTable(tableName, unique =''){
     let p = new Promise((resolve, reject)=>{
       this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
          id INTEGER PRIMARY KEY AUTOINCREMENT,
          name           TEXT    NOT NULL,
-         pageNo         TEXT     NOT NULL UNIQUE,
+         pageNo         TEXT     NOT NULL ${unique},
          village        CHAR(50) NOT NULL,
-         mobile         INT NOT NULL UNIQUE,
+         mobile         INT NOT NULL ${unique},
          father         TEXT NOT NULL,
          rate           INT    NOT NULL,
          guarantor      TEXT,

@@ -19,7 +19,7 @@ ipcRenderer.on('close-db', (event, message) => {
 });
 
 Promise.all([
-  q.createCustomerTable('customers'),
+  q.createCustomerTable('customers', 'UNIQUE'),
   q.createTransactionTable('transactions'),
   q.createVillageTable('village'),
   q.createCustomerTable('delcustomers'),
