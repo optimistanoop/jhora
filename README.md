@@ -30,7 +30,7 @@ Windows -  `C:\Users\Administrator\AppData\Roaming\db.db`
 
 Mac -  `/Users/<USER_NAME>/Library/Application Support/db.db`
 
-Linux -  ``
+Linux -  `/home/<USER_NAME>/.config/db.db`
 
 ## Using native modules
 

@@ -20,7 +20,7 @@ class Query {
       this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
          id INTEGER PRIMARY KEY AUTOINCREMENT,
          name           TEXT    NOT NULL,
-         pageNo         TEXT     NOT NULL,
+         pageNo         TEXT     NOT NULL UNIQUE,
          village        CHAR(50) NOT NULL,
          mobile         INT NOT NULL UNIQUE,
          father         TEXT NOT NULL,
