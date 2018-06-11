@@ -18,19 +18,15 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     };
   $scope.hideNoDataFound = true;
   $scope.setSalutation =()=> {
-      $scope.salutation = '';
-        if($scope.customer.salutation == 'Mrs'){
-          $scope.salutation = 'W/o' ;
-        }else if($scope.customer.salutation == 'Mr'){
-          $scope.salutation = 'S/o' ;
-        }else{
-          $scope.salutation = 'D/o' ;
-        }
-      }
-  $scope.sortBy = (propertyName)=>{
-      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-      $scope.propertyName = propertyName;
-    };
+    $scope.salutation = '';
+    if($scope.customer.salutation == 'Mrs'){
+      $scope.salutation = 'W/o' ;
+    }else if($scope.customer.salutation == 'Mr'){
+      $scope.salutation = 'S/o' ;
+    }else{
+      $scope.salutation = 'D/o' ;
+    }
+  }
 
  $scope.deleteTransaction=(ev,transaction)=>{
   shell.beep();

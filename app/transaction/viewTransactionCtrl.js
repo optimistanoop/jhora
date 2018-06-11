@@ -41,11 +41,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     });
   }
 
-  $scope.sortBy = (propertyName)=>{
-    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-    $scope.propertyName = propertyName;
-  };
-
   $scope.getDataByTable = (tableName, modelName)=>{
     q.selectAll(tableName)
     .then((rows)=>{
