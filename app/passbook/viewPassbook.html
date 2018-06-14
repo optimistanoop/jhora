@@ -68,5 +68,9 @@
   <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
     <h1>Sorry !! No transaction data found</h1>
   </md-content>
+  <md-input-container flex-xs>
+    <label>Calculation date</label>
+    <md-datepicker ng-model="calcDate" md-max-date="maxDate" md-open-on-focus></md-datepicker>
+  </md-input-container>
   <md-button class="md-raised md-primary" ng-click="Back()">Back</md-button>
 </div>
