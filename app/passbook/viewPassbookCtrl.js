@@ -125,6 +125,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     //TODO  rotate over transactions and return the calc dates
     //TODO here the consideration should be either Cr/Dr based on first type or 1 yr of the transaction
     let result = [];
+    let crPrinciple = 0;
+    let drPrinciple = 0;
+    let crInterest = 0;
+    let drInterest = 0;
     let firstTranType = $scope.transaction[0].type;
     let firstTranDate = $scope.transaction[0].date;
     //let  firstTranDate= new Date($scope.transaction[0].date);
@@ -132,12 +136,18 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     
     for(let tran of $scope.transactions){
       if(tran.date > nextYrMergerDate){
-        result.push(nextYrMergerDate);
+        crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
+        drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
+        drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = nextYrMergerDate;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
       if(tran.type != firstTranType){
-        result.push(tran.date);
+        crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
+        drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
+        drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = tran.date;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
