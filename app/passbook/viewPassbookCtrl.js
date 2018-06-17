@@ -117,11 +117,11 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   };
   
   
-  let caluclateSI = (p, r, t){
+  let caluclateSI = (p, r, t)=>{
     return p*r*t/100;
   };
   
-  let getCalcDates = (){
+  let getCalcDates = ()=>{
     //TODO  rotate over transactions and return the calc dates
     //TODO here the consideration should be either Cr/Dr based on first type or 1 yr of the transaction
     let result = [];
