@@ -136,10 +136,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     
     for(let tran of $scope.transactions){
       if(tran.date > nextYrMergerDate){
-        crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
-        crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
-        drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
+        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
+        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
+        // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = nextYrMergerDate;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
@@ -156,16 +156,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     return '';
   };
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
@@ -209,6 +200,18 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   }
 
   let transactions = [
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
+    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
     { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
