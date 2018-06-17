@@ -140,14 +140,18 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
         // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
         // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
+        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
+        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
+        // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = nextYrMergerDate;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
       if(tran.type != firstTranType){
-        crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
-        crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
-        drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
+        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
+        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
+        // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = tran.date;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
