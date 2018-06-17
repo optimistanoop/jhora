@@ -29,59 +29,64 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     document.getElementById("mySidenav").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
   };
+  
+  $scope.sortBy = (propertyName)=>{
+    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+    $scope.propertyName = propertyName;
+  };
 
-$rootScope.showToast = (msg)=>{
-    $mdToast.show($mdToast.simple().textContent(msg).position(TOAST_POS).hideDelay(TOAST_DELAY));
-};
+  $rootScope.showToast = (msg)=>{
+      $mdToast.show($mdToast.simple().textContent(msg).position(TOAST_POS).hideDelay(TOAST_DELAY));
+  };
 
-$rootScope.showAlertDialog = (ev, title, msg)=>{
-    $mdDialog.show(
-        $mdDialog.alert()
-        .parent(angular.element(document.querySelector('#popupContainer')))
-        .clickOutsideToClose(false)
-        .title(title)
-        .textContent(msg)
-        .ariaLabel('Alert Dialog Demo')
-        .ok('Got it!')
-        .theme('dark-orange')
-        .targetEvent(ev)
-    );
-};
+  $rootScope.showAlertDialog = (ev, title, msg)=>{
+      $mdDialog.show(
+          $mdDialog.alert()
+          .parent(angular.element(document.querySelector('#popupContainer')))
+          .clickOutsideToClose(false)
+          .title(title)
+          .textContent(msg)
+          .ariaLabel('Alert Dialog Demo')
+          .ok('Got it!')
+          .theme('dark-orange')
+          .targetEvent(ev)
+      );
+  };
 
-$rootScope.showDialog = (ev,modelName, data, templateUrl, msg ='')=>{
-    let p =new Promise( (resolve, reject)=>{
-        $mdDialog.show({
-            controller: ($scope, $mdDialog)=>{
-                $scope.message = msg,
-                $scope[modelName] = data;
-                $scope.answer = function(answer) {
-                    $mdDialog.hide(answer);
-                };
-            },
-            templateUrl: templateUrl,
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose:false,
-            fullscreen: true
-        })
-        .then(function(answer) {
-            resolve(answer);
-        })
-    });
+  $rootScope.showDialog = (ev,modelName, data, templateUrl, msg ='')=>{
+      let p =new Promise( (resolve, reject)=>{
+          $mdDialog.show({
+              controller: ($scope, $mdDialog)=>{
+                  $scope.message = msg,
+                  $scope[modelName] = data;
+                  $scope.answer = function(answer) {
+                      $mdDialog.hide(answer);
+                  };
+              },
+              templateUrl: templateUrl,
+              parent: angular.element(document.body),
+              targetEvent: ev,
+              clickOutsideToClose:false,
+              fullscreen: true
+          })
+          .then(function(answer) {
+              resolve(answer);
+          })
+      });
 
-    return p;
-};
+      return p;
+  };
 
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
-  {title:'Add Customer',route:'/customer/add'},
+  {title:'Add Customer',route:'/customers/add'},
   {title:'Add Transaction',route:'/transactions/add'},
-  {title:'Customers',route:'/customer'},
+  {title:'Customers',route:'/customers'},
   {title:'Transactions',route:'/transactions'},
-  {title:'Villages',route:'/villages/'},
-  {title:'Dashboard Demo',route:'/dashboard/view/'},
-  {title:'Passbook Demo',route:'/passbook1/view/'}
+  {title:'Villages',route:'/villages'},
+  {title:'Dashboard Demo',route:'/dashboard/view'},
+  {title:'Passbook Demo',route:'/passbook1/view'}
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
@@ -123,45 +128,45 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
       let y = dd.getFullYear();
       formattedDate = !isNaN(d) ? `${d}-${m + 1}-${y}`:null;
     }
-  return formattedDate ? formattedDate : null;
-};
-$routeProvider
-    .when("/", {
-        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
-    })
-    .when("/customer", {
-        templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
-    })
-    .when("/customer/add", {
-        templateUrl : 'file://' + __dirname + '/customer/addCustomer.html'
-    })
-    .when("/customer/update/:id", {
-        templateUrl : 'file://' + __dirname + '/customer/updateCustomer.html'
-    })
-    .when("/transactions", {
-        templateUrl : 'file://' + __dirname + '/transaction/viewTransaction.html'
-    })
-    .when("/transactions/add", {
-        templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
-    })
-    .when("/transaction/update/:id", {
-        templateUrl : 'file://' + __dirname + '/transaction/updateTransaction.html'
-    })
-    .when("/passbook/view/:id", {
-        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
-    })
-    .when("/villages/", {
-        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
-    })
-    .when("/village/:id", {
-        templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
-    })
-    .when("/passbook1/view/", {
-        templateUrl : 'file://' + __dirname + '/passbook/viewPassbook1.html'
-    })
-    .when("/dashboard/view/", {
-        templateUrl : 'file://' + __dirname + '/dashboard/dashboard.html'
-    });
-    $locationProvider.hashPrefix('!');
-    $locationProvider.html5Mode({enabled: false, requireBase: false});
+    return formattedDate ? formattedDate : null;
+  };
+  $routeProvider
+      .when("/", {
+          templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
+      })
+      .when("/customers", {
+          templateUrl : 'file://' + __dirname + '/customer/viewCustomer.html'
+      })
+      .when("/customers/add", {
+          templateUrl : 'file://' + __dirname + '/customer/addCustomer.html'
+      })
+      .when("/customers/update/:id", {
+          templateUrl : 'file://' + __dirname + '/customer/updateCustomer.html'
+      })
+      .when("/transactions", {
+          templateUrl : 'file://' + __dirname + '/transaction/viewTransaction.html'
+      })
+      .when("/transactions/add", {
+          templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
+      })
+      .when("/transactions/update/:id", {
+          templateUrl : 'file://' + __dirname + '/transaction/updateTransaction.html'
+      })
+      .when("/passbook/view/:id", {
+          templateUrl : 'file://' + __dirname + '/passbook/viewPassbook.html'
+      })
+      .when("/villages", {
+          templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
+      })
+      .when("/villages/view/:id", {
+          templateUrl : 'file://' + __dirname + '/village/addViewVillage.html'
+      })
+      .when("/passbook1/view", {
+          templateUrl : 'file://' + __dirname + '/passbook/viewPassbook1.html'
+      })
+      .when("/dashboard/view", {
+          templateUrl : 'file://' + __dirname + '/dashboard/dashboard.html'
+      });
+      $locationProvider.hashPrefix('!');
+      $locationProvider.html5Mode({enabled: false, requireBase: false});
 });

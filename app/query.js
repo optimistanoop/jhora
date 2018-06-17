@@ -60,7 +60,6 @@ class Query {
   
   createVillageTable(tableName){
     let p = new Promise((resolve, reject)=>{
-
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name TEXT NOT NULL UNIQUE)`
@@ -133,7 +132,7 @@ class Query {
 
   selectAllById(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE ${key} = ${value}`
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = ${value} ORDER BY date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
@@ -156,7 +155,7 @@ class Query {
   //get data between two dates
    selectDataByDates(tableName, key, value1, value2){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE date(${key}) BETWEEN '${value1}' AND '${value2}'`
+      let sql = `SELECT * FROM ${tableName} WHERE date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);

@@ -63,7 +63,7 @@
       <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{tran.customerId}}">{{ tran.name }}</a></span><span ng-hide="queryFor == 'All'">{{ tran.name }}</span></td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-show="queryFor == 'All'"><a ng-href="#!/transaction/update/{{tran.id}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
