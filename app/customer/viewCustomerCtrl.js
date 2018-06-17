@@ -5,13 +5,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.hideNoDataFound = true;
-    $rootScope.template = {title: 'Customers'}
-    $scope.editCustomer = (customer)=>{
-      // TODO
-      $rootScope.editModeData = customer;
-      $rootScope.template = {title: 'Edit Customer', content :'customer/updateCustomer.html'};
-
-    };
+    $rootScope.template = {title: 'Customers'};
     $scope.deleteCustomer=(ev,customer)=>{
       shell.beep();
       $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html','Are you sure to delete...?')
@@ -22,26 +16,21 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       });
   }
     $scope.confirmCustomer = (customer)=>{
-            let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation } = customer;
-            let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks','salutation'];
-            let values =[name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation];
-            q.insert(DELCUSTOMERS_TABLE, keys, values)
-            .then((data)=>{
-              return q.deleteRowById(CUSTOMERS_TABLE, customer.id);
-            })
-            .then((data)=>{
-              $scope.getCustomers(CUSTOMERS_TABLE);
-              $rootScope.showToast(`${customer.name}'s Customer Deleted`);
-            })
-            .catch((err)=>{
-              console.error('anp an err occured while deleting', err);
-            });
-          }
-
-    $scope.sortBy = (propertyName)=>{
-      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-      $scope.propertyName = propertyName;
-    };
+        let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation } = customer;
+        let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks','salutation'];
+        let values =[name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation];
+        q.insert(DELCUSTOMERS_TABLE, keys, values)
+        .then((data)=>{
+          return q.deleteRowById(CUSTOMERS_TABLE, customer.id);
+        })
+        .then((data)=>{
+          $scope.getCustomers(CUSTOMERS_TABLE);
+          $rootScope.showToast(`${customer.name}'s Customer Deleted`);
+        })
+        .catch((err)=>{
+          console.error('anp an err occured while deleting', err);
+        });
+    }
 
     $scope.getCustomers = (tableName)=>{
       q.selectAll(tableName)
@@ -70,11 +59,4 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       }
     };
     $scope.getCustomers(CUSTOMERS_TABLE);
-
-   $scope.viewCustomerPassbook = (customer)=>{
-    // TODO
-    $rootScope.viewPassbookData = customer;
-    $rootScope.template = {title: `Passbook for A/c No.-${customer.id}` , content :'passbook/viewPassbook.html'};
-   };
-
   });

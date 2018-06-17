@@ -34,11 +34,6 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $window.history.back();
     };
 
-    $scope.sortBy = (propertyName)=>{
-      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-      $scope.propertyName = propertyName;
-    };
-
     $scope.typeSelected= ()=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {

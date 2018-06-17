@@ -11,10 +11,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.disablePromiseDate = true;
     $scope.salutation = '';
 
-    $scope.sortBy = (propertyName)=>{
-      $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-      $scope.propertyName = propertyName;
-    };
     $scope.typeSelected= ()=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
