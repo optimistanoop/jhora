@@ -53,7 +53,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       $timeout(()=>{
         $scope[modelName] = rows;
         $scope.hideNoDataFound = true;
-        if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+        if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows.length == 0)
         $scope.hideNoDataFound = false;
       }, 0);
     })
