@@ -1,6 +1,6 @@
 
 jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-  
+
 
   const {dialog} = require('electron').remote;
   const {shell} = require('electron');
@@ -19,7 +19,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       },0)
       })
     };
-    
+
   $scope.hideNoDataFound = true;
   $scope.setSalutation =()=> {
     $scope.salutation = '';
@@ -31,7 +31,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       $scope.salutation = 'D/o' ;
     }
   }
-  
+
   $scope.deleteTransaction=(ev,transaction)=>{
    shell.beep();
    $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
@@ -41,14 +41,14 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
     });
   };
-  
+
   $scope.confirmTransaction = (transaction)=>{
     let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
     let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
     let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
      q.insert(DELTRANSACTION_TABLE, keys, values)
      .then((data)=>{
-       return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
+       return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
      })
      .then((data)=>{
        $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
@@ -58,7 +58,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
        console.error('anp an err occured while deleting',err);
      });
   }
-  
+
  $scope.getDataByTable = (tableName, modelName)=>{
    q.selectAll(tableName)
    .then((rows)=>{
@@ -81,7 +81,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
      console.error('anp got error while fetching data',err);
    });
  };
- 
+
  $scope.getCustomerPassbook = (tableName)=>{
     q.selectAllById(tableName, 'customerId', $scope.custid)
     .then((rows)=>{
@@ -100,27 +100,27 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       console.error(err);
     });
   };
-      
+
   $scope.Back = ()=>{
     $window.history.back();
   };
-  
+
   $scope.calculate = ()=>{
-    
-    // get the dr 
+
+    // get the dr
     for(let tran of $scope.transactions){
-      
+
     }
     // calc SI
-    
-    
+
+
   };
-  
-  
+
+
   let caluclateSI = (p, r, t)=>{
     return p*r*t/100;
   };
-  
+
   let getCalcDates = ()=>{
     //TODO  rotate over transactions and return the calc dates
     //TODO here the consideration should be either Cr/Dr based on first type or 1 yr of the transaction
@@ -133,38 +133,38 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     let firstTranDate = $scope.transaction[0].date;
     //let  firstTranDate= new Date($scope.transaction[0].date);
     let nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
-    
+
     for(let tran of $scope.transactions){
       if(tran.date > nextYrMergerDate){
-        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0;
+        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0;
         // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
         // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
-        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0;
+        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0;
         // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
         // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = nextYrMergerDate;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
       if(tran.type != firstTranType){
-        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
+        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0;
+        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0;
         // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
         // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = tran.date;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
       }
     }
-    
+
     return '';
   };
-  
 
-  
+
+
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
-  
+
   let getMonthDiff = (from, to)=>{
 
     from = new Date(from);

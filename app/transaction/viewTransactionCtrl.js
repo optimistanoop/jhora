@@ -30,7 +30,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
     q.insert(DELTRANSACTION_TABLE, keys, values)
     .then((data)=>{
-      return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
+      return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
     })
     .then((data)=>{
       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
@@ -42,7 +42,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
   }
 
   $scope.getDataByTable = (tableName, modelName)=>{
-    q.selectAll(tableName)
+    q.selectAllById(tableName,'active','1')
     .then((rows)=>{
       if(rows)
       for(let row of rows){

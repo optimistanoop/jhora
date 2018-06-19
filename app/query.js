@@ -49,7 +49,8 @@ class Query {
          customerId     INTEGER NOT NULL,
          name           TEXT    NOT NULL,
          village        TEXT    NOT NULL,
-         remarks        CHAR(80) )`
+         remarks        CHAR(80),
+         active         INT     DEFAULT 1)`
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);
@@ -189,7 +190,16 @@ class Query {
     return p;
   }
 
-
+  updateStatus(tableName, key, value,conditionOn,id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `UPDATE ${tableName} SET ${key} = ${value} WHERE ${conditionOn} =${id}`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 };
 
 module.exports = Query;
