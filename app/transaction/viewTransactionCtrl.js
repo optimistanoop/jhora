@@ -75,7 +75,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       $scope.startFilter = true;
       let fromDate = $mdDateLocale.parseDate($scope.tran.fromDate);
       let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
-      q.selectDataByDates(TRANSACTION_TABLE,'date',fromDate,toDate)
+      q.selectDataByDates(TRANSACTION_TABLE,'date',fromDate,toDate,'active','1')
         .then((rows)=>{
           $timeout(()=>{
             if(rows)
