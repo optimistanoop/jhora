@@ -124,7 +124,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.getDataByTable = (tableName, modelName)=>{
-      q.selectAllById(tableName,'active','1')
+      q.selectAll(tableName)
       .then((rows)=>{
         if(rows)
         for(let row of rows){
