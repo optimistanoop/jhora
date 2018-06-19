@@ -10,7 +10,7 @@ class Query {
       this.db.close((err, data)=>{
        if(err) reject(err);
        resolve(data);
-      }); 
+      });
    });
    return p;
   }
@@ -32,11 +32,11 @@ class Query {
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);
-       }); 
+       });
      });
      return p;
   }
-  
+
   createTransactionTable(tableName){
     let p = new Promise((resolve, reject)=>{
       this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
@@ -55,9 +55,9 @@ class Query {
          resolve(data);
        });
      });
-     return p; 
+     return p;
   }
-  
+
   createVillageTable(tableName){
     let p = new Promise((resolve, reject)=>{
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
@@ -66,7 +66,7 @@ class Query {
        , [], (err, data)=>{
        if(err) reject(err);
        resolve(data);
-     }); 
+     });
    });
    return p;
   }
@@ -96,7 +96,7 @@ class Query {
     });
     return p;
   }
-  
+
   update(tableName ='', keys = [], values =[], conditionOn, id){
     let p = new Promise((resolve, reject)=>{
       let columns = keys.map((key,index) => `${key}='${values[index]}'`).join(`,`);
@@ -132,7 +132,7 @@ class Query {
 
   selectAllById(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE ${key} = ${value} ORDER BY date(date)`
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = '${value}' order by date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);

@@ -95,18 +95,28 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     };
 		$scope.deleteVillage = (ev,village)=>{
 			shell.beep();
-			let confirm = $mdDialog.confirm()
+      q.selectAllById(CUSTOMERS_TABLE,'village',village.name)
+      .then((rows)=>{
+        console.log(rows);
+        if (rows.length) {
+          $rootScope.showAlertDialog(ev,`Village in Use`, `Village : ${village.name} unable to delete .`);
+        }
+        else{
+			       let confirm = $mdDialog.confirm()
 		         .title('Delete Village')
 		         .textContent(`Are you sure to delete village: ${village.name} ?`)
 		         .ariaLabel('Delete')
 		         .targetEvent(ev)
 		         .ok('Submit')
 		         .cancel('Cancel');
-			$mdDialog.show(confirm,village).then(function() {
+			          $mdDialog.show(confirm,village).then(function() {
 				      $scope.confirmVillage(village);
 				   },function() {
-        });
-			};
+           });
+         }
+       }
+     )
+	  };
     $scope.confirmVillage = (village)=>{
         let  {name} = village;
         let keys = ['name'];
