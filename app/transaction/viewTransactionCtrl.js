@@ -67,6 +67,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
   };
 
   $scope.getNewData= (queryFor)=>{
+    $scope.startFilter = false;
+    $scope.tran.toDate = null;
+    $scope.tran.fromDate = null;
     if(queryFor == $scope.limits[1]) {
       $scope.getDataByTable(DELTRANSACTION_TABLE, TRANSACTION_TABLE,`'1'`,1);
     }else{
