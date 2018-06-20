@@ -28,12 +28,16 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
     let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
     let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
+    let nDate = $mdDateLocale.parseDate(values[2]);
+    let nPromiseDate = $mdDateLocale.parseDate(values[3]);
+    values[2] = nDate;
+    values[3] = nPromiseDate;
     q.insert(DELTRANSACTION_TABLE, keys, values)
     .then((data)=>{
       return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
     })
     .then((data)=>{
-      $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+      $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active','1');
       $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
     })
     .catch((err)=>{
@@ -41,8 +45,8 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     });
   }
 
-  $scope.getDataByTable = (tableName, modelName)=>{
-    q.selectAllById(tableName,'active','1')
+  $scope.getDataByTable = (tableName, modelName,column,value)=>{
+    q.selectAllById(tableName,column,value)
     .then((rows)=>{
       if(rows)
       for(let row of rows){
@@ -64,18 +68,26 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
 
   $scope.getNewData= (queryFor)=>{
     if(queryFor == $scope.limits[1]) {
-      $scope.getDataByTable(DELTRANSACTION_TABLE, TRANSACTION_TABLE);
+      $scope.getDataByTable(DELTRANSACTION_TABLE, TRANSACTION_TABLE,`'1'`,1);
     }else{
-      $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+      $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active','1');
     }
   }
 
-  $scope.getTransaction=()=>{
+  $scope.getTransaction= (queryFor)=>{
+    if(queryFor == $scope.limits[1]) {
+      $scope.getFilter(DELTRANSACTION_TABLE, 'date',`'1'`,`'1'`);
+    }else{
+      $scope.getFilter(TRANSACTION_TABLE, 'date','active','1');
+    }
+  }
+
+  $scope.getFilter=(tableName,column1,column2,value)=>{
     if($scope.tran.toDate) {
       $scope.startFilter = true;
       let fromDate = $mdDateLocale.parseDate($scope.tran.fromDate);
       let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
-      q.selectDataByDates(TRANSACTION_TABLE,'date',fromDate,toDate,'active','1')
+      q.selectDataByDates(tableName,column1,fromDate,toDate,column2,value)
         .then((rows)=>{
           $timeout(()=>{
             if(rows)
@@ -100,6 +112,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.getNewData(queryFor);
   };
 
-  $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+  $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active','1');
 
   });

@@ -11,11 +11,11 @@
   </md-input-container>
   <md-input-container flex-xs class="movedown">
     <label>From Date</label>
-    <md-datepicker name="fromDate" ng-model="tran.fromDate" ng-show="hideNoDataFound" md-max-date="maxDate" ng-change="getTransaction()" md-open-on-focus ></md-datepicker>
+    <md-datepicker name="fromDate" ng-model="tran.fromDate" ng-show="hideNoDataFound" md-max-date="maxDate" ng-change="getTransaction(queryFor)" md-open-on-focus ></md-datepicker>
   </md-input-container>
     <md-input-container flex-xs class="movedown">
       <label>To Date</label>
-      <md-datepicker name="toDate" ng-model="tran.toDate" ng-show="hideNoDataFound" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" ng-disabled ="!tran.fromDate" md-open-on-focus ></md-datepicker>
+      <md-datepicker name="toDate" ng-model="tran.toDate" ng-show="hideNoDataFound" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction(queryFor)" ng-disabled ="!tran.fromDate" md-open-on-focus ></md-datepicker>
     </md-input-container flex-xs>
     <md-input-container>
     <md-button class="md-raised md-warn" ng-click="clearFilter(queryFor)" ng-show="startFilter">Clear Filter</md-button>
