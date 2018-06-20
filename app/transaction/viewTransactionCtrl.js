@@ -79,9 +79,9 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
 
   $scope.getTransaction= (queryFor)=>{
     if(queryFor == $scope.limits[1]) {
-      $scope.getFilter(DELTRANSACTION_TABLE, 'date',`'1'`,`'1'`);
+      $scope.getFilter(DELTRANSACTION_TABLE, 'date',1,1);
     }else{
-      $scope.getFilter(TRANSACTION_TABLE, 'date','active','1');
+      $scope.getFilter(TRANSACTION_TABLE, 'date','active',1);
     }
   }
 
