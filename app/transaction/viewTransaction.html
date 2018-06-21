@@ -34,27 +34,27 @@
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th>
-        <button ng-click="sortBy('amount')">Amount</button>
+        <md-button  ng-click="sortBy('amount')">Amount</md-button>
         <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('date')">Date</button>
+        <md-button ng-click="sortBy('date')">Date</md-button>
         <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('name')">Name</button>
+        <md-button ng-click="sortBy('name')">Name</md-button>
         <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('type')">Type</button>
+        <md-button ng-click="sortBy('type')">Type</md-button>
         <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('promiseDate')">Promise Date</button>
+        <md-button ng-click="sortBy('promiseDate')">Promise Date</md-button>
         <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
       </th>
       <th ng-hide="queryFor == 'All'">
-        <button ng-click="sortBy('deletedOn')">Deleted Date</button>
+        <md-button ng-click="sortBy('deletedOn')" >Deleted Date</md-button>
         <span class="sortorder" ng-show="propertyName === 'deletedOn'"  ng-class="{reverse: reverse}"></span>
       </th>
       <th ng-show="queryFor == 'All'">Edit</th>

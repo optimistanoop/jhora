@@ -21,10 +21,10 @@ let dbInit = ()=>{
 
   Promise.all([
     q.createCustomerTable('customers', 'UNIQUE'),
-    q.createTransactionTable('transactions','active','INT','DEFAULT','1'),
+    q.createTransactionTable('transactions','active INT DEFAULT 1'),
     q.createVillageTable('village'),
     q.createCustomerTable('delcustomers'),
-    q.createTransactionTable('deltransactions','deletedOn','TEXT')
+    q.createTransactionTable('deltransactions','deletedOn TEXT')
   ]).then((data)=>{
     angular.bootstrap(document, ['jhora']);
   })
