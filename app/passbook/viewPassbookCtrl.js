@@ -138,29 +138,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     let tranDate = $scope.transaction[0].date;
     //let  firstTranDate= new Date($scope.transaction[0].date);
     let nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
-<<<<<<< HEAD
-    
-    for(let tran of $scope.transactions){
-      if(tran.date > nextYrMergerDate){
-        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
-        // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
-        // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
-        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
-        // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
-        // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
-        firstTranDate = nextYrMergerDate;
-        nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
-      }
-      if(tran.type != firstTranType){
-        // crPrinciple += tran.type == 'Cr' ? tran.amount : 0; 
-        // drPrinciple += tran.type == 'Dr' ? tran.amount : 0; 
-        // crInterest  += tran.type == 'Cr' ? $scope.calculate(tran.date, new Date()) : 0;
-        // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
-        firstTranDate = tran.date;
-        nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
-=======
 
     for(let i = 0; i < $scope.transactions.length; i++){
       let tran = $scope.transactions[i];
@@ -182,7 +159,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         tranDate = tran.date;
         nextYrMergerDate = new Date(tranDate.getFullYear()+1, tranDate.getMonth(), tranDate.getDate());
         //TODO netTyp to changes based on the total calc
->>>>>>> 451d6ff... temp
       }
       
       // TODO for first or last tran which is older than 1 yr on calc day
@@ -191,8 +167,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     return '';
   };
   
-<<<<<<< HEAD
-=======
   calc()=>{
   let p =0, i = 0;;
   let netType = trans[0].type;
@@ -228,8 +202,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   
   
 }
->>>>>>> 451d6ff... temp
-
   
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE);
