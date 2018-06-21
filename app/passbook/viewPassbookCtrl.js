@@ -102,7 +102,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows;
-        if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+        $scope.hideNoDataFound = true;
+        if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
       },0);
     })
