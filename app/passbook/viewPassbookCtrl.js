@@ -1,5 +1,5 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDateLocale, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
 
 
   const {dialog} = require('electron').remote;
@@ -11,6 +11,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.customer = {};
   $scope.maxDate = new Date();
   $scope.calcDate = new Date();
+  $scope.deleteDate = new Date();
+  let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
   $scope.init = ()=> {
     q.selectAllById(CUSTOMERS_TABLE, 'id', $scope.custid)
     .then((rows)=>{
@@ -46,15 +48,21 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
 
   $scope.confirmTransaction = (transaction)=>{
     let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
-    let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
-    let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
+    let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks','deletedOn' ];
+    let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks,deletedOn];
+    let nDate = $mdDateLocale.parseDate(values[2]);
+    let nPromiseDate = $mdDateLocale.parseDate(values[3]);
+    values[2] = nDate;
+    values[3] = nPromiseDate;
      q.insert(DELTRANSACTION_TABLE, keys, values)
      .then((data)=>{
        return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
      })
      .then((data)=>{
-       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active',1);
+       $timeout(()=> {
+       $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
        $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
+       },0)
      })
      .catch((err)=>{
        console.error('anp an err occured while deleting',err);

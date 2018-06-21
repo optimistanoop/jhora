@@ -37,7 +37,7 @@ class Query {
      return p;
   }
 
-  createTransactionTable(tableName){
+  createTransactionTable(tableName,column,type,prop='',value=''){
     let p = new Promise((resolve, reject)=>{
       this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
          id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,7 +50,7 @@ class Query {
          name           TEXT    NOT NULL,
          village        TEXT    NOT NULL,
          remarks        CHAR(80),
-         active         INT     DEFAULT 1)`
+         ${column}         ${type}  ${prop} ${value})`
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);

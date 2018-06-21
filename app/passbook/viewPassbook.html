@@ -60,6 +60,10 @@
         <button ng-click="sortBy('promiseDate')">Promise Date</button>
         <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
       </th>
+      <th ng-hide="queryFor == 'All'">
+        <button ng-click="sortBy('deleteDate')">Deleted Date</button>
+        <span class="sortorder" ng-show="propertyName === 'deleteDate'"  ng-class="{reverse: reverse}"></span>
+      </th>
       <th ng-show="queryFor == 'All'">Edit</th>
       <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
@@ -68,6 +72,7 @@
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.type }}</td>
       <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+      <td ng-show="queryFor == 'Deleted'">{{ tran.deletedOn | date:"EEE,d/M/yy" }}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>

@@ -13,7 +13,8 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.hideNoDataFound = true;
     $scope.tran = {fromDate: null, toDate: null};
     $scope.maxDate = new Date();
-
+    $scope.deleteDate = new Date();
+    let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
     $scope.deleteTransaction=(ev,transaction)=>{
       shell.beep()
       $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
@@ -26,8 +27,8 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
 
   $scope.confirmTransaction = (transaction)=>{
     let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
-    let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
-    let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
+    let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks','deletedOn' ];
+    let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks,deletedOn];
     let nDate = $mdDateLocale.parseDate(values[2]);
     let nPromiseDate = $mdDateLocale.parseDate(values[3]);
     values[2] = nDate;

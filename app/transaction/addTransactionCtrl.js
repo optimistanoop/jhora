@@ -52,7 +52,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           }else{
             $scope.salutation = 'D/o' ;
           }
-          $scope.getCustomerPassbook(TRANSACTION_TABLE);
+          $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
         }else{
           $scope.customer = null;
           $scope.transactions = [];
@@ -110,8 +110,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       });
     };
 
-    $scope.getCustomerPassbook = (tableName)=>{
-         q.selectAllById(tableName, 'customerId', $scope.customer.id)
+    $scope.getCustomerPassbook = (tableName,column,value)=>{
+         q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
          .then((rows)=>{
            if(rows)
            for(let row of rows){
