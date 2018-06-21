@@ -1,7 +1,9 @@
 
 # Jhora
 
-Truly tiny jhora app for educational purpose that included SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
+Jhora means bag, this is a banking desktop app built using github's electron, nodejs, angularjs, sqlite3. It records Cr, Dr transections and generates reports based on records. This is built for educational purpose.
+
+Truly tiny desktop app which can be used for educational purpose that included SQLite support. See the [blog post](http://blog.arrayofbytes.co.uk/?p=379) for more.
 
 ```
 git clone https://github.com/optimistanoop/jhora.git
@@ -38,6 +40,7 @@ If you wish to use native modules, you must run `npm run postinstall` after firs
 
 ## Thanks to...
 
+* Built on top of: https://github.com/sjmelia/electron-boilerplate-sqlite
 * Primary inspiration: https://github.com/szwacz/electron-boilerplate
 * SQLite JS: https://github.com/bytheway/electron-sqlite3/
 
