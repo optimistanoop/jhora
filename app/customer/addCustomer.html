@@ -70,7 +70,7 @@
 
           <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
-            <label ng-model = columnName>{{columnName}}</label>
+            <label>{{columnName}}</label>
             <md-icon><i class="material-icons">person</i></md-icon>
             <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20" ng-required="true">
             <div ng-messages="customerForm.father.$error" role="alert" multiple>
