@@ -5,7 +5,7 @@
           <md-input-container class="md-block" flex-xs>
              <label>Title</label>
             <md-icon><i class="material-icons">person</i></md-icon>
-            <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
+            <md-select name="salutation" ng-model="customer.salutation" ng-required="true" ng-change="setColumn(customer.salutation)">
 
              <md-option ng-repeat="salutation in salutations" ng-value="salutation">
                {{salutation}}
@@ -70,7 +70,7 @@
 
           <md-content layout-padding layout="row">
           <md-input-container class="md-block" flex-xs>
-            <label>Father's Name</label>
+            <label>{{columnName}}</label>
             <md-icon><i class="material-icons">person</i></md-icon>
             <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20" ng-required="true">
             <div ng-messages="customerForm.father.$error" role="alert" multiple>

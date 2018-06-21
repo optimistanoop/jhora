@@ -3,10 +3,16 @@
 
     $scope.salutations = CUSTOMER_SALUTATION;
     $scope.customer = {salutation: $scope.salutations[0], name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
-
+    $scope.columnName = `Father's Name`;
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
-
+    $scope.setColumn = (salute)=>{
+      if(salute == 'Mrs'){
+        $scope.columnName = `Husband Name` ;
+      }else {
+        $scope.columnName = `Father's Name`;
+      }  
+    }
     $scope.searchVillage = (keyword)=>{
       let result = [];
       let villages = [];

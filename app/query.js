@@ -10,7 +10,7 @@ class Query {
       this.db.close((err, data)=>{
        if(err) reject(err);
        resolve(data);
-      }); 
+      });
    });
    return p;
   }
@@ -32,12 +32,12 @@ class Query {
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);
-       }); 
+       });
      });
      return p;
   }
-  
-  createTransactionTable(tableName){
+
+  createTransactionTable(tableName,data){
     let p = new Promise((resolve, reject)=>{
       this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
          id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,15 +49,16 @@ class Query {
          customerId     INTEGER NOT NULL,
          name           TEXT    NOT NULL,
          village        TEXT    NOT NULL,
-         remarks        CHAR(80) )`
+         remarks        CHAR(80),
+         ${data})`
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);
        });
      });
-     return p; 
+     return p;
   }
-  
+
   createVillageTable(tableName){
     let p = new Promise((resolve, reject)=>{
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
@@ -66,7 +67,7 @@ class Query {
        , [], (err, data)=>{
        if(err) reject(err);
        resolve(data);
-     }); 
+     });
    });
    return p;
   }
@@ -96,7 +97,7 @@ class Query {
     });
     return p;
   }
-  
+
   update(tableName ='', keys = [], values =[], conditionOn, id){
     let p = new Promise((resolve, reject)=>{
       let columns = keys.map((key,index) => `${key}='${values[index]}'`).join(`,`);
@@ -132,7 +133,17 @@ class Query {
 
   selectAllById(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE ${key} = ${value} ORDER BY date(date)`
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = '${value}' order by date(date)`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
+  selectAllByIdActive(tableName, key, value,conditionOn,value2){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = '${value}' AND ${conditionOn} = '${value2}' order by date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
@@ -153,9 +164,9 @@ class Query {
   }
 
   //get data between two dates
-   selectDataByDates(tableName, key, value1, value2){
+   selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
+      let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
@@ -189,7 +200,16 @@ class Query {
     return p;
   }
 
-
+  updateStatus(tableName, key, value,conditionOn,id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `UPDATE ${tableName} SET ${key} = ${value} WHERE ${conditionOn} =${id}`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 };
 
 module.exports = Query;
