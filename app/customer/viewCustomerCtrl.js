@@ -1,5 +1,5 @@
 
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE) {
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE,TRANSACTION_TABLE) {
     const {shell} = require('electron');
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
@@ -8,12 +8,20 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $rootScope.template = {title: 'Customers'};
     $scope.deleteCustomer=(ev,customer)=>{
       shell.beep();
+      q.selectAllById(TRANSACTION_TABLE,'customerId',customer.id)
+      .then((row)=>{
+        if(row.length>0) {
+          $rootScope.showAlertDialog(ev,`Customer in Use`, `Customer : ${customer.name} unable to delete .`);
+        }
+        else {
       $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html','Are you sure to delete...?')
       .then((answer)=>{
         if(answer == 'submit') {
           $scope.confirmCustomer(customer);
         }
       });
+    }
+    })
   }
     $scope.confirmCustomer = (customer)=>{
         let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation } = customer;

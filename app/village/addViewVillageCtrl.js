@@ -86,27 +86,29 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       });
     };
     $scope.getVillages(VILLAGE_TABLE);
-
-    $scope.editVillage = (village)=>{
-			$rootScope.template = {title: 'Edit Village'};
-			$rootScope.editModeData = true;
-	  	$scope.village.name = village.name;
-	  	$scope.village.id = village.id;
-    };
 		$scope.deleteVillage = (ev,village)=>{
 			shell.beep();
-			let confirm = $mdDialog.confirm()
+      q.selectAllById(CUSTOMERS_TABLE,'village',village.name)
+      .then((rows)=>{
+        if (rows.length>0) {
+          $rootScope.showAlertDialog(ev,`Village in Use`, `Village : ${village.name} unable to delete .`);
+        }
+        else{
+			       let confirm = $mdDialog.confirm()
 		         .title('Delete Village')
 		         .textContent(`Are you sure to delete village: ${village.name} ?`)
 		         .ariaLabel('Delete')
 		         .targetEvent(ev)
 		         .ok('Submit')
 		         .cancel('Cancel');
-			$mdDialog.show(confirm,village).then(function() {
+			          $mdDialog.show(confirm,village).then(function() {
 				      $scope.confirmVillage(village);
 				   },function() {
-        });
-			};
+           });
+         }
+       }
+     )
+	  };
     $scope.confirmVillage = (village)=>{
         let  {name} = village;
         let keys = ['name'];

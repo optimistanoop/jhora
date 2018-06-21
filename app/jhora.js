@@ -29,7 +29,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     document.getElementById("mySidenav").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
   };
-  
+
   $scope.sortBy = (propertyName)=>{
     $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
     $scope.propertyName = propertyName;
@@ -111,8 +111,8 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
     let dd = dateString ? new Date(dateString) : undefined;
     let formattedDate = '';
     if(dd){
-      let d = dd.getDate()< 9 ?  '0'+ (dd.getDate()) : dd.getDate();
-      let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth();
+      let d = dd.getDate()< 10  ?  '0'+ (dd.getDate()) : dd.getDate();
+      let m = dd.getMonth() < 10 ?  '0'+ (dd.getMonth()+1) : dd.getMonth()+1;
       let y = dd.getFullYear();
       formattedDate = !isNaN(d) ? `${y}-${m}-${d}` :'';
     }

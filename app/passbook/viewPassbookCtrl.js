@@ -1,14 +1,18 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
-  
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDateLocale, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+
 
   const {dialog} = require('electron').remote;
   const {shell} = require('electron');
   $rootScope.template = {title: 'Passbook'};
   $scope.custid=$routeParams.id;
+  $scope.limits = VIEW_LIMITS;
+  $scope.queryFor = $scope.limits[0];
   $scope.customer = {};
   $scope.maxDate = new Date();
   $scope.calcDate = new Date();
+  $scope.deleteDate = new Date();
+  let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
   $scope.init = ()=> {
     q.selectAllById(CUSTOMERS_TABLE, 'id', $scope.custid)
     .then((rows)=>{
@@ -19,7 +23,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       },0)
       })
     };
-    
+
   $scope.hideNoDataFound = true;
   $scope.setSalutation =()=> {
     $scope.salutation = '';
@@ -31,7 +35,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       $scope.salutation = 'D/o' ;
     }
   }
-  
+
   $scope.deleteTransaction=(ev,transaction)=>{
    shell.beep();
    $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
@@ -41,26 +45,32 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
     });
   };
-  
+
   $scope.confirmTransaction = (transaction)=>{
     let  {amount, rate, date, promiseDate, type, customerId, name, village, remarks } = transaction;
-    let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks' ];
-    let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks];
+    let keys = ['amount', 'rate', 'date', 'promiseDate', 'type', 'customerId', 'name', 'village', 'remarks','deletedOn' ];
+    let values =[amount,rate, date, promiseDate, type, customerId, name, village, remarks,deletedOn];
+    let nDate = $mdDateLocale.parseDate(values[2]);
+    let nPromiseDate = $mdDateLocale.parseDate(values[3]);
+    values[2] = nDate;
+    values[3] = nPromiseDate;
      q.insert(DELTRANSACTION_TABLE, keys, values)
      .then((data)=>{
-       return q.deleteRowById(TRANSACTION_TABLE, transaction.id);
+       return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
      })
      .then((data)=>{
-       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+       $timeout(()=> {
+       $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
        $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
+       },0)
      })
      .catch((err)=>{
        console.error('anp an err occured while deleting',err);
      });
   }
-  
- $scope.getDataByTable = (tableName, modelName)=>{
-   q.selectAll(tableName)
+
+ $scope.getDataByTable = (tableName, modelName,column,value)=>{
+   q.selectAllById(tableName,column,value)
    .then((rows)=>{
      if(rows)
      for(let row of rows){
@@ -81,9 +91,17 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
      console.error('anp got error while fetching data',err);
    });
  };
- 
- $scope.getCustomerPassbook = (tableName)=>{
-    q.selectAllById(tableName, 'customerId', $scope.custid)
+
+ $scope.getNewData= (queryFor)=>{
+   if(queryFor == $scope.limits[1]) {
+     $scope.getCustomerPassbook(DELTRANSACTION_TABLE,`'1'`,1);
+   }else{
+     $scope.getCustomerPassbook(TRANSACTION_TABLE,'active','1');
+   }
+ }
+
+ $scope.getCustomerPassbook = (tableName,column,value)=>{
+    q.selectAllByIdActive(tableName, 'customerId', $scope.custid,column,value)
     .then((rows)=>{
       if(rows)
       for(let row of rows){
@@ -92,7 +110,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows;
-        if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
+        $scope.hideNoDataFound = true;
+        if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
       },0);
     })
@@ -100,27 +119,27 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       console.error(err);
     });
   };
-      
+
   $scope.Back = ()=>{
     $window.history.back();
   };
-  
+
   $scope.calculate = ()=>{
-    
-    // get the dr 
+
+    // get the dr
     for(let tran of $scope.transactions){
-      
+
     }
     // calc SI
-    
-    
+
+
   };
-  
-  
+
+
   let caluclateSI = (p, r, t)=>{
     return p*r*t/100;
   };
-  
+
   let getCalcDates = ()=>{
     //TODO  rotate over transactions and return the calc dates
     //TODO here the consideration should be either Cr/Dr based on first type or 1 yr of the transaction
@@ -138,7 +157,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     let tranDate = $scope.transaction[0].date;
     //let  firstTranDate= new Date($scope.transaction[0].date);
     let nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
-
     for(let i = 0; i < $scope.transactions.length; i++){
       let tran = $scope.transactions[i];
       if(tran.date > nextYrMergerDate){
@@ -163,7 +181,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       
       // TODO for first or last tran which is older than 1 yr on calc day
     }
-    
+
     return '';
   };
   
@@ -202,10 +220,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   
   
 }
-  
+ 
   $scope.init();
-  $scope.getCustomerPassbook(TRANSACTION_TABLE);
-  
+  $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
+
   let getMonthDiff = (from, to)=>{
 
     from = new Date(from);
