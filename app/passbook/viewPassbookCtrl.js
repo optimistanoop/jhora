@@ -125,14 +125,20 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     //TODO  rotate over transactions and return the calc dates
     //TODO here the consideration should be either Cr/Dr based on first type or 1 yr of the transaction
     let result = [];
-    let crPrinciple = 0;
-    let drPrinciple = 0;
-    let crInterest = 0;
-    let drInterest = 0;
-    let firstTranType = $scope.transaction[0].type;
-    let firstTranDate = $scope.transaction[0].date;
+    //let crPrinciple = 0;
+    let principle = 0;
+    //let drPrinciple = 0;
+    //let crInterest = 0;
+    //let drInterest = 0;
+    let interest = 0;
+    let netAmt = principle + interest; 
+    //let netAmt = drPrinciple + drInterest - (crPrinciple + crInterest ); 
+    //let netTyp = netAmt >= 0 ? 'Dr' : 'Cr';
+    let netTyp = $scope.transaction[0].type;
+    let tranDate = $scope.transaction[0].date;
     //let  firstTranDate= new Date($scope.transaction[0].date);
     let nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
+<<<<<<< HEAD
     
     for(let tran of $scope.transactions){
       if(tran.date > nextYrMergerDate){
@@ -154,12 +160,75 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         // drInterest  += tran.type == 'Dr' ? $scope.calculate(tran.date, new Date()) : 0;
         firstTranDate = tran.date;
         nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
+=======
+
+    for(let i = 0; i < $scope.transactions.length; i++){
+      let tran = $scope.transactions[i];
+      if(tran.date > nextYrMergerDate){
+        // TODO calc based on the total calc amount till date
+        // TODO filter trans from tranDate to nextYrMergerDate inclucive
+        // TODO cal int for all till nextYrMergerDate
+        // TODO merge p and I (isolated)
+        // TODO merge p and I (together for netAmt)
+        //TODO netTyp to changes based on the total calc
+        
+        //netAmt = drPrinciple + drInterest - (crPrinciple + crInterest );
+        netTyp = netAmt >= 0 ? 'Dr' : 'Cr';
+        tranDate = nextYrMergerDate;
+        nextYrMergerDate = new Date(tranDate.getFullYear()+1, tranDate.getMonth(), tranDate.getDate());
       }
+      if(tran.type != netTyp || ( i > 0 && (i == ($scope.transactions.length -1 )))){
+        
+        tranDate = tran.date;
+        nextYrMergerDate = new Date(tranDate.getFullYear()+1, tranDate.getMonth(), tranDate.getDate());
+        //TODO netTyp to changes based on the total calc
+>>>>>>> 451d6ff... temp
+      }
+      
+      // TODO for first or last tran which is older than 1 yr on calc day
     }
     
     return '';
   };
   
+<<<<<<< HEAD
+=======
+  calc()=>{
+  let p =0, i = 0;;
+  let netType = trans[0].type;
+  let lastCalcDate = trans[0].date;
+  let lastCalcIndex = 0;
+  
+  for (let i = 0; i < trans.length; i++){
+    let tran = trans[i];
+    if(trna.type !=  netType){
+       // calc and set p, i, netType, netAmt, lastCalcDate
+       for(let j = lastCalcIndex; j < i; j++){
+         let nTran = trans[j];
+         
+         calcYr(lastCalcDate, tran, trans[j])
+       }
+       
+       let startDate = trans[lastCalcIndex].date;
+       let endDate = trans[i].date;
+       
+    }
+    else if(i > 0 &&  i == trans.length -1){
+       // calc and set p, i, netType,
+    }
+  }
+  
+  // for last tran
+  // get all yrs calc date from last cal date to  actual calc date including last yr month diff
+  // loop over all yrs calc date 
+  // calc and for the year
+  // set p, i, netType, lastCalcDate
+  // in the last loop calc for months
+  // set p, i, netType, lastCalcDate
+  
+  
+}
+>>>>>>> 451d6ff... temp
 
   
   $scope.init();
@@ -183,45 +252,4 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     lastMonth = to.getDate() >= 15 ? 1 :0.5;
     return [firstMonth, months, lastMonth];
   }
-
-
-  let getMonthDiff2 = (from, to)=> {
-    from = new Date(from);
-    to = new Date(to);
-    let valid = !isNaN(from) && !isNaN(to) && from < to ;
-    if(! valid) return [];
-    let months = 0;
-    let firstMonth = 0;
-    let lastMonth = 0;
-    months = (to.getFullYear() - from.getFullYear()) * 12;
-    months -= from.getMonth() + 1;
-    months += to.getMonth();
-    months = months <= 0 ? 0 : months;
-
-    firstMonth = from.getDate() <= 15 ? 1 :0.5;
-    lastMonth = to.getDate() >= 15 ? 1 :0.5;
-    return [firstMonth, months, lastMonth];
-  }
-
-  let transactions = [
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 500, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 700, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Dr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' },
-    { amount: 100, date: '2018-01-01', promiseDate: '2018-11-11', type: 'Cr', customerId: '1', name: 'Anoop', village:'Daniyari', remarks: '' }
-  ];
 });
