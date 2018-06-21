@@ -141,6 +141,16 @@ class Query {
     });
     return p;
   }
+  selectAllByIdActive(tableName, key, value,conditionOn,value2){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT * FROM ${tableName} WHERE ${key} = '${value}' AND ${conditionOn} = '${value2}' order by date(date)`
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
   //get data by year and month of selected data
    selectAllByYearMonth(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{

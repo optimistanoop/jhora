@@ -21,7 +21,15 @@
       </tr>
   	</table>
   </md-content>
-
+  <md-input-container flex-xs  class="width">
+    <label>Results for</label>
+    <md-icon><i class="material-icons">sort</i></md-icon>
+    <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
+      <md-option ng-repeat="limit in limits" ng-value="limit">
+        {{limit}}
+      </md-option>
+    </md-select>
+  </md-input-container>
   <md-content layout-padding layout="row" ng-show="hideNoDataFound">
     <md-input-container flex-xs>
     <label>Search</label>
@@ -52,16 +60,16 @@
         <button ng-click="sortBy('promiseDate')">Promise Date</button>
         <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
       </th>
-      <th>Edit</th>
-      <th>Delete</th>
+      <th ng-show="queryFor == 'All'">Edit</th>
+      <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td>{{ tran.type }}</td>
       <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td><a ng-href="#!/transactions/update/{{tran.id}}"><i class="material-icons">edit</i></a></td>
-      <td ng-click="deleteTransaction($event,tran)" ><i class="material-icons" style="color:red">delete</i></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><i class="material-icons">edit</i></a></td>
+      <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>
   </md-content>

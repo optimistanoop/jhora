@@ -6,6 +6,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   const {shell} = require('electron');
   $rootScope.template = {title: 'Passbook'};
   $scope.custid=$routeParams.id;
+  $scope.limits = VIEW_LIMITS;
+  $scope.queryFor = $scope.limits[0];
   $scope.customer = {};
   $scope.maxDate = new Date();
   $scope.calcDate = new Date();
@@ -51,7 +53,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
        return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
      })
      .then((data)=>{
-       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE);
+       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active',1);
        $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
      })
      .catch((err)=>{
@@ -59,8 +61,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
      });
   }
 
- $scope.getDataByTable = (tableName, modelName)=>{
-   q.selectAll(tableName)
+ $scope.getDataByTable = (tableName, modelName,column,value)=>{
+   q.selectAllById(tableName,column,value)
    .then((rows)=>{
      if(rows)
      for(let row of rows){
@@ -82,8 +84,16 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
    });
  };
 
- $scope.getCustomerPassbook = (tableName)=>{
-    q.selectAllById(tableName, 'customerId', $scope.custid)
+ $scope.getNewData= (queryFor)=>{
+   if(queryFor == $scope.limits[1]) {
+     $scope.getCustomerPassbook(DELTRANSACTION_TABLE,`'1'`,1);
+   }else{
+     $scope.getCustomerPassbook(TRANSACTION_TABLE,'active','1');
+   }
+ }
+
+ $scope.getCustomerPassbook = (tableName,column,value)=>{
+    q.selectAllByIdActive(tableName, 'customerId', $scope.custid,column,value)
     .then((rows)=>{
       if(rows)
       for(let row of rows){
@@ -163,7 +173,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
 
 
   $scope.init();
-  $scope.getCustomerPassbook(TRANSACTION_TABLE);
+  $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
 
   let getMonthDiff = (from, to)=>{
 

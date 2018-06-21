@@ -3,7 +3,6 @@
     <label>Results for</label>
     <md-icon><i class="material-icons">sort</i></md-icon>
     <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
-      <md-option><em>None</em></md-option>
       <md-option ng-repeat="limit in limits" ng-value="limit">
         {{limit}}
       </md-option>
