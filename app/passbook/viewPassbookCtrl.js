@@ -223,7 +223,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
 
 calcLatest()=>{
   let trans = [];
-  let results = [[trans[0]];
+  let results = [[trans[0]]];
   let fromTran = trans[0];
   let calcDate = '';
   for(let i=0; i<trans.length + 1; i++){
