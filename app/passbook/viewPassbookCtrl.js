@@ -232,7 +232,8 @@ calcLatest()=>{
       let from = fromTran.date;
       let to = t.date;
       // calcOnlyForYrs to calc for last index arr of results
-      // calcOnlyForYrs should also give the type as merge due to yr
+      // calcOnlyForYrs should also give the type as mergedTran due to yr
+      // calcOnlyForYrs will create new P with I = 0
       let mergedTran = calcOnlyForYrs(from, to , results[results.length -1]);
       fromTran = mergedTran ? mergedTran : fromTran;
       if(mergedTran){
@@ -246,14 +247,16 @@ calcLatest()=>{
 
       }
       
-      // merge tran if P, I is changing due to tran type
+      // merge trans after calc if P, I is changing due to tran type
       // here the rule will be to calc till date of tran and deduce amount from I first than P
       // calc new P and I
       if(fromTran.type != t.type){
         let from = fromTran.date;
         let to = t.date;
-        // calcForAll should also give the type as merged tran due to tran type
-        mergedTran = calcForAll(from, to, results[results.length -1]);
+        // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
+        // calcForAllTrans will create new P and I
+        // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
+        mergedTran = calcForAllTrans(from, to, results[results.length -1]);
         if(mergedTran){
           fromTran = mergedTran;
           results.push([mergedTran]);
@@ -264,7 +267,7 @@ calcLatest()=>{
       let from = fromTran.date;
       let to = calcDate;
       // calcOnlyForYrs to calc for last index arr of results
-      // calcOnlyForYrs should also give the type as merge due to yr
+      // calcOnlyForYrs should also give the type as merge due to yr and cr/dr
       let mergedTran = calcOnlyForYrs(from, to , results[results.length -1]);
       fromTran = mergedTran ? mergedTran : fromTran;
       if(mergedTran){
@@ -278,6 +281,10 @@ calcLatest()=>{
       // calc for diff of yrs month and calc date
       from = fromTran.date;
       // calcOnlyForMonths to calc for last index arr of results
+      // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
+      // calcOnlyForMonths should accumulate P, I 
+      // calcOnlyForMonths should also give the type as final and cr/dr
+
       let finalTran = calcOnlyForMonths(from, to, results[results.length -1])
       finalTran ?  results.push([finalTran]) :[];
       console.log('anp results', results);
