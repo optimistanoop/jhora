@@ -110,6 +110,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows;
+        calcLatest();
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
@@ -123,18 +124,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.Back = ()=>{
     $window.history.back();
   };
-
-  $scope.calculate = ()=>{
-
-    // get the dr
-    for(let tran of $scope.transactions){
-
-    }
-    // calc SI
-
-
-  };
-
 
   let caluclateSI = (p, r, t)=>{
     return p*r*t/100;
@@ -186,49 +175,55 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   };
   
   let calc = ()=>{
-  let p =0, i = 0;;
-  let netType = trans[0].type;
-  let lastCalcDate = trans[0].date;
-  let lastCalcIndex = 0;
-  
-  for (let i = 0; i < trans.length; i++){
-    let tran = trans[i];
-    if(trna.type !=  netType){
-       // calc and set p, i, netType, netAmt, lastCalcDate
-       for(let j = lastCalcIndex; j < i; j++){
-         let nTran = trans[j];
+    let p =0, i = 0;;
+    let netType = trans[0].type;
+    let lastCalcDate = trans[0].date;
+    let lastCalcIndex = 0;
+    
+    for (let i = 0; i < trans.length; i++){
+      let tran = trans[i];
+      if(trna.type !=  netType){
+         // calc and set p, i, netType, netAmt, lastCalcDate
+         for(let j = lastCalcIndex; j < i; j++){
+           let nTran = trans[j];
+           
+           calcYr(lastCalcDate, tran, trans[j])
+         }
          
-         calcYr(lastCalcDate, tran, trans[j])
-       }
-       
-       let startDate = trans[lastCalcIndex].date;
-       let endDate = trans[i].date;
-       
+         let startDate = trans[lastCalcIndex].date;
+         let endDate = trans[i].date;
+         
+      }
+      else if(i > 0 &&  i == trans.length -1){
+         // calc and set p, i, netType,
+      }
     }
-    else if(i > 0 &&  i == trans.length -1){
-       // calc and set p, i, netType,
-    }
+    
+    // for last tran
+    // get all yrs calc date from last cal date to  actual calc date including last yr month diff
+    // loop over all yrs calc date 
+    // calc and for the year
+    // set p, i, netType, lastCalcDate
+    // in the last loop calc for months
+    // set p, i, netType, lastCalcDate
+  
   }
-  
-  // for last tran
-  // get all yrs calc date from last cal date to  actual calc date including last yr month diff
-  // loop over all yrs calc date 
-  // calc and for the year
-  // set p, i, netType, lastCalcDate
-  // in the last loop calc for months
-  // set p, i, netType, lastCalcDate
-  
-  
-}
+
+  let calcOnlyForYrs = ()=>{
+  };
+  let calcForAllTrans = ()=>{
+  };
+  let calcOnlyForMonths = ()=>{
+  };
 
 let calcLatest = ()=>{
-  let trans = [];
+  let trans = $scope.transactions;
   let results = [[trans[0]]];
   let fromTran = trans[0];
-  let calcDate = '';
+  let calcDate = $scope.calcDate;
   for(let i=0; i<trans.length + 1; i++){
     if(i>0 &&  i < trans.length){
-      let t = tran[i];
+      let t = trans[i];
       let from = fromTran.date;
       let to = t.date;
       // calcOnlyForYrs to calc for last index arr of results
@@ -263,7 +258,10 @@ let calcLatest = ()=>{
         }
       }
       
-    } else{
+      console.log('anp i', i);
+      console.log('anp results i', results);
+      
+    } else if(i ==  trans.length){
       let from = fromTran.date;
       let to = calcDate;
       // calcOnlyForYrs to calc for last index arr of results
@@ -284,10 +282,13 @@ let calcLatest = ()=>{
       // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
       // calcOnlyForMonths should accumulate P, I 
       // calcOnlyForMonths should also give the type as final and cr/dr
-
+      console.log('anp from ', from);
+      console.log('anp to ', to);
+      console.log('anp calc results ', results[results.length -1]);
       let finalTran = calcOnlyForMonths(from, to, results[results.length -1])
       finalTran ?  results.push([finalTran]) :[];
-      console.log('anp results', results);
+      console.log('anp last i', i);
+      console.log('anp results last i', results);
       console.log('anp finalTran', finalTran);
     }
   }
