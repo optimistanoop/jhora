@@ -238,9 +238,12 @@ calcLatest()=>{
       if(mergedTran){
         results.push([mergedTran]);
       }else{
-        let nResults = results[results.length -1];
-        nResults.push(trans[i-1]);
-        results.push(nResults);
+        if(i > 1){
+          let nResults = results[results.length -1];
+          nResults.push(trans[i-1]);
+          results.push(nResults);
+        }
+
       }
       
       // merge tran if P, I is changing due to tran type
@@ -249,9 +252,10 @@ calcLatest()=>{
       if(fromTran.type != t.type){
         let from = fromTran.date;
         let to = t.date;
-        // calcAll should also give the type as merge due to tran type
-        mergedTran = calcAll(from, to, results[results.length -1]);
+        // calcForAll should also give the type as merged tran due to tran type
+        mergedTran = calcForAll(from, to, results[results.length -1]);
         if(mergedTran){
+          fromTran = mergedTran;
           results.push([mergedTran]);
         }
       }
@@ -277,6 +281,7 @@ calcLatest()=>{
       let finalTran = calcOnlyForMonths(from, to, results[results.length -1])
       finalTran ?  results.push([finalTran]) :[];
       console.log('anp results', results);
+      console.log('anp finalTran', finalTran);
     }
   }
 }
