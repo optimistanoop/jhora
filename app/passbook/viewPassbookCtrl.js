@@ -220,6 +220,50 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   
   
 }
+
+calcLatest()=>{
+  let trans = [];
+  let results = [[trans[0]];
+  let fromTran = trans[0];
+  let calcDate = '';
+  for(let i=0; i<trans.length + 1; i++){
+    if(i>0 &&  i < trans.length){
+      let t = tran[i];
+      let from = fromTran.date;
+      let to = t.date;
+      // calcOnlyForYrs to calc for last index arr of results
+      let mergedTran = calcOnlyForYrs(from, to , results[results.length -1]);
+      fromTran = mergedTran ? mergedTran : fromTran;
+      if(mergedTran){
+        results.push([mergedTran]);
+      }else{
+        let nResults = results[results.length -1];
+        nResults.push(trans[i-1]);
+        results.push(nResults);
+      }
+    } else{
+      let from = fromTran.date;
+      let to = calcDate;
+      // calcOnlyForYrs to calc for last index arr of results
+      let mergedTran = calcOnlyForYrs(from, to , results[results.length -1]);
+      fromTran = mergedTran ? mergedTran : fromTran;
+      if(mergedTran){
+        results.push([mergedTran]);
+      }else{
+        let nResults = results[results.length -1];
+        nResults.push(trans[i-1]);
+        results.push(nResults);
+      }
+      
+      // calc for diff of yrs month and calc date
+      from = fromTran.date;
+      // calcOnlyForMonths to calc for last index arr of results
+      let finalTran = calcOnlyForMonths(from, to, results[results.length -1])
+      finalTran ?  results.push([finalTran]) :[];
+      console.log('anp results', results);
+    }
+  }
+}
  
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
