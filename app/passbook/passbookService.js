@@ -5,86 +5,6 @@ jhora.service('passbookService', function($mdDateLocale) {
     return p*r*t/100;
   };
 
-  let getCalcDates = ()=>{
-    //TODO  rotate over transactions and return the calc dates
-    //TODO here the consideration should be either Cr/Dr based on first type or 1 yr of the transaction
-    let result = [];
-    //let crPrinciple = 0;
-    let principle = 0;
-    //let drPrinciple = 0;
-    //let crInterest = 0;
-    //let drInterest = 0;
-    let interest = 0;
-    let netAmt = principle + interest; 
-    //let netAmt = drPrinciple + drInterest - (crPrinciple + crInterest ); 
-    //let netTyp = netAmt >= 0 ? 'Dr' : 'Cr';
-    let netTyp = $scope.transaction[0].type;
-    let tranDate = $scope.transaction[0].date;
-    //let  firstTranDate= new Date($scope.transaction[0].date);
-    let nextYrMergerDate = new Date(firstTranDate.getFullYear()+1, firstTranDate.getMonth(), firstTranDate.getDate());
-    for(let i = 0; i < $scope.transactions.length; i++){
-      let tran = $scope.transactions[i];
-      if(tran.date > nextYrMergerDate){
-        // TODO calc based on the total calc amount till date
-        // TODO filter trans from tranDate to nextYrMergerDate inclucive
-        // TODO cal int for all till nextYrMergerDate
-        // TODO merge p and I (isolated)
-        // TODO merge p and I (together for netAmt)
-        //TODO netTyp to changes based on the total calc
-        
-        //netAmt = drPrinciple + drInterest - (crPrinciple + crInterest );
-        netTyp = netAmt >= 0 ? 'Dr' : 'Cr';
-        tranDate = nextYrMergerDate;
-        nextYrMergerDate = new Date(tranDate.getFullYear()+1, tranDate.getMonth(), tranDate.getDate());
-      }
-      if(tran.type != netTyp || ( i > 0 && (i == ($scope.transactions.length -1 )))){
-        
-        tranDate = tran.date;
-        nextYrMergerDate = new Date(tranDate.getFullYear()+1, tranDate.getMonth(), tranDate.getDate());
-        //TODO netTyp to changes based on the total calc
-      }
-      
-      // TODO for first or last tran which is older than 1 yr on calc day
-    }
-
-    return '';
-  };
-  
-  let calc = ()=>{
-    let p =0, i = 0;;
-    let netType = trans[0].type;
-    let lastCalcDate = trans[0].date;
-    let lastCalcIndex = 0;
-    
-    for (let i = 0; i < trans.length; i++){
-      let tran = trans[i];
-      if(trna.type !=  netType){
-         // calc and set p, i, netType, netAmt, lastCalcDate
-         for(let j = lastCalcIndex; j < i; j++){
-           let nTran = trans[j];
-           
-           calcYr(lastCalcDate, tran, trans[j])
-         }
-         
-         let startDate = trans[lastCalcIndex].date;
-         let endDate = trans[i].date;
-         
-      }
-      else if(i > 0 &&  i == trans.length -1){
-         // calc and set p, i, netType,
-      }
-    }
-    
-    // for last tran
-    // get all yrs calc date from last cal date to  actual calc date including last yr month diff
-    // loop over all yrs calc date 
-    // calc and for the year
-    // set p, i, netType, lastCalcDate
-    // in the last loop calc for months
-    // set p, i, netType, lastCalcDate
-  
-  }
-
   let calcOnlyForYrs = (from, to, trans)=>{
     
     //return {amount, si, type, date}
@@ -108,7 +28,7 @@ jhora.service('passbookService', function($mdDateLocale) {
           return accumulator + currentValue.amount;
         }, 0);
         
-    return {amount: amount, si:si, date: to};
+    return {amount: amount, si:si, date: to, type: 'Dr'};
   };
 
   let calcLatest = (trans, calcDate)=>{
