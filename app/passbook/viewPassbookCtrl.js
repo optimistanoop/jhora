@@ -292,6 +292,7 @@ calcLatest()=>{
     }
   }
 }
+}
  
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
