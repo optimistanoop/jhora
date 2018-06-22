@@ -10,7 +10,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.queryFor = $scope.limits[0];
   $scope.customer = {};
   $scope.maxDate = new Date();
-  $scope.calcDate = new Date();
+  $scope.calcDate = new Date($mdDateLocale.parseDate(new Date()));
   $scope.deleteDate = new Date();
   let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
   $scope.init = ()=> {
@@ -213,7 +213,22 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   };
   let calcForAllTrans = ()=>{
   };
-  let calcOnlyForMonths = ()=>{
+  let calcOnlyForMonths = (from, to, trans)=>{
+    let si = 0;
+    for(let tran of trans){
+      let times = getMonthDiff(tran.date, to);
+      console.log('anp times', times);
+      let months = times.reduce((accumulator, currentValue)=>{
+            return accumulator + currentValue;
+          }, 0);
+      si += caluclateSI(tran.amount, tran.rate, months);
+    }
+    
+    let amount = trans.reduce((accumulator, currentValue)=>{
+          return accumulator + currentValue.amount;
+        }, 0);
+        
+    return {amount: amount, si:si, date: to};
   };
 
 let calcLatest = ()=>{
@@ -271,9 +286,11 @@ let calcLatest = ()=>{
       if(mergedTran){
         results.push([mergedTran]);
       }else{
-        let nResults = results[results.length -1];
-        nResults.push(trans[i-1]);
-        results.push(nResults);
+        if(i > 1){
+          let nResults = results[results.length -1];
+          nResults.push(trans[i-1]);
+          results.push(nResults);
+        }
       }
       
       // calc for diff of yrs month and calc date
@@ -302,7 +319,7 @@ let calcLatest = ()=>{
 
     from = new Date(from);
     to = new Date(to);
-    let valid = !isNaN(from) && !isNaN(to) && from < to ;
+    let valid = !isNaN(from) && !isNaN(to) && from <= to ;
     if(! valid) return [];
     let months = 0;
     let firstMonth = 0;
@@ -312,8 +329,19 @@ let calcLatest = ()=>{
     months += to.getMonth();
     months = months <= 0 ? 0 : months;
 
-    firstMonth = from.getDate() <= 15 ? 1 :0.5;
-    lastMonth = to.getDate() >= 15 ? 1 :0.5;
+    firstMonth = from.getDate() > 15 ? 0.5 : 1;
+    lastMonth = to.getDate() > 15 ? 1 : 0.5;
+
+    if(to.getFullYear() == from.getFullYear() && to.getMonth() == from.getMonth()){
+      if((from.getDate() > 15 && to.getDate() > 15) || (from.getDate() <= 15 && to.getDate() <= 15)){
+        firstMonth = 0.5;
+        lastMonth = 0;
+      }else if(from.getDate() <= 15 && to.getDate() > 15){
+        firstMonth = 1;
+        lastMonth = 0;
+      }
+    }
+    
     return [firstMonth, months, lastMonth];
   }
 });
