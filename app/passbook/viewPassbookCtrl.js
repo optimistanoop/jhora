@@ -232,6 +232,7 @@ calcLatest()=>{
       let from = fromTran.date;
       let to = t.date;
       // calcOnlyForYrs to calc for last index arr of results
+      // calcOnlyForYrs should also give the type as merge due to yr
       let mergedTran = calcOnlyForYrs(from, to , results[results.length -1]);
       fromTran = mergedTran ? mergedTran : fromTran;
       if(mergedTran){
@@ -241,10 +242,25 @@ calcLatest()=>{
         nResults.push(trans[i-1]);
         results.push(nResults);
       }
+      
+      // merge tran if P, I is changing due to tran type
+      // here the rule will be to calc till date of tran and deduce amount from I first than P
+      // calc new P and I
+      if(fromTran.type != t.type){
+        let from = fromTran.date;
+        let to = t.date;
+        // calcAll should also give the type as merge due to tran type
+        mergedTran = calcAll(from, to, results[results.length -1]);
+        if(mergedTran){
+          results.push([mergedTran]);
+        }
+      }
+      
     } else{
       let from = fromTran.date;
       let to = calcDate;
       // calcOnlyForYrs to calc for last index arr of results
+      // calcOnlyForYrs should also give the type as merge due to yr
       let mergedTran = calcOnlyForYrs(from, to , results[results.length -1]);
       fromTran = mergedTran ? mergedTran : fromTran;
       if(mergedTran){
