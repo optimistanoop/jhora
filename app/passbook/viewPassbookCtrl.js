@@ -185,7 +185,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     return '';
   };
   
-  calc()=>{
+  let calc = ()=>{
   let p =0, i = 0;;
   let netType = trans[0].type;
   let lastCalcDate = trans[0].date;
@@ -221,7 +221,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   
 }
 
-calcLatest()=>{
+let calcLatest = ()=>{
   let trans = [];
   let results = [[trans[0]]];
   let fromTran = trans[0];
@@ -292,7 +292,7 @@ calcLatest()=>{
     }
   }
 }
-}
+
  
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
