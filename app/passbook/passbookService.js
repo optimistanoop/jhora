@@ -2,6 +2,13 @@
 jhora.service('passbookService', function($mdDateLocale) {
   
   let caluclateSI = (p =0, r=0, t=0)=>{ return p*r*t/100; };
+  let updateFinalTran = (finalTran, p=0, si=0) => {
+    finalTran.p = p;
+    finalTran.si = si;
+    finalTran.amount = p;
+    finalTran.total = p + si;
+  };
+  
   let calculateNewPSI = (p =0, si=0, i=0, finalTran)=>{ 
     let newPSI = {};
     if(i <= si){
@@ -21,7 +28,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     let fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
     if(to <= fromPlus1Yr) return undefined;
     
-    let p = 0, si=0,
+    let p = trans[0].amount, si = trans[0].si ? trans[0].si : 0,
     type = finalTran.type,
     mergedType = 'Yr',
     rate = trans[0].rate,
@@ -35,20 +42,23 @@ jhora.service('passbookService', function($mdDateLocale) {
     
     let frstCalcYr = calcYrs[0],
     date = calcYrs[calcYrs.length - 1];
-    for(let tran of trans){
-      let times = getMonthDiff(tran.date, frstCalcYr),
+    for(let i = 0; i < trans.length; i++){
+      let tran = trans[0],
+      times = getMonthDiff(tran.date, frstCalcYr),
       diffFromFrstCalcYr = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);    
       if(tran.type == type){
-        p += tran.amount;
+        if(i>0){
+          p += tran.amount;
+          si += tran.si ? tran.si :0;
+        }
         si += caluclateSI(tran.amount, tran.rate, diffFromFrstCalcYr);
       }else {
-        // calc si and deduct from I and than P
-        let i = caluclateSI(tran.amount, tran.rate, diffFromFrstCalcYr);
-        let newPSI = calculateNewPSI(p, si, i, finalTran);
+        let newPSI = calculateNewPSI(p, si, tran.amount, finalTran);
         p = newPSI.p;
         si = newPSI.si;
         type = newPSI.type;
-      }                   
+      }
+      updateFinalTran(finalTran, p, si);                   
     }
     
     p = p + si;
@@ -64,38 +74,33 @@ jhora.service('passbookService', function($mdDateLocale) {
     return {amount, total , si, type, date, rate, mergedType}
   };
   
-  // let calcForAllTrans = (from, to, trans=[], finalTran)=>{
-  //   let mergedType = 'Tr';
-  //   for(let tran of trans){
-  //     let times = getMonthDiff(tran.date, to),
-  //     months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
-  //   }
-  // };
-  
   let calcOnlyForMonths = (from, to, trans=[], finalTran, mergedType)=>{
-    let si = 0, p = 0,
+    let si =  trans[0].si ? trans[0].si : 0,
+    p = trans[0].amount,
     rate = trans[0].rate,
     type = finalTran.type;
     
-    //mergedType = 'Fn';
-    for(let tran of trans){
-      let times = getMonthDiff(tran.date, to),
+    for(let i = 0; i < trans.length; i++){
+      let tran = trans[i],
+      times = getMonthDiff(tran.date, to),
       months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
       if(tran.type == type){
-        p += tran.amount;
+        if(i>0){
+          p += tran.amount;
+          si += tran.si ? tran.si :0;
+        }
         si += caluclateSI(tran.amount, tran.rate, months);
       }else {
-        // calc si and deduct from I and than P
-        let i = caluclateSI(tran.amount, tran.rate, months);
-        let newPSI = calculateNewPSI(p, si, i, finalTran);
+        let newPSI = calculateNewPSI(p, si, tran.amount, finalTran);
         p = newPSI.p;
         si = newPSI.si;
         type = newPSI.type;
       }
+      updateFinalTran(finalTran, p, si);
     }
     
-    let amount = trans.reduce((accumulator, currentValue)=>{ return accumulator + currentValue.amount; }, 0);
-    let total = amount + si;    
+    let total = p + si,    
+    amount = p;    
     return {amount, p, si, total, type, rate , mergedType, date: to};
   };
 
@@ -145,9 +150,6 @@ jhora.service('passbookService', function($mdDateLocale) {
           }
         }
         
-        console.log('anp i', i);
-        console.log('anp results i', results);
-        
       } else if(i ==  trans.length){
         let from = fromTran.date,
         to = calcDate,
@@ -174,10 +176,9 @@ jhora.service('passbookService', function($mdDateLocale) {
         // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
         // calcOnlyForMonths should accumulate P, I 
         // calcOnlyForMonths should also give the type as final and cr/dr
-        finalTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'fn');
+        finalTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'Fn');
         finalTran ?  results.push([finalTran]) :[];
         finalTran ?  calcResults.push(finalTran) :[];
-        console.log('anp last i', i);
         console.log('anp results last', results);
         console.log('anp calcResults', calcResults);
         console.log('anp finalTran', finalTran);
@@ -190,7 +191,7 @@ jhora.service('passbookService', function($mdDateLocale) {
   let getMonthDiff = (from, to)=>{
     from = new Date(from);
     to = new Date(to);
-    let valid = !isNaN(from) && !isNaN(to) && from <= to ;
+    let valid = !isNaN(from) && !isNaN(to) && from < to ;
     if(! valid) return [];
     let months = 0,
     firstMonth = 0,

@@ -124,6 +124,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.Back = ()=>{
     $window.history.back();
   };
+  
+  $scope.calc = ()=>{
+    $scope.calcData = passbookService.calcLatest($scope.transactions, $scope.calcDate);
+  }
  
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
