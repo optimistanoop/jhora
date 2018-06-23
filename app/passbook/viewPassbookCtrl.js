@@ -109,8 +109,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
       }
       $timeout(()=>{
-        $scope.transactions = rows;
-        passbookService.calcLatest($scope.transactions, $scope.calcDate);
+        $scope.transactions = rows || [];
+        $scope.calcData = passbookService.calcLatest($scope.transactions, $scope.calcDate);
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;

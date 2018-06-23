@@ -46,7 +46,8 @@ jhora.service('passbookService', function($mdDateLocale) {
   };
   
   let calcOnlyForMonths = (from, to, trans=[])=>{
-    let si = 0;
+    let si = 0,
+    mergedType = 'Fn';
     for(let tran of trans){
       let times = getMonthDiff(tran.date, to),
       months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
@@ -55,13 +56,15 @@ jhora.service('passbookService', function($mdDateLocale) {
     }
     
     let amount = trans.reduce((accumulator, currentValue)=>{ return accumulator + currentValue.amount; }, 0);
-        
-    return {amount, si, date: to, type: 'Dr'};
+    let total = amount + si;    
+    return {amount, si, total, type: 'Dr', mergedType, date: to};
   };
 
   let calcLatest = (trans = [], calcDate)=>{
-    let results = [[trans[0]]];
-    let fromTran = trans[0];
+    let results = [[trans[0]]],
+    calcResults = [],
+    fromTran = trans[0],
+    finalTran = {};
     for(let i=0; i<trans.length + 1; i++){
       if(i>0 &&  i < trans.length){
         let t = trans[i],
@@ -74,6 +77,7 @@ jhora.service('passbookService', function($mdDateLocale) {
         fromTran = mergedTran ? mergedTran : fromTran;
         if(mergedTran){
           results.push([mergedTran]);
+          calcResults.push(mergedTran);
         }else{
           if(i > 1){
             let nResults = Array.from(results[results.length -1]);
@@ -95,6 +99,7 @@ jhora.service('passbookService', function($mdDateLocale) {
           if(mergedTran){
             fromTran = mergedTran;
             results.push([mergedTran]);
+            calcResults.push(mergedTran);
           }
         }
         
@@ -111,6 +116,7 @@ jhora.service('passbookService', function($mdDateLocale) {
 
         if(mergedTran){
           results.push([mergedTran]);
+          calcResults.push(mergedTran);
         }else{
           if(i > 1){
             let nResults = Array.from(results[results.length -1]);
@@ -125,13 +131,17 @@ jhora.service('passbookService', function($mdDateLocale) {
         // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
         // calcOnlyForMonths should accumulate P, I 
         // calcOnlyForMonths should also give the type as final and cr/dr
-        let finalTran = calcOnlyForMonths(from, to, results[results.length -1])
+        finalTran = calcOnlyForMonths(from, to, results[results.length -1]);
         finalTran ?  results.push([finalTran]) :[];
+        finalTran ?  calcResults.push(finalTran) :[];
         console.log('anp last i', i);
-        console.log('anp results last i', results);
+        console.log('anp results last', results);
+        console.log('anp calcResults', calcResults);
         console.log('anp finalTran', finalTran);
       }
     }
+    
+    return finalTran;
   }
 
   let getMonthDiff = (from, to)=>{
