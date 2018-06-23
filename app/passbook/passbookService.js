@@ -141,7 +141,7 @@ jhora.service('passbookService', function($mdDateLocale) {
       }
     }
     
-    return finalTran;
+    return {finalTran, calcResults,  results};
   }
 
   let getMonthDiff = (from, to)=>{

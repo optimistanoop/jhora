@@ -86,4 +86,24 @@
     <md-datepicker ng-model="calcDate" md-max-date="maxDate" md-open-on-focus></md-datepicker>
   </md-input-container>
   <md-button class="md-raised md-primary" ng-click="Back()">Back</md-button>
+  
+  <div flex ng-repeat="calc in calcData.calcResults">
+    <md-card md-theme="dark-blue" md-theme-watch>
+     <md-card-title>
+       <md-card-title-text>
+         <span class="md-headline">Total - {{calc.total}}</span>
+         <span class="md-subhead">Date -{{calc.date | date:"EEE,d/M/yy"}}</span>
+         <span class="md-subhead">Merge Type -{{calc.mergedType}}</span>
+         <span class="md-subhead">Amount - {{calc.amount}}</span>
+         <span class="md-subhead">SI.-{{calc.si}}</span>
+       </md-card-title-text>
+       <md-card-title-media>
+         <div class="md-media-sm card-media"></div>
+       </md-card-title-media>
+     </md-card-title>
+     <md-card-actions layout="row" layout-align="end center">
+       <!-- <md-button ><a ng-href="#!/passbook/view/{{customer.id}}" class="nolink">Passbook</a></md-button> -->
+     </md-card-actions>
+   </md-card>
+ </div>
 </div>
