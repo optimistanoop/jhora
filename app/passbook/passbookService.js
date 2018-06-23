@@ -5,9 +5,39 @@ jhora.service('passbookService', function($mdDateLocale) {
     return p*r*t/100;
   };
 
-  let calcOnlyForYrs = (from, to, trans)=>{
+  let calcOnlyForYrs = (from, to, trans = [])=>{
+    let fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
+    if(to <= fromPlus1Yr) return undefined;
     
-    //return {amount, si, type, date}
+    let yrDiff = to.getFullYear() - from.getFullYear();
+    let calcYrs  = [];
+    for(let i = 0; i< yrDiff; i++){
+      fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
+      calcYrs.push(fromPlus1Yr);
+      from = fromPlus1Yr;
+    }
+    let p = 0, si=0;
+    let frstCalcYr = calcYrs[0];
+    let date = calcYrs[calcYrs.length - 1];
+    let mergedType = 'Yr';
+    let type = 'Dr';
+    let rate = trans[0].rate;
+    for(let tran of trans){
+      let times = getMonthDiff(tran.date, frstCalcYr);
+      let diffFromFrstCalcYr = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);                       
+      si += caluclateSI(tran.amount, tran.rate, diffFromFrstCalcYr);
+      p += tran.amount;
+    }
+    p = p + si;
+    si = 0;
+    
+    for(let i = 1; i <  calcYrs.length; i++){
+      si = caluclateSI(p, trans[0].rate, 12);
+      p = p + si;
+      si = 0;
+    }
+    let amount = p;
+    return {amount, si, type, date, rate,  mergedType}
   };
   
   let calcForAllTrans = (from, to, trans)=>{
@@ -18,17 +48,13 @@ jhora.service('passbookService', function($mdDateLocale) {
     for(let tran of trans){
       let times = getMonthDiff(tran.date, to);
       console.log('anp times', times);
-      let months = times.reduce((accumulator, currentValue)=>{
-            return accumulator + currentValue;
-          }, 0);
+      let months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
       si += caluclateSI(tran.amount, tran.rate, months);
     }
     
-    let amount = trans.reduce((accumulator, currentValue)=>{
-          return accumulator + currentValue.amount;
-        }, 0);
+    let amount = trans.reduce((accumulator, currentValue)=>{ return accumulator + currentValue.amount; }, 0);
         
-    return {amount: amount, si:si, date: to, type: 'Dr'};
+    return {amount, si, date: to, type: 'Dr'};
   };
 
   let calcLatest = (trans, calcDate)=>{
