@@ -9,7 +9,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.limits = VIEW_LIMITS;
   $scope.queryFor = $scope.limits[0];
   $scope.customer = {};
-  $scope.maxDate = new Date();
+  //$scope.maxDate = new Date();
   $scope.calcDate = new Date($mdDateLocale.parseDate(new Date()));
   $scope.deleteDate = new Date();
   let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
@@ -110,7 +110,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows || [];
-        $scope.calcData = passbookService.calcLatest($scope.transactions, $scope.calcDate);
+        $scope.calculatePSI();
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
@@ -124,6 +124,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.Back = ()=>{
     $window.history.back();
   };
+  
+  $scope.calculatePSI = ()=>{
+    $scope.calcData = passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate);
+  }
  
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);

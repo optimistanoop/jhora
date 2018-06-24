@@ -1,8 +1,51 @@
 
 jhora.service('passbookService', function($mdDateLocale) {
   
-  let caluclateSI = (p =0, r=0, t=0)=>{ return p*r*t/100; };
-  let calculateNewPSI = (p =0, si=0, i=0, finalTran)=>{ 
+  let calculateSI = (p =0, r=0, t=0)=>{ return p*r*t/100; };
+  let getFromPlus1Yr = (from)=>{
+    let fromPlus1Yr;
+    if(from.getMonth() == 0 && from.getDate() <= 15){
+      fromPlus1Yr = new Date(from.getFullYear(), 11 , 31);
+    }else{
+      let d = from.getDate() > 15 ? 15 : 28;
+      let m = d > 15 ? from.getMonth() -1 : from.getMonth();
+      fromPlus1Yr = new Date(from.getFullYear()+1, m, d);
+    }
+    return fromPlus1Yr
+  };
+  
+  let updateFinalTran = (finalTran, p=0, si=0) => {
+    finalTran.p = p;
+    finalTran.si = si;
+    finalTran.amount = p;
+    finalTran.total = p + si;
+    return finalTran;
+  };
+  
+  let calculatePSI = (trans, to, p =0, si=0, type, finalTran) => {
+    
+    for(let i = 0; i < trans.length; i++){
+      let tran = trans[i],
+      times = getMonthDiff(tran.date, to),
+      months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);    
+      if(tran.type == type){
+        if(i>0){
+          p += tran.amount;
+          si += tran.si ? tran.si :0;
+        }
+        si += calculateSI(tran.amount, tran.rate, months);
+      }else {
+        let newPSI = calculateUpdatedPSI(p, si, tran.amount, finalTran);
+        p = newPSI.p;
+        si = newPSI.si;
+        type = newPSI.type;
+      }
+      finalTran = updateFinalTran(finalTran, p, si);                   
+    }
+    return {p, si, type, finalTran};
+  };
+  
+  let calculateUpdatedPSI = (p =0, si=0, i=0, finalTran)=>{ 
     let newPSI = {};
     if(i <= si){
       newPSI.si =  si - i;
@@ -17,174 +60,133 @@ jhora.service('passbookService', function($mdDateLocale) {
     return newPSI;
   };
 
-  let calcOnlyForYrs = (from, to, trans = [], finalTran)=>{
-    let fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
-    if(to <= fromPlus1Yr) return undefined;
+  let calculatePSIForYears = (from, to, trans = [], finalTran)=>{
+    let fromPlus1Yr = getFromPlus1Yr(from);
+    if(to <= fromPlus1Yr) return null;
     
-    let p = 0, si=0,
+    let p = trans[0].amount, si = trans[0].si ? trans[0].si : 0,
     type = finalTran.type,
     mergedType = 'Yr',
     rate = trans[0].rate,
     yrDiff = to.getFullYear() - from.getFullYear(),
     calcYrs  = [];
     for(let i = 0; i< yrDiff; i++){
-      fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
+      fromPlus1Yr = getFromPlus1Yr(from);
       calcYrs.push(fromPlus1Yr);
       from = fromPlus1Yr;
     }
     
     let frstCalcYr = calcYrs[0],
-    date = calcYrs[calcYrs.length - 1];
-    for(let tran of trans){
-      let times = getMonthDiff(tran.date, frstCalcYr),
-      diffFromFrstCalcYr = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);    
-      if(tran.type == type){
-        p += tran.amount;
-        si += caluclateSI(tran.amount, tran.rate, diffFromFrstCalcYr);
-      }else {
-        // calc si and deduct from I and than P
-        let i = caluclateSI(tran.amount, tran.rate, diffFromFrstCalcYr);
-        let newPSI = calculateNewPSI(p, si, i, finalTran);
-        p = newPSI.p;
-        si = newPSI.si;
-        type = newPSI.type;
-      }                   
-    }
-    
-    p = p + si;
+    toDate = calcYrs[calcYrs.length - 1];
+    let psi = calculatePSI(trans, frstCalcYr, p, si, type, finalTran);
+    p = psi.p + psi.si;
     si = 0;
+    type = psi.type;
+    finalTran = psi.finalTran;
     
     for(let i = 1; i <  calcYrs.length; i++){
-      si = caluclateSI(p, trans[0].rate, 12);
+      si = calculateSI(p, trans[0].rate, 12);
       p = p + si;
       si = 0;
     }
+    p = Math.round(p);
+    si =  Math.round(si);
     let amount = p,
-    total = p + si;
-    return {amount, total , si, type, date, rate, mergedType}
+    total = p + si,
+    d = toDate.getDate() > 15 ? 1 : 16,
+    m = d > 15 ? toDate.getMonth() : toDate.getMonth() + 1,
+    balPassedTo = new Date(toDate.getFullYear(), m, d),
+    calcTill = new Date(toDate.getFullYear(), toDate.getDate() <= 15 ? toDate.getMonth(): toDate.getMonth() + 1, toDate.getDate() <= 15 ?  15 : 0);
+    return {amount, total , si, type, date : balPassedTo, calcOn : toDate, calcTill, rate, mergedType}
   };
   
-  // let calcForAllTrans = (from, to, trans=[], finalTran)=>{
-  //   let mergedType = 'Tr';
-  //   for(let tran of trans){
-  //     let times = getMonthDiff(tran.date, to),
-  //     months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
-  //   }
-  // };
-  
-  let calcOnlyForMonths = (from, to, trans=[], finalTran, mergedType)=>{
-    let si = 0, p = 0,
+  let calculatePSIForMonths = (from, to, trans=[], finalTran, mergedType)=>{
+    let si =  trans[0].si ? trans[0].si : 0,
+    p = trans[0].amount,
     rate = trans[0].rate,
-    type = finalTran.type;
-    
-    //mergedType = 'Fn';
-    for(let tran of trans){
-      let times = getMonthDiff(tran.date, to),
-      months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
-      if(tran.type == type){
-        p += tran.amount;
-        si += caluclateSI(tran.amount, tran.rate, months);
-      }else {
-        // calc si and deduct from I and than P
-        let i = caluclateSI(tran.amount, tran.rate, months);
-        let newPSI = calculateNewPSI(p, si, i, finalTran);
-        p = newPSI.p;
-        si = newPSI.si;
-        type = newPSI.type;
-      }
-    }
-    
-    let amount = trans.reduce((accumulator, currentValue)=>{ return accumulator + currentValue.amount; }, 0);
-    let total = amount + si;    
-    return {amount, p, si, total, type, rate , mergedType, date: to};
+    type = finalTran.type,
+    psi = calculatePSI(trans, to, p, si, type, finalTran);
+    type = psi.type;
+    finalTran = psi.finalTran;
+    p = Math.round(psi.p);
+    si =  Math.round(psi.si);
+    let total = p + si,    
+    amount = p;
+    d = to.getDate() > 15 ? 1 : 16,
+    m = d > 15 ? to.getMonth() : to.getMonth() + 1,
+    balPassedTo = new Date(to.getFullYear(), m, d),    
+    calcTill = new Date(to.getFullYear(), to.getDate() <= 15 ? to.getMonth(): to.getMonth() + 1, to.getDate() <= 15 ?  15 : 0);    
+    return {amount, p, si, total, type, rate , mergedType, date : balPassedTo, calcOn: to, calcTill};
   };
 
-  let calcLatest = (trans = [], calcDate)=>{
-    let results = [[trans[0]]],
-    calcResults = [],
-    fromTran = trans[0],
-    finalTran = {type : trans[0].type};
+  let handleMonthlyCalc = (from, to, results, calcResults, finalTran, fromTran, mergedType)=>{
+    let mergedTran = calculatePSIForMonths(from, to, results[results.length -1], finalTran, mergedType);
+    if(mergedTran){
+      fromTran = mergedTran;
+      finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
+      results.push([mergedTran]);
+      calcResults.push(mergedTran);
+    }
+    return {results, calcResults, finalTran, fromTran};
+  };
+  let handleYearlyCalc = (from, to, trans=[], results, calcResults, finalTran, fromTran, i)=>{
+    let mergedTran = calculatePSIForYears(from, to , results[results.length -1], finalTran);
+    if(mergedTran){
+      fromTran = mergedTran;
+      finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
+      results.push([mergedTran]);
+      calcResults.push(mergedTran);
+    }else{
+      if(i > 1){
+        let nResults = Array.from(results[results.length -1]);
+        nResults.push(trans[i-1]);
+        results.push(nResults);
+      }
+    }
+    return {results, calcResults, finalTran, fromTran};
+  };
+  
+  let calculateFinalPSI = (trans = [], calcDate)=>{
+    let  config = { results : [[trans[0]]], calcResults : [], fromTran : trans[0], finalTran : {type : trans[0].type}};
     for(let i=0; i<trans.length + 1; i++){
       if(i>0 &&  i < trans.length){
         let t = trans[i],
-        from = fromTran.date,
-        to = t.date,
-        // calcOnlyForYrs to calc for last index arr of results
-        // calcOnlyForYrs should also give the type as mergedTran due to yr
-        // calcOnlyForYrs will create new P with I = 0
-        mergedTran = calcOnlyForYrs(from, to , results[results.length -1], finalTran);
-        fromTran = mergedTran ? mergedTran : fromTran;
-        if(mergedTran){
-          finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
-          results.push([mergedTran]);
-          calcResults.push(mergedTran);
-        }else{
-          if(i > 1){
-            let nResults = Array.from(results[results.length -1]);
-            nResults.push(trans[i-1]);
-            results.push(nResults);
-          }
-        }
-        
+        from = config.fromTran.date,
+        to = t.date;
         // merge trans after calc if P, I is changing due to tran type
         // here the rule will be to calc till date of tran and deduce amount from I first than P
         // calc new P and I
-        if(fromTran.type != t.type){
-          let from = fromTran.date,
+        config = handleYearlyCalc(from, to, trans, config.results, config.calcResults, config.finalTran, config.fromTran, i);
+        
+        if(config.fromTran.type != t.type){
+          let from = config.fromTran.date,
           to = t.date;
           // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
           // calcForAllTrans will create new P and I
           // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
-          mergedTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'Tr');
-          fromTran = mergedTran ? mergedTran : fromTran;
-
-          if(mergedTran){
-            finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
-            results.push([mergedTran]);
-            calcResults.push(mergedTran);
-          }
+          config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Tr');
         }
-        
-        console.log('anp i', i);
-        console.log('anp results i', results);
         
       } else if(i ==  trans.length){
-        let from = fromTran.date,
-        to = calcDate,
+        let from = config.fromTran.date,
+        to = calcDate;
         // calcOnlyForYrs to calc for last index arr of results
         // calcOnlyForYrs should also give the type as merge due to yr and cr/dr
-        mergedTran = calcOnlyForYrs(from, to , results[results.length -1], finalTran);
-        fromTran = mergedTran ? mergedTran : fromTran;
-
-        if(mergedTran){
-          finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
-          results.push([mergedTran]);
-          calcResults.push(mergedTran);
-        }else{
-          if(i > 1){
-            let nResults = Array.from(results[results.length -1]);
-            nResults.push(trans[i-1]);
-            results.push(nResults);
-          }
-        }
+        config = handleYearlyCalc(from, to, trans, config.results, config.calcResults, config.finalTran, config.fromTran, i);
         
         // calc for diff of yrs month and calc date
-        from = fromTran.date;
+        from = config.fromTran.date;
         // calcOnlyForMonths to calc for last index arr of results
         // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
         // calcOnlyForMonths should accumulate P, I 
         // calcOnlyForMonths should also give the type as final and cr/dr
-        finalTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'fn');
-        finalTran ?  results.push([finalTran]) :[];
-        finalTran ?  calcResults.push(finalTran) :[];
-        console.log('anp last i', i);
-        console.log('anp results last', results);
-        console.log('anp calcResults', calcResults);
-        console.log('anp finalTran', finalTran);
+        config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Fn');
+        
+        console.log('anp final config', config);
       }
     }
     
-    return {finalTran, calcResults,  results};
+    return config;
   }
 
   let getMonthDiff = (from, to)=>{
@@ -216,11 +218,11 @@ jhora.service('passbookService', function($mdDateLocale) {
     return [firstMonth, months, lastMonth];
   }
   
-  return {caluclateSI, calcOnlyForMonths, calcLatest};
+  return {calculateFinalPSI, calculatePSIForYears, calculatePSIForMonths, calculateSI};
 });
 
 
-// let caluclateSI = (p, r, t)=>{
+// let calculateSI = (p, r, t)=>{
 //   return p*r*t/100;
 // };
 // 
@@ -318,7 +320,7 @@ jhora.service('passbookService', function($mdDateLocale) {
 //     let months = times.reduce((accumulator, currentValue)=>{
 //           return accumulator + currentValue;
 //         }, 0);
-//     si += caluclateSI(tran.amount, tran.rate, months);
+//     si += calculateSI(tran.amount, tran.rate, months);
 //   }
 // 
 //   let amount = trans.reduce((accumulator, currentValue)=>{
