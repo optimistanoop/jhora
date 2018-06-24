@@ -75,6 +75,8 @@ jhora.service('passbookService', function($mdDateLocale) {
       p = p + si;
       si = 0;
     }
+    p = Math.round(p);
+    si =  Math.round(si);
     let amount = p,
     total = p + si;
     let d = date.getDate() > 15 ? 1 : 16;
@@ -107,7 +109,8 @@ jhora.service('passbookService', function($mdDateLocale) {
       }
       updateFinalTran(finalTran, p, si);
     }
-    
+    p = Math.round(p);
+    si =  Math.round(si);
     let total = p + si,    
     amount = p;
     let d = to.getDate() > 15 ? 1 : 16;
