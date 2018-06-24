@@ -110,7 +110,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows || [];
-        $scope.calcData = passbookService.calcLatest($scope.transactions, $scope.calcDate);
+        $scope.calculatePSI();
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
@@ -125,8 +125,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     $window.history.back();
   };
   
-  $scope.calc = ()=>{
-    $scope.calcData = passbookService.calcLatest($scope.transactions, $scope.calcDate);
+  $scope.calculatePSI = ()=>{
+    $scope.calcData = passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate);
   }
  
   $scope.init();
