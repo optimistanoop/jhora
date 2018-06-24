@@ -92,10 +92,12 @@
      <md-card-title>
        <md-card-title-text>
          <span class="md-headline">Total - {{calc.total}}</span>
-         <span class="md-subhead">Date -{{calc.date | date:"EEE,d/M/yy"}}</span>
+         <span class="md-subhead">Date -{{calc.calcOn | date:"EEE,d/M/yy"}}</span>
+         <span class="md-subhead">Calc Till -{{calc.calcTill | date:"EEE,d/M/yy"}}</span>
+         <span class="md-subhead">Bal passed to -{{calc.date | date:"EEE,d/M/yy"}}</span>
+         <span class="md-subhead">P - {{calc.amount}}</span>
+         <span class="md-subhead">SI -{{calc.si}}</span>
          <span class="md-subhead">Merge Type -{{calc.mergedType}}</span>
-         <span class="md-subhead">Amount - {{calc.amount}}</span>
-         <span class="md-subhead">SI.-{{calc.si}}</span>
        </md-card-title-text>
        <md-card-title-media>
          <div class="md-media-sm card-media"></div>

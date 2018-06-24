@@ -47,7 +47,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     }
     
     let frstCalcYr = calcYrs[0],
-    date = calcYrs[calcYrs.length - 1];
+    toDate = calcYrs[calcYrs.length - 1];
     for(let i = 0; i < trans.length; i++){
       let tran = trans[0],
       times = getMonthDiff(tran.date, frstCalcYr),
@@ -79,10 +79,11 @@ jhora.service('passbookService', function($mdDateLocale) {
     si =  Math.round(si);
     let amount = p,
     total = p + si;
-    let d = date.getDate() > 15 ? 1 : 16;
-    let m = d > 15 ? date.getMonth() : from.getMonth() + 1;
-    date = new Date(date.getFullYear(), m, d);
-    return {amount, total , si, type, date, rate, mergedType}
+    let d = toDate.getDate() > 15 ? 1 : 16;
+    let m = d > 15 ? toDate.getMonth() : toDate.getMonth() + 1;
+    let balPassedTo = new Date(toDate.getFullYear(), m, d);
+    let calcTill = new Date(toDate.getFullYear(), toDate.getDate() <= 15 ? toDate.getMonth(): toDate.getMonth() + 1, toDate.getDate() <= 15 ?  15 : 0);
+    return {amount, total , si, type, date : balPassedTo, calcOn : toDate, calcTill, rate, mergedType}
   };
   
   let calcOnlyForMonths = (from, to, trans=[], finalTran, mergedType)=>{
@@ -115,8 +116,9 @@ jhora.service('passbookService', function($mdDateLocale) {
     amount = p;
     let d = to.getDate() > 15 ? 1 : 16;
     let m = d > 15 ? to.getMonth() : to.getMonth() + 1;
-    let date = new Date(to.getFullYear(), m, d);    
-    return {amount, p, si, total, type, rate , mergedType, date};
+    let balPassedTo = new Date(to.getFullYear(), m, d);    
+    let calcTill = new Date(to.getFullYear(), to.getDate() <= 15 ? to.getMonth(): to.getMonth() + 1, to.getDate() <= 15 ?  15 : 0);    
+    return {amount, p, si, total, type, rate , mergedType, date : balPassedTo, calcOn: to, calcTill};
   };
 
   let calcLatest = (trans = [], calcDate)=>{
