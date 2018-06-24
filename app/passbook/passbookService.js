@@ -23,7 +23,7 @@ jhora.service('passbookService', function($mdDateLocale) {
   let calculatePSI = (trans, to, p =0, si=0, type, finalTran) => {
     
     for(let i = 0; i < trans.length; i++){
-      let tran = trans[0],
+      let tran = trans[i],
       times = getMonthDiff(tran.date, to),
       months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);    
       if(tran.type == type){
@@ -76,33 +76,11 @@ jhora.service('passbookService', function($mdDateLocale) {
     
     let frstCalcYr = calcYrs[0],
     toDate = calcYrs[calcYrs.length - 1];
-    // let psi = calculatePSI(trans, frstCalcYr, p, si, type, finalTran);
-    // p = psi.p + psi.si;
-    // si = 0;
-    // type = psi.type;
-    // finalTran = psi.finalTran;
-    
-    for(let i = 0; i < trans.length; i++){
-      let tran = trans[0],
-      times = getMonthDiff(tran.date, frstCalcYr),
-      diffFromFrstCalcYr = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);    
-      if(tran.type == type){
-        if(i>0){
-          p += tran.amount;
-          si += tran.si ? tran.si :0;
-        }
-        si += caluclateSI(tran.amount, tran.rate, diffFromFrstCalcYr);
-      }else {
-        let newPSI = calculateUpdatedPSI(p, si, tran.amount, finalTran);
-        p = newPSI.p;
-        si = newPSI.si;
-        type = newPSI.type;
-      }
-      updateFinalTran(finalTran, p, si);                   
-    }
-    
-    p = p + si;
+    let psi = calculatePSI(trans, frstCalcYr, p, si, type, finalTran);
+    p = psi.p + psi.si;
     si = 0;
+    type = psi.type;
+    finalTran = psi.finalTran;
     
     for(let i = 1; i <  calcYrs.length; i++){
       si = caluclateSI(p, trans[0].rate, 12);
@@ -112,11 +90,11 @@ jhora.service('passbookService', function($mdDateLocale) {
     p = Math.round(p);
     si =  Math.round(si);
     let amount = p,
-    total = p + si;
-    let d = toDate.getDate() > 15 ? 1 : 16;
-    let m = d > 15 ? toDate.getMonth() : toDate.getMonth() + 1;
-    let balPassedTo = new Date(toDate.getFullYear(), m, d);
-    let calcTill = new Date(toDate.getFullYear(), toDate.getDate() <= 15 ? toDate.getMonth(): toDate.getMonth() + 1, toDate.getDate() <= 15 ?  15 : 0);
+    total = p + si,
+    d = toDate.getDate() > 15 ? 1 : 16,
+    m = d > 15 ? toDate.getMonth() : toDate.getMonth() + 1,
+    balPassedTo = new Date(toDate.getFullYear(), m, d),
+    calcTill = new Date(toDate.getFullYear(), toDate.getDate() <= 15 ? toDate.getMonth(): toDate.getMonth() + 1, toDate.getDate() <= 15 ?  15 : 0);
     return {amount, total , si, type, date : balPassedTo, calcOn : toDate, calcTill, rate, mergedType}
   };
   
@@ -126,37 +104,17 @@ jhora.service('passbookService', function($mdDateLocale) {
     rate = trans[0].rate,
     type = finalTran.type;
     
-    // let psi = calculatePSI(trans, to, p, si, type, finalTran);
-    // type = psi.type;
-    // finalTran = psi.finalTran;
-    
-    for(let i = 0; i < trans.length; i++){
-      let tran = trans[i],
-      times = getMonthDiff(tran.date, to),
-      months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);
-      if(tran.type == type){
-        if(i>0){
-          p += tran.amount;
-          si += tran.si ? tran.si :0;
-        }
-        si += caluclateSI(tran.amount, tran.rate, months);
-      }else {
-        let newPSI = calculateUpdatedPSI(p, si, tran.amount, finalTran);
-        p = newPSI.p;
-        si = newPSI.si;
-        type = newPSI.type;
-      }
-      updateFinalTran(finalTran, p, si);
-    }
-    
-    p = Math.round(p);
-    si =  Math.round(si);
+    let psi = calculatePSI(trans, to, p, si, type, finalTran);
+    type = psi.type;
+    finalTran = psi.finalTran;
+    p = Math.round(psi.p);
+    si =  Math.round(psi.si);
     let total = p + si,    
     amount = p;
-    let d = to.getDate() > 15 ? 1 : 16;
-    let m = d > 15 ? to.getMonth() : to.getMonth() + 1;
-    let balPassedTo = new Date(to.getFullYear(), m, d);    
-    let calcTill = new Date(to.getFullYear(), to.getDate() <= 15 ? to.getMonth(): to.getMonth() + 1, to.getDate() <= 15 ?  15 : 0);    
+    d = to.getDate() > 15 ? 1 : 16,
+    m = d > 15 ? to.getMonth() : to.getMonth() + 1,
+    balPassedTo = new Date(to.getFullYear(), m, d),    
+    calcTill = new Date(to.getFullYear(), to.getDate() <= 15 ? to.getMonth(): to.getMonth() + 1, to.getDate() <= 15 ?  15 : 0);    
     return {amount, p, si, total, type, rate , mergedType, date : balPassedTo, calcOn: to, calcTill};
   };
 
