@@ -118,6 +118,26 @@ jhora.service('passbookService', function($mdDateLocale) {
     return {amount, p, si, total, type, rate , mergedType, date : balPassedTo, calcOn: to, calcTill};
   };
 
+  let handleMonthlyCalc = (from, to, trans=[], finalTran, mergedType)=>{
+
+  };
+  let handleYearlyCalc = (from, to, trans=[], results, calcResults, finalTran, fromTran, i)=>{
+    let mergedTran = calcOnlyForYrs(from, to , results[results.length -1], finalTran);
+    if(mergedTran){
+      fromTran = mergedTran;
+      finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
+      results.push([mergedTran]);
+      calcResults.push(mergedTran);
+    }else{
+      if(i > 1){
+        let nResults = Array.from(results[results.length -1]);
+        nResults.push(trans[i-1]);
+        results.push(nResults);
+      }
+    }
+    return {results, calcResults, finalTran, fromTran};
+  };
+  
   let calcLatest = (trans = [], calcDate)=>{
     let results = [[trans[0]]],
     calcResults = [],
@@ -128,36 +148,24 @@ jhora.service('passbookService', function($mdDateLocale) {
         let t = trans[i],
         from = fromTran.date,
         to = t.date,
-        // calcOnlyForYrs to calc for last index arr of results
-        // calcOnlyForYrs should also give the type as mergedTran due to yr
-        // calcOnlyForYrs will create new P with I = 0
-        mergedTran = calcOnlyForYrs(from, to , results[results.length -1], finalTran);
-        fromTran = mergedTran ? mergedTran : fromTran;
-        if(mergedTran){
-          finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
-          results.push([mergedTran]);
-          calcResults.push(mergedTran);
-        }else{
-          if(i > 1){
-            let nResults = Array.from(results[results.length -1]);
-            nResults.push(trans[i-1]);
-            results.push(nResults);
-          }
-        }
-        
         // merge trans after calc if P, I is changing due to tran type
         // here the rule will be to calc till date of tran and deduce amount from I first than P
         // calc new P and I
+        yearlyData = handleYearlyCalc(from, to, trans, results, calcResults, finalTran, fromTran, i);
+        results = yearlyData.results;
+        calcResults = yearlyData.calcResults;
+        finalTran = yearlyData.finalTran;
+        fromTran = yearlyData.fromTran;
         if(fromTran.type != t.type){
           let from = fromTran.date,
-          to = t.date;
+          to = t.date,
           // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
           // calcForAllTrans will create new P and I
           // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
           mergedTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'Tr');
-          fromTran = mergedTran ? mergedTran : fromTran;
 
           if(mergedTran){
+            fromTran = mergedTran;
             finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
             results.push([mergedTran]);
             calcResults.push(mergedTran);
@@ -169,20 +177,11 @@ jhora.service('passbookService', function($mdDateLocale) {
         to = calcDate,
         // calcOnlyForYrs to calc for last index arr of results
         // calcOnlyForYrs should also give the type as merge due to yr and cr/dr
-        mergedTran = calcOnlyForYrs(from, to , results[results.length -1], finalTran);
-        fromTran = mergedTran ? mergedTran : fromTran;
-
-        if(mergedTran){
-          finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
-          results.push([mergedTran]);
-          calcResults.push(mergedTran);
-        }else{
-          if(i > 1){
-            let nResults = Array.from(results[results.length -1]);
-            nResults.push(trans[i-1]);
-            results.push(nResults);
-          }
-        }
+        yearlyData = handleYearlyCalc(from, to, trans, results, calcResults, finalTran, fromTran, i);
+        results = yearlyData.results;
+        calcResults = yearlyData.calcResults;
+        finalTran = yearlyData.finalTran;
+        fromTran = yearlyData.fromTran;
         
         // calc for diff of yrs month and calc date
         from = fromTran.date;
