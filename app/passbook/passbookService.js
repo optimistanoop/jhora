@@ -35,7 +35,14 @@ jhora.service('passbookService', function($mdDateLocale) {
     yrDiff = to.getFullYear() - from.getFullYear(),
     calcYrs  = [];
     for(let i = 0; i< yrDiff; i++){
-      fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
+      //fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
+      if(from.getMonth() == 0 && from.getDate() <= 15){
+        fromPlus1Yr = new Date(from.getFullYear(), 11 , 31);
+      }else{
+        let d = from.getDate() > 15 ? 15 : 28;
+        let m = d > 15 ? from.getMonth() -1 : from.getMonth();
+        fromPlus1Yr = new Date(from.getFullYear()+1, m, d);
+      }
       calcYrs.push(fromPlus1Yr);
       from = fromPlus1Yr;
     }
@@ -71,6 +78,9 @@ jhora.service('passbookService', function($mdDateLocale) {
     }
     let amount = p,
     total = p + si;
+    let d = date.getDate() > 15 ? 1 : 16;
+    let m = d > 15 ? date.getMonth() : from.getMonth() + 1;
+    date = new Date(date.getFullYear(), m, d);
     return {amount, total , si, type, date, rate, mergedType}
   };
   
@@ -100,8 +110,11 @@ jhora.service('passbookService', function($mdDateLocale) {
     }
     
     let total = p + si,    
-    amount = p;    
-    return {amount, p, si, total, type, rate , mergedType, date: to};
+    amount = p;
+    let d = to.getDate() > 15 ? 1 : 16;
+    let m = d > 15 ? to.getMonth() : to.getMonth() + 1;
+    let date = new Date(to.getFullYear(), m, d);    
+    return {amount, p, si, total, type, rate , mergedType, date};
   };
 
   let calcLatest = (trans = [], calcDate)=>{

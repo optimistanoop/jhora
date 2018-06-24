@@ -9,7 +9,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.limits = VIEW_LIMITS;
   $scope.queryFor = $scope.limits[0];
   $scope.customer = {};
-  $scope.maxDate = new Date();
+  //$scope.maxDate = new Date();
   $scope.calcDate = new Date($mdDateLocale.parseDate(new Date()));
   $scope.deleteDate = new Date();
   let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
