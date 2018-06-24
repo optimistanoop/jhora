@@ -26,7 +26,7 @@ jhora.service('passbookService', function($mdDateLocale) {
 
   let calcOnlyForYrs = (from, to, trans = [], finalTran)=>{
     let fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
-    if(to <= fromPlus1Yr) return undefined;
+    if(to <= fromPlus1Yr) return null;
     
     let p = trans[0].amount, si = trans[0].si ? trans[0].si : 0,
     type = finalTran.type,
@@ -35,7 +35,6 @@ jhora.service('passbookService', function($mdDateLocale) {
     yrDiff = to.getFullYear() - from.getFullYear(),
     calcYrs  = [];
     for(let i = 0; i< yrDiff; i++){
-      //fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), from.getDate());
       if(from.getMonth() == 0 && from.getDate() <= 15){
         fromPlus1Yr = new Date(from.getFullYear(), 11 , 31);
       }else{
@@ -204,7 +203,7 @@ jhora.service('passbookService', function($mdDateLocale) {
   let getMonthDiff = (from, to)=>{
     from = new Date(from);
     to = new Date(to);
-    let valid = !isNaN(from) && !isNaN(to) && from < to ;
+    let valid = !isNaN(from) && !isNaN(to) && from <= to ;
     if(! valid) return [];
     let months = 0,
     firstMonth = 0,
