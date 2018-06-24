@@ -118,8 +118,15 @@ jhora.service('passbookService', function($mdDateLocale) {
     return {amount, p, si, total, type, rate , mergedType, date : balPassedTo, calcOn: to, calcTill};
   };
 
-  let handleMonthlyCalc = (from, to, trans=[], finalTran, mergedType)=>{
-
+  let handleMonthlyCalc = (from, to, results, calcResults, finalTran, fromTran, mergedType)=>{
+    let mergedTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, mergedType);
+    if(mergedTran){
+      fromTran = mergedTran;
+      finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
+      results.push([mergedTran]);
+      calcResults.push(mergedTran);
+    }
+    return {results, calcResults, finalTran, fromTran};
   };
   let handleYearlyCalc = (from, to, trans=[], results, calcResults, finalTran, fromTran, i)=>{
     let mergedTran = calcOnlyForYrs(from, to , results[results.length -1], finalTran);
@@ -162,14 +169,11 @@ jhora.service('passbookService', function($mdDateLocale) {
           // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
           // calcForAllTrans will create new P and I
           // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
-          mergedTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'Tr');
-
-          if(mergedTran){
-            fromTran = mergedTran;
-            finalTran = {p: mergedTran.amount, si: mergedTran.si, total : mergedTran.total, type: mergedTran.type};
-            results.push([mergedTran]);
-            calcResults.push(mergedTran);
-          }
+          monthlyData = handleMonthlyCalc(from, to, results, calcResults, finalTran, fromTran, 'Tr');
+          results = monthlyData.results;
+          calcResults = monthlyData.calcResults;
+          finalTran = monthlyData.finalTran;
+          fromTran = monthlyData.fromTran;
         }
         
       } else if(i ==  trans.length){
@@ -189,9 +193,12 @@ jhora.service('passbookService', function($mdDateLocale) {
         // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
         // calcOnlyForMonths should accumulate P, I 
         // calcOnlyForMonths should also give the type as final and cr/dr
-        finalTran = calcOnlyForMonths(from, to, results[results.length -1], finalTran, 'Fn');
-        finalTran ?  results.push([finalTran]) :[];
-        finalTran ?  calcResults.push(finalTran) :[];
+        let monthlyData = handleMonthlyCalc(from, to, results, calcResults, finalTran, fromTran, 'Fn');
+        results = monthlyData.results;
+        calcResults = monthlyData.calcResults;
+        finalTran = monthlyData.finalTran;
+        fromTran = monthlyData.fromTran;
+        
         console.log('anp results last', results);
         console.log('anp calcResults', calcResults);
         console.log('anp finalTran', finalTran);
