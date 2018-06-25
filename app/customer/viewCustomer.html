@@ -24,19 +24,19 @@
   <table style="width:80%;margin: 0px auto;" class="customertable">
     <tr>
       <th>
-        <button ng-click="sortBy('name')">Name</button>
+        <md-button ng-click="sortBy('name')">Name</md-button>
         <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('father')">Father</button>
+        <md-button ng-click="sortBy('father')">Father</md-button>
         <span class="sortorder" ng-show="propertyName === 'father'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('village')">Village</button>
+        <md-button ng-click="sortBy('village')">Village</md-button>
         <span class="sortorder" ng-show="propertyName === 'village'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('mobile')">Mobile</button>
+        <md-button ng-click="sortBy('mobile')">Mobile</md-button>
         <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
       </th>
       <th ng-show="queryFor == 'All'">Edit</th>

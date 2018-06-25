@@ -3,7 +3,6 @@
     <label>Results for</label>
     <md-icon><i class="material-icons">sort</i></md-icon>
     <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
-      <md-option><em>None</em></md-option>
       <md-option ng-repeat="limit in limits" ng-value="limit">
         {{limit}}
       </md-option>
@@ -11,11 +10,11 @@
   </md-input-container>
   <md-input-container flex-xs class="movedown">
     <label>From Date</label>
-    <md-datepicker name="fromDate" ng-model="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" md-open-on-focus ></md-datepicker>
+    <md-datepicker name="fromDate" ng-model="tran.fromDate" ng-show="hideNoDataFound" md-max-date="maxDate" ng-change="getTransaction(queryFor)" md-open-on-focus ></md-datepicker>
   </md-input-container>
     <md-input-container flex-xs class="movedown">
       <label>To Date</label>
-      <md-datepicker name="toDate" ng-model="tran.toDate" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction()" ng-disabled ="!tran.fromDate" md-open-on-focus ></md-datepicker>
+      <md-datepicker name="toDate" ng-model="tran.toDate" ng-show="hideNoDataFound" md-min-date="tran.fromDate" md-max-date="maxDate" ng-change="getTransaction(queryFor)" ng-disabled ="!tran.fromDate" md-open-on-focus ></md-datepicker>
     </md-input-container flex-xs>
     <md-input-container>
     <md-button class="md-raised md-warn" ng-click="clearFilter(queryFor)" ng-show="startFilter">Clear Filter</md-button>
@@ -35,24 +34,28 @@
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th>
-        <button ng-click="sortBy('amount')">Amount</button>
+        <md-button  ng-click="sortBy('amount')">Amount</md-button>
         <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('date')">Date</button>
+        <md-button ng-click="sortBy('date')">Date</md-button>
         <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('name')">Name</button>
+        <md-button ng-click="sortBy('name')">Name</md-button>
         <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('type')">Type</button>
+        <md-button ng-click="sortBy('type')">Type</md-button>
         <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <button ng-click="sortBy('promiseDate')">Promise Date</button>
+        <md-button ng-click="sortBy('promiseDate')">Promise Date</md-button>
         <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th ng-hide="queryFor == 'All'">
+        <md-button ng-click="sortBy('deletedOn')" >Deleted Date</md-button>
+        <span class="sortorder" ng-show="propertyName === 'deletedOn'"  ng-class="{reverse: reverse}"></span>
       </th>
       <th ng-show="queryFor == 'All'">Edit</th>
       <th ng-show="queryFor == 'All'">Delete</th>
@@ -63,6 +66,7 @@
       <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{tran.customerId}}">{{ tran.name }}</a></span><span ng-hide="queryFor == 'All'">{{ tran.name }}</span></td>
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+      <td ng-show="queryFor == 'Deleted'">{{ tran.deletedOn | date:"EEE,d/M/yy" }}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
