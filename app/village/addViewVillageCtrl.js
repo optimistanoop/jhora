@@ -68,6 +68,12 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.getVillages = (tableName)=>{
+      q.takeBackup(tableName)
+      .then((data)=>{
+        console.log('anp data came', data);
+      }).catch((err)=>{
+        console.log('anp err came', err);
+      })
       q.selectAll(tableName)
       .then((rows)=>{
         if(rows)
