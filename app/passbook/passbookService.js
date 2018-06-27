@@ -3,6 +3,8 @@ jhora.service('passbookService', function($mdDateLocale) {
   
   let calculateSI = (p =0, r=0, t=0)=>{ return p*r*t/100; };
   let addCalcResults = (p, si, type, date, rate, mergedType , calcResults)=>{
+    p = Math.round(p);
+    si = Math.round(si);
     let d = date.getDate() > 15 ? 1 : 16,
     m = d > 15 ? date.getMonth() : date.getMonth() + 1,
     balPassedTo = new Date(date.getFullYear(), m, d),
@@ -16,9 +18,9 @@ jhora.service('passbookService', function($mdDateLocale) {
     if(from.getMonth() == 0 && from.getDate() <= 15){
       fromPlus1Yr = new Date(from.getFullYear(), 11 , 31);
     }else{
-      let d = from.getDate() > 15 ? 15 : 28;
-      let m = d > 15 ? from.getMonth() -1 : from.getMonth();
-      fromPlus1Yr = new Date(from.getFullYear()+1, m, d);
+      let d = from.getDate() > 15 ? 15 : 0;
+      //let m = d > 15 ? from.getMonth() -1  : from.getMonth();
+      fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), d);
     }
     return fromPlus1Yr
   };
@@ -85,7 +87,10 @@ jhora.service('passbookService', function($mdDateLocale) {
     type = finalTran.type,
     mergedType = 'Yearly',
     rate = trans[0].rate,
-    yrDiff = to.getFullYear() - from.getFullYear(),
+    //yrDiff = to.getFullYear() - from.getFullYear(),
+    times = getMonthDiff(from , to); //to.getFullYear() - from.getFullYear(),
+    months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);   
+    yrDiff =  Math.floor(months / 12);
     calcYrs  = [];
     for(let i = 0; i< yrDiff; i++){
       fromPlus1Yr = getFromPlus1Yr(from);
@@ -113,15 +118,13 @@ jhora.service('passbookService', function($mdDateLocale) {
       // calcTill = new Date(calcYrs[i].getFullYear(), calcYrs[i].getDate() <= 15 ? calcYrs[i].getMonth(): calcYrs[i].getMonth() + 1, calcYrs[i].getDate() <= 15 ?  15 : 0);
       // calcResults.push({amount : p, total : p+ si, si, type, date : balPassedTo, calcOn : calcYrs[i], calcTill:calcTill, rate :trans[0].rate, mergedType})
     }
-    p = Math.round(p);
-    si =  Math.round(si);
     let amount = p,
     total = p + si,
     // d = toDate.getDate() > 15 ? 1 : 16,
     // m = d > 15 ? toDate.getMonth() : toDate.getMonth() + 1,
     // balPassedTo = new Date(toDate.getFullYear(), m, d),
     // calcTill = new Date(toDate.getFullYear(), toDate.getDate() <= 15 ? toDate.getMonth(): toDate.getMonth() + 1, toDate.getDate() <= 15 ?  15 : 0);
-    {balPassedTo, calcTill} = addCalcResults(p, si, type, to, trans[0].rate, mergedType , []);
+    {balPassedTo, calcTill} = addCalcResults(p, si, type, calcYrs[calcYrs.length -1], trans[0].rate, mergedType , []);
     return {amount, total , si, type, date : balPassedTo, calcOn : toDate, calcTill, rate, mergedType}
   };
   
@@ -133,8 +136,8 @@ jhora.service('passbookService', function($mdDateLocale) {
     psi = calculatePSI(trans, to, p, si, type, finalTran, calcResults, mergedType);
     type = psi.type;
     finalTran = psi.finalTran;
-    p = Math.round(psi.p);
-    si =  Math.round(psi.si);
+    p = psi.p;
+    si =  psi.si;
     let total = p + si,    
     amount = p;
     d = to.getDate() > 15 ? 1 : 16,
@@ -189,6 +192,9 @@ jhora.service('passbookService', function($mdDateLocale) {
           // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
           // calcForAllTrans will create new P and I
           // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
+          let nResults = Array.from(config.results[config.results.length -1]);
+          nResults.push(t);
+          config.results.push(nResults);
           config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Transactional');
         }
         
