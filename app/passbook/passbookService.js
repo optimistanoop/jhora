@@ -32,12 +32,11 @@ jhora.service('passbookService', function($mdDateLocale) {
     return finalTran;
   };
   
-  let calculatePSI = (trans, to, p =0, si=0, type, finalTran, calcResults, mergedType) => {
+  let calculatePSI = (trans=[], to, p =0, si=0, type, finalTran, calcResults, mergedType) => {
     
     for(let i = 0; i < trans.length; i++){
       let tran = trans[i],
-      times = getMonthDiff(tran.date, to),
-      months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);    
+      months = getMonthDiff(tran.date, to);
       if(tran.type == type){
         if(i>0){
           p += tran.amount;
@@ -81,8 +80,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     type = finalTran.type,
     mergedType = 'Yearly',
     rate = trans[0].rate,
-    times = getMonthDiff(from , to);
-    months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);   
+    months = getMonthDiff(from , to);
     yrDiff =  Math.floor(months / 12);
     calcYrs  = [];
     for(let i = 0; i< yrDiff; i++){
@@ -229,8 +227,8 @@ jhora.service('passbookService', function($mdDateLocale) {
         lastMonth = 0;
       }
     }
-    
-    return [firstMonth, months, lastMonth];
+    let totalMonths = firstMonth + months + lastMonth;
+    return totalMonths;
   }
   
   return {calculateFinalPSI, calculatePSIForYears, calculatePSIForMonths, calculateSI};
