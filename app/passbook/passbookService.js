@@ -19,7 +19,6 @@ jhora.service('passbookService', function($mdDateLocale) {
       fromPlus1Yr = new Date(from.getFullYear(), 11 , 31);
     }else{
       let d = from.getDate() > 15 ? 15 : 0;
-      //let m = d > 15 ? from.getMonth() -1  : from.getMonth();
       fromPlus1Yr = new Date(from.getFullYear()+1, from.getMonth(), d);
     }
     return fromPlus1Yr
@@ -54,11 +53,6 @@ jhora.service('passbookService', function($mdDateLocale) {
       finalTran = updateFinalTran(finalTran, p, si);
       
       addCalcResults(p, si, type, to, tran.rate, mergedType , calcResults);
-      // let d = to.getDate() > 15 ? 1 : 16,
-      // m = d > 15 ? to.getMonth() : to.getMonth() + 1,
-      // balPassedTo = new Date(to.getFullYear(), m, d),
-      // calcTill = new Date(to.getFullYear(), to.getDate() <= 15 ? to.getMonth(): to.getMonth() + 1, to.getDate() <= 15 ?  15 : 0);                   
-      // calcResults.push({amount : p, total : p+ si , si, type, date : balPassedTo, calcOn : tran.date, calcTill:calcTill, rate:tran.rate, mergedType})
     }
      
     return {p, si, type, finalTran};
@@ -87,8 +81,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     type = finalTran.type,
     mergedType = 'Yearly',
     rate = trans[0].rate,
-    //yrDiff = to.getFullYear() - from.getFullYear(),
-    times = getMonthDiff(from , to); //to.getFullYear() - from.getFullYear(),
+    times = getMonthDiff(from , to);
     months = times.reduce((accumulator, currentValue)=>{ return accumulator + currentValue; }, 0);   
     yrDiff =  Math.floor(months / 12);
     calcYrs  = [];
@@ -112,18 +105,9 @@ jhora.service('passbookService', function($mdDateLocale) {
       p = p + si;
       si = 0;
       addCalcResults(p, si, type, calcYrs[i], trans[0].rate, mergedType , calcResults);
-      // let d = calcYrs[i].getDate() > 15 ? 1 : 16,
-      // m = d > 15 ? calcYrs[i].getMonth() : calcYrs[i].getMonth() + 1,
-      // balPassedTo = new Date(calcYrs[i].getFullYear(), m, d),
-      // calcTill = new Date(calcYrs[i].getFullYear(), calcYrs[i].getDate() <= 15 ? calcYrs[i].getMonth(): calcYrs[i].getMonth() + 1, calcYrs[i].getDate() <= 15 ?  15 : 0);
-      // calcResults.push({amount : p, total : p+ si, si, type, date : balPassedTo, calcOn : calcYrs[i], calcTill:calcTill, rate :trans[0].rate, mergedType})
     }
     let amount = p,
     total = p + si,
-    // d = toDate.getDate() > 15 ? 1 : 16,
-    // m = d > 15 ? toDate.getMonth() : toDate.getMonth() + 1,
-    // balPassedTo = new Date(toDate.getFullYear(), m, d),
-    // calcTill = new Date(toDate.getFullYear(), toDate.getDate() <= 15 ? toDate.getMonth(): toDate.getMonth() + 1, toDate.getDate() <= 15 ?  15 : 0);
     {balPassedTo, calcTill} = addCalcResults(p, si, type, calcYrs[calcYrs.length -1], trans[0].rate, mergedType , []);
     return {amount, total , si, type, date : balPassedTo, calcOn : toDate, calcTill, rate, mergedType}
   };
