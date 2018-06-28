@@ -19,11 +19,17 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   };
   
   $scope.delete = (ev)=>{
-    $scope.deleteByTable(ev, CUSTOMERS_TABLE);
-    $scope.deleteByTable(ev, TRANSACTION_TABLE);  
-    $scope.deleteByTable(ev, DELCUSTOMERS_TABLE);  
-    $scope.deleteByTable(ev, DELTRANSACTION_TABLE);  
-    $scope.deleteByTable(ev, VILLAGE_TABLE);  
+    $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
+    .then((data)=>{
+         $scope.deleteByTable(ev, CUSTOMERS_TABLE);
+         $scope.deleteByTable(ev, TRANSACTION_TABLE);  
+         $scope.deleteByTable(ev, DELCUSTOMERS_TABLE);  
+         $scope.deleteByTable(ev, DELTRANSACTION_TABLE);  
+         $scope.deleteByTable(ev, VILLAGE_TABLE);
+      })
+      .catch((err)=>{
+        console.error('anp an error occured while operation', err);
+      });
   };
   
   $scope.import = (ev)=>{
@@ -50,7 +56,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         })
       }
     })
-    
   };
   
   $scope.getBackupByTable = (ev, tableName)=>{

@@ -52,6 +52,24 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
           .targetEvent(ev)
       );
   };
+  
+  $scope.showConfirmDialog = (ev, title, msg)=>{
+    let p =new Promise( (resolve, reject)=>{
+      let confirm = $mdDialog.confirm()
+      .title(title)
+      .textContent(msg)
+      .ariaLabel('Delete')
+      .targetEvent(ev)
+      .ok('Submit')
+      .cancel('Cancel');
+      
+      $mdDialog.show(confirm).then((data)=>{
+        resolve(data);
+      },(err)=>{
+      });
+    });
+    return p;
+  };
 
   $rootScope.showDialog = (ev,modelName, data, templateUrl, msg ='')=>{
       let p =new Promise( (resolve, reject)=>{
