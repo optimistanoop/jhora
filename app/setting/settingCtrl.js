@@ -10,7 +10,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   const csv2json=require("csvtojson");
 
 
-  $scope.backup = (ev)=>{
+  $scope.export = (ev)=>{
     $scope.getBackupByTable(ev, CUSTOMERS_TABLE);
     $scope.getBackupByTable(ev, TRANSACTION_TABLE);  
     $scope.getBackupByTable(ev, DELCUSTOMERS_TABLE);  
@@ -23,6 +23,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     dialog.showOpenDialog(options, (filePaths)=>{
       console.log('anp file filePaths', filePaths);
       const csvFilePath= filePaths && filePaths[0] ? filePaths[0] : '';
+      if(csvFilePath)
       csv2json()
       .fromFile(csvFilePath)
       .then((jsonObj)=>{
