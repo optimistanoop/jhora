@@ -86,7 +86,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   {title:'Transactions',route:'/transactions'},
   {title:'Villages',route:'/villages'},
   {title:'Dashboard Demo',route:'/dashboard/view'},
-  {title:'Passbook Demo',route:'/passbook1/view'}
+  {title:'Passbook Demo',route:'/passbook1/view'},
+  {title:'Settings',route:'/setting'}
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
@@ -166,6 +167,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
       })
       .when("/dashboard/view", {
           templateUrl : 'file://' + __dirname + '/dashboard/dashboard.html'
+      })
+      .when("/setting", {
+          templateUrl : 'file://' + __dirname + '/setting/setting.html'
       });
       $locationProvider.hashPrefix('!');
       $locationProvider.html5Mode({enabled: false, requireBase: false});

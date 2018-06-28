@@ -1,5 +1,3 @@
-let Sqlite3 = require('sqlite3').verbose();
-
 class Query {
   constructor(db){
      this.db = db;
@@ -210,6 +208,7 @@ class Query {
     });
     return p;
   }
+  
 };
 
 module.exports = Query;
