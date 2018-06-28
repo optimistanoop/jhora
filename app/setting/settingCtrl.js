@@ -1,7 +1,7 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TABLE, CUSTOMERS_TABLE){
   
   $rootScope.template = {title: 'Setting'};
-  $scope.msg = 'Check your backup in downloads folder once its done. Currently we are backing up customers and transactions.';
+  $scope.msg = 'Check your backup in downloads folder once its done. Example File Name : jhora-customers-02-10-18.csv';
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
   const path = require('path');
@@ -10,6 +10,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.backup = (ev)=>{
     $scope.getBackupByTable(ev, CUSTOMERS_TABLE);
     $scope.getBackupByTable(ev, TRANSACTION_TABLE);  
+    $scope.getBackupByTable(ev, DELCUSTOMERS_TABLE);  
+    $scope.getBackupByTable(ev, DELTRANSACTION_TABLE);  
+    $scope.getBackupByTable(ev, VILLAGE_TABLE);  
   };
   
   $scope.getBackupByTable = (ev, tableName)=>{
