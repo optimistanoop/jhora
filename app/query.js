@@ -118,6 +118,17 @@ class Query {
     });
     return p;
   }
+  
+  deleteTableByName(tableName){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `DROP TABLE ${tableName}`
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 
   selectAll(tableName){
     let p = new Promise( (resolve, reject)=>{

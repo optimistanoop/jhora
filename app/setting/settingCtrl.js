@@ -18,6 +18,14 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     $scope.getBackupByTable(ev, VILLAGE_TABLE);  
   };
   
+  $scope.delete = (ev)=>{
+    $scope.deleteByTable(ev, CUSTOMERS_TABLE);
+    $scope.deleteByTable(ev, TRANSACTION_TABLE);  
+    $scope.deleteByTable(ev, DELCUSTOMERS_TABLE);  
+    $scope.deleteByTable(ev, DELTRANSACTION_TABLE);  
+    $scope.deleteByTable(ev, VILLAGE_TABLE);  
+  };
+  
   $scope.import = (ev)=>{
     let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
@@ -70,5 +78,17 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
     });
   };
+  
+  $scope.deleteByTable = (ev, tableName)=>{
+    q.deleteTableByName(tableName)
+    .then((rows)=>{
+      $scope.showAlertDialog(ev, 'Delete', `Table ${tableName} deleted.`)
+    })
+    .catch((err)=>{
+      $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
+    });
+  };
+  
+  
 
 });
