@@ -6,6 +6,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   const fs = require('fs');
   const path = require('path');
   const {app} = require('electron').remote;
+  const {dialog} = require('electron').remote;
+  const csv2json=require("csvtojson");
+
 
   $scope.backup = (ev)=>{
     $scope.getBackupByTable(ev, CUSTOMERS_TABLE);
@@ -14,8 +17,20 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     $scope.getBackupByTable(ev, DELTRANSACTION_TABLE);  
     $scope.getBackupByTable(ev, VILLAGE_TABLE);  
   };
+  
   $scope.import = (ev)=>{
-    $scope.showAlertDialog(ev, 'Import', `Import coming soon.`)
+    let options = {title:'select files to upload', properties:['openFile', 'multiSelections', 'message']}
+    dialog.showOpenDialog(options, (filePaths)=>{
+      console.log('anp file filePaths', filePaths);
+      const csvFilePath= filePaths && filePaths[0] ? filePaths[0] : '';
+      csv2json()
+      .fromFile(csvFilePath)
+      .then((jsonObj)=>{
+        $scope.showAlertDialog(ev, 'Import', `Import coming soon.`);
+          console.log('anp c2j', jsonObj);
+      })
+    })
+    
   };
   
   $scope.getBackupByTable = (ev, tableName)=>{
