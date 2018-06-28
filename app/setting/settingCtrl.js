@@ -30,9 +30,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         if(f)
         csv2json()
         .fromFile(f)
-        .then((jsonObj)=>{
-          console.log('anp c2j', jsonObj);
-          return q.bulkUpload(tableName, jsonObj);
+        .then((jsonArr)=>{
+          console.log('anp c2j', jsonArr);
+          return q.bulkUpload(tableName, jsonArr);
         })
         .then((data)=>{
           $scope.showAlertDialog(ev, 'Import', `${tableName} imported succesfully.`);
