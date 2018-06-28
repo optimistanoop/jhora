@@ -119,7 +119,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         },0)
       })
       .catch((err)=>{
-          console.error('anp err occured while insertion',err);
+        $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
       });
     };
 

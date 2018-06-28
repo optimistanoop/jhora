@@ -1,4 +1,4 @@
-jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TABLE, CUSTOMERS_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE){
+jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TABLE, CUSTOMERS_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = 'Check your backup in downloads folder once its done. Example File Name : jhora-customers-02-10-18.csv';
@@ -6,16 +6,43 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   const fs = require('fs');
   const path = require('path');
   const {app} = require('electron').remote;
+  const {dialog} = require('electron').remote;
+  const csv2json=require("csvtojson");
 
-  $scope.backup = (ev)=>{
+
+  $scope.export = (ev)=>{
     $scope.getBackupByTable(ev, CUSTOMERS_TABLE);
     $scope.getBackupByTable(ev, TRANSACTION_TABLE);  
     $scope.getBackupByTable(ev, DELCUSTOMERS_TABLE);  
     $scope.getBackupByTable(ev, DELTRANSACTION_TABLE);  
     $scope.getBackupByTable(ev, VILLAGE_TABLE);  
   };
+  
   $scope.import = (ev)=>{
-    $scope.showAlertDialog(ev, 'Import', `Import coming soon.`)
+    let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
+    dialog.showOpenDialog(options, (filePaths)=>{
+      console.log('anp file filePaths', filePaths);
+      filePaths = filePaths ? filePaths :[];
+      for(let f of filePaths){
+        let splitedNames = f.split('-');
+        let tableName = splitedNames[1] || '';
+        console.log('anp table name',tableName );
+        if(f)
+        csv2json()
+        .fromFile(f)
+        .then((jsonObj)=>{
+          console.log('anp c2j', jsonObj);
+          return q.bulkUpload(tableName, jsonObj);
+        })
+        .then((data)=>{
+          $scope.showAlertDialog(ev, 'Import', `${tableName} imported succesfully.`);
+        })
+        .catch((err)=>{
+          $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
+        })
+      }
+    })
+    
   };
   
   $scope.getBackupByTable = (ev, tableName)=>{
@@ -23,11 +50,11 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     .then((rows)=>{
       let fields;
       if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE){
-        fields = ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'];
+        fields = TRANSACTION_COLUMNS;
       }else if (tableName == CUSTOMERS_TABLE || tableName == DELCUSTOMERS_TABLE){
-        fields = ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'];
+        fields = CUSTOMERS_COLUMNS;
       }else if (tableName == VILLAGE_TABLE){
-        fields = ['id', 'name'];
+        fields = VILLAGE_COLUMNS;
       }
       const opts = { fields };      
       const csv = json2csv(rows, opts);
@@ -40,7 +67,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       });
     })
     .catch((err)=>{
-      console.error('anp got error while fetching data',err);
+      $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
     });
   };
 

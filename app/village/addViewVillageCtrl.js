@@ -1,6 +1,5 @@
 jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
 
-  const {dialog} = require('electron').remote;
 	const {shell} = require('electron');
 	$rootScope.template = {title: 'Add / View Villages'};
 	$scope.village = { name : ''} ;
