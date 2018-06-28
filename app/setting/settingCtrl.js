@@ -18,21 +18,32 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     $scope.getBackupByTable(ev, VILLAGE_TABLE);  
   };
   
+  $scope.delete = (ev)=>{
+    $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
+    .then((data)=>{
+         $scope.deleteByTable(ev, CUSTOMERS_TABLE);
+         $scope.deleteByTable(ev, TRANSACTION_TABLE);  
+         $scope.deleteByTable(ev, DELCUSTOMERS_TABLE);  
+         $scope.deleteByTable(ev, DELTRANSACTION_TABLE);  
+         $scope.deleteByTable(ev, VILLAGE_TABLE);
+      })
+      .catch((err)=>{
+        console.error('anp an error occured while operation', err);
+      });
+  };
+  
   $scope.import = (ev)=>{
     let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
-      console.log('anp file filePaths', filePaths);
       filePaths = filePaths ? filePaths :[];
       for(let f of filePaths){
         let splitedNames = f.split('-');
         let tableName = splitedNames[1] || '';
-        console.log('anp table name',tableName );
         if(f)
         csv2json()
         .fromFile(f)
-        .then((jsonObj)=>{
-          console.log('anp c2j', jsonObj);
-          return q.bulkUpload(tableName, jsonObj);
+        .then((jsonArr)=>{
+          return q.bulkUpload(tableName, jsonArr);
         })
         .then((data)=>{
           $scope.showAlertDialog(ev, 'Import', `${tableName} imported succesfully.`);
@@ -42,7 +53,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         })
       }
     })
-    
   };
   
   $scope.getBackupByTable = (ev, tableName)=>{
@@ -70,5 +80,17 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
     });
   };
+  
+  $scope.deleteByTable = (ev, tableName)=>{
+    q.deleteTableByName(tableName)
+    .then((rows)=>{
+      $scope.showAlertDialog(ev, 'Delete', `Table ${tableName} deleted.`)
+    })
+    .catch((err)=>{
+      $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
+    });
+  };
+  
+  
 
 });

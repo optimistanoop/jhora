@@ -126,7 +126,13 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   };
   
   $scope.calculatePSI = ()=>{
-    $scope.calcData = passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate);
+    passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate)
+    .then((data)=>{
+      $scope.calcData = data;
+    })
+    .catch((err)=>{
+      console.error('anp an error occured while operation', err);
+    });
   }
  
   $scope.init();
