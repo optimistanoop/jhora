@@ -19,17 +19,20 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   };
   
   $scope.import = (ev)=>{
-    let options = {title:'select files to upload', properties:['openFile', 'multiSelections', 'message']}
+    let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
       console.log('anp file filePaths', filePaths);
-      const csvFilePath= filePaths && filePaths[0] ? filePaths[0] : '';
-      if(csvFilePath)
-      csv2json()
-      .fromFile(csvFilePath)
-      .then((jsonObj)=>{
-        $scope.showAlertDialog(ev, 'Import', `Import coming soon.`);
+      filePaths = filePaths ? filePaths :[];
+      for(let f of filePaths){
+        // TODO check for the table name, and bulk insert
+        if(csvFilePath)
+        csv2json()
+        .fromFile(csvFilePath)
+        .then((jsonObj)=>{
+          $scope.showAlertDialog(ev, 'Import', `Import coming soon.`);
           console.log('anp c2j', jsonObj);
-      })
+        })
+      }
     })
     
   };

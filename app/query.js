@@ -208,6 +208,20 @@ class Query {
     });
     return p;
   }
+  bulkUpload(data =[]){
+    let p = new Promise( (resolve, reject)=>{
+      let tableName = ''
+      let stmt = this.db.prepare(`INSERT INTO ${tableName} (${columns}) VALUES (${values})`);
+      // let columns = keys.map((key) => `${key}`).join(',');
+      // values = values.map((value) => `'${value}'`).join(',');
+      // let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
+       for (var i = 0; i < 10; i++) {
+           stmt.run("Ipsum " + i);
+       }
+       stmt.finalize();
+    });
+    return p;
+  }
   
 };
 
