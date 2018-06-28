@@ -1,4 +1,4 @@
-jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TABLE, CUSTOMERS_TABLE){
+jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, TRANSACTION_TABLE, CUSTOMERS_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE){
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = 'Check your backup in downloads folder once its done. Example File Name : jhora-customers-02-10-18.csv';
@@ -14,21 +14,26 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     $scope.getBackupByTable(ev, DELTRANSACTION_TABLE);  
     $scope.getBackupByTable(ev, VILLAGE_TABLE);  
   };
+  $scope.import = (ev)=>{
+    $scope.showAlertDialog(ev, 'Import', `Import coming soon.`)
+  };
   
   $scope.getBackupByTable = (ev, tableName)=>{
     q.selectAll(tableName)
     .then((rows)=>{
       let fields;
-      if(tableName == TRANSACTION_TABLE){
+      if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE){
         fields = ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'];
-      }else if (tableName == CUSTOMERS_TABLE){
+      }else if (tableName == CUSTOMERS_TABLE || tableName == DELCUSTOMERS_TABLE){
         fields = ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'];
+      }else if (tableName == VILLAGE_TABLE){
+        fields = ['id', 'name'];
       }
       const opts = { fields };      
       const csv = json2csv(rows, opts);
       let dir = app.getPath('downloads');
       let fileName = `jhora-${tableName}-${$mdDateLocale.formatDate(new Date())}.csv`;
-      let backupPath = path.join(dir, fileName);
+      let backupPath = path.join(__dirname, fileName);
       fs.writeFile(backupPath, csv,  function (err) {
         if (err) throw err;
         $scope.showAlertDialog(ev, 'Backup', `Backup for ${tableName} is done.`)
