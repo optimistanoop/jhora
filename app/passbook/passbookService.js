@@ -157,8 +157,9 @@ jhora.service('passbookService', function($mdDateLocale) {
   };
   
   let calculateFinalPSI = (trans = [], calcDate)=>{
-    let  config = { results : [[trans[0]]], calcResults : [], fromTran : trans[0], finalTran : {type : trans[0].type}};
-    for(let i=0; i<trans.length + 1; i++){
+    let firstTran = trans[0] ? trans[0] : {};
+    let  config = { results : [[firstTran]], calcResults : [], fromTran : firstTran, finalTran : {type : firstTran ? firstTran.type :''}};
+    for(let i=0; i< trans.length + 1; i++){
       if(i>0 &&  i < trans.length){
         let t = trans[i],
         from = config.fromTran.date,
@@ -180,7 +181,7 @@ jhora.service('passbookService', function($mdDateLocale) {
           config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Transactional');
         }
         
-      } else if(i ==  trans.length){
+      } else if(i > 0 && i ==  trans.length){
         let from = config.fromTran.date,
         to = calcDate;
         // calcOnlyForYrs to calc for last index arr of results
