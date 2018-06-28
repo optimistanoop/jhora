@@ -121,7 +121,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     });
   };
 
-  $scope.Back = ()=>{
+  $scope.back = ()=>{
     $window.history.back();
   };
   

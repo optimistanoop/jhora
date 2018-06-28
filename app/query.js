@@ -1,9 +1,6 @@
 class Query {
   constructor(db){
      this.db = db;
-     const {app} = require('electron').remote;
-     this.dir = app.getPath('downloads');
-     console.log('anp dir', this.dir);
   }
 
   closeDB(){
@@ -212,32 +209,6 @@ class Query {
     return p;
   }
   
-  takeBackup(tableName){
-    let p = new Promise( (resolve, reject)=>{
-      // .headers on  .mode csv .output data.csv SELECT * from customers; .quit
-      let sql = `'.headers' on`;
-      let sql2 = `'.mode' csv`;
-      let sql3 = `'.output' ${this.dir}`;
-      let sql4 = `select * from ${tableName}`;
-      this.db.exec(sql, (err, data)=>{
-        console.log('anp here', err, data);
-      if(err) reject(err);
-      resolve(data);
-    });
-    //   .run(sql2)
-    //   .run(sql3)
-    //   .run(sql4, [], (err, data)=>{
-    //     console.log('anp here', err, data);
-    //   if(err) reject(err);
-    //   resolve(data);
-    // });
-      //    (err, data)=>{
-      //   if(err) reject(err);
-      //   resolve(data);
-      // });
-    });
-    return p;
-  }
 };
 
 module.exports = Query;
