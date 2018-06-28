@@ -35,17 +35,14 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.import = (ev)=>{
     let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
-      console.log('anp file filePaths', filePaths);
       filePaths = filePaths ? filePaths :[];
       for(let f of filePaths){
         let splitedNames = f.split('-');
         let tableName = splitedNames[1] || '';
-        console.log('anp table name',tableName );
         if(f)
         csv2json()
         .fromFile(f)
         .then((jsonArr)=>{
-          console.log('anp c2j', jsonArr);
           return q.bulkUpload(tableName, jsonArr);
         })
         .then((data)=>{

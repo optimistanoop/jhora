@@ -157,50 +157,52 @@ jhora.service('passbookService', function($mdDateLocale) {
   };
   
   let calculateFinalPSI = (trans = [], calcDate)=>{
-    let firstTran = trans[0] ? trans[0] : {};
-    let  config = { results : [[firstTran]], calcResults : [], fromTran : firstTran, finalTran : {type : firstTran ? firstTran.type :''}};
-    for(let i=0; i< trans.length + 1; i++){
-      if(i>0 &&  i < trans.length){
-        let t = trans[i],
-        from = config.fromTran.date,
-        to = t.date;
-        // merge trans after calc if P, I is changing due to tran type
-        // here the rule will be to calc till date of tran and deduce amount from I first than P
-        // calc new P and I
-        config = handleYearlyCalc(from, to, trans, config.results, config.calcResults, config.finalTran, config.fromTran, i);
-        
-        if(config.fromTran.type != t.type){
-          let from = config.fromTran.date,
+    let p =new Promise( (resolve, reject)=>{
+      let firstTran = trans[0] ? trans[0] : {};
+      let  config = { results : [[firstTran]], calcResults : [], fromTran : firstTran, finalTran : {type : firstTran ? firstTran.type :''}};
+      for(let i=0; i< trans.length + 1; i++){
+        if(i>0 &&  i < trans.length){
+          let t = trans[i],
+          from = config.fromTran.date,
           to = t.date;
-          // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
-          // calcForAllTrans will create new P and I
-          // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
-          let nResults = Array.from(config.results[config.results.length -1]);
-          nResults.push(t);
-          config.results.push(nResults);
-          config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Transactional');
+          // merge trans after calc if P, I is changing due to tran type
+          // here the rule will be to calc till date of tran and deduce amount from I first than P
+          // calc new P and I
+          config = handleYearlyCalc(from, to, trans, config.results, config.calcResults, config.finalTran, config.fromTran, i);
+          
+          if(config.fromTran.type != t.type){
+            let from = config.fromTran.date,
+            to = t.date;
+            // calcForAllTrans should also give the type as mergedTran due to tranType and cr/dr
+            // calcForAllTrans will create new P and I
+            // calcForAllTrans, the rule will be to calc till date of tran and deduce amount from I first than P
+            let nResults = Array.from(config.results[config.results.length -1]);
+            nResults.push(t);
+            config.results.push(nResults);
+            config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Transactional');
+          }
+          
+        } else if(i > 0 && i ==  trans.length){
+          let from = config.fromTran.date,
+          to = calcDate;
+          // calcOnlyForYrs to calc for last index arr of results
+          // calcOnlyForYrs should also give the type as merge due to yr and cr/dr
+          config = handleYearlyCalc(from, to, trans, config.results, config.calcResults, config.finalTran, config.fromTran, i);
+          
+          // calc for diff of yrs month and calc date
+          from = config.fromTran.date;
+          // calcOnlyForMonths to calc for last index arr of results
+          // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
+          // calcOnlyForMonths should accumulate P, I 
+          // calcOnlyForMonths should also give the type as final and cr/dr
+          config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Final');
+          
+          console.log('anp final config', config);
         }
-        
-      } else if(i > 0 && i ==  trans.length){
-        let from = config.fromTran.date,
-        to = calcDate;
-        // calcOnlyForYrs to calc for last index arr of results
-        // calcOnlyForYrs should also give the type as merge due to yr and cr/dr
-        config = handleYearlyCalc(from, to, trans, config.results, config.calcResults, config.finalTran, config.fromTran, i);
-        
-        // calc for diff of yrs month and calc date
-        from = config.fromTran.date;
-        // calcOnlyForMonths to calc for last index arr of results
-        // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
-        // calcOnlyForMonths should accumulate P, I 
-        // calcOnlyForMonths should also give the type as final and cr/dr
-        config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Final');
-        
-        console.log('anp final config', config);
       }
-    }
-    
-    return config;
+      resolve(config);
+    });
+    return p; 
   }
 
   let getMonthDiff = (from, to)=>{
