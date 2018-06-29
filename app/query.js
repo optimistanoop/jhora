@@ -121,7 +121,7 @@ class Query {
   
   deleteTableByName(tableName){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `DROP TABLE ${tableName}`
+      let sql = `DELETE FROM ${tableName}`
       this.db.run(sql, [], (err, data)=>{
         if(err) reject(err);
         resolve(data);
