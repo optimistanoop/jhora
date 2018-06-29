@@ -31,7 +31,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.export = (ev)=>{
     exportAlltables(ev)
     .then((data)=>{
-      console.log('anp expo2');
       $scope.showAlertDialog(ev, 'Backup', `Backup for all data is done.`)
     }); 
   };
@@ -58,7 +57,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     dialog.showOpenDialog(options, (filePaths)=>{
       filePaths = filePaths ? filePaths :[];
       if(filePaths.length > 0)
-        deleteAllTables(ev)
+        exportAlltables(ev)
+        .then(deleteAllTables.bind(this, ev))
         .then((data)=>{
           for(let f of filePaths){
             let splitedNames = f.split('-');
@@ -125,4 +125,35 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     });
     return p;
   };
+  
+  $scope.doCalculationsForAll = ()=>{
+    // get last calc date 
+    // check last calc date falls in todays time slab , if no proceed, if yes return
+    //  get all cust data , get All  calc data (all calc data will be used to decide weather we need to calc or not, coz a cust many have a new tran which triggers calc)
+    //  foreach cust, check last calc date falls in todays time slab , if no proceed to calc, if yes return to next cust
+    let today = new Date();
+    today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    let  calcSlabFrom = new Date(today.getFullYear(),  today.getMonth(), today.getDate() <= 15 ?  1 : 16);
+    let  calcSlabTo = new Date(today.getFullYear(), today.getDate() <= 15 ? today.getMonth(): today.getMonth() + 1, today.getDate() <= 15 ?  15 : 0);
+    //TODO get last calc date (may be based on total cust and no of calc data in the current slab)
+    let lastCalcDate = new Date(new Date().getFullYear()-1, 0, 1); 
+    if(lastCalcDate >= calcSlabFrom && lastCalcDate <= calcSlabTo) return {};
+    
+    // TODO (not optimal) query for those cust which last calc date is not in the cuurent slab (can be done by quering calc table for current slab and removing them from custs)
+    let calcs = {[id]:{}}; // query for those cust which last calc date is in the cuurent slab and on foreach create calcs 
+    let custs = []; // on all custs, 
+    let finalCalcs = [] 
+    for(let cust of custs){
+      if(!calcs[cust.id]){
+        //TODO get tran of cust
+        let trans = [];
+        passbookService.calculateFinalPSI(trans, today)
+        .then((data)=>{
+          data ?  finalCalcs.push(data) :''; 
+        })
+      }
+    }
+    return finalCalcs;
+  };
+  
 });
