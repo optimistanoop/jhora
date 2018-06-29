@@ -1,7 +1,11 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
-  $scope.msg = 'Check your backup in downloads folder once its done. Example File Name : jhora-customers-02-10-18.csv';
+  $scope.msg = `Check your backup/exported file in downloads/app folder once its done.`;
+  $scope.msg2 = `Import steps- export -> delete -> import`;
+  $scope.msg3 = `Delete steps- export -> delete`;
+  $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv `;
+
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
   const path = require('path');
