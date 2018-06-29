@@ -221,10 +221,10 @@ class Query {
   }
   bulkUpload(tableName, rows =[]){
     let p = new Promise( (resolve, reject)=>{
-      if(rows.length == 0) reject(`No data found for ${tableName}`);
+      if(rows.length == 0) resolve(`No data found for ${tableName}`);
       let keys = Object.keys(rows[0]) || [];
       let columns = keys.map((key) => `${key}`).join(',');
-      let i = 1;
+      let i = 0;
       for (let r of rows) {
         let values = Object.values(r);
         values = values.map((value) => `'${value}'`).join(',');
