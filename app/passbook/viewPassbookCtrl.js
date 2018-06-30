@@ -110,6 +110,9 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows || [];
+        $scope.minDate = $scope.tratransactions[0].date;
+        let lastDate = $scope.tratransactions[$scope.tratransactions.length -1].date;
+        $scope.maxDate = new Date(lastDate.getFullYear() + 5, lastDate.getMonth(), lastDate.getDate());
         $scope.calculatePSI();
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
