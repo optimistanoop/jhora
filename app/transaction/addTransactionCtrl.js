@@ -19,6 +19,12 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $scope.disablePromiseDate = false;
       }
     };
+    
+    $scope.onRateChange = (ev)=>{
+      if($scope.transaction.rate == 0){
+        $rootScope.showAlertDialog(ev, 'Alert', 'You have chaned rate, please varify.')
+      }
+    };
 
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;

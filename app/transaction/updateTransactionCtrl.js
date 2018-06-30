@@ -4,6 +4,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $rootScope.template = {title: 'Edit Transaction'};
     $scope.transid = $routeParams.id;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    
+    $scope.onRateChange = (ev)=>{
+      if($scope.transaction.rate == 0){
+        $rootScope.showAlertDialog(ev, 'Alert', 'You have chaned rate, please varify.')
+      }
+    };
+    
     $scope.init = ()=> {
       q.selectAllById(TRANSACTION_TABLE, 'id', $scope.transid)
       .then((rows)=>
