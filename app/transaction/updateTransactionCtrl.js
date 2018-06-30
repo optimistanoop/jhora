@@ -7,7 +7,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     
     $scope.onRateChange = (ev)=>{
       if($scope.transaction.rate == 0){
-        $rootScope.showAlertDialog(ev, 'Alert', 'You have chaned rate, please varify.')
+        $rootScope.showAlertDialog(ev, 'Alert', 'You have chaned rate, please verify.')
       }
     };
     
@@ -41,9 +41,10 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $window.history.back();
     };
 
-    $scope.typeSelected= ()=>{
+    $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
+        $scope.transaction.type == "Settle" && $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
         $scope.disablePromiseDate = true;
       } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;

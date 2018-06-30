@@ -32,7 +32,7 @@
             <md-input-container flex-xs>
               <label>Type</label>
               <md-icon><i class="material-icons">credit_card</i></md-icon>
-              <md-select name="type" ng-model="transaction.type" ng-change="typeSelected()" required>
+              <md-select name="type" ng-model="transaction.type" ng-change="typeSelected($event)" required>
                 <md-option><em>None</em></md-option>
                 <md-option ng-repeat="type in types" ng-value="type">
                   {{type}}
@@ -45,7 +45,7 @@
             <md-input-container class="md-block" flex-xs>
               <label>Rate</label>
               <md-icon><i class="material-icons">trending_up</i></md-icon>
-              <input name="rate" type="number" ng-model="transaction.rate"  ng-change="onRateChange()" ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
+              <input name="rate" type="number" ng-model="transaction.rate"  ng-change="onRateChange($event)" ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
               <div ng-messages="transactionForm.rate.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply rate.</div>
                 <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
