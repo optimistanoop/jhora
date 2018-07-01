@@ -42,6 +42,22 @@
                 <div ng-message="required" class="my-message">You must supply a type.</div>
               </div>
             </md-input-container>
+            <md-input-container>
+              <label>Date</label>
+              <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
+              <div ng-messages="transactionForm.date.$error" role="alert" multiple>
+                <div ng-message="required" class="my-message">You must supply a date.</div>
+              </div>
+            </md-input-container>
+          </div>
+          <div layout-gt-xs="row">
+            <md-input-container flex-xs>
+              <label>Promise Date</label>
+              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-disabled="disablePromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
+              <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
+                <div ng-message="required" class="my-message">You must supply a promise date.</div>
+              </div>
+            </md-input-container>
             <md-input-container class="md-block" flex-xs>
               <label>Rate</label>
               <md-icon><i class="material-icons">trending_up</i></md-icon>
@@ -52,22 +68,6 @@
                 <div ng-message="max" class="my-message">Rate should be less than 6.</div>
                 <div ng-message="minlength" class="my-message">Rate should be of minimum 1 digit.</div>
                 <div ng-message="maxlength" class="my-message">Rate should be of maximum 3 digits.</div>
-              </div>
-            </md-input-container>
-          </div>
-          <div layout-gt-xs="row">
-            <md-input-container>
-              <label>Date</label>
-              <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
-              <div ng-messages="transactionForm.date.$error" role="alert" multiple>
-                <div ng-message="required" class="my-message">You must supply a date.</div>
-              </div>
-            </md-input-container>
-            <md-input-container flex-xs>
-              <label>Promise Date</label>
-              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-disabled="disablePromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
-              <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
-                <div ng-message="required" class="my-message">You must supply a promise date.</div>
               </div>
             </md-input-container>
             <md-input-container flex-xs>
