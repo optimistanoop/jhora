@@ -25,6 +25,7 @@
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
       $scope.customer.salutation = $scope.salutations[0];
+      $scope.columnName = `Father's Name`;
       $scope.customerForm.$setPristine();
       $scope.customerForm.$setUntouched();
     };

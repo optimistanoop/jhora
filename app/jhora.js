@@ -52,6 +52,24 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
           .targetEvent(ev)
       );
   };
+  
+  $scope.showConfirmDialog = (ev, title, msg)=>{
+    let p =new Promise( (resolve, reject)=>{
+      let confirm = $mdDialog.confirm()
+      .title(title)
+      .textContent(msg)
+      .ariaLabel('Delete')
+      .targetEvent(ev)
+      .ok('Submit')
+      .cancel('Cancel');
+      
+      $mdDialog.show(confirm).then((data)=>{
+        resolve(data);
+      },(err)=>{
+      });
+    });
+    return p;
+  };
 
   $rootScope.showDialog = (ev,modelName, data, templateUrl, msg ='')=>{
       let p =new Promise( (resolve, reject)=>{
@@ -86,7 +104,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   {title:'Transactions',route:'/transactions'},
   {title:'Villages',route:'/villages'},
   {title:'Dashboard Demo',route:'/dashboard/view'},
-  {title:'Passbook Demo',route:'/passbook1/view'}
+  {title:'Passbook Demo',route:'/passbook1/view'},
+  {title:'Settings',route:'/setting'}
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
@@ -97,7 +116,10 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village')
 .constant('TOAST_DELAY', 3000)
-.constant('TOAST_POS', 'bottom right');
+.constant('TOAST_POS', 'bottom right')
+.constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
+.constant('TRANSACTION_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'])
+.constant('VILLAGE_COLUMNS', ['id','name']);
 
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
 
@@ -166,6 +188,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
       })
       .when("/dashboard/view", {
           templateUrl : 'file://' + __dirname + '/dashboard/dashboard.html'
+      })
+      .when("/setting", {
+          templateUrl : 'file://' + __dirname + '/setting/setting.html'
       });
       $locationProvider.hashPrefix('!');
       $locationProvider.html5Mode({enabled: false, requireBase: false});

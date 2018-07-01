@@ -30,7 +30,7 @@ Releases can only be built on the target platform.
 
 Windows -  `C:\Users\Administrator\AppData\Roaming\db.db`
 
-Mac -  `/Users/<USER_NAME>/Library/Application Support/db.db`
+Mac -  `/Users/<USER_NAME>/Library/Application\ Support/db.db`
 
 Linux -  `/home/<USER_NAME>/.config/db.db`
 

@@ -1,5 +1,3 @@
-let Sqlite3 = require('sqlite3').verbose();
-
 class Query {
   constructor(db){
      this.db = db;
@@ -120,6 +118,17 @@ class Query {
     });
     return p;
   }
+  
+  deleteTableByName(tableName){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `DELETE FROM ${tableName}`
+      this.db.run(sql, [], (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 
   selectAll(tableName){
     let p = new Promise( (resolve, reject)=>{
@@ -210,6 +219,26 @@ class Query {
     });
     return p;
   }
+  bulkUpload(tableName, rows =[]){
+    let p = new Promise( (resolve, reject)=>{
+      if(rows.length == 0) resolve(`No data found for ${tableName}`);
+      let keys = Object.keys(rows[0]) || [];
+      let columns = keys.map((key) => `${key}`).join(',');
+      let i = 0;
+      for (let r of rows) {
+        let values = Object.values(r);
+        values = values.map((value) => `'${value}'`).join(',');
+        let sql = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
+          this.db.run(sql, [], (err, data)=>{
+            if(err) reject(err);
+            i++;
+            if(i == rows.length) resolve(data);
+          });
+      }
+    });
+    return p;
+  }
+  
 };
 
 module.exports = Query;

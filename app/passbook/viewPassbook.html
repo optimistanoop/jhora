@@ -83,9 +83,9 @@
   </md-content>
   <md-input-container flex-xs ng-show="hideNoDataFound">
     <label>Calculation date</label>
-    <md-datepicker ng-model="calcDate" ng-change="calculatePSI()" md-open-on-focus></md-datepicker>
+    <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" md-open-on-focus></md-datepicker>
   </md-input-container>
-  <md-button class="md-raised md-primary" ng-click="Back()">Back</md-button>
+  <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
   
   <div layout="row" ng-repeat="calc in calcData.calcResults">
     <md-card md-theme="dark-blue" md-theme-watch flex="50">

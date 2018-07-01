@@ -1,6 +1,5 @@
 jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
 
-  const {dialog} = require('electron').remote;
 	const {shell} = require('electron');
 	$rootScope.template = {title: 'Add / View Villages'};
 	$scope.village = { name : ''} ;
@@ -94,16 +93,12 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
           $rootScope.showAlertDialog(ev,`Village in Use`, `Village : ${village.name} unable to delete .`);
         }
         else{
-			       let confirm = $mdDialog.confirm()
-		         .title('Delete Village')
-		         .textContent(`Are you sure to delete village: ${village.name} ?`)
-		         .ariaLabel('Delete')
-		         .targetEvent(ev)
-		         .ok('Submit')
-		         .cancel('Cancel');
-			          $mdDialog.show(confirm,village).then(function() {
+					 $scope.showConfirmDialog(ev, 'Delete Village', `Are you sure to delete village: ${village.name} ?`)
+					 .then((data)=>{
 				      $scope.confirmVillage(village);
-				   },function() {
+				   })
+					 .catch((err)=>{
+						 console.error('anp an error occured while operation', err);
            });
          }
        }

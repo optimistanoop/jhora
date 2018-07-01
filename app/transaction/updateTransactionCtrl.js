@@ -4,6 +4,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $rootScope.template = {title: 'Edit Transaction'};
     $scope.transid = $routeParams.id;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    
+    $scope.onRateChange = (ev)=>{
+      if($scope.transaction.rate == 0){
+        $rootScope.showAlertDialog(ev, 'Alert', 'You have chaned rate, please verify.')
+      }
+    };
+    
     $scope.init = ()=> {
       q.selectAllById(TRANSACTION_TABLE, 'id', $scope.transid)
       .then((rows)=>
@@ -34,9 +41,10 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $window.history.back();
     };
 
-    $scope.typeSelected= ()=>{
+    $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
+        $scope.transaction.type == "Settle" && $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
         $scope.disablePromiseDate = true;
       } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
@@ -119,7 +127,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         },0)
       })
       .catch((err)=>{
-          console.error('anp err occured while insertion',err);
+        $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
       });
     };
 
