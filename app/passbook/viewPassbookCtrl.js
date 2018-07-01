@@ -60,8 +60,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
      })
      .then((data)=>{
        $timeout(()=> {
-       $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
-       $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
+         $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
+         $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
        },0)
      })
      .catch((err)=>{
@@ -131,7 +131,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.calculatePSI = ()=>{
     passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate)
     .then((data)=>{
-      $scope.calcData = data;
+      $timeout(()=> {
+        $scope.calcData = data;
+      },0)
+
     })
     .catch((err)=>{
       console.error('anp an error occured while operation', err);
