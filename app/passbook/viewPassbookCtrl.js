@@ -128,7 +128,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     $window.history.back();
   };
   
-  $scope.calculatePSI = ()=>{
+  let calculatePSI = ()=>{
     passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate)
     .then((data)=>{
       $timeout(()=> {
@@ -139,6 +139,30 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     .catch((err)=>{
       console.error('anp an error occured while operation', err);
     });
+  }
+  
+  $scope.calculatePSI = ()=>{
+    let fromDate = $mdDateLocale.parseDate( $scope.transactions[0].date);
+    let calcDate = $mdDateLocale.parseDate( $scope.calcDate);
+    q.selectDataByDates(TRANSACTION_TABLE, 'customerId', 'date', $scope.transactions[0].date, calcDate, $scope.custid)
+    .then((data)=>{
+      
+      if(rows)
+      for(let row of rows){
+        row.date = row.date ? new Date(row.date) : null;
+        row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
+      }
+      $timeout(()=>{
+        $scope.transactions = rows || [];
+        $scope.minDate = $scope.transactions[0] ? $scope.transactions[0].date :new Date();
+        let lastDate = $scope.transactions[$scope.transactions.length -1].date;
+        $scope.maxDate = new Date(lastDate.getFullYear() + 5, lastDate.getMonth(), lastDate.getDate());
+        $scope.calculatePSI();
+        $scope.hideNoDataFound = true;
+        if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
+        $scope.hideNoDataFound = false;
+      },0);
+    })
   }
  
   $scope.init();
