@@ -109,3 +109,4 @@ md-toolbar:not(.md-menu-toolbar){
   color: white;
   text-decoration: none !important;
 }
+.pointer {cursor: pointer;}
