@@ -1,73 +1,82 @@
 <div ng-controller="viewPassbookCtrl">
-  <div flex layout="row">
-    <div layout="column" flex="50">
-      <md-content layout-padding>
-        <md-card md-theme="dark-blue" md-theme-watch >
-         <md-card-title>
-           <md-card-title-text>
-             <span class="md-headline">{{customer.name}} {{salutation}} {{customer.father}}</span>
-             <span class="md-subhead">{{customer.village }}</span>
-             <span class="md-subhead">Rate -{{customer.rate}}%</span>
-             <span class="md-subhead">Page No-{{customer.pageNo}}</span>
-             <span class="md-subhead">Mobile-{{customer.mobile}}</span>
-             <span class="md-subhead">Guarantor-{{customer.guarantor}}</span>
-             <span class="md-subhead">Remarks-{{customer.remarks}}</span>
-           </md-card-title-text>
-           <md-card-title-media>
-             <div class="md-media-sm card-media"></div>
-           </md-card-title-media>
-         </md-card-title>
-         <md-card-actions layout="row" layout-align="end center">
-         </md-card-actions>
-       </md-card>
-     </md-content>
-     <md-content layout-padding>
-       <md-input-container flex-xs  class="width">
-         <label>Results for</label>
-         <md-icon><i class="material-icons">sort</i></md-icon>
-         <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
-           <md-option ng-repeat="limit in limits" ng-value="limit">
-             {{limit}}
-           </md-option>
-         </md-select>
-       </md-input-container>
+  <div layout="column" flex="100">
+    <div layout="column" >
+      <div flex=100 style="max-height:90px;" >
+        <md-content style="height:120px">
+          <md-card md-theme="dark-blue" md-theme-watch >
+            <md-card-header-text style="text-align:center">
+              <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
+            </md-card-header-text>
+             <span style="text-align:center">Village: {{customer.village }}</span>
+             <div layout-padding>
+               <span>Rate: {{customer.rate}}%</span>
+               <span style="position: absolute;left:15%;bottom:34px">Page No: {{customer.pageNo}}</span>
+               <span style="position: absolute;left:30%;bottom:34px">Mobile: {{customer.mobile}}</span>
+               <span ng-if="customer.guarantor" style="position: absolute;left:50%;bottom:34px">Guarantor: {{customer.guarantor}}</span>
+               <span ng-if="customer.remarks" style="position: absolute;left:75%;bottom:34px">Remarks: {{customer.remarks}}</span>
+             </div> 
+         </md-card>
+        </md-content>
+    </div>
+    <div layout="row" style="max-height: 75px;">
+    <div flex="50" >
+      <md-content layout-padding class="line">
+          <span style="font-size:20px"><strong> Transactions </strong></span>
+        <md-input-container flex-xs  class="width">
+          <label>Results for</label>
+          <md-icon><i class="material-icons">sort</i></md-icon>
+          <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
+            <md-option ng-repeat="limit in limits" ng-value="limit">
+              {{limit}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex-xs ng-show="hideNoDataFound" class="search">
+          <label>Search</label>
+          <md-icon> <i class="material-icons">search</i> </md-icon>
+          <input ng-model="$ctrl.query" type="text" style="width:125px">
+        </md-input-container>
+      </md-content>
+   </div>
+     <div flex="50" >
+       <span class="cal"><strong> Calculations </strong></span>
+     <md-content  class="calDate">
        <md-input-container flex-xs ng-show="hideNoDataFound">
-         <label>Calculation date</label>
-         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" md-open-on-focus></md-datepicker>
-       </md-input-container>
-       <md-input-container flex-xs ng-show="hideNoDataFound">
-         <label>Search</label>
-         <md-icon> <i class="material-icons">search</i> </md-icon>
-         <input ng-model="$ctrl.query" type="text">
+         <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
+         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" ></md-datepicker>
        </md-input-container>
      </md-content>
+   </div>
+ </div>
+</div>
+<div layout="row">
      
-     <div ng-show="hideNoDataFound" layout-padding>
+     <!-- <div ng-show="hideNoDataFound" layout-padding>
          <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
-     </div>
-     
-     <md-content layout-padding ng-show="hideNoDataFound">
-     <table>
-       <tr>
+     </div> -->
+    <div flex="50" class="line"> 
+     <md-content  layout-padding ng-show="hideNoDataFound">
+     <table width="100%">
+       <tr class="pointer">
          <th>
-           <md-button ng-click="sortBy('amount')">Amount</md-button>
+           <a ng-click="sortBy('amount')">Amount</a>
            <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
          </th>
          <th>
-           <md-button ng-click="sortBy('date')">Date</md-button>
+           <a ng-click="sortBy('date')">Date</a>
            <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
          </th>
          <th>
-           <md-button ng-click="sortBy('type')">Type</md-button>
+           <a ng-click="sortBy('type')">Type</a>
            <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
          </th>
          <th>
-           <md-button ng-click="sortBy('promiseDate')">Promise Date</md-button>
+           <a ng-click="sortBy('promiseDate')">Promise Date</a>
            <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
          </th>
          <th ng-hide="queryFor == 'All'">
-           <md-button ng-click="sortBy('deleteDate')">Deleted Date</md-button>
+           <a ng-click="sortBy('deleteDate')">Deleted Date</a>
            <span class="sortorder" ng-show="propertyName === 'deleteDate'"  ng-class="{reverse: reverse}"></span>
          </th>
          <th ng-show="queryFor == 'All'">Edit</th>
@@ -85,29 +94,30 @@
      </table>
      </md-content>
     </div>
-    <md-content layout-padding ng-show="hideNoDataFound">
-      <table>
-        <tr>
+    <div flex="50">
+    <md-content  layout-padding ng-show="hideNoDataFound">
+      <table class="customertable" >
+        <tr class="pointer">
           <th>
-            <md-button>Total</md-button>
+            <a>Total</a>
           </th>
           <th>
-            <md-button>Date</md-button>
+            <a>Date</a>
           </th>
           <th>
-            <md-button>Calc Date</md-button>
+            <a>Calc Date</a>
           </th>
           <th>
-            <md-button>Balance Passed To</md-button>
+            <a>Passed To</a>
           </th>
           <th>
-            <md-button>P</md-button>
+            <a>P</a>
           </th>
           <th>
-            <md-button>SI</md-button>
+            <a>SI</a>
           </th>
           <th>
-            <md-button>Merge Type</md-button>
+            <a>Merge Type</a>
           </th>
         </tr>
         <tr ng-repeat="calc in calcData.calcResults">
@@ -126,5 +136,7 @@
        <h1>Sorry !! No transaction data found</h1>
      </md-content>
   </div>
+</div>
+</div>
   <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
 </div>
