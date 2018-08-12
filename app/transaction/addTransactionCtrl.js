@@ -11,7 +11,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.disablePromiseDate = true;
     $scope.salutation = '';
 
-    $scope.typeSelected= ()=>{
+    $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
         $scope.transaction.type == "Settle" && $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')

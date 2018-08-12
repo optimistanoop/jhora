@@ -1,111 +1,142 @@
 <div ng-controller="viewPassbookCtrl">
-
-  <md-content layout-padding>
-  	<table style="width:80%;margin: 0px auto;">
-  		<tr><td style="background-color: rgb(57, 73, 171); width: 250px;color:#E0ECF8;text-align: center;" colspan="6"><h4>{{customer.name}} {{salutation}} {{customer.father}}, {{customer.village }}</h4></td></tr>
-  		<tr style="background-color:#283593;color:#E0ECF8">
-  			<td>Rate</td>
-        <td>Page No.</td>
-        <td>Mobile</td>
-        <td>Guarantor</td>
-        <!-- <td>Date</td> -->
-        <td>Remarks</td>
-  		</tr>
-  		<tr style="">
-        <td>{{customer.rate}}%</td>
-        <td>{{customer.pageNo}}</td>
-        <td>{{customer.mobile}}</td>
-        <td>{{customer.guarantor}}</td>
-        <!-- <td>{{customer.date | date:"EEE,d/M/yy"}}</td> -->
-        <td>{{customer.remarks}}</td>
-      </tr>
-  	</table>
-  </md-content>
-  <md-content layout-padding layout="row">
-    <md-input-container flex-xs  class="width">
-      <label>Results for</label>
-      <md-icon><i class="material-icons">sort</i></md-icon>
-      <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
-        <md-option ng-repeat="limit in limits" ng-value="limit">
-          {{limit}}
-        </md-option>
-      </md-select>
-    </md-input-container>
-    <md-input-container flex-xs ng-show="hideNoDataFound">
-    <label>Search</label>
-    <md-icon> <i class="material-icons">search</i> </md-icon>
-    <input ng-model="$ctrl.query" type="text">
-  </md-input-container>
-  <div style="width:80%;margin: 10px auto;" ng-show="hideNoDataFound">
-      <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
-      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
-  </div>
-  </md-content>
-  <md-content flex="50" layout-padding layout="row" ng-show="hideNoDataFound">
-  <table style="width:80%;margin: 0px auto;">
-    <tr>
-      <th>
-        <md-button ng-click="sortBy('amount')">Amount</md-button>
-        <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
-      </th>
-      <th>
-        <md-button ng-click="sortBy('date')">Date</md-button>
-        <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
-      </th>
-      <th>
-        <md-button ng-click="sortBy('type')">Type</md-button>
-        <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
-      </th>
-      <th>
-        <md-button ng-click="sortBy('promiseDate')">Promise Date</md-button>
-        <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
-      </th>
-      <th ng-hide="queryFor == 'All'">
-        <md-button ng-click="sortBy('deleteDate')">Deleted Date</md-button>
-        <span class="sortorder" ng-show="propertyName === 'deleteDate'"  ng-class="{reverse: reverse}"></span>
-      </th>
-      <th ng-show="queryFor == 'All'">Edit</th>
-      <th ng-show="queryFor == 'All'">Delete</th>
-    </tr>
-    <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
-      <td>{{ tran.amount | currency:'&#8377;' }}</td>
-      <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
-      <td>{{ tran.type }}</td>
-      <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
-      <td ng-show="queryFor == 'Deleted'">{{ tran.deletedOn | date:"EEE,d/M/yy" }}</td>
-      <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><i class="material-icons">edit</i></a></td>
-      <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
-    </tr>
-  </table>
-  </md-content>
-  <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
-    <h1>Sorry !! No transaction data found</h1>
-  </md-content>
-  <md-input-container flex-xs ng-show="hideNoDataFound">
-    <label>Calculation date</label>
-    <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" md-open-on-focus></md-datepicker>
-  </md-input-container>
-  <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
-  
-  <div layout="row" ng-repeat="calc in calcData.calcResults">
-    <md-card md-theme="dark-blue" md-theme-watch flex="50">
-     <md-card-title>
-       <md-card-title-text>
-         <span class="md-headline">Total - {{calc.total}}</span>
-         <span class="md-subhead">Date -{{calc.calcOn | date:"EEE,d/M/yy"}}</span>
-         <span class="md-subhead">Calc Till -{{calc.calcTill | date:"EEE,d/M/yy"}}</span>
-         <span class="md-subhead">Bal passed to -{{calc.date | date:"EEE,d/M/yy"}}</span>
-         <span class="md-subhead">P - {{calc.amount}}</span>
-         <span class="md-subhead">SI -{{calc.si}}</span>
-         <span class="md-subhead">Merge Type -{{calc.mergedType}}</span>
-       </md-card-title-text>
-       <md-card-title-media>
-         <div class="md-media-sm card-media"></div>
-       </md-card-title-media>
-     </md-card-title>
-     <md-card-actions layout="row" layout-align="end center">
-       <!-- <md-button ><a ng-href="#!/passbook/view/{{customer.id}}" class="nolink">Passbook</a></md-button> -->
-     </md-card-actions>
-   </md-card>
+  <div layout="column" flex="100">
+    <div layout="column" >
+      <div flex=100 style="max-height:90px;" >
+        <md-content style="height:120px">
+          <md-card md-theme="dark-blue" md-theme-watch >
+            <md-card-header-text style="text-align:center">
+              <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
+            </md-card-header-text>
+             <span style="text-align:center">Village: {{customer.village }}</span>
+             <div layout-padding>
+               <span>Rate: {{customer.rate}}%</span>
+               <span style="position: absolute;left:15%;bottom:34px">Page No: {{customer.pageNo}}</span>
+               <span style="position: absolute;left:30%;bottom:34px">Mobile: {{customer.mobile}}</span>
+               <span ng-if="customer.guarantor" style="position: absolute;left:50%;bottom:34px">Guarantor: {{customer.guarantor}}</span>
+               <span ng-if="customer.remarks" style="position: absolute;left:75%;bottom:34px">Remarks: {{customer.remarks}}</span>
+             </div> 
+         </md-card>
+        </md-content>
+    </div>
+    <div layout="row" style="max-height: 75px;">
+    <div flex="50" >
+      <md-content layout-padding class="line">
+          <span style="font-size:20px"><strong> Transactions </strong></span>
+        <md-input-container flex-xs  class="width">
+          <label>Results for</label>
+          <md-icon><i class="material-icons">sort</i></md-icon>
+          <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
+            <md-option ng-repeat="limit in limits" ng-value="limit">
+              {{limit}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex-xs ng-show="hideNoDataFound" class="search">
+          <label>Search</label>
+          <md-icon> <i class="material-icons">search</i> </md-icon>
+          <input ng-model="$ctrl.query" type="text" style="width:125px">
+        </md-input-container>
+      </md-content>
+   </div>
+     <div flex="50" >
+       <span class="cal"><strong> Calculations </strong></span>
+     <md-content  class="calDate">
+       <md-input-container flex-xs ng-show="hideNoDataFound">
+         <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
+         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" ></md-datepicker>
+       </md-input-container>
+     </md-content>
+   </div>
  </div>
+</div>
+<div layout="row">
+     
+     <!-- <div ng-show="hideNoDataFound" layout-padding>
+         <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
+         <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+     </div> -->
+    <div flex="50" class="line"> 
+     <md-content  layout-padding ng-show="hideNoDataFound">
+     <table width="100%">
+       <tr class="pointer">
+         <th>
+           <a ng-click="sortBy('amount')">Amount</a>
+           <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
+         </th>
+         <th>
+           <a ng-click="sortBy('date')">Date</a>
+           <span class="sortorder" ng-show="propertyName === 'date'" ng-class="{reverse: reverse}"></span>
+         </th>
+         <th>
+           <a ng-click="sortBy('type')">Type</a>
+           <span class="sortorder" ng-show="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
+         </th>
+         <th>
+           <a ng-click="sortBy('promiseDate')">Promise Date</a>
+           <span class="sortorder" ng-show="propertyName === 'promiseDate'" ng-class="{reverse: reverse}"></span>
+         </th>
+         <th ng-hide="queryFor == 'All'">
+           <a ng-click="sortBy('deleteDate')">Deleted Date</a>
+           <span class="sortorder" ng-show="propertyName === 'deleteDate'"  ng-class="{reverse: reverse}"></span>
+         </th>
+         <th ng-show="queryFor == 'All'">Edit</th>
+         <th ng-show="queryFor == 'All'">Delete</th>
+       </tr>
+       <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
+         <td>{{ tran.amount | currency:'&#8377;' }}</td>
+         <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
+         <td>{{ tran.type }}</td>
+         <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
+         <td ng-show="queryFor == 'Deleted'">{{ tran.deletedOn | date:"EEE,d/M/yy" }}</td>
+         <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><i class="material-icons">edit</i></a></td>
+         <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
+       </tr>
+     </table>
+     </md-content>
+    </div>
+    <div flex="50">
+    <md-content  layout-padding ng-show="hideNoDataFound">
+      <table class="customertable" >
+        <tr class="pointer">
+          <th>
+            <a>Total</a>
+          </th>
+          <th>
+            <a>Date</a>
+          </th>
+          <th>
+            <a>Calc Date</a>
+          </th>
+          <th>
+            <a>Passed To</a>
+          </th>
+          <th>
+            <a>P</a>
+          </th>
+          <th>
+            <a>SI</a>
+          </th>
+          <th>
+            <a>Merge Type</a>
+          </th>
+        </tr>
+        <tr ng-repeat="calc in calcData.calcResults">
+          <td>{{ calc.total | currency:'&#8377;' }}</td>
+          <td>{{ calc.calcOn | date:"EEE,d/M/yy" }}</td>
+          <td>{{ calc.calcTill | date:"EEE,d/M/yy"}}</td>
+          <td>{{ calc.date | date:"EEE,d/M/yy" }}</td>
+          <td>{{ calc.amount | currency:'&#8377;' }}</td>
+          <td>{{ calc.si | currency:'&#8377;' }}</td>
+          <td>{{ calc.mergedType}}</td>
+        </tr>
+      </table>
+    </md-content>
+
+     <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
+       <h1>Sorry !! No transaction data found</h1>
+     </md-content>
+  </div>
+</div>
+</div>
+  <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
 </div>
