@@ -1,8 +1,27 @@
 <div ng-controller="viewPassbookCtrl">
   <div layout="column" flex="100">
-    <div layout="row">
-      <div flex=28>
-      <md-content>
+    <div layout="column" >
+      <div flex=100 style="max-height:90px;" >
+        <md-content style="height:120px">
+          <md-card md-theme="dark-blue" md-theme-watch >
+            <md-card-header-text style="text-align:center">
+              <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
+            </md-card-header-text>
+             <span style="text-align:center">Village: {{customer.village }}</span>
+             <div layout-padding>
+               <span>Rate: {{customer.rate}}%</span>
+               <span style="position: absolute;left:15%;bottom:34px">Page No: {{customer.pageNo}}</span>
+               <span style="position: absolute;left:30%;bottom:34px">Mobile: {{customer.mobile}}</span>
+               <span ng-if="customer.guarantor" style="position: absolute;left:50%;bottom:34px">Guarantor: {{customer.guarantor}}</span>
+               <span ng-if="customer.remarks" style="position: absolute;left:75%;bottom:34px">Remarks: {{customer.remarks}}</span>
+             </div> 
+         </md-card>
+        </md-content>
+    </div>
+    <div layout="row" style="max-height: 75px;">
+    <div flex="50" >
+      <md-content layout-padding class="line">
+          <span style="font-size:20px"><strong> Transactions </strong></span>
         <md-input-container flex-xs  class="width">
           <label>Results for</label>
           <md-icon><i class="material-icons">sort</i></md-icon>
@@ -12,39 +31,23 @@
             </md-option>
           </md-select>
         </md-input-container>
-        <md-input-container flex-xs ng-show="hideNoDataFound">
+        <md-input-container flex-xs ng-show="hideNoDataFound" class="search">
           <label>Search</label>
           <md-icon> <i class="material-icons">search</i> </md-icon>
           <input ng-model="$ctrl.query" type="text" style="width:125px">
         </md-input-container>
       </md-content>
-    </div>
-  
-    <div flex="55">
-      <md-content style="height:120px">
-        <md-card md-theme="dark-blue" md-theme-watch >
-          <md-card-header-text style="text-align:center">
-            <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
-          </md-card-header-text>
-           <span style="text-align:center">Village: {{customer.village }}</span>
-           <div layout-padding>
-             <span>Rate: {{customer.rate}}%</span>
-             <span style="position: absolute;left:15%;bottom:34px">Page No: {{customer.pageNo}}</span>
-             <span style="position: absolute;left:30%;bottom:34px">Mobile: {{customer.mobile}}</span>
-             <span ng-if="customer.guarantor" style="position: absolute;left:50%;bottom:34px">Guarantor: {{customer.guarantor}}</span>
-             <span ng-if="customer.remarks" style="position: absolute;left:75%;bottom:34px">Remarks: {{customer.remarks}}</span>
-           </div> 
-       </md-card>
-     </md-content>
-     </div>
-     <div flex="20">
-     <md-content style="position:absolute;right:20px;width:150px">
+   </div>
+     <div flex="50" >
+       <span class="cal"><strong> Calculations </strong></span>
+     <md-content  class="calDate">
        <md-input-container flex-xs ng-show="hideNoDataFound">
-         <label>Calculation date</label>
-         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" md-open-on-focus></md-datepicker>
+         <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
+         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" ></md-datepicker>
        </md-input-container>
      </md-content>
    </div>
+ </div>
 </div>
 <div layout="row">
      
@@ -52,9 +55,9 @@
          <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
      </div> -->
-    <div flex="40"> 
-     <md-content  ng-show="hideNoDataFound">
-     <table>
+    <div flex="50" class="line"> 
+     <md-content  layout-padding ng-show="hideNoDataFound">
+     <table width="100%">
        <tr class="pointer">
          <th>
            <a ng-click="sortBy('amount')">Amount</a>
@@ -91,9 +94,9 @@
      </table>
      </md-content>
     </div>
-    <div flex="60">
-    <md-content  ng-show="hideNoDataFound">
-      <table >
+    <div flex="50">
+    <md-content  layout-padding ng-show="hideNoDataFound">
+      <table class="customertable" >
         <tr class="pointer">
           <th>
             <a>Total</a>
@@ -105,7 +108,7 @@
             <a>Calc Date</a>
           </th>
           <th>
-            <a>Balance Passed To</a>
+            <a>Passed To</a>
           </th>
           <th>
             <a>P</a>

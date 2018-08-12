@@ -110,3 +110,27 @@ md-toolbar:not(.md-menu-toolbar){
   text-decoration: none !important;
 }
 .pointer {cursor: pointer;}
+.line {
+  border:groove;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-top: 0px;
+}
+.cal {
+  font-size: 20px;
+    position: relative;
+    top: 34px;
+    padding-left: 15px;
+}
+.calDate {
+  position: absolute;
+  right: 3px;
+  padding: -15px;
+  margin: -15px;
+  width: 230px;
+}
+.search {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+}
