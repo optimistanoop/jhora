@@ -149,7 +149,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     }else{
       if(i > 1){
         let nResults = Array.from(results[results.length -1]);
-        nResults.push(trans[i-1]);
+        i != trans.length ? nResults.push(trans[i-1]) :[];
         results.push(nResults);
       }
     }
