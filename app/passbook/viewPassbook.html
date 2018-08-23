@@ -120,7 +120,7 @@
             <a>Merge Type</a>
           </th>
         </tr>
-        <tr ng-repeat="calc in calcData.calcResults">
+        <tr ng-repeat="calc in calcData.calcs track by $index">
           <td>{{ calc.total | currency:'&#8377;' }}</td>
           <td>{{ calc.calcOn | date:"EEE,d/M/yy" }}</td>
           <td>{{ calc.calcTill | date:"EEE,d/M/yy"}}</td>
