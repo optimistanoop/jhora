@@ -141,8 +141,8 @@ jhora.service('passbookService', function($mdDateLocale) {
         let nextTran = trans[i+1];
         let nextTranType = nextTran ? nextTran.type : null;
         let from = masterObj.results[lastIndexOFResults][0].date;
-        let to = nextTran ? nextTran.date : null;
-        let lastTranAsCr = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle') && to == null)
+        let to = nextTran ? nextTran.date : calcDate;
+        let lastTranAsCr = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle'))
         let fromPlus1Yr = getFromPlus1Yr(from);
 
         if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || i == trans.length - 1){
