@@ -64,7 +64,7 @@ jhora.service('passbookService', function($mdDateLocale) {
         p += tran.amount;
         si += tran.si ? tran.si :0;
         si += calculateSI(tran.amount, tran.rate, months);
-      }else if(tran.type == 'Cr'){
+      }else if(tran.type == 'Cr' || tran.type == 'Settle' ){
         let newPSI = getUpdatedPSI(p, si, tran.amount);
         p = newPSI.p;
         si = newPSI.si;
@@ -109,7 +109,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     total = p + si,
     toDate = calcYrs[calcYrs.length - 1],
     {calcTill, balPassedTo} = getBalPassedTo(toDate);
-    return {amount, total , p, si, calcTill, calcOn : toDate, date : balPassedTo}
+    return {amount, total , p, si, rate, type:'Dr', mergedType:'Yearly', calcTill, calcOn : toDate, date : balPassedTo}
   };
 
 
@@ -123,7 +123,7 @@ jhora.service('passbookService', function($mdDateLocale) {
     let total = p + si,    
     amount = p,
     {balPassedTo, calcTill} = getBalPassedTo(to);   
-    return {amount, total, p, si, calcTill, calcOn: to, date : balPassedTo };
+    return {amount, total, p, si, rate, type :'Dr', calcTill, calcOn: to, date : balPassedTo };
   };
 
   // this assumes calcDate is valid for all trans
@@ -141,39 +141,36 @@ jhora.service('passbookService', function($mdDateLocale) {
         let nextTran = trans[i+1];
         let nextTranType = nextTran ? nextTran.type : null;
         let from = masterObj.results[lastIndexOFResults][0].date;
-        let to = nextTran ? nextTran.date : calcDate;
+        let to = nextTran ? nextTran.date : null;
+        let lastTranAsCr = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle') && to == null)
         let fromPlus1Yr = getFromPlus1Yr(from);
 
-        if(to > fromPlus1Yr || nextTranType == 'Cr' || i == trans.length - 1){
+        if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || i == trans.length - 1){
           let finalResult;
           if(to > fromPlus1Yr){
             // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end 
             finalResult = calculatePSIForYears(from, to, masterObj.results[lastIndexOFResults]);
-            finalResult.rate = firstTran.rate;
-            finalResult.type = 'Dr';
-            finalResult.mergedType = 'Yearly';
             masterObj.calcs.push(finalResult);
             console.log(finalResult);
           } 
-          if(nextTranType == 'Cr'){
+          
+          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| lastTranAsCr){
             // monthly
             let toCalcTrans = finalResult ? [finalResult] : masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
+            to = lastTranAsCr ? toCalcTrans[toCalcTrans.length -1].date : to;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
-            finalResult.rate = firstTran.rate;
-            finalResult.type = 'Dr';
-            finalResult.mergedType = 'Credit';
+            finalResult.mergedType = nextTranType == 'Cr' ? 'Credit' : 'Settle';
             masterObj.calcs.push(finalResult);
             console.log(finalResult);
 
           }
           if(i == trans.length - 1){
-            // monthly
+            // monthly 
             let toCalcTrans = finalResult ? [finalResult]: masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
+            to = calcDate;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
-            finalResult.rate = firstTran.rate;
-            finalResult.type = 'Dr';
             finalResult.mergedType = 'Final';
             masterObj.calcs.push(finalResult);
             console.log(finalResult);
