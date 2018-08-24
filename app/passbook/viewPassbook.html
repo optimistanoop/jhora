@@ -4,8 +4,9 @@
       <div flex=100 style="max-height:90px;" >
         <md-content style="height:120px">
           <md-card md-theme="dark-blue" md-theme-watch >
-            <md-card-header-text style="text-align:center">
+            <md-card-header-text style="padding-left: 550px">
               <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
+              <span class="md-title" style="float: right;padding-right: 20px; color:red;font-size: 22px;"><strong> Total Amount Due : {{dueBal}}/- INR </strong></span>
             </md-card-header-text>
              <span style="text-align:center">Village: {{customer.village }}</span>
              <div layout-padding>
@@ -40,7 +41,7 @@
    </div>
      <div flex="50" >
        <span class="cal"><strong> Calculations </strong></span>
-     <md-content  class="calDate">
+      <md-content  class="calDate">
        <md-input-container flex-xs ng-show="hideNoDataFound">
          <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
          <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" ></md-datepicker>
