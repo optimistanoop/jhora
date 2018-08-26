@@ -6,7 +6,6 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.hideNoDataFound = true;
     $rootScope.template = {title: 'Customers'};
-    $scope.dueBal = [];
     $scope.deleteCustomer=(ev,customer)=>{
       shell.beep();
       q.selectAllById(TRANSACTION_TABLE,'customerId',customer.id)
@@ -56,11 +55,11 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
           console.log('MAHE', data);
           for (let i of data) {
             for(let j of rows) {
-            if (j.id == i.results[i.results.length-1][0].customerId) { 
-            let bal = i.results[i.results.length-1][0].total;
-            $scope.dueBal.push(bal);
-                }
+              if (j.id == i.results[i.results.length-1][0].customerId) { 
+                let bal = i.results[i.results.length-1][0].total;
+                j.due = bal;
               }
+             }
             }
           },0); 
         })

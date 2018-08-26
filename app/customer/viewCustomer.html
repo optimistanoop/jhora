@@ -51,7 +51,7 @@
       <td>{{ cust.father }}</td>
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
-      <td>{{ dueBal[$index] | currency :'&#8377;'}}</td>
+      <td>{{ cust.due| currency :'&#8377;'}}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.id}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
