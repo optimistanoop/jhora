@@ -179,6 +179,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
 
           finalResult.rate = firstTran.rate;
           finalResult.type = 'Dr';
+          finalResult.customerId = firstTran.customerId;
           let nextResultsToCalc = nextTran ? [finalResult, nextTran] : [finalResult];
           finalResult ? masterObj.results.push(nextResultsToCalc) :[];
 
