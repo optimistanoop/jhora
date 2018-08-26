@@ -1,5 +1,5 @@
 
-jhora.service('passbookService', function($mdDateLocale) {
+jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   let getFromPlus1Yr = (from)=>{
     let fromPlus1Yr;
     if(from.getMonth() == 0 && from.getDate() <= 15){
@@ -195,6 +195,18 @@ jhora.service('passbookService', function($mdDateLocale) {
     return p;
   }
 
-  return {calculateFinalPSI, calculatePSIForYears, calculatePSIForMonths, calculateSI};
+  let getUserData =(value)=> {
+   return  q.selectAllById(TRANSACTION_TABLE,'customerId',value)
+   .then((rows)=>{
+    for(let row of rows){
+       row.date = row.date ? new Date(row.date) : null;
+     }
+    return calculateFinalPSI(rows,new Date());
+    })
+   .catch((err)=>{
+     console.error('anp got error while fetching data',err);
+    });
+  }
+  return {calculateFinalPSI, calculatePSIForYears, calculatePSIForMonths, calculateSI,getUserData};
 
 });

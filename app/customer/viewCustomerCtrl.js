@@ -1,11 +1,12 @@
-
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE,TRANSACTION_TABLE) {
+  
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE,TRANSACTION_TABLE,passbookService) {
     const {shell} = require('electron');
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
     $scope.customer = { name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
     $scope.hideNoDataFound = true;
     $rootScope.template = {title: 'Customers'};
+    $scope.dueBal = [];
     $scope.deleteCustomer=(ev,customer)=>{
       shell.beep();
       q.selectAllById(TRANSACTION_TABLE,'customerId',customer.id)
@@ -46,10 +47,16 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
         if(rows)
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
+          passbookService.getUserData(row.id)
+          .then((data)=>{
+              let bal = data.results[data.results.length-1][0].total;
+              $scope.dueBal.push(bal);
+          })
         }
         $timeout(()=>{
           $scope.hideNoDataFound = true;
           $scope.customers = rows;
+          console.log("balance",$scope.dueBal);
           if(rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         },0);
