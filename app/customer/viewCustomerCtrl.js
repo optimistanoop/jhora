@@ -44,19 +44,29 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $scope.getCustomers = (tableName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
+        let promises =[]
         if(rows)
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
-          passbookService.getUserData(row.id)
-          .then((data)=>{
-              let bal = data.results[data.results.length-1][0].total;
-              $scope.dueBal.push(bal);
-          })
+          promises.push(passbookService.getUserData(row.id))
         }
+        Promise.all(promises)
+        .then((data)=>{
+          $timeout (function() {
+          console.log('MAHE', data);
+          for (let i of data) {
+            for(let j of rows) {
+            if (j.id == i.results[i.results.length-1][0].customerId) { 
+            let bal = i.results[i.results.length-1][0].total;
+            $scope.dueBal.push(bal);
+                }
+              }
+            }
+          },0); 
+        })
         $timeout(()=>{
           $scope.hideNoDataFound = true;
           $scope.customers = rows;
-          console.log("balance",$scope.dueBal);
           if(rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         },0);
