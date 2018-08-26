@@ -39,6 +39,10 @@
         <md-button ng-click="sortBy('mobile')">Mobile</md-button>
         <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
       </th>
+      <th>
+        <md-button ng-click="sortBy('due')">Due</md-button>
+        <span class="sortorder" ng-show="propertyName === 'due'" ng-class="{reverse: reverse}"></span>
+      </th>
       <th ng-show="queryFor == 'All'">Edit</th>
       <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
@@ -47,6 +51,7 @@
       <td>{{ cust.father }}</td>
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
+      <td>{{ cust.due| currency :'&#8377;'}}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.id}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>

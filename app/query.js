@@ -175,7 +175,7 @@ class Query {
   //get data between two dates
    selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
+      let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND active = 1 AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
