@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -94,6 +94,29 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 
       return p;
   };
+  
+  $scope.updateBal = ()=>{
+    let same = ''
+    if(!same )
+    q.selectAll(CUSTOMERS_TABLE)
+    .then((rows)=>{
+      let promises =[]
+      if(rows)
+      for(let row of rows){
+        row.date = row.date ? new Date(row.date) : null;
+        promises.push(passbookService.getUserData(row.id))
+      }
+      Promise.all(promises)
+      .then((data)=>{
+        // inset 
+        // broa
+      })
+    })
+    .catch((err)=>{
+      console.error(err);
+    });
+  }
+
 
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])

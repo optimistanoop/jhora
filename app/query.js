@@ -56,6 +56,29 @@ class Query {
      });
      return p;
   }
+  createBalanceTable(tableName){
+    let p = new Promise((resolve, reject)=>{
+      this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         amount         INT    NOT NULL,
+         date           TEXT   NOT NULL,
+         calcTill       TEXT   NOT NULL,
+         calcOn       TEXT   NOT NULL,
+         balPassedTo    TEXT   NOT NULL,
+         customerId     INTEGER NOT NULL,
+         type           TEXT   NOT NULL,
+         p           INT    NOT NULL,
+         si           INT    NOT NULL,
+         rate           INT    NOT NULL,
+         total           INT    NOT NULL,
+         remarks        CHAR(80)`
+         , [], (err, data)=>{
+         if(err) reject(err);
+         resolve(data);
+       });
+     });
+     return p;
+  }
 
   createVillageTable(tableName){
     let p = new Promise((resolve, reject)=>{
