@@ -6,7 +6,7 @@
           <md-card md-theme="dark-blue" md-theme-watch >
             <md-card-header-text style="padding-left: 550px">
               <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
-              <span class="md-title" style="float: right;padding-right: 20px; color:red;font-size: 22px;"><strong> Total Amount Due : {{dueBal}}/- INR </strong></span>
+              <span class="md-title" style="float: right;padding-right: 20px; color:red;font-size: 22px;"><strong> Total Amount Due - {{dueBal | currency :'&#8377;'}}/-</strong></span>
             </md-card-header-text>
              <span style="text-align:center">Village: {{customer.village }}</span>
              <div layout-padding>
