@@ -64,7 +64,6 @@ class Query {
          date           TEXT   NOT NULL,
          calcTill       TEXT   NOT NULL,
          calcOn       TEXT   NOT NULL,
-         balPassedTo    TEXT   NOT NULL,
          customerId     INTEGER NOT NULL,
          type           TEXT   NOT NULL,
          p           INT    NOT NULL,

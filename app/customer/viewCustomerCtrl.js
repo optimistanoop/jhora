@@ -1,5 +1,5 @@
   
-jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE,TRANSACTION_TABLE,passbookService) {
+jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE,TRANSACTION_TABLE,BALANCE_TABLE,passbookService) {
     const {shell} = require('electron');
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
@@ -43,26 +43,38 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $scope.getCustomers = (tableName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
-        let promises =[]
-        if(rows)
+        // let promises =[]
+        if(rows) {
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
-          promises.push(passbookService.getUserData(row.id))
+          // promises.push(passbookService.getUserData(row.id))
         }
-        Promise.all(promises)
+      }
+        q.selectAll(BALANCE_TABLE)
         .then((data)=>{
+          if(data.length>0){
           $timeout (function() {
           console.log('MAHE', data);
           for (let i of data) {
             for(let j of rows) {
-              if (j.id == i.results[i.results.length-1][0].customerId) { 
-                let bal = i.results[i.results.length-1][0].total;
-                j.due = bal;
+              if (j.id == i.customerId) { 
+                j.due = i.total;
               }
              }
             }
-          },0); 
+          },0);
+          }
+          else {
+            $timeout (function() {
+            for(let j of rows) {
+              j.due = 'NA';
+            }
+          },0);
+          } 
         })
+        .catch((err)=>{
+        console.error("Error in balance",err);
+        });
         $timeout(()=>{
           $scope.hideNoDataFound = true;
           $scope.customers = rows;
@@ -75,6 +87,11 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       });
     };
 
+    let run = function() {
+      console.log("Event catched");
+      $scope.getCustomers(CUSTOMERS_TABLE);
+    }
+    $rootScope.$on('updateCustomers',run);
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getCustomers(DELCUSTOMERS_TABLE);

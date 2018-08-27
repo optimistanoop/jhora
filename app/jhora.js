@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE,BALANCE_COLUMNS) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -98,7 +98,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   $scope.updateBal = ()=>{
     q.selectAll(CUSTOMERS_TABLE)
     .then((rows)=>{
-      let promises =[]
+      let promises =[];
+      let balPromises = [];
       if(rows)
       for(let row of rows){
         row.date = row.date ? new Date(row.date) : null;
@@ -106,42 +107,43 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       };
       Promise.all(promises)
       .then((datas)=>{
+        console.log("promise",promises);
         for (let data of datas) {
           let balData = data.results[data.results.length-1][0];
           q.selectAllById(BALANCE_TABLE,'customerId',balData.customerId)
           .then((balance)=>{
             console.log("balance",balance)
             if(balance.length > 0) {
-            let calcDate = $mdDateLocale.parseDate(balData.calcOn);
-            let balDate = $mdDateLocale.parseDate(balance[0].calcOn);
-            if(balance && balDate < calcDate) {
-              let keys = ['amount','date','calcTill','calcOn','balPassedTo','customerId','type','p','si','rate','total'];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.balPassedTo,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-              q.update(BALANCE_TABLE, keys, values, 'customerId', balData.customerId)
-                $rootScope.showToast('Balances Updated');
-
-              // .catch((err)=>{
-              // console.error('anp err occured while updation',err);
-              // });
+              let calcDate = $mdDateLocale.parseDate(balData.calcOn);
+              let balDate = $mdDateLocale.parseDate(balance[0].calcOn);
+              if(balance && balDate < calcDate) {
+              var values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                balPromises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
+                return;
               } 
-            else if (balance && balDate >= calcDate) {
+              else if (balance && balDate >= calcDate) {
               angular.noop();
               console.log("Balances remain same");
-            }
+              return;
+              }
             }
             else {
-              let keys = ['amount','date','calcTill','calcOn','balPassedTo','customerId','type','p','si','rate','total'];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.balPassedTo,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-              q.insert(BALANCE_TABLE, keys, values)
-
-              $rootScope.showToast('Balances inserted');
-              // .catch((err)=>{
-              //   console.error('anp err occured while insertion',err);
-              // });
+              var values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                balPromises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values))
+                return;
             }
-          });
-        };  // broa} ==
-      });
+          })
+        }
+        Promise.all(balPromises)
+          .then((value)=>{
+            console.log("AFTER ",balPromises,value);
+            $rootScope.showToast('Balances Updated');
+            $rootScope.$emit('updateCustomers');
+            // $rootScope.$broadcast('updateCustomers');
+            // $rootScope.run();
+      })
+      })
+      
     })
     .catch((err)=>{
       console.error(err);
@@ -170,6 +172,7 @@ $scope.updateBal();
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village')
 .constant('BALANCE_TABLE', 'balances')
+.constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','customerId','type','p','si','rate','total'])
 .constant('TOAST_DELAY', 3000)
 .constant('TOAST_POS', 'bottom right')
 .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
