@@ -71,7 +71,7 @@ class Query {
          si           INT    NOT NULL,
          rate           INT    NOT NULL,
          total           INT    NOT NULL,
-         remarks        CHAR(80)`
+         remarks        CHAR(80))`
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);
