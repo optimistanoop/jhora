@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -94,7 +94,61 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 
       return p;
   };
+  
+  $scope.updateBal = ()=>{
+    q.selectAll(CUSTOMERS_TABLE)
+    .then((rows)=>{
+      let promises =[]
+      if(rows)
+      for(let row of rows){
+        row.date = row.date ? new Date(row.date) : null;
+        promises.push(passbookService.getUserData(row.id))
+      };
+      Promise.all(promises)
+      .then((datas)=>{
+        for (let data of datas) {
+          let balData = data.results[data.results.length-1][0];
+          q.selectAllById(BALANCE_TABLE,'customerId',balData.customerId)
+          .then((balance)=>{
+            console.log("balance",balance)
+            if(balance.length > 0) {
+            let calcDate = $mdDateLocale.parseDate(balData.calcOn);
+            let balDate = $mdDateLocale.parseDate(balance[0].calcOn);
+            if(balance && balDate < calcDate) {
+              let keys = ['amount','date','calcTill','calcOn','balPassedTo','customerId','type','p','si','rate','total'];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.balPassedTo,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              q.update(BALANCE_TABLE, keys, values, 'customerId', balData.customerId)
+                $rootScope.showToast('Balances Updated');
 
+              // .catch((err)=>{
+              // console.error('anp err occured while updation',err);
+              // });
+              } 
+            else if (balance && balDate >= calcDate) {
+              angular.noop();
+              console.log("Balances remain same");
+            }
+            }
+            else {
+              let keys = ['amount','date','calcTill','calcOn','balPassedTo','customerId','type','p','si','rate','total'];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.balPassedTo,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              q.insert(BALANCE_TABLE, keys, values)
+
+              $rootScope.showToast('Balances inserted');
+              // .catch((err)=>{
+              //   console.error('anp err occured while insertion',err);
+              // });
+            }
+          });
+        };  // broa} ==
+      });
+    })
+    .catch((err)=>{
+      console.error(err);
+    });
+  };
+
+$scope.updateBal();
 })
 //.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
@@ -115,6 +169,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 .constant('TRANSACTION_TABLE', 'transactions')
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village')
+.constant('BALANCE_TABLE', 'balances')
 .constant('TOAST_DELAY', 3000)
 .constant('TOAST_POS', 'bottom right')
 .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])

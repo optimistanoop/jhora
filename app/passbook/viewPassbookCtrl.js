@@ -133,6 +133,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       $timeout(()=> {
         $scope.calcData = data;
         $scope.dueBal = $scope.calcData.results[$scope.calcData.results.length-1][0].total;
+        console.log($scope.calcData.results[$scope.calcData.results.length-1][0]);
       },0)
 
     })

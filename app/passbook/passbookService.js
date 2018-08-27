@@ -196,8 +196,8 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     return p;
   }
 
-  let getUserData =(value)=> {
-   return  q.selectAllById(TRANSACTION_TABLE,'customerId',value)
+  let getUserData =(customerId)=> {
+   return  q.selectAllById(TRANSACTION_TABLE,'customerId',customerId)
    .then((rows)=>{
     for(let row of rows){
        row.date = row.date ? new Date(row.date) : null;
