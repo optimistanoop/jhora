@@ -110,38 +110,6 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
           console.log("in the second if");
         }
         else {
-          console.log("in the second else");
-          q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
-          .then((NoMatch)=>{
-            if(NoMatch.length>0) {
-              console.log("non matching",NoMatch[0].id)
-              let balPromise = [];
-              let userPromise = [];
-              for(let i of NoMatch) {
-                // i.date = i.date ? new Date(i.date) : null;
-                userPromise.push(passbookService.getUserData(i.id)
-                .then((bal)=>{
-                  if(bal.results.length>1) {
-                  let balData = bal.results[bal.results.length-1][0];
-                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                    balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
-                  }
-                }))
-              }
-              Promise.all(userPromise)
-              .then((user)=>{
-                Promise.all(balPromise)
-                .then((insert)=>{
-                $rootScope.showToast('Balances Updated');
-                $rootScope.$emit('updateCustomers');
-              })
-                .catch((err)=>{
-                  console.error("Error while insertion",err);
-                  });
-              })
-
-            }
-            })
               console.log("only update");
               q.selectAll(CUSTOMERS_TABLE)
               .then((custs)=> {
@@ -174,35 +142,37 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         }
       }
       else {
-        console.log("in the first else");
-        q.selectAll(CUSTOMERS_TABLE)
-        .then((custs)=> {
-          if(custs.length > 0) {
-            let promises = [];
-            let insertPromise =[];
-            for(let cust of custs){
-              cust.date = cust.date ? new Date(cust.date) : null;
-              insertPromise.push(passbookService.getUserData(cust.id)
-              .then((data)=>{
-                if(data.results.length>1) {
-                  console.log(data.results.length);
-                let balData = data.results[data.results.length-1][0];
-                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+          q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
+          .then((NoMatch)=>{
+            if(NoMatch.length>0) {
+              console.log("non matching",NoMatch[0].id)
+              let balPromise = [];
+              let userPromise = [];
+              for(let i of NoMatch) {
+                // i.date = i.date ? new Date(i.date) : null;
+                userPromise.push(passbookService.getUserData(i.id)
+                .then((bal)=>{
+                  if(bal.results.length>1) {
+                  let balData = bal.results[bal.results.length-1][0];
+                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                    balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+                  }
+                }))
               }
-              }))
-            }
-            Promise.all(insertPromise)
-            .then((insert)=>{
-              Promise.all(promises)
-              .then((ins)=>{
+              Promise.all(userPromise)
+              .then((user)=>{
+                Promise.all(balPromise)
+                .then((insert)=>{
                 $rootScope.showToast('Balances Updated');
                 $rootScope.$emit('updateCustomers');
               })
-            })
+                .catch((err)=>{
+                  console.error("Error while insertion",err);
+                  });
+              })
 
-          }
-        })
+            }
+            })
       }
     })
   };
