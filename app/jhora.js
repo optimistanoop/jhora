@@ -106,7 +106,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
         let calcYear = new Date(rows[0].calcOn).getFullYear();
         console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
-        if ((todayDay <= 15 && calcDay <= 15 && todayMonth == calcMonth && todayYear == calcYear) || (todayDay <= 31 && calcDay <= 31 && todayMonth == calcMonth && todayYear == calcYear )) {
+        if ((todayDay <= 15 && calcDay <= 15 && todayMonth == calcMonth && todayYear == calcYear) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15 && todayMonth == calcMonth && todayYear == calcYear )) {
           console.log("in the second if");
         }
         else {
@@ -114,24 +114,32 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
           q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
           .then((NoMatch)=>{
             if(NoMatch.length>0) {
-              console.log("non matching")
+              console.log("non matching",NoMatch[0].id)
               let balPromise = [];
+              let userPromise = [];
               for(let i of NoMatch) {
-                i.date = i.date ? new Date(i.date) : null;
-                passbookService.getUserData(i.id)
+                // i.date = i.date ? new Date(i.date) : null;
+                userPromise.push(passbookService.getUserData(i.id)
                 .then((bal)=>{
-                  if(bal.results.length>0) {
+                  if(bal.results.length>1) {
                   let balData = bal.results[bal.results.length-1][0];
                   let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
                     balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
                   }
-                })
+                }))
               }
-              Promise.all(balPromise)
-              .then((insert)=>{
+              Promise.all(userPromise)
+              .then((user)=>{
+                Promise.all(balPromise)
+                .then((insert)=>{
                 $rootScope.showToast('Balances Updated');
                 $rootScope.$emit('updateCustomers');
               })
+                .catch((err)=>{
+                  console.error("Error while insertion",err);
+                  });
+              })
+
             }
             })
               console.log("only update");
@@ -139,20 +147,27 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
               .then((custs)=> {
               if(custs.length > 0) {
                 let promises = []
-                for(let row of rows){
-                row.date = row.date ? new Date(row.date) : null;
-                passbookService.getUserData(row.id)
+                let updatePromise = [];
+                for(let cust of custs){
+                cust.date = cust.date ? new Date(cust.date) : null;
+                updatePromise.push(passbookService.getUserData(cust.id)
                 .then((datas)=>{
+                  if(datas.results.length>1) {
                   let balData = datas.results[datas.results.length-1][0];
                   let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
                   promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
-                })
+                }
+                }))
               }
-              Promise.all(promises)
-              .then((update)=>{
+              Promise.all(updatePromise)
+              .then((upt)=>{
+                Promise.all(promises)
+                .then((update)=>{
                 $rootScope.showToast('Balances Updated');
                 $rootScope.$emit('updateCustomers');
               })
+              })
+              
           }
         })
 
@@ -163,10 +178,11 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         q.selectAll(CUSTOMERS_TABLE)
         .then((custs)=> {
           if(custs.length > 0) {
-            let promises = []
+            let promises = [];
+            let insertPromise =[];
             for(let cust of custs){
               cust.date = cust.date ? new Date(cust.date) : null;
-              passbookService.getUserData(cust.id)
+              insertPromise.push(passbookService.getUserData(cust.id)
               .then((data)=>{
                 if(data.results.length>1) {
                   console.log(data.results.length);
@@ -174,10 +190,17 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
                 let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
                 promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
               }
-              })
+              }))
             }
-              // $rootScope.showToast('Balances Updated');
-            $rootScope.$emit('updateCustomers',promises);
+            Promise.all(insertPromise)
+            .then((insert)=>{
+              Promise.all(promises)
+              .then((ins)=>{
+                $rootScope.showToast('Balances Updated');
+                $rootScope.$emit('updateCustomers');
+              })
+            })
+
           }
         })
       }

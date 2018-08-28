@@ -44,7 +44,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       q.selectAll(tableName)
       .then((rows)=>{
         // let promises =[]
-        if(rows) {
+        if(rows.length>0) {
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
           // promises.push(passbookService.getUserData(row.id))
@@ -63,13 +63,6 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
              }
             }
           },0);
-          }
-          else {
-            $timeout (function() {
-            for(let j of rows) {
-              j.due = 'NA';
-            }
-          },0);
           } 
         })
         .catch((err)=>{
@@ -83,23 +76,14 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
         },0);
       })
       .catch((err)=>{
-        console.error(err);
+        console.error("error while getting",err);
       });
     };
 
-    let run = function(promises) {
-      Promise.all(promises)
-      .then((data)=>{
+    let run = function() {
         $scope.getCustomers(CUSTOMERS_TABLE);
-      })
-    }
-    $rootScope.$on('updateCustomers',function(ev,promises) {
-      Promise.all(promises)
-      .then((data)=>{
-        console.log(data);
-        $scope.getCustomers(CUSTOMERS_TABLE);
-      })
-    });
+      }
+    $rootScope.$on('updateCustomers',run);
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getCustomers(DELCUSTOMERS_TABLE);
