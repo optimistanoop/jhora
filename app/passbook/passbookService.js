@@ -130,12 +130,10 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   // first tran is always Dr
   // this is only for debiters hence no +Cr
   let calculateFinalPSI = (trans = [], calcDate)=>{
-    console.log("trans",trans);
-    // if(trans.length>0) {
     let p = new Promise((resolve, reject)=>{  
       let firstTran = trans[0] ? trans[0] : {};
       let  masterObj = {results:[[firstTran]], calcs:[]};
-
+      if(firstTran.type == 'Dr')
       for(let i = 0; i < trans.length; i++){
 
         let lastIndexOFResults = masterObj.results.length -1;
@@ -196,13 +194,11 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
       resolve(masterObj);
     })
     return p;
-  // }
   }
 
   let getUserData =(customerId)=> {
    return  q.selectAllByIdActive(TRANSACTION_TABLE,'customerId',customerId,'active',1)
    .then((rows)=>{
-    console.log("rows",rows);
     for(let row of rows){
       if(row.date){
        row.date = row.date ? new Date(row.date) : null;
