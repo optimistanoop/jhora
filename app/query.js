@@ -56,12 +56,52 @@ class Query {
      });
      return p;
   }
+  createBalanceTable(tableName,column = ""){
+    let p = new Promise((resolve, reject)=>{
+      this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         amount         INT    NOT NULL,
+         date           TEXT   NOT NULL,
+         calcTill       TEXT   NOT NULL,
+         calcOn       TEXT   NOT NULL,
+         customerId     INTEGER NOT NULL,
+         type           TEXT   NOT NULL,
+         p           INT    NOT NULL,
+         si           INT    NOT NULL,
+         rate           INT    NOT NULL,
+         total           INT    NOT NULL,
+         remarks        CHAR(80)
+         ${column})`
+         , [], (err, data)=>{
+         if(err) reject(err);
+         resolve(data);
+       });
+     });
+     return p;
+  }
 
   createVillageTable(tableName){
     let p = new Promise((resolve, reject)=>{
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name TEXT NOT NULL UNIQUE)`
+       , [], (err, data)=>{
+       if(err) reject(err);
+       resolve(data);
+     });
+   });
+   return p;
+  }
+
+  createTrigger(triggerName,action){
+    let p = new Promise((resolve, reject)=>{
+    this.db.run(`CREATE TRIGGER IF NOT EXISTS ${triggerName} AFTER ${action} ON balances FOR EACH ROW
+      BEGIN
+      INSERT INTO balances_history (
+        amount,date,calcTill,calcOn,customerId,type,p,si,rate,total,remarks,action)
+      VALUES (new.amount,new.date,new.calcTill,new.calcOn,new.customerId,new.type,new.p,
+        new.si,new.rate,new.total,new.remarks,'${action}');
+        END;`
        , [], (err, data)=>{
        if(err) reject(err);
        resolve(data);
@@ -175,7 +215,7 @@ class Query {
   //get data between two dates
    selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
+      let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND active = 1 AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
@@ -235,6 +275,17 @@ class Query {
             if(i == rows.length) resolve(data);
           });
       }
+    });
+    return p;
+  }
+  selectAllTwoTable(table1,table2,columns,match1,match2,conditionOn=""){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT ${columns} FROM ${table1} LEFT JOIN ${table2} ON ${match1} = ${match2} ${conditionOn}`;
+      console.log("sql",sql);
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
     });
     return p;
   }

@@ -23,8 +23,12 @@ let dbInit = ()=>{
     q.createCustomerTable('customers', 'UNIQUE'),
     q.createTransactionTable('transactions','active INT DEFAULT 1'),
     q.createVillageTable('village'),
+    q.createBalanceTable('balances'),
+    q.createBalanceTable('balances_history',',action'),
     q.createCustomerTable('delcustomers'),
-    q.createTransactionTable('deltransactions','deletedOn TEXT')
+    q.createTransactionTable('deltransactions','deletedOn TEXT'),
+    q.createTrigger('onInsert','INSERT'),
+    q.createTrigger('onUpdate','UPDATE')
   ]).then((data)=>{
     angular.bootstrap(document, ['jhora']);
   })
