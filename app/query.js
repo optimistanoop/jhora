@@ -56,7 +56,7 @@ class Query {
      });
      return p;
   }
-  createBalanceTable(tableName){
+  createBalanceTable(tableName,column = ""){
     let p = new Promise((resolve, reject)=>{
       this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
          id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,7 +70,8 @@ class Query {
          si           INT    NOT NULL,
          rate           INT    NOT NULL,
          total           INT    NOT NULL,
-         remarks        CHAR(80))`
+         remarks        CHAR(80)
+         ${column})`
          , [], (err, data)=>{
          if(err) reject(err);
          resolve(data);
@@ -84,6 +85,23 @@ class Query {
     this.db.run(`CREATE TABLE IF NOT EXISTS ${tableName}(
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        name TEXT NOT NULL UNIQUE)`
+       , [], (err, data)=>{
+       if(err) reject(err);
+       resolve(data);
+     });
+   });
+   return p;
+  }
+
+  createTrigger(triggerName,action){
+    let p = new Promise((resolve, reject)=>{
+    this.db.run(`CREATE TRIGGER IF NOT EXISTS ${triggerName} AFTER ${action} ON balances FOR EACH ROW
+      BEGIN
+      INSERT INTO balances_history (
+        amount,date,calcTill,calcOn,customerId,type,p,si,rate,total,remarks,action)
+      VALUES (new.amount,new.date,new.calcTill,new.calcOn,new.customerId,new.type,new.p,
+        new.si,new.rate,new.total,new.remarks,'${action}');
+        END;`
        , [], (err, data)=>{
        if(err) reject(err);
        resolve(data);
