@@ -107,10 +107,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let calcYear = new Date(rows[0].calcOn).getFullYear();
         console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
         if ((todayDay <= 15 && calcDay <= 15 && todayMonth == calcMonth && todayYear == calcYear) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15 && todayMonth == calcMonth && todayYear == calcYear )) {
-          console.log("in the second if");
         }
         else {
-              console.log("only update");
               q.selectAll(CUSTOMERS_TABLE)
               .then((custs)=> {
               if(custs.length > 0) {
@@ -142,37 +140,35 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         }
       }
       else {
-          q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
-          .then((NoMatch)=>{
-            if(NoMatch.length>0) {
-              console.log("non matching",NoMatch[0].id)
-              let balPromise = [];
-              let userPromise = [];
-              for(let i of NoMatch) {
-                // i.date = i.date ? new Date(i.date) : null;
-                userPromise.push(passbookService.getUserData(i.id)
-                .then((bal)=>{
-                  if(bal.results.length>1) {
-                  let balData = bal.results[bal.results.length-1][0];
-                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                    balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
-                  }
-                }))
-              }
-              Promise.all(userPromise)
-              .then((user)=>{
-                Promise.all(balPromise)
-                .then((insert)=>{
-                $rootScope.showToast('Balances Updated');
-                $rootScope.$emit('updateCustomers');
-              })
-                .catch((err)=>{
-                  console.error("Error while insertion",err);
-                  });
-              })
+          // q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
+          // .then((NoMatch)=>{
+          //   if(NoMatch.length>0) {
+          //     let balPromise = [];
+          //     let userPromise = [];
+          //     for(let i of NoMatch) {
+          //       userPromise.push(passbookService.getUserData(i.id)
+          //       .then((bal)=>{
+          //         if(bal.results.length>1) {
+          //         let balData = bal.results[bal.results.length-1][0];
+          //         let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+          //           balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+          //         }
+          //       }))
+          //     }
+          //     Promise.all(userPromise)
+          //     .then((user)=>{
+          //       Promise.all(balPromise)
+          //       .then((insert)=>{
+          //       $rootScope.showToast('Balances Updated');
+          //       $rootScope.$emit('updateCustomers');
+          //     })
+          //       .catch((err)=>{
+          //         console.error("Error while insertion",err);
+          //         });
+          //     })
 
-            }
-            })
+          //   }
+          //   })
       }
     })
   };

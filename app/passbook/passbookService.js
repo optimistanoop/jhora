@@ -200,7 +200,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   }
 
   let getUserData =(customerId)=> {
-   return  q.selectAllById(TRANSACTION_TABLE,'customerId',customerId)
+   return  q.selectAllByIdActive(TRANSACTION_TABLE,'customerId',customerId,'active',1)
    .then((rows)=>{
     console.log("rows",rows);
     for(let row of rows){

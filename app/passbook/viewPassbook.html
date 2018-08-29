@@ -6,7 +6,7 @@
           <md-card md-theme="dark-blue" md-theme-watch >
             <md-card-header-text style="padding-left: 550px">
               <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
-              <span class="md-title" style="float: right;padding-right: 20px; color:red;font-size: 22px;"><strong> Total Amount Due - {{dueBal | currency :'&#8377;'}}/-</strong></span>
+              <span class="md-title" style="float: right;padding-right: 20px; color:red;font-size: 22px;" ng-if="hideNoDataFound"><strong> Total Amount Due - {{dueBal | currency :'&#8377;'}}/-</strong></span>
             </md-card-header-text>
              <span style="text-align:center">Village: {{customer.village }}</span>
              <div layout-padding>
@@ -19,7 +19,7 @@
          </md-card>
         </md-content>
     </div>
-    <div layout="row" style="max-height: 75px;">
+    <div layout="row" style="max-height: 75px;" ng-if="hideNoDataFound">
     <div flex="50" >
       <md-content layout-padding class="line">
           <span style="font-size:20px"><strong> Transactions </strong></span>
@@ -50,14 +50,14 @@
    </div>
  </div>
 </div>
-<div layout="row">
+<div layout="row" >
      
      <!-- <div ng-show="hideNoDataFound" layout-padding>
          <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
      </div> -->
-    <div flex="50" class="line"> 
-     <md-content  layout-padding ng-show="hideNoDataFound">
+    <div flex="50" class="line" ng-if="hideNoDataFound"> 
+     <md-content  layout-padding>
      <table width="100%">
        <tr class="pointer">
          <th>

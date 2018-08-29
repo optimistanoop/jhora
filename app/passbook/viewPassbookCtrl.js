@@ -102,7 +102,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
  $scope.getCustomerPassbook = (tableName,column,value)=>{
     q.selectAllByIdActive(tableName, 'customerId', $scope.custid,column,value)
     .then((rows)=>{
-      if(rows)
+      if(rows.length>0){
       for(let row of rows){
         row.date = row.date ? new Date(row.date) : null;
         row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
@@ -117,6 +117,10 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
       },0);
+    }
+    else {
+      $scope.hideNoDataFound = false;
+    }
     })
     .catch((err)=>{
       console.error(err);
