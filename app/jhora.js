@@ -106,11 +106,10 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
         let calcYear = new Date(rows[0].calcOn).getFullYear();
         console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
-        if ((todayDay <= 15 && calcDay <= 15 && todayMonth == calcMonth && todayYear == calcYear) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15 && todayMonth == calcMonth && todayYear == calcYear )) {
-        }
-        else {
-              q.selectAll(CUSTOMERS_TABLE)
-              .then((custs)=> {
+        if ((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15))) {
+        } else {
+            q.selectAll(CUSTOMERS_TABLE)
+            .then((custs)=> {
               if(custs.length > 0) {
                 let promises = []
                 let updatePromise = [];
@@ -119,63 +118,29 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
                 updatePromise.push(passbookService.getUserData(cust.id)
                 .then((datas)=>{
                   if(datas.results.length>1) {
-                  let balData = datas.results[datas.results.length-1][0];
-                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                  promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
-                }
+                    let balData = datas.results[datas.results.length-1][0];
+                    let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                    promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
+                  }
                 }))
               }
               Promise.all(updatePromise)
               .then((upt)=>{
                 Promise.all(promises)
                 .then((update)=>{
-                $rootScope.showToast('Balances Updated');
-                $rootScope.$emit('updateCustomers');
+                  $rootScope.showToast('Balances Updated');
+                  $rootScope.$emit('updateCustomers');
+                })
               })
-              })
-              
-          }
-        })
-
+            }
+          })
         }
-      }
-      else {
-          // q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
-          // .then((NoMatch)=>{
-          //   if(NoMatch.length>0) {
-          //     let balPromise = [];
-          //     let userPromise = [];
-          //     for(let i of NoMatch) {
-          //       userPromise.push(passbookService.getUserData(i.id)
-          //       .then((bal)=>{
-          //         if(bal.results.length>1) {
-          //         let balData = bal.results[bal.results.length-1][0];
-          //         let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-          //           balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
-          //         }
-          //       }))
-          //     }
-          //     Promise.all(userPromise)
-          //     .then((user)=>{
-          //       Promise.all(balPromise)
-          //       .then((insert)=>{
-          //       $rootScope.showToast('Balances Updated');
-          //       $rootScope.$emit('updateCustomers');
-          //     })
-          //       .catch((err)=>{
-          //         console.error("Error while insertion",err);
-          //         });
-          //     })
-
-          //   }
-          //   })
       }
     })
   };
 
-$scope.updateBal();
+  $scope.updateBal();
 })
-//.constant('VILLAGES', ['Daniyari', 'Garhia Mohan', 'Koindha', 'Chhapra Dalrai', 'Garhia Pathak', 'Sivrajpur', 'Pipra Misra', 'Chaupathia', 'Tariya Sujan', 'Other'])
 .constant('TABS', [
   {title:'Add Customer',route:'/customers/add'},
   {title:'Add Transaction',route:'/transactions/add'},
