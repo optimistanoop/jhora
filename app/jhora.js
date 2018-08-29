@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE,BALANCE_COLUMNS) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -96,56 +96,85 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   };
   
   $scope.updateBal = ()=>{
-    q.selectAll(CUSTOMERS_TABLE)
+    q.selectAll(BALANCE_TABLE)
     .then((rows)=>{
-      let promises =[]
-      if(rows)
-      for(let row of rows){
-        row.date = row.date ? new Date(row.date) : null;
-        promises.push(passbookService.getUserData(row.id))
-      };
-      Promise.all(promises)
-      .then((datas)=>{
-        for (let data of datas) {
-          let balData = data.results[data.results.length-1][0];
-          q.selectAllById(BALANCE_TABLE,'customerId',balData.customerId)
-          .then((balance)=>{
-            console.log("balance",balance)
-            if(balance.length > 0) {
-            let calcDate = $mdDateLocale.parseDate(balData.calcOn);
-            let balDate = $mdDateLocale.parseDate(balance[0].calcOn);
-            if(balance && balDate < calcDate) {
-              let keys = ['amount','date','calcTill','calcOn','balPassedTo','customerId','type','p','si','rate','total'];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.balPassedTo,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-              q.update(BALANCE_TABLE, keys, values, 'customerId', balData.customerId)
+      if(rows.length > 0) {
+        let todayDay = new Date().getDate();
+        let todayMonth = new Date().getMonth()+1;
+        let todayYear = new Date().getFullYear();
+        let calcDay = new Date(rows[0].calcOn).getDate();
+        let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
+        let calcYear = new Date(rows[0].calcOn).getFullYear();
+        console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
+        if ((todayDay <= 15 && calcDay <= 15 && todayMonth == calcMonth && todayYear == calcYear) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15 && todayMonth == calcMonth && todayYear == calcYear )) {
+          console.log("in the second if");
+        }
+        else {
+              console.log("only update");
+              q.selectAll(CUSTOMERS_TABLE)
+              .then((custs)=> {
+              if(custs.length > 0) {
+                let promises = []
+                let updatePromise = [];
+                for(let cust of custs){
+                cust.date = cust.date ? new Date(cust.date) : null;
+                updatePromise.push(passbookService.getUserData(cust.id)
+                .then((datas)=>{
+                  if(datas.results.length>1) {
+                  let balData = datas.results[datas.results.length-1][0];
+                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                  promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
+                }
+                }))
+              }
+              Promise.all(updatePromise)
+              .then((upt)=>{
+                Promise.all(promises)
+                .then((update)=>{
                 $rootScope.showToast('Balances Updated');
+                $rootScope.$emit('updateCustomers');
+              })
+              })
+              
+          }
+        })
 
-              // .catch((err)=>{
-              // console.error('anp err occured while updation',err);
-              // });
-              } 
-            else if (balance && balDate >= calcDate) {
-              angular.noop();
-              console.log("Balances remain same");
-            }
-            }
-            else {
-              let keys = ['amount','date','calcTill','calcOn','balPassedTo','customerId','type','p','si','rate','total'];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.balPassedTo,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-              q.insert(BALANCE_TABLE, keys, values)
+        }
+      }
+      else {
+          q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
+          .then((NoMatch)=>{
+            if(NoMatch.length>0) {
+              console.log("non matching",NoMatch[0].id)
+              let balPromise = [];
+              let userPromise = [];
+              for(let i of NoMatch) {
+                // i.date = i.date ? new Date(i.date) : null;
+                userPromise.push(passbookService.getUserData(i.id)
+                .then((bal)=>{
+                  if(bal.results.length>1) {
+                  let balData = bal.results[bal.results.length-1][0];
+                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                    balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+                  }
+                }))
+              }
+              Promise.all(userPromise)
+              .then((user)=>{
+                Promise.all(balPromise)
+                .then((insert)=>{
+                $rootScope.showToast('Balances Updated');
+                $rootScope.$emit('updateCustomers');
+              })
+                .catch((err)=>{
+                  console.error("Error while insertion",err);
+                  });
+              })
 
-              $rootScope.showToast('Balances inserted');
-              // .catch((err)=>{
-              //   console.error('anp err occured while insertion',err);
-              // });
             }
-          });
-        };  // broa} ==
-      });
+            })
+      }
     })
-    .catch((err)=>{
-      console.error(err);
-    });
   };
 
 $scope.updateBal();
@@ -170,6 +199,7 @@ $scope.updateBal();
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village')
 .constant('BALANCE_TABLE', 'balances')
+.constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','customerId','type','p','si','rate','total'])
 .constant('TOAST_DELAY', 3000)
 .constant('TOAST_POS', 'bottom right')
 .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
