@@ -54,7 +54,6 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
         .then((data)=>{
           if(data.length>0){
           $timeout (function() {
-          console.log('MAHE', data);
           for (let i of data) {
             for(let j of rows) {
               if (j.id == i.customerId) { 
