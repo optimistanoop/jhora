@@ -218,6 +218,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
       .when("/transactions/add", {
           templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
       })
+      .when("/transactions/add/:id", {
+          templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
+      })
       .when("/transactions/update/:id", {
           templateUrl : 'file://' + __dirname + '/transaction/updateTransaction.html'
       })

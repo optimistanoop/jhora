@@ -24,10 +24,15 @@
        <label>Search</label>
        <md-icon> <i class="material-icons">search</i> </md-icon>
        <input ng-model="$ctrl.query" type="text">
+
      </md-input-container>
  <div style="width:80%;margin: 10px auto;">
      <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
      <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+          <md-button class="md-fab md-primary" aria-label="Eat cake" style="float: right;"ng-href="#!/transactions/add">
+            <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
+            <md-icon md-svg-src="images/plus.svg"></md-icon>
+        </md-button>
  </div>
 </md-content>
 <md-content layout-padding layout="row" ng-show="hideNoDataFound">
@@ -74,5 +79,10 @@
 </md-content>
   <md-content style="width:80%;margin: 0px auto;" ng-hide="hideNoDataFound">
     <h1>Sorry !! No transaction data found</h1>
+      <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
+          <md-button class="md-fab md-primary" aria-label="Eat cake" style="float: right;"ng-href="#!/transactions/add">
+            <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
+            <md-icon md-svg-src="images/plus.svg"></md-icon>
+        </md-button>
   </md-content>
 </div>

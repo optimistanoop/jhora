@@ -1,5 +1,5 @@
 
-  jhora.controller('addCustomerCtrl', function($rootScope, $scope, $timeout,$mdDateLocale, $mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE, CUSTOMER_SALUTATION) {
+  jhora.controller('addCustomerCtrl', function($rootScope, $scope,$window, $timeout,$mdDateLocale, $mdDialog, CUSTOMERS_TABLE, TRANSACTION_TABLE,VILLAGE_TABLE, CUSTOMER_SALUTATION) {
 
     $scope.salutations = CUSTOMER_SALUTATION;
     $scope.customer = {salutation: $scope.salutations[0], name: '', mobile: '', village: '', father: '', rate: '', guarantor: '', date: null, pageNo: '', remarks: '' };
@@ -72,7 +72,9 @@
         console.error(err);
       });
     };
-
+    $scope.back = () => {
+      $window.history.back();
+    }
     $scope.getVillages(VILLAGE_TABLE);
 
   });

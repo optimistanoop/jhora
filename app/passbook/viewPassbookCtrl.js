@@ -1,5 +1,5 @@
 
-jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDateLocale, passbookService, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE) {
+jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDateLocale, passbookService, TRANSACTION_TYPES, VIEW_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,BALANCE_TABLE,BALANCE_COLUMNS) {
 
 
   const {dialog} = require('electron').remote;
@@ -58,6 +58,20 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
        return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
      })
      .then((data)=>{
+      q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)
+        .then((trans)=>{
+          if(trans.length>0) {
+            passbookService.getUserData(transaction.customerId)
+            .then((calc)=>{
+              let balData = calc.results[calc.results.length-1][0];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
+            })
+          }
+          else {
+            q.deleteTableByName('balances WHERE customerId = '+transaction.customerId)
+          }
+        })
        $timeout(()=> {
          $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
          $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
