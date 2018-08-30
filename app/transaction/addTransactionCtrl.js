@@ -2,6 +2,7 @@
 jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,passbookService,BALANCE_TABLE,BALANCE_COLUMNS) {
 
     $rootScope.template = {title:'Add Transaction'};
+    $scope.custId = $routeParams.id;
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
@@ -10,7 +11,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
     $scope.salutation = '';
-
+    
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
@@ -137,6 +138,14 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       });
     };
 
+    if($scope.custId) {
+      q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
+      .then((data)=>{
+        $timeout(function() {
+        $scope.updateSelectedCust(data[0]);
+        })
+      })
+    }
     $scope.getCustomerPassbook = (tableName,column,value)=>{
          q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
          .then((rows)=>{
@@ -145,12 +154,17 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
              row.date = row.date ? new Date(row.date) : null;
              row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : null;
            }
+           $timeout(function() {
            $scope.transactions = rows;
+           })
          })
          .catch((err)=>{
            console.error(err);
          });
      };
+    $scope.back =()=>{
+      $window.history.back();
+    }
     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
 
   });
