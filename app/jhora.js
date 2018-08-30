@@ -153,6 +153,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
+.constant('UPDATE_TRANSACTION_TYPES', ['Dr', 'Cr'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
 .constant('CUSTOMERS_TABLE', 'customers')
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')

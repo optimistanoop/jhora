@@ -1,5 +1,5 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,BALANCE_TABLE,BALANCE_COLUMNS,passbookService) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$routeParams,$window, UPDATE_TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,BALANCE_TABLE,BALANCE_COLUMNS,passbookService) {
 
     $rootScope.template = {title: 'Edit Transaction'};
     $scope.transid = $routeParams.id;
@@ -25,7 +25,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     )};
 
     $scope.setDefaults = ()=>{
-      $scope.types = TRANSACTION_TYPES;
+      $scope.types = UPDATE_TRANSACTION_TYPES;
       $scope.customer = { salutation: '', name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
       $rootScope.editModeData = {};
       $scope.salutation = '';
@@ -43,8 +43,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
 
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
-      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
-        $scope.transaction.type == "Settle" && $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
+      if ($scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
       } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
@@ -54,7 +53,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
+      if ($scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
       }else if($scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;

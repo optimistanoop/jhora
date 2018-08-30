@@ -34,18 +34,6 @@
                   <div ng-message="maxlength">Your entry is too long.</div>
                 </div>
               </md-autocomplete>
-              <md-input-container class="md-block" flex-xs>
-                <label>Amount</label>
-                <md-icon><i class="material-icons">money</i></md-icon>
-                <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
-                <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
-                  <div ng-message="required" class="my-message">You must supply an amount.</div>
-                  <div ng-message="minlength" class="my-message">Amount should be minimum of 3 digits.</div>
-                  <div ng-message="min" class="my-message">Amount should be greater than 100.</div>
-                  <div ng-message="max" class="my-message">Amount should be less than 2,00,000.</div>
-                  <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
-                </div>
-              </md-input-container>
               <md-input-container flex-xs>
                 <label>Type</label>
                 <md-icon><i class="material-icons">credit_card</i></md-icon>
@@ -57,6 +45,18 @@
                 </md-select>
                 <div ng-messages="transactionForm.type.$error" role="alert" multiple>
                   <div ng-message="required" class="my-message">You must supply a type.</div>
+                </div>
+              </md-input-container>
+              <md-input-container class="md-block" flex-xs>
+                <label>Amount</label>
+                <md-icon><i class="material-icons">money</i></md-icon>
+                <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
+                <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
+                  <div ng-message="required" class="my-message">You must supply an amount.</div>
+                  <div ng-message="minlength" class="my-message">Amount should be minimum of 3 digits.</div>
+                  <div ng-message="min" class="my-message">Amount should be greater than 100.</div>
+                  <div ng-message="max" class="my-message">Amount should be less than 2,00,000.</div>
+                  <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
                 </div>
               </md-input-container>
             </div>
