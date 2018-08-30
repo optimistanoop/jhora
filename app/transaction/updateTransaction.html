@@ -53,7 +53,7 @@
           <div layout-gt-xs="row">
             <md-input-container flex-xs>
               <label>Promise Date</label>
-              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-disabled="disablePromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
+              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
               <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply a promise date.</div>
               </div>

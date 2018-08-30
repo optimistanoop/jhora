@@ -160,6 +160,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village')
 .constant('BALANCE_TABLE', 'balances')
+.constant('BALANCE_HISTORY_TABLE', 'balances_history')
 .constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','customerId','type','p','si','rate','total'])
 .constant('TOAST_DELAY', 3000)
 .constant('TOAST_POS', 'bottom right')

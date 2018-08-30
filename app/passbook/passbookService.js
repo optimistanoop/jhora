@@ -132,7 +132,8 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   let calculateFinalPSI = (trans = [], calcDate)=>{
     let p = new Promise((resolve, reject)=>{  
       let firstTran = trans[0] ? trans[0] : {};
-      let  masterObj = {results:[[firstTran]], calcs:[]};
+      let masterObj = {results:[[firstTran]], calcs:[]};
+      let nextDueDate;
       if(firstTran.type == 'Dr')
       for(let i = 0; i < trans.length; i++){
 
@@ -142,28 +143,30 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         let nextTranType = nextTran ? nextTran.type : null;
         let from = masterObj.results[lastIndexOFResults][0].date;
         let to = nextTran ? nextTran.date : calcDate;
-        let lastTranAsCr = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle'))
+        let lastTranAsCrOrSettle = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle'))
         let fromPlus1Yr = getFromPlus1Yr(from);
+        nextDueDate = tran.promiseDate ? tran.promiseDate : nextDueDate;
 
         if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || i == trans.length - 1){
           let finalResult;
           if(to > fromPlus1Yr){
             // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end 
             finalResult = calculatePSIForYears(from, to, masterObj.results[lastIndexOFResults]);
+            finalResult.dueFrom = firstTran.date;
+            finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
-            console.log(finalResult);
           } 
           
-          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| lastTranAsCr){
+          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| lastTranAsCrOrSettle){
             // monthly
             let toCalcTrans = finalResult ? [finalResult] : masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
-            to = lastTranAsCr ? toCalcTrans[toCalcTrans.length -1].date : to;
+            to = lastTranAsCrOrSettle ? toCalcTrans[toCalcTrans.length -1].date : to;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = nextTranType == 'Cr' ? 'Credit' : 'Settle';
+            finalResult.dueFrom = firstTran.date;
+            finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
-            console.log(finalResult);
-
           }
           if(i == trans.length - 1){
             // monthly 
@@ -172,16 +175,16 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             to = calcDate;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = 'Final';
+            finalResult.dueFrom = firstTran.date;
+            finalResult.nextDueDate = nextDueDate;            
             masterObj.calcs.push(finalResult);
-            console.log(finalResult);
-
           }
 
           finalResult.rate = firstTran.rate;
           finalResult.type = 'Dr';
           finalResult.customerId = firstTran.customerId;
           let nextResultsToCalc = nextTran ? [finalResult, nextTran] : [finalResult];
-          finalResult ? masterObj.results.push(nextResultsToCalc) :[];
+          masterObj.results.push(nextResultsToCalc);
 
         }else if(nextTranType == 'Dr'){
           let lastResult = Array.from(masterObj.results[lastIndexOFResults]);

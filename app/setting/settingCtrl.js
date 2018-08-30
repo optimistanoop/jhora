@@ -1,4 +1,4 @@
-jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_COLUMNS, VILLAGE_COLUMNS){
+jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_COLUMNS,BALANCE_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = `Check your backup/exported file in downloads/app folder once its done.`;
@@ -17,6 +17,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return Promise.all([
        $scope.deleteByTable(ev, CUSTOMERS_TABLE),
        $scope.deleteByTable(ev, TRANSACTION_TABLE),  
+       $scope.deleteByTable(ev, BALANCE_TABLE),  
+       $scope.deleteByTable(ev, BALANCE_HISTORY_TABLE),  
        $scope.deleteByTable(ev, DELCUSTOMERS_TABLE),  
        $scope.deleteByTable(ev, DELTRANSACTION_TABLE),  
        $scope.deleteByTable(ev, VILLAGE_TABLE)
@@ -26,6 +28,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return Promise.all([
       $scope.getBackupByTable(ev, CUSTOMERS_TABLE),
       $scope.getBackupByTable(ev, TRANSACTION_TABLE),  
+      $scope.getBackupByTable(ev, BALANCE_TABLE),  
+      $scope.getBackupByTable(ev, BALANCE_HISTORY_TABLE),  
       $scope.getBackupByTable(ev, DELCUSTOMERS_TABLE),  
       $scope.getBackupByTable(ev, DELTRANSACTION_TABLE),  
       $scope.getBackupByTable(ev, VILLAGE_TABLE)
@@ -97,6 +101,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           fields = CUSTOMERS_COLUMNS;
         }else if (tableName == VILLAGE_TABLE){
           fields = VILLAGE_COLUMNS;
+        }else if (tableName == BALANCE_TABLE){
+          fields = BALANCE_COLUMNS;
+        }else if (tableName == BALANCE_HISTORY_TABLE){
+          fields = BALANCE_COLUMNS;
         }
         const opts = { fields };      
         const csv = json2csv(rows, opts);
