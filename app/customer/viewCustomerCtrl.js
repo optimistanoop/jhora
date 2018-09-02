@@ -46,7 +46,7 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
         console.log('anp rows', rows);
       })
       //SELECT * FROM customers c LEFT JOIN balances b ON c.id = b.customerId
-      q.selectAllTwoTable('customers c', 'balances b', 'b.', 'c.id', 'b.customerId')
+      q.selectAllTwoTable('customers c', 'balances b', '*', 'c.id', 'b.customerId')
       .then((rows)=>{
         console.log('anp data', rows);
         if(rows.length>0) {
@@ -77,6 +77,11 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
           if(rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         },0);
+      }
+      else {
+        $timeout(function() {
+        $scope.hideNoDataFound = false;
+      },0)
       }
      })
      .catch((err)=>{
