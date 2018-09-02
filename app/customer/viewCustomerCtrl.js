@@ -43,40 +43,45 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $scope.getCustomers = (tableName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
-        // let promises =[]
+        console.log('anp rows', rows);
+      })
+      //SELECT * FROM customers c LEFT JOIN balances b ON c.id = b.customerId
+      q.selectAllTwoTable('customers c', 'balances b', 'b.', 'c.id', 'b.customerId')
+      .then((rows)=>{
+        console.log('anp data', rows);
         if(rows.length>0) {
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
           // promises.push(passbookService.getUserData(row.id))
         }
-      }
-        q.selectAll(BALANCE_TABLE)
-        .then((data)=>{
-          if(data.length>0){
-          $timeout (function() {
-          for (let i of data) {
-            for(let j of rows) {
-              if (j.id == i.customerId) { 
-                j.due = i.total;
-              }
-             }
-            }
-          },0);
-          } 
-        })
-        .catch((err)=>{
-        console.error("Error in balance",err);
-        });
+        // q.selectAll(BALANCE_TABLE)
+        // .then((data)=>{
+        //   if(data.length>0){
+        //   $timeout (function() {
+        //   for (let i of data) {
+        //     for(let j of rows) {
+        //       if (j.id == i.customerId) { 
+        //         j.due = i.total;
+        //       }
+        //      }
+        //     }
+        //   },0);
+        //   } 
+        // })
+        // .catch((err)=>{
+        // console.error("Error in balance",err);
+        // });
         $timeout(()=>{
           $scope.hideNoDataFound = true;
           $scope.customers = rows;
           if(rows && rows.length == 0)
           $scope.hideNoDataFound = false;
         },0);
-      })
-      .catch((err)=>{
-        console.error("error while getting",err);
-      });
+      }
+     })
+     .catch((err)=>{
+       console.error("error while getting",err);
+     });
     };
 
     let run = function() {

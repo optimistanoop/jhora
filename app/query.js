@@ -64,6 +64,8 @@ class Query {
          date           TEXT   NOT NULL,
          calcTill       TEXT   NOT NULL,
          calcOn       TEXT   NOT NULL,
+         dueFrom       TEXT   NOT NULL,
+         nextDueDate       TEXT   NOT NULL,
          customerId     INTEGER NOT NULL,
          type           TEXT   NOT NULL,
          p           INT    NOT NULL,
@@ -281,7 +283,6 @@ class Query {
   selectAllTwoTable(table1,table2,columns,match1,match2,conditionOn=""){
     let p = new Promise( (resolve, reject)=>{
       let sql = `SELECT ${columns} FROM ${table1} LEFT JOIN ${table2} ON ${match1} = ${match2} ${conditionOn}`;
-      console.log("sql",sql);
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
