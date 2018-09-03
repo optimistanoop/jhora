@@ -109,8 +109,8 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         if (!((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15)))) {
             return q.selectAll(CUSTOMERS_TABLE)
         }
-        return []
       }
+      return []
     })
     .then((custs)=> {
       if(custs.length > 0) {

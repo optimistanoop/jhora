@@ -48,6 +48,14 @@
         <md-button ng-click="sortBy('total')">Due</md-button>
         <span class="sortorder" ng-show="propertyName === 'total'" ng-class="{reverse: reverse}"></span>
       </th>
+      <th>
+        <md-button ng-click="sortBy('dueFrom')">Due From</md-button>
+        <span class="sortorder" ng-show="propertyName === 'dueFrom'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <md-button ng-click="sortBy('nextDueDate')">Next Due Date</md-button>
+        <span class="sortorder" ng-show="propertyName === 'nextDueDate'" ng-class="{reverse: reverse}"></span>
+      </th>
       <th ng-show="queryFor == 'All'">Edit</th>
       <th ng-show="queryFor == 'All'">Delete</th>
     </tr>
@@ -57,6 +65,8 @@
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
       <td><span ng-if="cust.total == undefined">NA</span>{{ cust.total| currency :'&#8377;'}}</td>
+      <td>{{ cust.dueFrom | date:"EEE,d/M/yy"}}</td>
+      <td>{{ cust.nextDueDate | date:"EEE,d/M/yy"}}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.id}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>

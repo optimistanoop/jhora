@@ -12,17 +12,16 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       .then((row)=>{
         if(row.length>0) {
           $rootScope.showAlertDialog(ev,`Customer in Use`, `Customer : ${customer.name} unable to delete .`);
+        } else {
+          $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html','Are you sure to delete...?')
+          .then((answer)=>{
+            if(answer == 'submit') {
+              $scope.confirmCustomer(customer);
+            }
+          });
         }
-        else {
-      $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html','Are you sure to delete...?')
-      .then((answer)=>{
-        if(answer == 'submit') {
-          $scope.confirmCustomer(customer);
-        }
-      });
+      })
     }
-    })
-  }
     $scope.confirmCustomer = (customer)=>{
         let  {name, mobile, village, father, rate, guarantor, date, pageNo, remarks,salutation } = customer;
         let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks','salutation'];
@@ -43,15 +42,16 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
     $scope.getCustomers = (tableName)=>{
       q.selectAllTwoTable('customers c', 'balances b', 'c.*,b.total,b.dueFrom,b.nextDueDate', 'c.id', 'b.customerId')
       .then((rows)=>{
-        console.log('anp data', rows);
         if(rows.length>0) {
-        for(let row of rows){
-          row.date = row.date ? new Date(row.date) : null;
-        }
-        $timeout(()=>{
-          $scope.hideNoDataFound = true;
-          $scope.customers = rows;
-        },0);
+          for(let row of rows){
+            row.date = row.date ? new Date(row.date) : null;
+            row.dueFrom = row.dueFrom ? new Date(row.dueFrom) : null;
+            row.nextDueDate = row.nextDueDate ? new Date(row.nextDueDate) : null;
+          }
+          $timeout(()=>{
+            $scope.hideNoDataFound = true;
+            $scope.customers = rows;
+          },0);
       }
       else {
         $timeout(function() {
