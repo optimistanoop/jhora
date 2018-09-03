@@ -109,7 +109,6 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let calcDay = new Date(rows[0].calcOn).getDate();
         let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
         let calcYear = new Date(rows[0].calcOn).getFullYear();
-        console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
         if (!((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15)))) {
             return q.selectAll(CUSTOMERS_TABLE)
         }
