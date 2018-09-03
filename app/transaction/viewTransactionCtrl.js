@@ -64,7 +64,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
   $scope.getDataByTable = (tableName, modelName,column,value)=>{
     q.selectAllById(tableName,column,value)
     .then((rows)=>{
-      if(rows)
+      if(rows.length)
       for(let row of rows){
         row.date = row.date ? new Date(row.date) : null;
         if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
@@ -109,7 +109,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       q.selectDataByDates(tableName,column1,fromDate,toDate,column2,value)
         .then((rows)=>{
           $timeout(()=>{
-            if(rows)
+            if(rows.length)
             for(let row of rows){
               row.date = row.date ? new Date(row.date) : undefined;
               row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;

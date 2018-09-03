@@ -127,7 +127,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.getDataByTable = (tableName, modelName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
-        if(rows)
+        if(rows.length)
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
@@ -151,13 +151,20 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.getCustomerPassbook = (tableName,column,value)=>{
          q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
          .then((rows)=>{
-           if(rows)
+           if(rows.length)
            for(let row of rows){
              row.date = row.date ? new Date(row.date) : null;
              row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : null;
            }
+           
            $timeout(function() {
              $scope.transactions = rows;
+             passbookService.calculateFinalPSI(rows, new Date())
+               .then((calc)=>{
+                 let balData = calc.results[calc.results.length-1][0];
+                 $scope.calcData = calc;
+                 $scope.dueBal = balData ? balData.total : 0;
+               })
            })
          })
          .catch((err)=>{
