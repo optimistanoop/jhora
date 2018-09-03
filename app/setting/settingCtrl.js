@@ -5,6 +5,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg2 = `Import steps- export -> delete -> import`;
   $scope.msg3 = `Delete steps- export -> delete`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv `;
+  $scope.msg5 = `All calculations to be happen for todays date`;
 
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
@@ -138,34 +139,46 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return p;
   };
   
-  $scope.doCalculationsForAll = ()=>{
-    // get last calc date 
-    // check last calc date falls in todays time slab , if no proceed, if yes return
-    //  get all cust data , get All  calc data (all calc data will be used to decide weather we need to calc or not, coz a cust many have a new tran which triggers calc)
-    //  foreach cust, check last calc date falls in todays time slab , if no proceed to calc, if yes return to next cust
-    let today = new Date();
-    today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    let  calcSlabFrom = new Date(today.getFullYear(),  today.getMonth(), today.getDate() <= 15 ?  1 : 16);
-    let  calcSlabTo = new Date(today.getFullYear(), today.getDate() <= 15 ? today.getMonth(): today.getMonth() + 1, today.getDate() <= 15 ?  15 : 0);
-    //TODO get last calc date (may be based on total cust and no of calc data in the current slab)
-    let lastCalcDate = new Date(new Date().getFullYear()-1, 0, 1); 
-    if(lastCalcDate >= calcSlabFrom && lastCalcDate <= calcSlabTo) return {};
-    
-    // TODO (not optimal) query for those cust which last calc date is not in the cuurent slab (can be done by quering calc table for current slab and removing them from custs)
-    let calcs = {[id]:{}}; // query for those cust which last calc date is in the cuurent slab and on foreach create calcs 
-    let custs = []; // on all custs, 
-    let finalCalcs = [] 
-    for(let cust of custs){
-      if(!calcs[cust.id]){
-        //TODO get tran of cust
-        let trans = [];
-        passbookService.calculateFinalPSI(trans, today)
-        .then((data)=>{
-          data ?  finalCalcs.push(data) :''; 
-        })
+  $scope.calc = ()=>{
+    q.selectAll(BALANCE_TABLE)
+    .then((rows)=>{
+      if(!rows.length){
+        return q.selectAll(CUSTOMERS_TABLE)  
       }
-    }
-    return finalCalcs;
+      return []
+    })
+    .then((rows)=>{
+      let promises = [];
+      if(rows.length){
+        for(let row of rows){
+          row.date = row.date ? new Date(row.date) : null;
+          promises.push(passbookService.getUserData(row.id));
+        }
+      }
+      return Promise.all(promises)
+    })
+    .then((rows)=>{
+      let promises = [];
+      if(rows.length){
+        console.log(rows.length);
+        //for(let row of rows){
+        for(let i=0; i< rows.length; i++){
+          let row = rows[i];
+          //console.log(rows);
+          if(row.results.length) {
+            let balData = row.results[row.results.length-1][0];
+            console.log(i, balData.dueFrom);
+            let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+            promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+          }
+        }
+      }
+      return Promise.all(promises)
+    })
+    .then((data)=>{
+      $rootScope.showToast('Balances Updated');
+      $rootScope.$emit('updateCustomers');
+    })
   };
   
 });
