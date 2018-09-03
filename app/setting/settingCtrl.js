@@ -167,7 +167,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           //console.log(rows);
           if(row.results.length) {
             let balData = row.results[row.results.length-1][0];
-            console.log(i, balData.dueFrom);
             let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
             promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
           }

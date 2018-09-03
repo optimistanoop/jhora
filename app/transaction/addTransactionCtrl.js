@@ -93,29 +93,31 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       console.log("customer",$scope.transaction.customerId);
       q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
-        q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', $scope.transaction.customerId,'active',1)
-        .then((trans)=>{
-          if(trans.length>1) {
-            passbookService.getUserData($scope.transaction.customerId)
-            .then((calc)=>{
-              let balData = calc.results[calc.results.length-1][0];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-              q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
-            })
-          }
-          else {
-            passbookService.getUserData($scope.transaction.customerId)
-            .then((calc)=>{
-              let balData = calc.results[calc.results.length-1][0];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-              q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values)
-            })
-          }
-        })
+        return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', $scope.transaction.customerId,'active',1)
+      })
+      .then((trans)=>{
+        if(trans.length>1) {
+          return passbookService.getUserData($scope.transaction.customerId)
+              .then((calc)=>{
+                let balData = calc.results[calc.results.length-1][0];
+                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
+              })
+        }
+        else {
+          return passbookService.getUserData($scope.transaction.customerId)
+              .then((calc)=>{
+                let balData = calc.results[calc.results.length-1][0];
+                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values)
+              })
+        }
+      })
+      .then((data)=>{
         $timeout(()=>{
           $scope.resetTransaction();
+          $rootScope.showToast('Transaction Added');
         },0);
-        $rootScope.showToast('Transaction Added');
       })
       .catch((err)=>{
           console.error('anp err, transaction insertion', err);
@@ -155,16 +157,16 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
              row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : null;
            }
            $timeout(function() {
-           $scope.transactions = rows;
+             $scope.transactions = rows;
            })
          })
          .catch((err)=>{
            console.error(err);
          });
      };
-    $scope.back =()=>{
-      $window.history.back();
-    }
-    $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
+  $scope.back =()=>{
+    $window.history.back();
+  }
+  $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
 
-  });
+});

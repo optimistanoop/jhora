@@ -119,12 +119,14 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       }
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
-        passbookService.getUserData($scope.transaction.customerId)
+        return passbookService.getUserData($scope.transaction.customerId)
             .then((calc)=>{
               let balData = calc.results[calc.results.length-1][0];
               let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
               q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
         })
+      })
+      .then((data)=>{
         $timeout (()=>{
           $rootScope.showToast('Transaction updated');
           $scope.resetTransaction();
@@ -146,10 +148,10 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
           row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout( ()=>{
-        $scope[modelName] = rows;
-        if(tableName == CUSTOMERS_TABLE)
-        $scope.updateSelectedCust($scope.transaction.customerId);
-      },0)
+          $scope[modelName] = rows;
+          if(tableName == CUSTOMERS_TABLE)
+          $scope.updateSelectedCust($scope.transaction.customerId);
+        },0)
       })
       .catch((err)=>{
         console.error(err);

@@ -145,7 +145,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         let to = nextTran ? nextTran.date : calcDate;
         let lastTranAsCrOrSettle = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle'))
         let fromPlus1Yr = getFromPlus1Yr(from);
-        nextDueDate = tran.promiseDate ? tran.promiseDate : nextDueDate;
+        nextDueDate = tran.promiseDate ? $mdDateLocale.parseDate(tran.promiseDate) : nextDueDate;
 
         if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || i == trans.length - 1){
           let finalResult;
@@ -203,6 +203,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     for(let row of rows){
       if(row.date){
        row.date = row.date ? new Date(row.date) : null;
+       row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
       }
      }
     return calculateFinalPSI(rows,new Date());
