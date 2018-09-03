@@ -44,7 +44,7 @@
       <md-content  class="calDate">
        <md-input-container flex-xs ng-show="hideNoDataFound">
          <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
-         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" ></md-datepicker>
+         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI(calcDate)" ></md-datepicker>
        </md-input-container>
      </md-content>
    </div>
@@ -118,7 +118,7 @@
             <a>SI</a>
           </th>
           <th>
-            <a>Merge Type</a>
+            <a>Type</a>
           </th>
         </tr>
         <tr ng-repeat="calc in calcData.calcs track by $index">

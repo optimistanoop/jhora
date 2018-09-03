@@ -126,7 +126,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
         $scope.minDate = $scope.transactions[0] ? $scope.transactions[0].date :new Date();
         let lastDate = $scope.transactions[$scope.transactions.length -1].date;
         $scope.maxDate = new Date(lastDate.getFullYear() + 5, lastDate.getMonth(), lastDate.getDate());
-        calculatePSIToday();
+        calculatePSIToday($scope.calcDate);
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
         $scope.hideNoDataFound = false;
@@ -141,8 +141,8 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     });
   };
   
-  let calculatePSIToday = ()=>{
-    passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate)
+  let calculatePSIToday = (data)=>{
+    passbookService.calculateFinalPSI($scope.transactions, data)
     .then((data)=>{
       $timeout(()=> {
         $scope.calcData = data;
@@ -154,9 +154,9 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     });
   }
   
-  $scope.calculatePSI = ()=>{
+  $scope.calculatePSI = (data)=>{
     let fromDate = $mdDateLocale.parseDate( $scope.transactions[0].date);
-    let calcDate = $mdDateLocale.parseDate( $scope.calcDate);
+    let calcDate = $mdDateLocale.parseDate( data );
     q.selectDataByDates(TRANSACTION_TABLE, 'date', fromDate, calcDate, 'customerId', $scope.custid)
     .then((rows)=>{  
       console.log('anp rows', rows);
@@ -167,7 +167,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       }
       $timeout(()=>{
         $scope.transactions = rows || [];
-        calculatePSIToday();
+        calculatePSIToday(data);
         $scope.minDate = $scope.transactions[0] ? $scope.transactions[0].date :new Date();
         console.log('anp rows', rows);
         console.log('anp rows', $scope.transactions);
