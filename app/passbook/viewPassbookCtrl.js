@@ -140,10 +140,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       console.error(err);
     });
   };
-
-  $scope.back = ()=>{
-    $window.history.back();
-  };
   
   let calculatePSIToday = ()=>{
     passbookService.calculateFinalPSI($scope.transactions, $scope.calcDate)

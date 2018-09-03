@@ -36,11 +36,6 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.disablePromiseDate = $scope.transaction.type == 'Settle' ? true :false;
     }
 
-
-    $scope.cancelUpdate = () =>{
-      $window.history.back();
-    };
-
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Cr") {

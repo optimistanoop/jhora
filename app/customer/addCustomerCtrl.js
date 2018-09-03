@@ -72,9 +72,7 @@
         console.error(err);
       });
     };
-    $scope.back = () => {
-      $window.history.back();
-    }
+    
     $scope.getVillages(VILLAGE_TABLE);
 
   });

@@ -164,9 +164,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
            console.error(err);
          });
      };
-  $scope.back =()=>{
-    $window.history.back();
-  }
+     
   $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
 
 });

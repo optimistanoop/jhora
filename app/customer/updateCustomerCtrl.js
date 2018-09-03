@@ -17,10 +17,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       return result.length > 0 ? result :villages;
     };
 
-    $scope.cancelUpdate = () =>{
-      $window.history.back();
-    };
-
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
       $scope.customerForm.$setPristine();
