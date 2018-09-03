@@ -56,8 +56,8 @@
         <md-button ng-click="sortBy('nextDueDate')">Next Due Date</md-button>
         <span class="sortorder" ng-show="propertyName === 'nextDueDate'" ng-class="{reverse: reverse}"></span>
       </th>
-      <th ng-show="queryFor == 'All'">Edit</th>
-      <th ng-show="queryFor == 'All'">Delete</th>
+      <th ng-show="queryFor == 'All'">E</th>
+      <th ng-show="queryFor == 'All'">D</th>
     </tr>
     <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{cust.id}}">{{ cust.name }}</a></span><span ng-hide="queryFor == 'All'">{{ cust.name }}</span></td>
