@@ -106,8 +106,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
         let calcYear = new Date(rows[0].calcOn).getFullYear();
         console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
-        if ((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15))) {
-        } else {
+        if (!((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15)))) {
             q.selectAll(CUSTOMERS_TABLE)
             .then((custs)=> {
               if(custs.length > 0) {
@@ -162,7 +161,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 .constant('VILLAGE_TABLE', 'village')
 .constant('BALANCE_TABLE', 'balances')
 .constant('BALANCE_HISTORY_TABLE', 'balances_history')
-.constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','customerId','type','p','si','rate','total'])
+.constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','dueFrom', 'nextDueDate','customerId','type','p','si','rate','total'])
 .constant('TOAST_DELAY', 3000)
 .constant('TOAST_POS', 'bottom right')
 .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])

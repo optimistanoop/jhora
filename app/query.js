@@ -100,8 +100,8 @@ class Query {
     this.db.run(`CREATE TRIGGER IF NOT EXISTS ${triggerName} AFTER ${action} ON balances FOR EACH ROW
       BEGIN
       INSERT INTO balances_history (
-        amount,date,calcTill,calcOn,customerId,type,p,si,rate,total,remarks,action)
-      VALUES (new.amount,new.date,new.calcTill,new.calcOn,new.customerId,new.type,new.p,
+        amount,date,calcTill,calcOn,dueFrom, nextDueDate, customerId,type,p,si,rate,total,remarks,action)
+      VALUES (new.amount,new.date,new.calcTill,new.calcOn,new.dueFrom,new.nextDueDate,new.customerId,new.type,new.p,
         new.si,new.rate,new.total,new.remarks,'${action}');
         END;`
        , [], (err, data)=>{

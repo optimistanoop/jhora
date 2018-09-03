@@ -152,7 +152,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
           if(to > fromPlus1Yr){
             // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end 
             finalResult = calculatePSIForYears(from, to, masterObj.results[lastIndexOFResults]);
-            finalResult.dueFrom = firstTran.date;
+            finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
             finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
           } 
@@ -164,7 +164,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             to = lastTranAsCrOrSettle ? toCalcTrans[toCalcTrans.length -1].date : to;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = nextTranType == 'Cr' ? 'Credit' : 'Settle';
-            finalResult.dueFrom = firstTran.date;
+            finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
             finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
           }
@@ -175,7 +175,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             to = calcDate;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = 'Final';
-            finalResult.dueFrom = firstTran.date;
+            finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
             finalResult.nextDueDate = nextDueDate;            
             masterObj.calcs.push(finalResult);
           }
@@ -190,10 +190,8 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
           let lastResult = Array.from(masterObj.results[lastIndexOFResults]);
           lastResult.push(nextTran);
           masterObj.results.push(lastResult);
-          console.log(masterObj);
         }
       }
-      console.log(masterObj);
       resolve(masterObj);
     })
     return p;
