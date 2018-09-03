@@ -27,9 +27,11 @@ let dbInit = ()=>{
     q.createBalanceTable('balances_history',',action'),
     q.createCustomerTable('delcustomers'),
     q.createTransactionTable('deltransactions','deletedOn TEXT'),
-    q.createTrigger('onInsert','INSERT'),
-    q.createTrigger('onUpdate','UPDATE')
-  ]).then((data)=>{
+  ])
+  .then((data)=>{
+    return Promise.all([ q.createTrigger('onInsert','INSERT'), q.createTrigger('onUpdate','UPDATE')])
+  })
+  .then((data)=>{
     angular.bootstrap(document, ['jhora']);
   })
   .catch((err)=>{
