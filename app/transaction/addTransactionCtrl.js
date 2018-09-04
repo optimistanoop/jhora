@@ -139,15 +139,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         console.error(err);
       });
     };
-
-    if($scope.custId) {
-      q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
-      .then((data)=>{
-        $timeout(function() {
-        $scope.updateSelectedCust(data[0]);
-        })
-      })
-    }
+    
     $scope.getCustomerPassbook = (tableName,column,value)=>{
          q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
          .then((rows)=>{
@@ -172,6 +164,15 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
          });
      };
      
-  $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
+     if($scope.custId) {
+       q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
+       .then((data)=>{
+         $timeout(function() {
+         $scope.updateSelectedCust(data[0]);
+         })
+       })
+     }
+     
+     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
 
 });
