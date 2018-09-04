@@ -40,7 +40,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.export = (ev)=>{
     exportAlltables(ev)
     .then((data)=>{
-      $scope.showAlertDialog(ev, 'Backup', `Backup for all data is done.`)
+      $rootScope.showToast(`Backup for all data is done.`)
     }); 
   };
   
@@ -96,11 +96,11 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
               })
             );
           }
-          
           return Promise.all(promises)
-          .then((data)=>{
-            $scope.showAlertDialog(ev, 'Import', `All data imported succesfully.`);
-          })
+        })
+        .then((data)=>{
+          data.length && $rootScope.showToast(`All data imported succesfully.`);
+          !data.length && $rootScope.showToast(`Nothing to import.`);
         })
         .catch((err)=>{
           $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
@@ -156,7 +156,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return p;
   };
   
-  $scope.calc = ()=>{
+  $scope.calc = (ev)=>{
     q.selectAll(BALANCE_TABLE)
     .then((rows)=>{
       if(!rows.length){
@@ -192,8 +192,12 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       return Promise.all(promises)
     })
     .then((data)=>{
-      $rootScope.showToast('Balances Updated');
-      $rootScope.$emit('updateCustomers');
+      if(data.length){
+        $rootScope.showToast(`Balances Updated`);
+        $rootScope.$emit('updateCustomers');
+      }else{
+        $rootScope.showToast('Nothing to update');
+      }
     })
   };
   
