@@ -45,7 +45,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
         return passbookService.getUserData(transaction.customerId)
             .then((calc)=>{
               let balData = calc.results[calc.results.length-1][0];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
               q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
             })
       } else {
@@ -108,12 +108,12 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
       q.selectDataByDates(tableName,column1,fromDate,toDate,column2,value)
         .then((rows)=>{
+          if(rows.length)
+          for(let row of rows){
+            row.date = row.date ? new Date(row.date) : undefined;
+            row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          }
           $timeout(()=>{
-            if(rows.length)
-            for(let row of rows){
-              row.date = row.date ? new Date(row.date) : undefined;
-              row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
-            }
           $scope.transactions= rows;
           $scope.hideNoDataFound = true;
           if (rows.length == 0) {
