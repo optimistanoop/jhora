@@ -1,4 +1,4 @@
-jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_COLUMNS,BALANCE_COLUMNS, VILLAGE_COLUMNS){
+jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = `Check your backup/exported file in downloads/app folder once its done.`;
@@ -61,17 +61,33 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   };
   
   $scope.import = (ev)=>{
-    let promises = [];
     let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
       filePaths = filePaths ? filePaths :[];
-      if(filePaths.length > 0)
-        exportAlltables(ev)
-        .then(deleteAllTables.bind(this, ev))
+      let promises=[];
+      let tableNames=[];
+      //exportAlltables(ev)
+      //.then(deleteAllTables.bind(this, ev))
+      if(filePaths.length)
+        for(let f of filePaths){
+          let splitedNames = f.split('-');
+          let tableName = splitedNames[1] || '';
+          tableNames.push(tableName);
+          promises.push($scope.getBackupByTable(ev, tableName));
+        }
+        Promise.all(promises)
         .then((data)=>{
-          for(let f of filePaths){
-            let splitedNames = f.split('-');
-            let tableName = splitedNames[1] || '';
+          let promises=[]
+          for(let tableName of tableNames){
+            promises.push($scope.deleteByTable(ev, tableName));
+          }
+          return Promise.all(promises);
+        })
+        .then((data)=>{
+          let promises = [];
+          for(let i in filePaths){
+            let f = filePaths[i];
+            let tableName = tableNames[i];
             if(f)
             promises.push(csv2json()
               .fromFile(f)
@@ -80,6 +96,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
               })
             );
           }
+          
           return Promise.all(promises)
           .then((data)=>{
             $scope.showAlertDialog(ev, 'Import', `All data imported succesfully.`);
@@ -97,7 +114,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       .then((rows)=>{
         let fields;
         if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE){
-          fields = TRANSACTION_COLUMNS;
+          fields = TRANSACTION_EXPORT_COLUMNS;
         }else if (tableName == CUSTOMERS_TABLE || tableName == DELCUSTOMERS_TABLE){
           fields = CUSTOMERS_COLUMNS;
         }else if (tableName == VILLAGE_TABLE){

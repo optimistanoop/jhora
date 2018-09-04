@@ -174,6 +174,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 .constant('TOAST_POS', 'bottom right')
 .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
 .constant('TRANSACTION_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'])
+.constant('TRANSACTION_EXPORT_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type', 'active'])
 .constant('VILLAGE_COLUMNS', ['id','name']);
 
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
