@@ -91,7 +91,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     for(let i = 0; i< yrDiff; i++){
       fromPlus1Yr = getFromPlus1Yr(from);
       calcYrs.push(fromPlus1Yr);
-      from = fromPlus1Yr;
+      from = new Date(fromPlus1Yr.getFullYear(), fromPlus1Yr.getMonth(), fromPlus1Yr.getDate() +1); //+1 DAY
     }
 
     let frstCalcYr = calcYrs[0];
