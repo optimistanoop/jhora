@@ -117,7 +117,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         return passbookService.getUserData($scope.transaction.customerId)
             .then((calc)=>{
               let balData = calc.results[calc.results.length-1][0];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
               q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
         })
       })

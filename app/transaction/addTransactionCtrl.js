@@ -11,14 +11,19 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
     $scope.salutation = '';
-    
+    $scope.dueBal = 0;
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
-        $scope.transaction.type == "Settle" && $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
+        $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
+        $scope.disablePromiseDate = true;
+        $scope.transaction.amount = $scope.dueBal;
+      }else if($scope.transaction.type == "Cr"){
+        $scope.transaction.amount = '';
         $scope.disablePromiseDate = true;
       } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
+        $scope.transaction.amount = '';
       }
     };
     
@@ -100,7 +105,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           return passbookService.getUserData($scope.transaction.customerId)
               .then((calc)=>{
                 let balData = calc.results[calc.results.length-1][0];
-                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
                 q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
               })
         }
@@ -108,7 +113,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           return passbookService.getUserData($scope.transaction.customerId)
               .then((calc)=>{
                 let balData = calc.results[calc.results.length-1][0];
-                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
                 q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values)
               })
         }
