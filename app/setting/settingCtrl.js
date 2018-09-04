@@ -139,7 +139,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return p;
   };
   
-  $scope.calc = ()=>{
+  $scope.calc = (ev)=>{
     q.selectAll(BALANCE_TABLE)
     .then((rows)=>{
       if(!rows.length){
@@ -175,7 +175,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       return Promise.all(promises)
     })
     .then((data)=>{
-      $rootScope.showToast('Balances Updated');
+      $rootScope.showAlertDialog(ev,'Balance','Balances Updated');
       $rootScope.$emit('updateCustomers');
     })
   };
