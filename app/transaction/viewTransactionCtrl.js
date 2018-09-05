@@ -35,7 +35,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     values[3] = nPromiseDate;
     q.insert(DELTRANSACTION_TABLE, keys, values)
     .then((data)=>{
-      return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
+      return q.updateStatus(TRANSACTION_TABLE, 'active', '2', 'id', transaction.id)
     })
     .then((data)=>{
       return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)

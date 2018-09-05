@@ -145,7 +145,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           return $scope.insetTransactionAndBalance(keys, values)   
         })
         .then((data)=>{
-          return q.updateActiveStatus(TRANSACTION_TABLE, 'active', 0, 'customerId', $scope.transaction.customerId);
+          return q.updateActiveStatus(TRANSACTION_TABLE, 'active', '0', 'customerId', $scope.transaction.customerId);
         })
         .then((data)=>{
           $timeout(()=>{
