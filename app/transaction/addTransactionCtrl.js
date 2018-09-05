@@ -56,7 +56,6 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
 
     $scope.updateSelectedCust = (customer)=>{
         if(customer && customer.id){
-
           $scope.customer = customer;
           $scope.transaction.rate = $scope.customer.rate;
           if($scope.customer.salutation == 'Mrs'){
@@ -108,8 +107,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
                 let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
                 q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
               })
-        }
-        else {
+        } else {
           return passbookService.getUserData($scope.transaction.customerId)
               .then((calc)=>{
                 let balData = calc.results[calc.results.length-1][0];
@@ -171,7 +169,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-          console.error('anp err, transaction insertion', err);
+        console.error('anp err, transaction insertion', err);
       });
     };
     
@@ -200,7 +198,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     };
     
     $scope.getCustomerPassbook = (tableName,column,value)=>{
-         q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
+        q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
          .then((rows)=>{
            if(rows.length)
            for(let row of rows){
@@ -222,18 +220,18 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
            console.error(err);
          });
      };
-     $scope.init = ()=>{
-       if($scope.custId) {
-         q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
+    $scope.init = ()=>{
+      if($scope.custId) {
+        q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
          .then((data)=>{
            $timeout(function() {
            $scope.updateSelectedCust(data[0]);
            })
-         })
-       }else{
+        })
+      }else{
          $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
-       }
-     }
+      }
+    }
      
-     $scope.init();
+    $scope.init();
 });
