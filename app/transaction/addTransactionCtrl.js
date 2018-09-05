@@ -11,10 +11,11 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.maxPromiseDate = new Date();
     $scope.disablePromiseDate = true;
     $scope.salutation = '';
-    $scope.dueBal = 0;
+    $scope.dueBal = '';
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
-      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
+      $scope.transaction.amount = '';
+      if ($scope.transaction.type == "Settle") {
         $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
         $scope.disablePromiseDate = true;
         $scope.transaction.amount = $scope.dueBal;
@@ -92,11 +93,10 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       values[indexPdate] = promiseDate;
       return {keys, values};
     }
-
-    $scope.addTransaction = ()=>{
-      let {keys, values} = $scope.dataMassage();
-      console.log("customer",$scope.transaction.customerId);
-      q.insert(TRANSACTION_TABLE, keys, values)
+    
+    $scope.insetTransactionAndBalance = (keys =[], values=[])=>{
+      //let {keys, values} = $scope.dataMassage();
+      return q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', $scope.transaction.customerId,'active',1)
       })
@@ -118,6 +118,52 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
               })
         }
       })
+    };
+    
+    $scope.processSettle = (ev)=>{
+      let discount = $scope.dueBal - $scope.transaction.amount;
+      if(discount < 0){
+        $scope.showAlertDialog(ev, 'Error', `Amount should not be greater than due balanace.`);
+      }else if(discount){
+        $scope.showConfirmDialog(ev, 'Alert', `Are you sure for Rs. ${discount} discount ?`)
+        .then((data)=>{
+          console.log('anp confirm', data);
+          if(data){
+            // add transaction
+            // add discount
+            // inactive all trans
+            let {keys, values} = $scope.dataMassage();
+            return $scope.insetTransactionAndBalance(keys, values)
+          }
+          throw Error;
+        })
+        .then((data)=>{
+          $scope.transaction.remarks = $scope.transaction.amount;
+          $scope.transaction.amount = discount;
+          $scope.transaction.type = 'Discount';        
+          let {keys, values} = $scope.dataMassage();
+          return $scope.insetTransactionAndBalance(keys, values)   
+        })
+        .then((data)=>{
+          return q.updateActiveStatus(TRANSACTION_TABLE, 'active', '0', 'customerId', $scope.transaction.customerId);
+        })
+        .then((data)=>{
+          $timeout(()=>{
+            $scope.resetTransaction();
+            $rootScope.showToast('Transaction Added');
+          },0);
+        })
+        .catch((err)=>{
+            console.error('anp err, transaction insertion', err);
+        });
+      }else {
+        $scope.processAddTransaction();
+      }
+    }
+
+    $scope.processAddTransaction = ()=>{
+      let {keys, values} = $scope.dataMassage();
+      $scope.insetTransactionAndBalance(keys, values)
       .then((data)=>{
         $timeout(()=>{
           $scope.resetTransaction();
@@ -128,6 +174,14 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           console.error('anp err, transaction insertion', err);
       });
     };
+    
+    $scope.addTransaction = (ev)=>{
+      if($scope.transaction.type == 'Settle'){
+        $scope.processSettle(ev);
+      }else{
+        $scope.processAddTransaction(ev);
+      }
+    }
 
     $scope.getDataByTable = (tableName, modelName)=>{
       q.selectAll(tableName)
@@ -168,16 +222,18 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
            console.error(err);
          });
      };
-     
-     if($scope.custId) {
-       q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
-       .then((data)=>{
-         $timeout(function() {
-         $scope.updateSelectedCust(data[0]);
+     $scope.init = ()=>{
+       if($scope.custId) {
+         q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
+         .then((data)=>{
+           $timeout(function() {
+           $scope.updateSelectedCust(data[0]);
+           })
          })
-       })
+       }else{
+         $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
+       }
      }
      
-     $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
-
+     $scope.init();
 });

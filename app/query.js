@@ -262,6 +262,16 @@ class Query {
     });
     return p;
   }
+  updateActiveStatus(tableName, key, value,conditionOn,id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `UPDATE ${tableName} SET ${key} = ${value} WHERE ${conditionOn} =${id} AND active=1`;
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
   bulkUpload(tableName, rows =[]){
     let p = new Promise( (resolve, reject)=>{
       if(rows.length == 0) resolve(`No data found for ${tableName}`);

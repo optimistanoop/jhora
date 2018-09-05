@@ -64,7 +64,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         p += tran.amount;
         si += tran.si ? tran.si :0;
         si += calculateSI(tran.amount, tran.rate, months);
-      }else if(tran.type == 'Cr' || tran.type == 'Settle' ){
+      }else if(tran.type == 'Cr' || tran.type == 'Settle' || tran.type == 'Discount' ){
         let newPSI = getUpdatedPSI(p, si, tran.amount);
         p = newPSI.p;
         si = newPSI.si;
@@ -157,7 +157,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             masterObj.calcs.push(finalResult);
           } 
           
-          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| lastTranAsCrOrSettle){
+          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| nextTranType == 'Discount'|| lastTranAsCrOrSettle){
             // monthly
             let toCalcTrans = finalResult ? [finalResult] : masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
