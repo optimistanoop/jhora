@@ -87,11 +87,19 @@ jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW
       });
     };
 
-    let run = function() {
-      console.log("Event catched");
-      $scope.getCustomers(CUSTOMERS_TABLE);
+    let run = function(promises) {
+      Promise.all(promises)
+      .then((data)=>{
+        $scope.getCustomers(CUSTOMERS_TABLE);
+      })
     }
-    $rootScope.$on('updateCustomers',run);
+    $rootScope.$on('updateCustomers',function(ev,promises) {
+      Promise.all(promises)
+      .then((data)=>{
+        console.log(data);
+        $scope.getCustomers(CUSTOMERS_TABLE);
+      })
+    });
     $scope.getNewData= (queryFor)=>{
       if(queryFor == $scope.limits[1]) {
         $scope.getCustomers(DELCUSTOMERS_TABLE);

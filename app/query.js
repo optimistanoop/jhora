@@ -260,6 +260,17 @@ class Query {
     });
     return p;
   }
+  selectAllTwoTable(table1,table2,columns,match1,match2,conditionOn=""){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `SELECT ${columns} FROM ${table1} LEFT JOIN ${table2} ON ${match1} = ${match2} ${conditionOn}`;
+      console.log("sql",sql);
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
   
 };
 

@@ -96,58 +96,92 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   };
   
   $scope.updateBal = ()=>{
-    q.selectAll(CUSTOMERS_TABLE)
+    q.selectAll(BALANCE_TABLE)
     .then((rows)=>{
-      let promises =[];
-      let balPromises = [];
-      if(rows)
-      for(let row of rows){
-        row.date = row.date ? new Date(row.date) : null;
-        promises.push(passbookService.getUserData(row.id))
-      };
-      Promise.all(promises)
-      .then((datas)=>{
-        console.log("promise",promises);
-        for (let data of datas) {
-          let balData = data.results[data.results.length-1][0];
-          q.selectAllById(BALANCE_TABLE,'customerId',balData.customerId)
-          .then((balance)=>{
-            console.log("balance",balance)
-            if(balance.length > 0) {
-              let calcDate = $mdDateLocale.parseDate(balData.calcOn);
-              let balDate = $mdDateLocale.parseDate(balance[0].calcOn);
-              if(balance && balDate < calcDate) {
-              var values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                balPromises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
-                return;
-              } 
-              else if (balance && balDate >= calcDate) {
-              angular.noop();
-              console.log("Balances remain same");
-              return;
-              }
-            }
-            else {
-              var values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                balPromises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values))
-                return;
-            }
-          })
+      if(rows.length > 0) {
+        let todayDay = new Date().getDate();
+        let todayMonth = new Date().getMonth()+1;
+        let todayYear = new Date().getFullYear();
+        let calcDay = new Date(rows[0].calcOn).getDate();
+        let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
+        let calcYear = new Date(rows[0].calcOn).getFullYear();
+        console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
+        if ((todayDay <= 15 && calcDay <= 15 && todayMonth == calcMonth && todayYear == calcYear) || (todayDay <= 31 && calcDay <= 31 && todayMonth == calcMonth && todayYear == calcYear )) {
+          console.log("in the second if");
         }
-        Promise.all(balPromises)
-          .then((value)=>{
-            console.log("AFTER ",balPromises,value);
-            $rootScope.showToast('Balances Updated');
-            $rootScope.$emit('updateCustomers');
-            // $rootScope.$broadcast('updateCustomers');
-            // $rootScope.run();
-      })
-      })
-      
+        else {
+          console.log("in the second else");
+          q.selectAllTwoTable('customers c','balances b','c.id','c.id','b.customerId','WHERE b.customerId IS NULL')
+          .then((NoMatch)=>{
+            if(NoMatch.length>0) {
+              console.log("non matching")
+              let balPromise = [];
+              for(let i of NoMatch) {
+                i.date = i.date ? new Date(i.date) : null;
+                passbookService.getUserData(i.id)
+                .then((bal)=>{
+                  if(bal.results.length>0) {
+                  let balData = bal.results[bal.results.length-1][0];
+                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                    balPromise.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+                  }
+                })
+              }
+              Promise.all(balPromise)
+              .then((insert)=>{
+                $rootScope.showToast('Balances Updated');
+                $rootScope.$emit('updateCustomers');
+              })
+            }
+            })
+              console.log("only update");
+              q.selectAll(CUSTOMERS_TABLE)
+              .then((custs)=> {
+              if(custs.length > 0) {
+                let promises = []
+                for(let row of rows){
+                row.date = row.date ? new Date(row.date) : null;
+                passbookService.getUserData(row.id)
+                .then((datas)=>{
+                  let balData = datas.results[datas.results.length-1][0];
+                  let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                  promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
+                })
+              }
+              Promise.all(promises)
+              .then((update)=>{
+                $rootScope.showToast('Balances Updated');
+                $rootScope.$emit('updateCustomers');
+              })
+          }
+        })
+
+        }
+      }
+      else {
+        console.log("in the first else");
+        q.selectAll(CUSTOMERS_TABLE)
+        .then((custs)=> {
+          if(custs.length > 0) {
+            let promises = []
+            for(let cust of custs){
+              cust.date = cust.date ? new Date(cust.date) : null;
+              passbookService.getUserData(cust.id)
+              .then((data)=>{
+                if(data.results.length>1) {
+                  console.log(data.results.length);
+                let balData = data.results[data.results.length-1][0];
+                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+              }
+              })
+            }
+              // $rootScope.showToast('Balances Updated');
+            $rootScope.$emit('updateCustomers',promises);
+          }
+        })
+      }
     })
-    .catch((err)=>{
-      console.error(err);
-    });
   };
 
 $scope.updateBal();
