@@ -97,10 +97,10 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       //let {keys, values} = $scope.dataMassage();
       return q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
-        return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', $scope.transaction.customerId,'active',1)
+        return q.selectAllById(BALANCE_TABLE, 'customerId', $scope.transaction.customerId)
       })
       .then((trans)=>{
-        if(trans.length>1) {
+        if(trans.length) {
           return passbookService.getUserData($scope.transaction.customerId)
               .then((calc)=>{
                 let balData = calc.results[calc.results.length-1][0];
