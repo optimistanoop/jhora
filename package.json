@@ -7,7 +7,7 @@
   "copyright": "© 2018, KF Daniyari.",
   "homepage": "http://example.com",
   "license": "MIT",
-  "main": "app/app.js",
+  "main": "app.js",
   "build": {
     "appId": "com.example.electron-boilerplate-sqlite",
     "files": [
