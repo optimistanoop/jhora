@@ -85,9 +85,8 @@
           })
           .catch((err) => {
             console.error("error while getting", err);
-        });
-      }
-      else {
+          });
+      } else {
         q.selectAll(tableName)
           .then((rows) => {
             if (rows.length) {
