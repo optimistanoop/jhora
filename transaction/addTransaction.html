@@ -20,6 +20,7 @@
                 md-require-match
                 md-selected-item-change="updateSelectedCust(item)"
                 md-floating-label="Name"
+                ng-disabled="nameDisable"
                 >
                 <md-item-template>
                   <span md-highlight-text="searchText">{{item.name}}</span>

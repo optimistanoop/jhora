@@ -27,7 +27,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $scope.transaction.amount = '';
       }
     };
-    
+
     $scope.onRateChange = (ev)=>{
       if($scope.transaction.rate == 0){
         $rootScope.showAlertDialog(ev, 'Alert', 'You have changed rate, please verify.')
@@ -92,7 +92,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       values[indexPdate] = promiseDate;
       return {keys, values};
     }
-    
+
     $scope.insetTransactionAndBalance = (keys =[], values=[])=>{
       //let {keys, values} = $scope.dataMassage();
       return q.insert(TRANSACTION_TABLE, keys, values)
@@ -117,7 +117,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         }
       })
     };
-    
+
     $scope.processSettle = (ev)=>{
       let discount = $scope.dueBal - $scope.transaction.amount;
       if(discount < 0){
@@ -138,9 +138,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         .then((data)=>{
           $scope.transaction.remarks = $scope.transaction.amount;
           $scope.transaction.amount = discount;
-          $scope.transaction.type = 'Discount';        
+          $scope.transaction.type = 'Discount';
           let {keys, values} = $scope.dataMassage();
-          return $scope.insetTransactionAndBalance(keys, values)   
+          return $scope.insetTransactionAndBalance(keys, values)
         })
         .then((data)=>{
           return q.updateActiveStatus(TRANSACTION_TABLE, 'active', '0', 'customerId', $scope.transaction.customerId);
@@ -172,7 +172,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         console.error('anp err, transaction insertion', err);
       });
     };
-    
+
     $scope.addTransaction = (ev)=>{
       if($scope.transaction.type == 'Settle'){
         $scope.processSettle(ev);
@@ -196,7 +196,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         console.error(err);
       });
     };
-    
+
     $scope.getCustomerPassbook = (tableName,column,value)=>{
         q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
          .then((rows)=>{
@@ -205,7 +205,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
              row.date = row.date ? new Date(row.date) : null;
              row.promiseDate = row.promiseDate  ? new Date(row.promiseDate) : null;
            }
-           
+
            $timeout(function() {
              $scope.transactions = rows;
              passbookService.calculateFinalPSI(rows, new Date())
@@ -225,13 +225,15 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
          .then((data)=>{
            $timeout(function() {
+          $scope.nameDisable =true;
            $scope.updateSelectedCust(data[0]);
            })
         })
       }else{
          $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
+         $scope.nameDisable = false;
       }
     }
-     
+
     $scope.init();
 });

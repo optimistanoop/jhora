@@ -15,14 +15,14 @@
                <span style="position: absolute;left:30%;bottom:34px">Mobile: {{customer.mobile}}</span>
                <span ng-if="customer.guarantor" style="position: absolute;left:50%;bottom:34px">Guarantor: {{customer.guarantor}}</span>
                <span ng-if="customer.remarks" style="position: absolute;left:75%;bottom:34px">Remarks: {{customer.remarks}}</span>
-             </div> 
+             </div>
          </md-card>
         </md-content>
     </div>
-    <div layout="row" style="max-height: 75px;" ng-if="hideNoDataFound">
+    <div layout="row" style="max-height: 75px;">
     <div flex="50" >
-      <md-content layout-padding class="line">
-          <span style="font-size:20px"><strong> Transactions </strong></span>
+      <md-content layout-padding ng-class="{'line' :hideNoDataFound==true}">
+          <span style="font-size:20px"ng-if="hideNoDataFound"><strong> Transactions </strong></span>
         <md-input-container flex-xs  class="width">
           <label>Results for</label>
           <md-icon><i class="material-icons">sort</i></md-icon>
@@ -40,7 +40,7 @@
       </md-content>
    </div>
      <div flex="50" >
-       <span class="cal"><strong> Calculations </strong></span>
+       <span class="cal"  ng-if="hideNoDataFound"><strong> Calculations </strong></span>
       <md-content  class="calDate">
        <md-input-container flex-xs ng-show="hideNoDataFound">
          <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
@@ -51,12 +51,12 @@
  </div>
 </div>
 <div layout="row" >
-     
+
      <!-- <div ng-show="hideNoDataFound" layout-padding>
          <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
      </div> -->
-    <div flex="50" class="line" ng-if="hideNoDataFound"> 
+    <div flex="50" class="line" ng-if="hideNoDataFound">
      <md-content  layout-padding>
      <table width="100%">
        <tr class="pointer">
