@@ -1,0 +1,51 @@
+<div ng-controller="addViewVillageCtrl"  ng-cloak class="md-inline-form">
+  <div layout="row">
+    <div flex="40">
+      <md-content layout-padding>
+      <form novalidate name="villageForm">
+
+         <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
+            <label>Name</label>
+            <md-icon><i class="material-icons">home</i></md-icon>
+            <input name="name" type="text" ng-model="village.name" ng-minlength="4" md-maxlength="20" ng-required="true">
+            <div ng-messages="villageForm.name.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a name.</div>
+              <div ng-message="minlength" class="my-message">Name should be of minimum 4 alphabets.</div>
+              <div ng-message="md-maxlength" class="my-message">Name should not be greater than 20 alphabets.</div>
+            </div>
+          </md-input-container>
+          </md-content>
+
+        <md-button class="md-raised md-primary" ng-disabled="villageForm.$invalid" ng-click="addVillage($event)">Submit</md-button>
+        <md-button class="md-raised md-warn" ng-click="resetVillage()">Reset</md-button>
+        <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
+
+      </form>
+    </md-content>
+  </div>
+
+<div flex="60">
+      <md-content layout-padding layout="row" ng-show="hideNoDataFound">
+  <table style="width:80%;margin: 0px auto;" class="customertable">
+    <tr>
+      <th>
+        <md-button ng-click="sortBy('name')">Name</md-button>
+        <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th ng-show="queryFor == 'All'">Edit</th>
+      <th ng-show="queryFor == 'All'">Delete</th>
+    </tr>
+    <tr ng-repeat="village in villages | filter:$ctrl.query | orderBy:propertyName:reverse">
+      <td>{{ village.name }}</td>
+
+      <td ng-click="editVillage(village)" ng-show="queryFor == 'All'"><i class="material-icons">edit</i></td>
+      <td ng-click="deleteVillage($event,village)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
+    </tr>
+   </table>
+  </md-content>
+  <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
+    <h1>Sorry !! No village data found</h1>
+  </md-content>
+</div>
+</div>

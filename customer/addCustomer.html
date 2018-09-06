@@ -1,0 +1,133 @@
+<div ng-controller="addCustomerCtrl"  ng-cloak class="md-inline-form">
+      <form novalidate name="customerForm">
+
+        <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
+             <label>Title</label>
+            <md-icon><i class="material-icons">person</i></md-icon>
+            <md-select name="salutation" ng-model="customer.salutation" ng-required="true" ng-change="setColumn(customer.salutation)">
+
+             <md-option ng-repeat="salutation in salutations" ng-value="salutation">
+               {{salutation}}
+             </md-option>
+           </md-select>
+           <div ng-messages="customerForm.salutation.$error" role="alert" multiple>
+             <div ng-message="required" class="my-message">You must supply a title.</div>
+           </div>
+          </md-input-container>
+            <md-input-container class="md-block" flex-xs>
+              <label>Name</label>
+            <input name="name" type="text" ng-model="customer.name" ng-minlength="4" md-maxlength="20" ng-required="true">
+            <div ng-messages="customerForm.name.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a name.</div>
+              <div ng-message="minlength" class="my-message">Name should be of minimum 4 alphabets.</div>
+              <div ng-message="md-maxlength" class="my-message">Name should not be greater than 20 alphabets.</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block" flex-xs>
+            <label>Mobile No</label>
+            <md-icon><i class="material-icons">phone</i></md-icon>
+            <input name="mobile" type="number" ng-model="customer.mobile" ng-minlength="10" ng-maxlength="10" ng-min="6000000000" ng-max="9999999999" ng-required="true">
+            <div ng-messages="customerForm.mobile.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a mobile No.</div>
+              <div ng-message="minlength" class="my-message">Mobile No. should be of 10 digits.</div>
+              <div ng-message="maxlength" class="my-message">Mobile No. should be of 10 digits.</div>
+              <div ng-message="min" class="my-message">Mobile No. should be greater than 6,00,00,00,000.</div>
+              <div ng-message="max" class="my-message">Mobile No. should be less than 9,99,99,99,999.</div>
+            </div>
+          </md-input-container>
+            
+            <md-input-container flex-xs>
+              <md-icon><i class="material-icons">home</i></md-icon>
+            </md-input-container>
+
+            <md-autocomplete flex-xs required
+              md-no-cache="true"
+              md-input-name="village"
+              md-input-minlength="4"
+              md-input-maxlength="20"
+              md-selected-item="customer.village"
+              md-search-text="searchText"
+              md-items="item in searchVillage(searchText)"
+              md-item-text="item"
+              md-require-match
+              md-floating-label="Village">
+              <md-item-template>
+                <span md-highlight-text="searchText">{{item}}</span>
+              </md-item-template>
+              <md-not-found>
+                No village found for "{{searchText}}".
+              </md-not-found>
+              <div ng-messages="customerForm.village.$error" ng-if="customerForm.village.$touched">
+                <div ng-message="required">You <b>must</b> supply a village.</div>
+                <div ng-message="md-require-match">Please select an existing village.</div>
+                <div ng-message="minlength">Your entry is not long enough.</div>
+                <div ng-message="maxlength">Your entry is too long.</div>
+              </div>
+            </md-autocomplete>
+        
+          </md-content>
+
+          <md-content layout-padding layout="row">
+          <md-input-container class="md-block" flex-xs>
+            <label>{{columnName}}</label>
+            <md-icon><i class="material-icons">person</i></md-icon>
+            <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20" ng-required="true">
+            <div ng-messages="customerForm.father.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply father name.</div>
+              <div ng-message="minlength" class="my-message">Father's Name should be of minimum 4 alphabets.</div>
+              <div ng-message="md-maxlength" class="my-message">Father'sName should not be greater 20 alphabets.</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block" flex-xs>
+            <label>Rate</label>
+            <md-icon><i class="material-icons">trending_up</i></md-icon>
+            <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
+            <div ng-messages="customerForm.rate.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply rate.</div>
+              <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
+              <div ng-message="max" class="my-message">Rate should be less than 6.</div>
+              <div ng-message="minlength" class="my-message">Rate should be of minimum 1 digit.</div>
+              <div ng-message="maxlength" class="my-message">Rate should be of maximum 3 digits.</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block" flex-xs>
+            <label>Page No</label>
+            <md-icon><i class="material-icons">book</i></md-icon>
+            <input name="pageNo" type="text" ng-model="customer.pageNo" ng-minlength="1" md-maxlength="4" ng-required="true">
+            <div ng-messages="customerForm.pageNo.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a Page No.</div>
+              <div ng-message="minlength" class="my-message">Page No. should be of minimum 1 digit.</div>
+              <div ng-message="md-maxlength" class="my-message"> Page No. should be of maximum 4 digit.</div>
+            </div>
+          </md-input-container>
+          </md-content>
+          <md-content layout-padding layout="row">
+            <md-input-container class="md-block" flex-xs>
+              <label>Guarantor</label>
+              <md-icon><i class="material-icons">people</i></md-icon>
+              <input name="guarantor" type="text" ng-model="customer.guarantor" ng-minlength="4" md-maxlength="20" ng-required="false">
+              <div ng-messages="customerForm.guarantor.$error" role="alert" multiple>
+                <div ng-message="minlength" class="my-message">Guarantor's Name should be of minimum 4 alphabets.</div>
+                <div ng-message="md-maxlength" class="my-message">Guarantor's Name should not be greater 20  alphabets.</div>
+              </div>
+            </md-input-container>
+          <md-input-container flex-xs>
+            <label>Enter date</label>
+            <md-datepicker ng-model="customer.date" md-min-date="minDate" md-max-date="maxDate" md-open-on-focus></md-datepicker>
+          </md-input-container>
+        <md-input-container class="md-block" flex-xs>
+          <label>Remarks</label>
+          <md-icon><i class="material-icons">note</i></md-icon>
+          <textarea name="remarks" type="text" ng-model="customer.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus ng-required="false"></textarea>
+          <div ng-messages="customerForm.remarks.$error" role="alert" multiple>
+            <div ng-message="minlength" class="my-message">Remarks should be of minimum 4 alphabets.</div>
+            <div ng-message="md-maxlength" class="my-message">Father's Name should not be greater 80 alphabets.</div>
+          </div>
+        </md-input-container>
+      </md-content>
+        <md-button class="md-raised md-primary" ng-disabled="customerForm.$invalid" ng-click="addCustomer($event)">Submit</md-button>
+        <md-button class="md-raised md-warn" ng-click="resetCustomer()">Reset</md-button>
+        <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
+      </form>
+</div>
