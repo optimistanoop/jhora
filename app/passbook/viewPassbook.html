@@ -15,14 +15,14 @@
                <span style="position: absolute;left:30%;bottom:34px">Mobile: {{customer.mobile}}</span>
                <span ng-if="customer.guarantor" style="position: absolute;left:50%;bottom:34px">Guarantor: {{customer.guarantor}}</span>
                <span ng-if="customer.remarks" style="position: absolute;left:75%;bottom:34px">Remarks: {{customer.remarks}}</span>
-             </div> 
+             </div>
          </md-card>
         </md-content>
     </div>
-    <div layout="row" style="max-height: 75px;" ng-if="hideNoDataFound">
+    <div layout="row" style="max-height: 75px;">
     <div flex="50" >
-      <md-content layout-padding class="line">
-          <span style="font-size:20px"><strong> Transactions </strong></span>
+      <md-content layout-padding ng-class="{'line' :hideNoDataFound==true}">
+          <span style="font-size:20px"ng-if="hideNoDataFound"><strong> Transactions </strong></span>
         <md-input-container flex-xs  class="width">
           <label>Results for</label>
           <md-icon><i class="material-icons">sort</i></md-icon>
@@ -40,23 +40,23 @@
       </md-content>
    </div>
      <div flex="50" >
-       <span class="cal"><strong> Calculations </strong></span>
+       <span class="cal"  ng-if="hideNoDataFound"><strong> Calculations </strong></span>
       <md-content  class="calDate">
        <md-input-container flex-xs ng-show="hideNoDataFound">
          <label style="right: 0px;left: auto;width: 125px;">Calculation date</label>
-         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI()" ></md-datepicker>
+         <md-datepicker ng-model="calcDate" md-min-date="minDate" md-max-date="maxDate" ng-change="calculatePSI(calcDate)" ></md-datepicker>
        </md-input-container>
      </md-content>
    </div>
  </div>
 </div>
 <div layout="row" >
-     
+
      <!-- <div ng-show="hideNoDataFound" layout-padding>
          <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
      </div> -->
-    <div flex="50" class="line" ng-if="hideNoDataFound"> 
+    <div flex="50" class="line" ng-if="hideNoDataFound">
      <md-content  layout-padding>
      <table width="100%">
        <tr class="pointer">
@@ -80,8 +80,8 @@
            <a ng-click="sortBy('deleteDate')">Deleted Date</a>
            <span class="sortorder" ng-show="propertyName === 'deleteDate'"  ng-class="{reverse: reverse}"></span>
          </th>
-         <th ng-show="queryFor == 'All'">Edit</th>
-         <th ng-show="queryFor == 'All'">Delete</th>
+         <th ng-show="queryFor == 'All'">E</th>
+         <th ng-show="queryFor == 'All'">D</th>
        </tr>
        <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
          <td>{{ tran.amount | currency:'&#8377;' }}</td>
@@ -118,7 +118,7 @@
             <a>SI</a>
           </th>
           <th>
-            <a>Merge Type</a>
+            <a>Type</a>
           </th>
         </tr>
         <tr ng-repeat="calc in calcData.calcs track by $index">
@@ -139,5 +139,10 @@
   </div>
 </div>
 </div>
+
   <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
+  <md-button class="md-fab md-primary" style="float: right; "ng-href="#!/transactions/add/{{customer.id}}">
+    <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
+    <md-icon md-svg-src="images/plus.svg"></md-icon>
+  </md-button>
 </div>

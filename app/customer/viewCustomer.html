@@ -9,6 +9,7 @@
         </md-option>
       </md-select>
     </md-input-container>
+  
   <md-content layout-padding layout="row" ng-show="hideNoDataFound">
   <md-input-container flex-xs>
     <label>Search</label>
@@ -18,6 +19,10 @@
   <div style="width:80%;margin: 10px auto;">
       <label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
       <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
+      <md-button class="md-fab md-primary" aria-label="Eat cake" style="float:right;" ng-href="#!/customers/add">
+   <md-tooltip md-direction="top" >Add New Customer</md-tooltip>
+            <md-icon md-svg-src="images/plus.svg"></md-icon>
+        </md-button>
   </div>
   </md-content>
   <md-content layout-padding layout="row" ng-show="hideNoDataFound">
@@ -40,18 +45,28 @@
         <span class="sortorder" ng-show="propertyName === 'mobile'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
-        <md-button ng-click="sortBy('due')">Due</md-button>
-        <span class="sortorder" ng-show="propertyName === 'due'" ng-class="{reverse: reverse}"></span>
+        <md-button ng-click="sortBy('dueFrom')">Due From</md-button>
+        <span class="sortorder" ng-show="propertyName === 'dueFrom'" ng-class="{reverse: reverse}"></span>
       </th>
-      <th ng-show="queryFor == 'All'">Edit</th>
-      <th ng-show="queryFor == 'All'">Delete</th>
+      <th>
+        <md-button ng-click="sortBy('total')">Due</md-button>
+        <span class="sortorder" ng-show="propertyName === 'total'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
+        <md-button ng-click="sortBy('nextDueDate')">Next Due Date</md-button>
+        <span class="sortorder" ng-show="propertyName === 'nextDueDate'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th ng-show="queryFor == 'All'">E</th>
+      <th ng-show="queryFor == 'All'">D</th>
     </tr>
     <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
       <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{cust.id}}">{{ cust.name }}</a></span><span ng-hide="queryFor == 'All'">{{ cust.name }}</span></td>
       <td>{{ cust.father }}</td>
       <td>{{ cust.village }}</td>
       <td>{{ cust.mobile }}</td>
-      <td><span ng-if="cust.due == undefined">NA</span>{{ cust.due| currency :'&#8377;'}}</td>
+      <td>{{ cust.dueFrom | date:"EEE,d/M/yy"}}</td>
+      <td><span ng-if="cust.total == undefined">NA</span>{{ cust.total| currency :'&#8377;'}}</td>
+      <td>{{ cust.nextDueDate | date:"EEE,d/M/yy"}}</td>
       <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.id}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
@@ -59,5 +74,9 @@
   </md-content>
   <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
     <h1>Sorry !! No customer data found</h1>
+    <md-button class="md-fab md-primary" aria-label="Eat cake" style="float:right;" ng-href="#!/customers/add">
+   <md-tooltip md-direction="top" >Add New Customer</md-tooltip>
+            <md-icon md-svg-src="images/plus.svg"></md-icon>
+        </md-button>
   </md-content>
 </div>

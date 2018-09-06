@@ -17,10 +17,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       return result.length > 0 ? result :villages;
     };
 
-    $scope.cancelUpdate = () =>{
-      $window.history.back();
-    };
-
     $scope.resetCustomer = ()=>{
       $scope.customer ={};
       $scope.customerForm.$setPristine();
@@ -79,7 +75,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     $scope.getVillages = (tableName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
-        if(rows)
+        if(rows.length)
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : undefined;
         }

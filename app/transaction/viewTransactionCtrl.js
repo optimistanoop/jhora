@@ -35,24 +35,24 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     values[3] = nPromiseDate;
     q.insert(DELTRANSACTION_TABLE, keys, values)
     .then((data)=>{
-      return q.updateStatus(TRANSACTION_TABLE, 'active', '0', 'id', transaction.id)
+      return q.updateStatus(TRANSACTION_TABLE, 'active', '2', 'id', transaction.id)
     })
     .then((data)=>{
-      console.log("scoep",transaction.customerId);
-      q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)
-        .then((trans)=>{
-          if(trans.length>0) {
-            passbookService.getUserData(transaction.customerId)
+      return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)
+    })
+    .then((trans)=>{
+      if(trans.length) {
+        return passbookService.getUserData(transaction.customerId)
             .then((calc)=>{
               let balData = calc.results[calc.results.length-1][0];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
               q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
             })
-          }
-          else {
-            q.deleteTableByName('balances WHERE customerId = '+transaction.customerId)
-          }
-        })
+      } else {
+        return q.deleteTableByName('balances WHERE customerId = '+transaction.customerId)
+      }
+    })
+    then((data)=>{
       $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active','1');
       $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
     })
@@ -64,7 +64,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
   $scope.getDataByTable = (tableName, modelName,column,value)=>{
     q.selectAllById(tableName,column,value)
     .then((rows)=>{
-      if(rows)
+      if(rows.length)
       for(let row of rows){
         row.date = row.date ? new Date(row.date) : null;
         if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
@@ -108,12 +108,12 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       let toDate = $mdDateLocale.parseDate($scope.tran.toDate);
       q.selectDataByDates(tableName,column1,fromDate,toDate,column2,value)
         .then((rows)=>{
+          if(rows.length)
+          for(let row of rows){
+            row.date = row.date ? new Date(row.date) : undefined;
+            row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
+          }
           $timeout(()=>{
-            if(rows)
-            for(let row of rows){
-              row.date = row.date ? new Date(row.date) : undefined;
-              row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : undefined;
-            }
           $scope.transactions= rows;
           $scope.hideNoDataFound = true;
           if (rows.length == 0) {

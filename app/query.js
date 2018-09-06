@@ -64,6 +64,8 @@ class Query {
          date           TEXT   NOT NULL,
          calcTill       TEXT   NOT NULL,
          calcOn       TEXT   NOT NULL,
+         dueFrom       TEXT   NOT NULL,
+         nextDueDate       TEXT   NOT NULL,
          customerId     INTEGER NOT NULL,
          type           TEXT   NOT NULL,
          p           INT    NOT NULL,
@@ -98,8 +100,8 @@ class Query {
     this.db.run(`CREATE TRIGGER IF NOT EXISTS ${triggerName} AFTER ${action} ON balances FOR EACH ROW
       BEGIN
       INSERT INTO balances_history (
-        amount,date,calcTill,calcOn,customerId,type,p,si,rate,total,remarks,action)
-      VALUES (new.amount,new.date,new.calcTill,new.calcOn,new.customerId,new.type,new.p,
+        amount,date,calcTill,calcOn,dueFrom, nextDueDate, customerId,type,p,si,rate,total,remarks,action)
+      VALUES (new.amount,new.date,new.calcTill,new.calcOn,new.dueFrom,new.nextDueDate,new.customerId,new.type,new.p,
         new.si,new.rate,new.total,new.remarks,'${action}');
         END;`
        , [], (err, data)=>{
@@ -216,6 +218,7 @@ class Query {
    selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
     let p = new Promise( (resolve, reject)=>{
       let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND active = 1 AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
+      console.log('anp sql', sql);
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
@@ -259,6 +262,16 @@ class Query {
     });
     return p;
   }
+  updateActiveStatus(tableName, key, value,conditionOn,id){
+    let p = new Promise( (resolve, reject)=>{
+      let sql = `UPDATE ${tableName} SET ${key} = ${value} WHERE ${conditionOn} =${id} AND active=1`;
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
   bulkUpload(tableName, rows =[]){
     let p = new Promise( (resolve, reject)=>{
       if(rows.length == 0) resolve(`No data found for ${tableName}`);
@@ -281,7 +294,6 @@ class Query {
   selectAllTwoTable(table1,table2,columns,match1,match2,conditionOn=""){
     let p = new Promise( (resolve, reject)=>{
       let sql = `SELECT ${columns} FROM ${table1} LEFT JOIN ${table2} ON ${match1} = ${match2} ${conditionOn}`;
-      console.log("sql",sql);
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);

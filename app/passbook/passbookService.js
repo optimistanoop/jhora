@@ -64,7 +64,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         p += tran.amount;
         si += tran.si ? tran.si :0;
         si += calculateSI(tran.amount, tran.rate, months);
-      }else if(tran.type == 'Cr' || tran.type == 'Settle' ){
+      }else if(tran.type == 'Cr' || tran.type == 'Settle' || tran.type == 'Discount' ){
         let newPSI = getUpdatedPSI(p, si, tran.amount);
         p = newPSI.p;
         si = newPSI.si;
@@ -91,7 +91,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     for(let i = 0; i< yrDiff; i++){
       fromPlus1Yr = getFromPlus1Yr(from);
       calcYrs.push(fromPlus1Yr);
-      from = fromPlus1Yr;
+      from = new Date(fromPlus1Yr.getFullYear(), fromPlus1Yr.getMonth(), fromPlus1Yr.getDate() +1); //+1 DAY
     }
 
     let frstCalcYr = calcYrs[0];
@@ -130,9 +130,10 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   // first tran is always Dr
   // this is only for debiters hence no +Cr
   let calculateFinalPSI = (trans = [], calcDate)=>{
-    let p = new Promise((resolve, reject)=>{  
+    let p = new Promise((resolve, reject)=>{
       let firstTran = trans[0] ? trans[0] : {};
-      let  masterObj = {results:[[firstTran]], calcs:[]};
+      let masterObj = {results:[[firstTran]], calcs:[]};
+      let nextDueDate;
       if(firstTran.type == 'Dr')
       for(let i = 0; i < trans.length; i++){
 
@@ -142,28 +143,30 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         let nextTranType = nextTran ? nextTran.type : null;
         let from = masterObj.results[lastIndexOFResults][0].date;
         let to = nextTran ? nextTran.date : calcDate;
-        let lastTranAsCr = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle'))
+        let lastTranAsCrOrSettleOrDiscount = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle' || tran.type == 'Discount'))
         let fromPlus1Yr = getFromPlus1Yr(from);
+        nextDueDate = tran.promiseDate ? $mdDateLocale.parseDate(tran.promiseDate) : nextDueDate;
 
-        if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || i == trans.length - 1){
+        if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || nextTranType == 'Discount' || i == trans.length - 1){
           let finalResult;
           if(to > fromPlus1Yr){
             // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end 
             finalResult = calculatePSIForYears(from, to, masterObj.results[lastIndexOFResults]);
+            finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
+            finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
-            console.log(finalResult);
           } 
           
-          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| lastTranAsCr){
+          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| nextTranType == 'Discount'|| lastTranAsCrOrSettleOrDiscount){
             // monthly
             let toCalcTrans = finalResult ? [finalResult] : masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
-            to = lastTranAsCr ? toCalcTrans[toCalcTrans.length -1].date : to;
+            to = lastTranAsCrOrSettleOrDiscount ? toCalcTrans[toCalcTrans.length -1].date : to;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = nextTranType == 'Cr' ? 'Credit' : 'Settle';
+            finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
+            finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
-            console.log(finalResult);
-
           }
           if(i == trans.length - 1){
             // monthly 
@@ -172,25 +175,23 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             to = calcDate;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = 'Final';
+            finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
+            finalResult.nextDueDate = nextDueDate;            
             masterObj.calcs.push(finalResult);
-            console.log(finalResult);
-
           }
 
           finalResult.rate = firstTran.rate;
           finalResult.type = 'Dr';
           finalResult.customerId = firstTran.customerId;
           let nextResultsToCalc = nextTran ? [finalResult, nextTran] : [finalResult];
-          finalResult ? masterObj.results.push(nextResultsToCalc) :[];
+          masterObj.results.push(nextResultsToCalc);
 
         }else if(nextTranType == 'Dr'){
           let lastResult = Array.from(masterObj.results[lastIndexOFResults]);
           lastResult.push(nextTran);
           masterObj.results.push(lastResult);
-          console.log(masterObj);
         }
       }
-      console.log(masterObj);
       resolve(masterObj);
     })
     return p;
@@ -202,6 +203,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     for(let row of rows){
       if(row.date){
        row.date = row.date ? new Date(row.date) : null;
+       row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
       }
      }
     return calculateFinalPSI(rows,new Date());

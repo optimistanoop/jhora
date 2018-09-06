@@ -1,5 +1,5 @@
 
-jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$routeParams,$window, TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,BALANCE_TABLE,BALANCE_COLUMNS,passbookService) {
+jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLocale, $timeout,$mdDialog,$routeParams,$window, UPDATE_TRANSACTION_TYPES, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,BALANCE_TABLE,BALANCE_COLUMNS,passbookService) {
 
     $rootScope.template = {title: 'Edit Transaction'};
     $scope.transid = $routeParams.id;
@@ -25,7 +25,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     )};
 
     $scope.setDefaults = ()=>{
-      $scope.types = TRANSACTION_TYPES;
+      $scope.types = UPDATE_TRANSACTION_TYPES;
       $scope.customer = { salutation: '', name: '', mobile: '', village: '', father: '', guarantor: '', rate:'', date: null, pageNo: '', remarks: '' };
       $rootScope.editModeData = {};
       $scope.salutation = '';
@@ -36,15 +36,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.disablePromiseDate = $scope.transaction.type == 'Settle' ? true :false;
     }
 
-
-    $scope.cancelUpdate = () =>{
-      $window.history.back();
-    };
-
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
-      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
-        $scope.transaction.type == "Settle" && $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
+      if ($scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
       } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
@@ -54,7 +48,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $scope.dateSelected =()=>{
       $scope.minPromiseDate = $scope.transaction.date;
       $scope.maxPromiseDate = new Date($scope.transaction.date.getFullYear() +1 , $scope.transaction.date.getMonth(), $scope.transaction.date.getDate());
-      if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") {
+      if ($scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
       }else if($scope.transaction.type == 'Dr'){
         $scope.disablePromiseDate = false;
@@ -120,12 +114,14 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       }
       q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
       .then((data)=>{
-        passbookService.getUserData($scope.transaction.customerId)
+        return passbookService.getUserData($scope.transaction.customerId)
             .then((calc)=>{
               let balData = calc.results[calc.results.length-1][0];
-              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+              let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
               q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
         })
+      })
+      .then((data)=>{
         $timeout (()=>{
           $rootScope.showToast('Transaction updated');
           $scope.resetTransaction();
@@ -140,17 +136,17 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $scope.getDataByTable = (tableName, modelName)=>{
       q.selectAll(tableName)
       .then((rows)=>{
-        if(rows)
+        if(rows.length)
         for(let row of rows){
           row.date = row.date ? new Date(row.date): null;
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
           row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
         $timeout( ()=>{
-        $scope[modelName] = rows;
-        if(tableName == CUSTOMERS_TABLE)
-        $scope.updateSelectedCust($scope.transaction.customerId);
-      },0)
+          $scope[modelName] = rows;
+          if(tableName == CUSTOMERS_TABLE)
+          $scope.updateSelectedCust($scope.transaction.customerId);
+        },0)
       })
       .catch((err)=>{
         console.error(err);
@@ -160,12 +156,18 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $scope.getCustomerPassbook = (tableName)=>{
          q.selectAllById(tableName, 'customerId', $scope.transaction.customerId)
          .then((rows)=>{
-           if(rows)
+           if(rows.length)
            for(let row of rows){
              row.date = row.date ? new Date(row.date) : null;
              row.promiseDate = row.promiseDate ? new Date(row.promiseDate) :null;
            }
            $scope.transactions = rows;
+           passbookService.calculateFinalPSI(rows, new Date())
+             .then((calc)=>{
+               let balData = calc.results[calc.results.length-1][0];
+               $scope.calcData = calc;
+               $scope.dueBal = balData ? balData.total : 0;
+             })
          })
          .catch((err)=>{
            console.error(err);

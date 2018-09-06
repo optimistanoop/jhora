@@ -1,6 +1,6 @@
 
 let jhora = angular.module('jhora', ['ngRoute', 'ngMaterial', 'ngMessages']);
-jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE,BALANCE_COLUMNS) {
+jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, $mdDateLocale,$window, passbookService, TABS,CUSTOMER_SALUTATION, TOAST_DELAY, TOAST_POS, CUSTOMERS_TABLE,BALANCE_TABLE,BALANCE_COLUMNS) {
   $scope.salutation = CUSTOMER_SALUTATION;
   $scope.currentNavItem = '0';
   $scope.navClosed = true;
@@ -28,6 +28,10 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   $scope.closeNav = ()=>{
     document.getElementById("mySidenav").style.width = "0px";
     document.getElementById("main").style.marginLeft = "0px";
+  };
+  
+  $scope.back = ()=>{
+    $window.history.back();
   };
 
   $scope.sortBy = (propertyName)=>{
@@ -105,39 +109,42 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let calcDay = new Date(rows[0].calcOn).getDate();
         let calcMonth = new Date(rows[0].calcOn).getMonth()+1;
         let calcYear = new Date(rows[0].calcOn).getFullYear();
-        console.log(todayDay,todayMonth,todayYear,calcDay,calcMonth,calcYear);
-        if ((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15))) {
-        } else {
-            q.selectAll(CUSTOMERS_TABLE)
-            .then((custs)=> {
-              if(custs.length > 0) {
-                let promises = []
-                let updatePromise = [];
-                for(let cust of custs){
-                cust.date = cust.date ? new Date(cust.date) : null;
-                updatePromise.push(passbookService.getUserData(cust.id)
-                .then((datas)=>{
-                  if(datas.results.length>1) {
-                    let balData = datas.results[datas.results.length-1][0];
-                    let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-                    promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
-                  }
-                }))
-              }
-              Promise.all(updatePromise)
-              .then((upt)=>{
-                Promise.all(promises)
-                .then((update)=>{
-                  $rootScope.showToast('Balances Updated');
-                  $rootScope.$emit('updateCustomers');
-                })
-              })
-            }
-          })
+        if (!((todayMonth == calcMonth && todayYear == calcYear) && ((todayDay <= 15 && calcDay <= 15) || (todayDay <= 31 && calcDay <= 31 && todayDay > 15 && calcDay > 15)))) {
+            return q.selectAll(CUSTOMERS_TABLE)
         }
       }
+      return []
     })
-  };
+    .then((custs)=> {
+      if(custs.length > 0) {
+        let promises = []
+        let updatePromise = [];
+        for(let cust of custs){
+        cust.date = cust.date ? new Date(cust.date) : null;
+        updatePromise.push(passbookService.getUserData(cust.id)
+        .then((datas)=>{
+          if(datas.results.length>1) {
+            let balData = datas.results[datas.results.length-1][0];
+            let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+            promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
+          }
+        }))
+      }
+      
+      Promise.all(updatePromise)
+      .then((upt)=>{
+        return Promise.all(promises)
+      })
+      .then((update)=>{
+        $rootScope.showToast('Balances Updated');
+        $rootScope.$emit('updateCustomers');
+      })
+    }
+  })
+  .catch((err)=>{
+    console.error(err);
+  })
+};
 
   $scope.updateBal();
 })
@@ -153,6 +160,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 ])
 .constant('CUSTOMER_SALUTATION',['Mr', 'Mrs', 'Miss'])
 .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
+.constant('UPDATE_TRANSACTION_TYPES', ['Dr', 'Cr'])
 .constant('VIEW_LIMITS', ['All', 'Deleted'])
 .constant('CUSTOMERS_TABLE', 'customers')
 .constant('DELCUSTOMERS_TABLE', 'delcustomers')
@@ -160,11 +168,13 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 .constant('DELTRANSACTION_TABLE', 'deltransactions')
 .constant('VILLAGE_TABLE', 'village')
 .constant('BALANCE_TABLE', 'balances')
-.constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','customerId','type','p','si','rate','total'])
+.constant('BALANCE_HISTORY_TABLE', 'balances_history')
+.constant('BALANCE_COLUMNS',['amount','date','calcTill','calcOn','dueFrom', 'nextDueDate','customerId','type','p','si','rate','total'])
 .constant('TOAST_DELAY', 3000)
 .constant('TOAST_POS', 'bottom right')
 .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
 .constant('TRANSACTION_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'])
+.constant('TRANSACTION_EXPORT_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type', 'active'])
 .constant('VILLAGE_COLUMNS', ['id','name']);
 
 jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, $locationProvider) {
@@ -215,6 +225,9 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
           templateUrl : 'file://' + __dirname + '/transaction/viewTransaction.html'
       })
       .when("/transactions/add", {
+          templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
+      })
+      .when("/transactions/add/:id", {
           templateUrl : 'file://' + __dirname + '/transaction/addTransaction.html'
       })
       .when("/transactions/update/:id", {

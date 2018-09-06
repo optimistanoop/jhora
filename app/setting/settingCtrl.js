@@ -1,10 +1,11 @@
-jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_COLUMNS, VILLAGE_COLUMNS){
+jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = `Check your backup/exported file in downloads/app folder once its done.`;
   $scope.msg2 = `Import steps- export -> delete -> import`;
   $scope.msg3 = `Delete steps- export -> delete`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv `;
+  $scope.msg5 = `All calculations to be happen for todays date`;
 
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
@@ -17,6 +18,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return Promise.all([
        $scope.deleteByTable(ev, CUSTOMERS_TABLE),
        $scope.deleteByTable(ev, TRANSACTION_TABLE),  
+       $scope.deleteByTable(ev, BALANCE_TABLE),  
+       $scope.deleteByTable(ev, BALANCE_HISTORY_TABLE),  
        $scope.deleteByTable(ev, DELCUSTOMERS_TABLE),  
        $scope.deleteByTable(ev, DELTRANSACTION_TABLE),  
        $scope.deleteByTable(ev, VILLAGE_TABLE)
@@ -26,6 +29,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return Promise.all([
       $scope.getBackupByTable(ev, CUSTOMERS_TABLE),
       $scope.getBackupByTable(ev, TRANSACTION_TABLE),  
+      $scope.getBackupByTable(ev, BALANCE_TABLE),  
+      $scope.getBackupByTable(ev, BALANCE_HISTORY_TABLE),  
       $scope.getBackupByTable(ev, DELCUSTOMERS_TABLE),  
       $scope.getBackupByTable(ev, DELTRANSACTION_TABLE),  
       $scope.getBackupByTable(ev, VILLAGE_TABLE)
@@ -35,7 +40,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.export = (ev)=>{
     exportAlltables(ev)
     .then((data)=>{
-      $scope.showAlertDialog(ev, 'Backup', `Backup for all data is done.`)
+      $rootScope.showToast(`Backup for all data is done.`)
     }); 
   };
   
@@ -56,17 +61,33 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   };
   
   $scope.import = (ev)=>{
-    let promises = [];
     let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
       filePaths = filePaths ? filePaths :[];
-      if(filePaths.length > 0)
-        exportAlltables(ev)
-        .then(deleteAllTables.bind(this, ev))
+      let promises=[];
+      let tableNames=[];
+      //exportAlltables(ev)
+      //.then(deleteAllTables.bind(this, ev))
+      if(filePaths.length)
+        for(let f of filePaths){
+          let splitedNames = f.split('-');
+          let tableName = splitedNames[1] || '';
+          tableNames.push(tableName);
+          promises.push($scope.getBackupByTable(ev, tableName));
+        }
+        Promise.all(promises)
         .then((data)=>{
-          for(let f of filePaths){
-            let splitedNames = f.split('-');
-            let tableName = splitedNames[1] || '';
+          let promises=[]
+          for(let tableName of tableNames){
+            promises.push($scope.deleteByTable(ev, tableName));
+          }
+          return Promise.all(promises);
+        })
+        .then((data)=>{
+          let promises = [];
+          for(let i in filePaths){
+            let f = filePaths[i];
+            let tableName = tableNames[i];
             if(f)
             promises.push(csv2json()
               .fromFile(f)
@@ -76,9 +97,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
             );
           }
           return Promise.all(promises)
-          .then((data)=>{
-            $scope.showAlertDialog(ev, 'Import', `All data imported succesfully.`);
-          })
+        })
+        .then((data)=>{
+          data.length && $rootScope.showToast(`All data imported succesfully.`);
+          !data.length && $rootScope.showToast(`Nothing to import.`);
         })
         .catch((err)=>{
           $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
@@ -92,11 +114,15 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       .then((rows)=>{
         let fields;
         if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE){
-          fields = TRANSACTION_COLUMNS;
+          fields = TRANSACTION_EXPORT_COLUMNS;
         }else if (tableName == CUSTOMERS_TABLE || tableName == DELCUSTOMERS_TABLE){
           fields = CUSTOMERS_COLUMNS;
         }else if (tableName == VILLAGE_TABLE){
           fields = VILLAGE_COLUMNS;
+        }else if (tableName == BALANCE_TABLE){
+          fields = BALANCE_COLUMNS;
+        }else if (tableName == BALANCE_HISTORY_TABLE){
+          fields = BALANCE_COLUMNS;
         }
         const opts = { fields };      
         const csv = json2csv(rows, opts);
@@ -130,34 +156,49 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return p;
   };
   
-  $scope.doCalculationsForAll = ()=>{
-    // get last calc date 
-    // check last calc date falls in todays time slab , if no proceed, if yes return
-    //  get all cust data , get All  calc data (all calc data will be used to decide weather we need to calc or not, coz a cust many have a new tran which triggers calc)
-    //  foreach cust, check last calc date falls in todays time slab , if no proceed to calc, if yes return to next cust
-    let today = new Date();
-    today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    let  calcSlabFrom = new Date(today.getFullYear(),  today.getMonth(), today.getDate() <= 15 ?  1 : 16);
-    let  calcSlabTo = new Date(today.getFullYear(), today.getDate() <= 15 ? today.getMonth(): today.getMonth() + 1, today.getDate() <= 15 ?  15 : 0);
-    //TODO get last calc date (may be based on total cust and no of calc data in the current slab)
-    let lastCalcDate = new Date(new Date().getFullYear()-1, 0, 1); 
-    if(lastCalcDate >= calcSlabFrom && lastCalcDate <= calcSlabTo) return {};
-    
-    // TODO (not optimal) query for those cust which last calc date is not in the cuurent slab (can be done by quering calc table for current slab and removing them from custs)
-    let calcs = {[id]:{}}; // query for those cust which last calc date is in the cuurent slab and on foreach create calcs 
-    let custs = []; // on all custs, 
-    let finalCalcs = [] 
-    for(let cust of custs){
-      if(!calcs[cust.id]){
-        //TODO get tran of cust
-        let trans = [];
-        passbookService.calculateFinalPSI(trans, today)
-        .then((data)=>{
-          data ?  finalCalcs.push(data) :''; 
-        })
+  $scope.calc = (ev)=>{
+    q.selectAll(BALANCE_TABLE)
+    .then((rows)=>{
+      if(!rows.length){
+        return q.selectAll(CUSTOMERS_TABLE)  
       }
-    }
-    return finalCalcs;
+      return []
+    })
+    .then((rows)=>{
+      let promises = [];
+      if(rows.length){
+        for(let row of rows){
+          row.date = row.date ? new Date(row.date) : null;
+          promises.push(passbookService.getUserData(row.id));
+        }
+      }
+      return Promise.all(promises)
+    })
+    .then((rows)=>{
+      let promises = [];
+      if(rows.length){
+        //for(let row of rows){
+        for(let i=0; i< rows.length; i++){
+          let row = rows[i];
+          //console.log(rows);
+          if(row.results.length) {
+            let balData = row.results[row.results.length-1][0];
+            console.log(balData);
+            let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+            promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
+          }
+        }
+      }
+      return Promise.all(promises)
+    })
+    .then((data)=>{
+      if(data.length){
+        $rootScope.showToast(`Balances Updated`);
+        $rootScope.$emit('updateCustomers');
+      }else{
+        $rootScope.showToast('Nothing to update');
+      }
+    })
   };
   
 });

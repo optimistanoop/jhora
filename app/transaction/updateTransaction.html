@@ -17,18 +17,6 @@
                 <div ng-message="required" class="my-message">You must supply a customer.</div>
               </div>
             </md-input-container flex-xs>
-            <md-input-container class="md-block" flex-xs>
-              <label>Amount</label>
-              <md-icon><i class="material-icons">money</i></md-icon>
-              <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
-              <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
-                <div ng-message="required" class="my-message">You must supply an amount.</div>
-                <div ng-message="minlength" class="my-message">Amount should be minimum of 3 digits.</div>
-                <div ng-message="min" class="my-message">Amount should be greater than 100.</div>
-                <div ng-message="max" class="my-message">Amount should be less than 2,00,000.</div>
-                <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
-              </div>
-            </md-input-container>
             <md-input-container flex-xs>
               <label>Type</label>
               <md-icon><i class="material-icons">credit_card</i></md-icon>
@@ -42,6 +30,18 @@
                 <div ng-message="required" class="my-message">You must supply a type.</div>
               </div>
             </md-input-container>
+            <md-input-container class="md-block" flex-xs>
+              <label>Amount</label>
+              <md-icon><i class="material-icons">money</i></md-icon>
+              <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
+              <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
+                <div ng-message="required" class="my-message">You must supply an amount.</div>
+                <div ng-message="minlength" class="my-message">Amount should be minimum of 3 digits.</div>
+                <div ng-message="min" class="my-message">Amount should be greater than 100.</div>
+                <div ng-message="max" class="my-message">Amount should be less than 2,00,000.</div>
+                <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
+              </div>
+            </md-input-container>
             <md-input-container>
               <label>Date</label>
               <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
@@ -53,7 +53,7 @@
           <div layout-gt-xs="row">
             <md-input-container flex-xs>
               <label>Promise Date</label>
-              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-disabled="disablePromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
+              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
               <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply a promise date.</div>
               </div>
@@ -92,7 +92,7 @@
         </div> -->
         </form>
           <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="confirmTransaction($event,transaction)">Submit</md-button>
-          <md-button class="md-raised md-warn" ng-click="cancelUpdate()">Cancel</md-button>
+          <md-button class="md-raised md-warn" ng-click="back()">Back</md-button>
       </md-content>
     </div>
     <div flex="30">
@@ -105,7 +105,7 @@
            <span class="md-subhead">Rate -{{customer.rate}}%</span>
          </md-card-title-text>
          <md-card-title-media>
-           <div class="md-media-sm card-media"></div>
+           <div class="md-media-sm card-media" style="color:red;">Due - {{dueBal | currency :'&#8377;'}}/-</div>
          </md-card-title-media>
        </md-card-title>
        <md-card-actions layout="row" layout-align="end center">
