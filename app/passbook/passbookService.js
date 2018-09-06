@@ -130,7 +130,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   // first tran is always Dr
   // this is only for debiters hence no +Cr
   let calculateFinalPSI = (trans = [], calcDate)=>{
-    let p = new Promise((resolve, reject)=>{  
+    let p = new Promise((resolve, reject)=>{
       let firstTran = trans[0] ? trans[0] : {};
       let masterObj = {results:[[firstTran]], calcs:[]};
       let nextDueDate;
@@ -143,11 +143,11 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         let nextTranType = nextTran ? nextTran.type : null;
         let from = masterObj.results[lastIndexOFResults][0].date;
         let to = nextTran ? nextTran.date : calcDate;
-        let lastTranAsCrOrSettle = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle'))
+        let lastTranAsCrOrSettleOrDiscount = (nextTranType == null && (tran.type == 'Cr' || tran.type == 'Settle' || tran.type == 'Discount'))
         let fromPlus1Yr = getFromPlus1Yr(from);
         nextDueDate = tran.promiseDate ? $mdDateLocale.parseDate(tran.promiseDate) : nextDueDate;
 
-        if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || i == trans.length - 1){
+        if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || nextTranType == 'Discount' || i == trans.length - 1){
           let finalResult;
           if(to > fromPlus1Yr){
             // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end 
@@ -157,11 +157,11 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             masterObj.calcs.push(finalResult);
           } 
           
-          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| nextTranType == 'Discount'|| lastTranAsCrOrSettle){
+          if(nextTranType == 'Cr' || nextTranType == 'Settle'|| nextTranType == 'Discount'|| lastTranAsCrOrSettleOrDiscount){
             // monthly
             let toCalcTrans = finalResult ? [finalResult] : masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
-            to = lastTranAsCrOrSettle ? toCalcTrans[toCalcTrans.length -1].date : to;
+            to = lastTranAsCrOrSettleOrDiscount ? toCalcTrans[toCalcTrans.length -1].date : to;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = nextTranType == 'Cr' ? 'Credit' : 'Settle';
             finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
