@@ -129,9 +129,9 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   // this assumes calcDate is valid for all trans
   // first tran is always Dr
   // this is only for debiters hence no +Cr
-  let calculateFinalPSI = (trans = [], calcDate)=>{
+  let calculateFinalPSI = (trans = [], calcDate = new Date())=>{
     let p = new Promise((resolve, reject)=>{
-      let firstTran = trans[0] ? trans[0] : {};
+      let firstTran = trans[0] ? trans[0] : {customerId:null};
       let masterObj = {results:[[firstTran]], calcs:[]};
       let nextDueDate;
       if(firstTran.type == 'Dr')
