@@ -192,6 +192,22 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
           masterObj.results.push(lastResult);
         }
       }
+      
+      let balData = firstTran.customerId ? masterObj.results[masterObj.results.length-1][0] : null;
+      balData = firstTran.customerId ? {amount : Math.floor(balData.amount),
+        date: $mdDateLocale.parseDate(balData.date),
+        calcTill: $mdDateLocale.parseDate(balData.calcTill),
+        calcOn: $mdDateLocale.parseDate(balData.calcOn),
+        dueFrom: $mdDateLocale.parseDate(balData.dueFrom),
+        nextDueDate: $mdDateLocale.parseDate(balData.nextDueDate),
+        customerId: balData.customerId,
+        type: balData.type,
+        p: Math.floor(balData.p),
+        si: Math.floor(balData.si),
+        rate: balData.rate,
+        total: Math.floor(balData.total)
+      } : {customerId:null};
+      masterObj.results[masterObj.results.length-1][0] = balData;
       resolve(masterObj);
     })
     return p;

@@ -116,18 +116,16 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       return []
     })
     .then((custs)=> {
-      if(custs.length > 0) {
+      if(custs.length) {
         let promises = []
         let updatePromise = [];
         for(let cust of custs){
         cust.date = cust.date ? new Date(cust.date) : null;
         updatePromise.push(passbookService.getUserData(cust.id)
         .then((datas)=>{
-          if(datas.results.length>1) {
             let balData = datas.results[datas.results.length-1][0];
-            let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-            promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
-          }
+            let values = balData.customerId ? [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total] : null;
+            values && promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
         }))
       }
       
