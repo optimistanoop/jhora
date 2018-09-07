@@ -60,7 +60,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
      .then((data)=>{
       q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)
         .then((trans)=>{
-          if(trans.length>0) {
+          if(trans.length) {
             passbookService.getUserData(transaction.customerId)
             .then((calc)=>{
               let balData = calc.results[calc.results.length-1][0];

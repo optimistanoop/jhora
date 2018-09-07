@@ -177,16 +177,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     .then((rows)=>{
       let promises = [];
       if(rows.length){
-        //for(let row of rows){
-        for(let i=0; i< rows.length; i++){
-          let row = rows[i];
-          //console.log(rows);
-          if(row.results.length) {
+        for(let row of rows){
             let balData = row.results[row.results.length-1][0];
-            console.log(balData);
-            let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
-            promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
-          }
+            let values = balData.customerId ? [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total] : null;
+            values && promises.push(q.insert(BALANCE_TABLE, BALANCE_COLUMNS, values));
         }
       }
       return Promise.all(promises)
