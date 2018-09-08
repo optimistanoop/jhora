@@ -188,7 +188,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider,$routeProvider, 
     let formattedDate = '';
     if(dd){
       let d = dd.getDate()< 10  ?  '0'+ (dd.getDate()) : dd.getDate();
-      let m = dd.getMonth() < 10 ?  '0'+ (dd.getMonth()+1) : dd.getMonth()+1;
+      let m = dd.getMonth() < 9 ?  '0'+ (dd.getMonth()+1) : dd.getMonth()+1;
       let y = dd.getFullYear();
       formattedDate = !isNaN(d) ? `${y}-${m}-${d}` :'';
     }
