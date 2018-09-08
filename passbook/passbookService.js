@@ -109,7 +109,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     total = p + si,
     toDate = calcYrs[calcYrs.length - 1],
     {calcTill, balPassedTo} = getBalPassedTo(toDate);
-    return {amount, total , p, si, rate, type:'Dr', mergedType:'Yearly', calcTill, calcOn : toDate, date : balPassedTo}
+    return {amount : Math.floor(amount), total: Math.floor(total), p: Math.floor(p), si: Math.floor(si), rate, type:'Dr', mergedType:'Yearly', calcTill, calcOn : toDate, date : balPassedTo}
   };
 
 
@@ -123,7 +123,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     let total = p + si,    
     amount = p,
     {balPassedTo, calcTill} = getBalPassedTo(to);   
-    return {amount, total, p, si, rate, type :'Dr', calcTill, calcOn: to, date : balPassedTo };
+    return {amount : Math.floor(amount), total: Math.floor(total), p: Math.floor(p), si: Math.floor(si), rate, type :'Dr', calcTill, calcOn: to, date : balPassedTo };
   };
 
   // this assumes calcDate is valid for all trans
@@ -194,7 +194,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
       }
       
       let balData = firstTran.customerId ? masterObj.results[masterObj.results.length-1][0] : null;
-      balData = firstTran.customerId ? {amount : Math.floor(balData.amount),
+      balData = firstTran.customerId ? {amount : balData.amount,
         date: $mdDateLocale.parseDate(balData.date),
         calcTill: $mdDateLocale.parseDate(balData.calcTill),
         calcOn: $mdDateLocale.parseDate(balData.calcOn),
@@ -202,10 +202,10 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         nextDueDate: $mdDateLocale.parseDate(balData.nextDueDate),
         customerId: balData.customerId,
         type: balData.type,
-        p: Math.floor(balData.p),
-        si: Math.floor(balData.si),
+        p: balData.p,
+        si: balData.si,
         rate: balData.rate,
-        total: Math.floor(balData.total)
+        total: balData.total
       } : {customerId:null};
       masterObj.results[masterObj.results.length-1][0] = balData;
       resolve(masterObj);
