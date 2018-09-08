@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="lib/angular-material.min.css">
     <link rel="stylesheet" href="./jhora.css">
     <title>Jhora</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyD9B2YdN4gAPqryKSiHRQocPc9kA_ZSFLY",
+        authDomain: "jhoraapp.firebaseapp.com",
+        databaseURL: "https://jhoraapp.firebaseio.com",
+        projectId: "jhoraapp",
+        storageBucket: "",
+        messagingSenderId: "105398319929"
+      };
+      firebase.initializeApp(config);
+    </script>
   <body>
     <div ng-controller="jhoraCtrl" ng-cloak >
           <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
