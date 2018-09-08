@@ -1,4 +1,4 @@
-  jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE, BALANCE_TABLE, passbookService) {
+  jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE, BALANCE_TABLE) {
     const {
       shell
     } = require('electron');
@@ -36,18 +36,7 @@
         })
     }
     $scope.confirmCustomer = (customer) => {
-      let {
-        name,
-        mobile,
-        village,
-        father,
-        rate,
-        guarantor,
-        date,
-        pageNo,
-        remarks,
-        salutation
-      } = customer;
+      let { name, mobile, village, father, rate, guarantor, date, pageNo, remarks, salutation } = customer;
       let keys = ['name', 'mobile', 'village', 'father', 'rate', 'guarantor', 'date', 'pageNo', 'remarks', 'salutation'];
       let values = [name, mobile, village, father, rate, guarantor, date, pageNo, remarks, salutation];
       q.insert(DELCUSTOMERS_TABLE, keys, values)
