@@ -6,7 +6,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg3 = `Delete steps- export -> delete`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv `;
   $scope.msg5 = `All calculations to be happen for todays date`;
-
+  $scope.showProgress = false;
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
   const path = require('path');
@@ -38,13 +38,16 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   }
 
   $scope.export = (ev)=>{
+    $scope.showProgress = true;
     exportAlltables(ev)
     .then((data)=>{
+      $scope.showProgress = false;
       $rootScope.showToast(`Backup for all data is done.`)
     }); 
   };
   
   $scope.delete = (ev)=>{
+    $scope.showProgress = true;
     $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
     .then((data)=>{
         return exportAlltables(ev);
@@ -53,6 +56,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       return deleteAllTables(ev);
     })
     .then((data)=>{
+      $scope.showProgress = false;
       $scope.showAlertDialog(ev, 'Delete', `All Table data deleted.`)
     })
     .catch((err)=>{
@@ -66,8 +70,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       filePaths = filePaths ? filePaths :[];
       let promises=[];
       let tableNames=[];
-      //exportAlltables(ev)
-      //.then(deleteAllTables.bind(this, ev))
+      $timeout(()=>{
+        $scope.showProgress = true;
+      },0)
       if(filePaths.length)
         for(let f of filePaths){
           let splitedNames = f.split('-');
@@ -99,6 +104,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           return Promise.all(promises)
         })
         .then((data)=>{
+          $timeout(()=>{
+            $scope.showProgress = false;
+          },0)
           data.length && $rootScope.showToast(`All data imported succesfully.`);
           !data.length && $rootScope.showToast(`Nothing to import.`);
         })
@@ -157,6 +165,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   };
   
   $scope.calc = (ev)=>{
+    $scope.showProgress = true;
     q.selectAll(BALANCE_TABLE)
     .then((rows)=>{
       if(!rows.length){
@@ -186,6 +195,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       return Promise.all(promises)
     })
     .then((data)=>{
+      $scope.showProgress = false;
       if(data.length){
         $rootScope.showToast(`Balances Updated`);
         $rootScope.$emit('updateCustomers');
