@@ -154,6 +154,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.getCustomerPassbook = (tableName)=>{
+         q.selectAllByIdActive(tableName, 'customerId', $scope.transaction.customerId,'active',1)
          q.selectAllById(tableName, 'customerId', $scope.transaction.customerId)
          .then((rows)=>{
            if(rows.length)
