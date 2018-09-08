@@ -1,4 +1,5 @@
 <div flex ng-controller="settingCtrl">
+  <md-progress-linear class="md-warn" ng-if="showProgress" md-mode="indeterminate"></md-progress-linear>
   <div flex="50">
     <p >{{msg}}<p>
     <p >{{msg2}}<p>
@@ -12,4 +13,5 @@
   <md-button class="md-raised md-warn" ng-click="import($event)">Import Data</md-button>
   <md-button class="md-raised md-warn" ng-click="delete($event)">Delete Data</md-button>
   <md-button class="md-raised md-primary" ng-click="back($event)">Back</md-button>
+
 </div>
