@@ -131,6 +131,10 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.getNewData(queryFor);
   };
 
+  $scope.reload = () =>{
+    $window.location.reload();
+  }
+
   $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active','1');
 
   });
