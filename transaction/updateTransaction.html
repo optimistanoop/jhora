@@ -20,7 +20,7 @@
             <md-input-container flex-xs>
               <label>Type</label>
               <md-icon><i class="material-icons">credit_card</i></md-icon>
-              <md-select name="type" ng-model="transaction.type" ng-change="typeSelected($event)" required>
+              <md-select name="type" ng-model="transaction.type" ng-change="typeSelected($event)" ng-disabled="active" required>
                 <md-option><em>None</em></md-option>
                 <md-option ng-repeat="type in types" ng-value="type">
                   {{type}}
@@ -33,7 +33,7 @@
             <md-input-container class="md-block" flex-xs>
               <label>Amount</label>
               <md-icon><i class="material-icons">money</i></md-icon>
-              <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
+              <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" ng-disabled="active" required>
               <div ng-messages="transactionForm.amount.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply an amount.</div>
                 <div ng-message="minlength" class="my-message">Amount should be minimum of 3 digits.</div>
@@ -44,7 +44,7 @@
             </md-input-container>
             <md-input-container>
               <label>Date</label>
-              <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
+              <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus ng-disabled="active" required></md-datepicker>
               <div ng-messages="transactionForm.date.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply a date.</div>
               </div>
@@ -53,7 +53,7 @@
           <div layout-gt-xs="row">
             <md-input-container flex-xs>
               <label>Promise Date</label>
-              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" md-open-on-focus ng-required="!disablePromiseDate"></md-datepicker>
+              <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" md-open-on-focus ng-required="!disablePromiseDate" ng-disabled="active"></md-datepicker>
               <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply a promise date.</div>
               </div>
@@ -61,7 +61,7 @@
             <md-input-container class="md-block" flex-xs>
               <label>Rate</label>
               <md-icon><i class="material-icons">trending_up</i></md-icon>
-              <input name="rate" type="number" ng-model="transaction.rate"  ng-change="onRateChange($event)" ng-disabled= "disablePromiseDate" ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
+              <input name="rate" type="number" ng-model="transaction.rate"  ng-change="onRateChange($event)" ng-disabled="true" ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
               <div ng-messages="transactionForm.rate.$error" role="alert" multiple>
                 <div ng-message="required" class="my-message">You must supply rate.</div>
                 <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
@@ -73,7 +73,7 @@
             <md-input-container flex-xs>
               <label>Remarks</label>
               <md-icon><i class="material-icons">note</i></md-icon>
-              <textarea ng-model="transaction.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus></textarea>
+              <textarea ng-model="transaction.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus ng-disabled="active"></textarea>
               <div ng-messages="transactionForm.remarks.$error" role="alert" multiple>
                 <div ng-message="minlength" class="my-message">Remarks should be of minimum 4 alphabets.</div>
                 <div ng-message="md-maxlength" class="my-message">Father'sName should not be greater 80 alphabets.</div>
