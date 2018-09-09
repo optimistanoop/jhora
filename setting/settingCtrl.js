@@ -1,4 +1,4 @@
-jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, VILLAGE_COLUMNS){
+jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = `Check your backup/exported file in downloads/app folder once its done.`;
@@ -130,7 +130,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         }else if (tableName == BALANCE_TABLE){
           fields = BALANCE_COLUMNS;
         }else if (tableName == BALANCE_HISTORY_TABLE){
-          fields = BALANCE_COLUMNS;
+          fields = BALANCE_HISTORY_COLUMNS;
         }
         const opts = { fields };      
         const csv = json2csv(rows, opts);
