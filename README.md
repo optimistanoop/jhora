@@ -28,11 +28,11 @@ Releases can only be built on the target platform.
 
 ## DB path
 
-Windows -  `C:\Users\Administrator\AppData\Roaming\db.db`
+Windows -  `C:\Users\Administrator\AppData\Roaming\jhora\db.db`
 
-Mac -  `/Users/<USER_NAME>/Library/Application\ Support/db.db`
+Mac -  `/Users/<USER_NAME>/Library/Application\ Support/jhora/db.db`
 
-Linux -  `/home/<USER_NAME>/.config/db.db`
+Linux -  `/home/<USER_NAME>/.config/jhora/db.db`
 
 ## Using native modules
 
