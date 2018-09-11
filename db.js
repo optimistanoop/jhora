@@ -4,7 +4,10 @@ let dbInit = ()=>{
   let sqlite3 = require('sqlite3').verbose();
   const {app} = require('electron').remote;
   const path = require('path');
+  const fs = require('fs');
   let dir = app.getPath("appData");
+  dir = path.join(dir, 'jhora');
+  if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
   let dbPath = path.join(dir, 'db.db');
   let db = new sqlite3.Database(dbPath);
   q = new Query(db);
