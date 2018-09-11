@@ -48,6 +48,17 @@
                   <div ng-message="required" class="my-message">You must supply a type.</div>
                 </div>
               </md-input-container>
+              <md-input-container>
+                <label>Date</label>
+                <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
+                <div ng-messages="transactionForm.date.$error" role="alert" multiple>
+                  <div ng-message="required" class="my-message">You must supply a date.</div>
+                </div>
+              </md-input-container>
+            </div>
+          </md-content>
+          <md-content layout-padding>
+            <div layout="row">
               <md-input-container class="md-block" flex-xs>
                 <label>Amount</label>
                 <md-icon><i class="material-icons">money</i></md-icon>
@@ -58,17 +69,6 @@
                   <div ng-message="min" class="my-message">Amount should be greater than 100.</div>
                   <div ng-message="max" class="my-message">Amount should be less than 2,00,000.</div>
                   <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
-                </div>
-              </md-input-container>
-            </div>
-          </md-content>
-          <md-content layout-padding>
-            <div layout="row">
-              <md-input-container>
-                <label>Date</label>
-                <md-datepicker name="date" ng-model="transaction.date" md-min-date="minDate" md-max-date="maxDate" ng-change="dateSelected()" md-open-on-focus required></md-datepicker>
-                <div ng-messages="transactionForm.date.$error" role="alert" multiple>
-                  <div ng-message="required" class="my-message">You must supply a date.</div>
                 </div>
               </md-input-container>
               <md-input-container flex-xs>

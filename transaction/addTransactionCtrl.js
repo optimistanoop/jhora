@@ -5,6 +5,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.custId = $routeParams.id;
     $scope.types = TRANSACTION_TYPES;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
+    $scope.transactions = [];
     $scope.minDate = new Date(new Date().getFullYear() -5, new Date().getMonth(), new Date().getDate());
     $scope.maxDate = new Date();
     $scope.minPromiseDate = new Date();
@@ -15,7 +16,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
       $scope.transaction.amount = '';
-      if ($scope.transaction.type == "Settle") {
+      if(($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr") && !$scope.transactions.length){
+        $rootScope.showAlertDialog(ev, 'Error', 'Please add Dr as first transaction of customer.')
+      }else if ($scope.transaction.type == "Settle") {
         $rootScope.showAlertDialog(ev, 'Alert', 'You have selected settle, please verify.')
         $scope.disablePromiseDate = true;
         $scope.transaction.amount = $scope.dueBal;
@@ -40,6 +43,12 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
 
       if ($scope.transaction.type == "Settle" || $scope.transaction.type == "Cr" ) {
         $scope.disablePromiseDate = true;
+        $scope.transaction.type == "Settle" && passbookService.calculateFinalPSI($scope.transactions, $scope.transaction.date).then((calc)=>{
+                         let balData = calc.results[calc.results.length-1][0];
+                         $scope.calcData = calc;
+                         $scope.dueBal = balData ? balData.total : 0;
+                         $scope.transaction.amount = $scope.dueBal;
+                       })
       }else if($scope.transaction.type == 'Dr') {
         $scope.disablePromiseDate = false;
       }
@@ -172,11 +181,24 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         console.error('anp err, transaction insertion', err);
       });
     };
-
+    
+    let validateFirstTransaction = (ev)=>{
+      if(!$scope.transactions.length && ($scope.transaction.type == 'Settle' || $scope.transaction.type == 'Cr')){
+        $scope.showAlertDialog(ev, 'Error', `Please select Dr as first transaction for customer.`);
+        return false
+      }else if($scope.transactions.length && $scope.transaction.type == 'Settle' && $scope.transactions[$scope.transactions.length -1].date > $scope.transaction.date){
+        $scope.showAlertDialog(ev, 'Error', `Settle should be the last transaction.`);
+        return false;
+      }
+      return true;
+    }
+    
+    
     $scope.addTransaction = (ev)=>{
-      if($scope.transaction.type == 'Settle'){
+      let valid =  validateFirstTransaction(ev);
+      if(valid && $scope.transaction.type == 'Settle'){
         $scope.processSettle(ev);
-      }else{
+      }else if(valid){
         $scope.processAddTransaction(ev);
       }
     }
