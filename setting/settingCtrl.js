@@ -1,9 +1,9 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
   
   $rootScope.template = {title: 'Setting'};
-  $scope.msg = `Check your backup/exported file in downloads/app folder once its done.`;
-  $scope.msg2 = `Import steps- export -> delete -> import`;
-  $scope.msg3 = `Delete steps- export -> delete`;
+  $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
+  $scope.msg2 = `Import steps- export (select folder for eport) -> delete -> import`;
+  $scope.msg3 = `Delete steps- export (select folder for eport) -> delete`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv `;
   $scope.msg5 = `All calculations to be happen for todays date`;
   $scope.showProgress = false;
@@ -41,7 +41,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     dir = dir ? dir : app.getPath('downloads');
     let today = new Date();
     let fileName = `jhora-${tableName}-${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}.csv`;
-    dir = path.join(__dirname, `jhorabackup`);
+    dir = path.join(dir, `jhorabackup`);
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
     dir = path.join(dir, `${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`);
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
@@ -68,20 +68,25 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     $scope.showProgress = true;
     $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
     .then((data)=>{
-        return exportAlltables(ev);
+      let options = {title:'Select folder for export', properties:['openDirectory']}
+      dialog.showOpenDialog(options, (filePaths)=>{
+        console.log(filePaths);
+        if(filePaths && filePaths[0])
+        exportAlltables(ev, filePaths[0])
+        .then((data)=>{
+          return deleteAllTables(ev);
+        })
+        .then((data)=>{
+          $scope.showProgress = false;
+          $scope.showToast(`All Table data deleted.`)
+        })
+        .catch((err)=>{
+          console.error('anp an error occured while operation', err);
+        });
+        
     })
-    .then((data)=>{
-      return deleteAllTables(ev);
     })
-    .then((data)=>{
-      $scope.showProgress = false;
-      $scope.showAlertDialog(ev, 'Delete', `All Table data deleted.`)
-    })
-    .catch((err)=>{
-      console.error('anp an error occured while operation', err);
-    });
   };
-  
   $scope.import = (ev)=>{
     let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
     dialog.showOpenDialog(options, (filePaths)=>{
