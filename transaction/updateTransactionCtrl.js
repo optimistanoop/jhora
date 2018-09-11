@@ -90,6 +90,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       if($scope.transactions.length == 1 &&  $scope.transaction.type == 'Cr'){
         $scope.showAlertDialog(ev, 'Error', `Please select Dr as first transaction for customer.`);
         return false
+      }else if($scope.transactions.length && $scope.transaction.type == 'Cr' && $scope.transactions[0].date > $scope.transaction.date){
+        $scope.showAlertDialog(ev, 'Error', `Cr should should not be the first transaction.`);
+        return false;
       }
       return true;
     }
