@@ -22,7 +22,7 @@
   </md-input-container>
  <div style="width:80%;margin: 10px auto;position:relative;left:20px;font-weight:bold;font-size:20pt;">
    <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
-     <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length | limitTo:3}} % </label>
+     <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length | limitTo:4}} % </label>
  </div>
  <md-input-container flex-xs style="position:relative;left:-35px;">
    <label>Search</label>
