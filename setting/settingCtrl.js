@@ -191,7 +191,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       if(!rows.length){
         return q.selectAll(CUSTOMERS_TABLE)  
       }
-      return []
+      return q.wildCard('select c.id from customers c left join balances b on c.id= b.customerId where b.customerId is null')
     })
     .then((rows)=>{
       let promises = [];

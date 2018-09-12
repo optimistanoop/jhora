@@ -181,6 +181,15 @@ class Query {
     });
     return p;
   }
+  wildCard(sql){
+    let p = new Promise( (resolve, reject)=>{
+      this.db.all(sql, (err, data)=>{
+        if(err) reject(err);
+        resolve(data);
+      });
+    });
+    return p;
+  }
 
   selectAllById(tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
