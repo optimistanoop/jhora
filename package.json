@@ -13,7 +13,8 @@
     "files": [
       "app/**/*",
       "node_modules/**/*",
-      "package.json"
+      "package.json",
+      "*"
     ]
   },
   "scripts": {
