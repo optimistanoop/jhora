@@ -164,14 +164,14 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       title: 'Villages',
       route: '/villages'
     },
-    {
-      title: 'Dashboard Demo',
-      route: '/dashboard/view'
-    },
-    {
-      title: 'Passbook Demo',
-      route: '/passbook1/view'
-    },
+    // {
+    //   title: 'Dashboard Demo',
+    //   route: '/dashboard/view'
+    // },
+    // {
+    //   title: 'Passbook Demo',
+    //   route: '/passbook1/view'
+    // },
     {
       title: 'Settings',
       route: '/setting'
@@ -190,6 +190,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   .constant('BALANCE_TABLE', 'balances')
   .constant('BALANCE_HISTORY_TABLE', 'balances_history')
   .constant('BALANCE_COLUMNS', ['amount', 'date', 'calcTill', 'calcOn', 'dueFrom', 'nextDueDate', 'customerId', 'type', 'p', 'si', 'rate', 'total'])
+  .constant('BALANCE_HISTORY_COLUMNS', ['amount', 'date', 'calcTill', 'calcOn', 'dueFrom', 'nextDueDate', 'customerId', 'type', 'p', 'si', 'rate', 'total', 'action'])
   .constant('TOAST_DELAY', 3000)
   .constant('TOAST_POS', 'bottom right')
   .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
