@@ -11,7 +11,7 @@
   "build": {
     "appId": "com.example.electron-boilerplate-sqlite",
     "files": [
-      "app/**/*",
+      "**/*",
       "node_modules/**/*",
       "package.json",
       "*"
