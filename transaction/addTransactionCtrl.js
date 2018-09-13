@@ -175,6 +175,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           },0);
       })
     }
+  }
 
     $scope.processAddTransaction = (ev)=>{
       let {keys, values} = $scope.dataMassage();

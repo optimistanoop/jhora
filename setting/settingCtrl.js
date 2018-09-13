@@ -5,7 +5,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
   $scope.msg3 = `Delete steps- export (select folder for export) -> delete.`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
-  $scope.msg5 = `All balance calculations for cutomers to be happen for todays date.`;
+  $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
@@ -14,27 +14,54 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   const {dialog} = require('electron').remote;
   const csv2json=require("csvtojson");
   
-  let deleteAllTables = (ev)=>{
-    return Promise.all([
-       $scope.deleteByTable(ev, CUSTOMERS_TABLE),
-       $scope.deleteByTable(ev, TRANSACTION_TABLE),  
-       $scope.deleteByTable(ev, BALANCE_TABLE),  
-       $scope.deleteByTable(ev, BALANCE_HISTORY_TABLE),  
-       $scope.deleteByTable(ev, DELCUSTOMERS_TABLE),  
-       $scope.deleteByTable(ev, DELTRANSACTION_TABLE),  
-       $scope.deleteByTable(ev, VILLAGE_TABLE)
-     ]);
+  $scope.items = ['Transactions','Balances','Balances_History','Customers','Villages'];
+  $scope.selected = [TRANSACTION_TABLE,BALANCE_TABLE, BALANCE_HISTORY_TABLE];
+  $scope.toggle = function (item, list) {
+    item = item.toLowerCase();
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    }
+    else {
+      list.push(item);
+    }
+  };
+
+  $scope.exists = function (item, list) {
+    item = item.toLowerCase();
+    return list.indexOf(item) > -1;
+  };
+
+  $scope.isIndeterminate = function() {
+    return ($scope.selected.length !== 0 &&
+        $scope.selected.length !== $scope.items.length);
+  };
+
+  $scope.isChecked = function() {
+    return $scope.selected.length === $scope.items.length;
+  };
+
+  $scope.toggleAll = function() {
+      if ($scope.selected.length === $scope.items.length) {
+        $scope.selected = [];
+      } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
+        $scope.selected = $scope.items.slice(0).map(v => v.toLowerCase());;
+      }
+  };
+  
+  let deleteAllTables = (ev, tables=[])=>{
+    let promises =[];
+    for(let table of tables){
+        promises.push($scope.deleteByTable(ev, table));
+    }
+    return Promise.all(promises);
   }
-  let exportAlltables = (ev, dir)=>{
-    return Promise.all([
-      $scope.getBackupByTable(ev, CUSTOMERS_TABLE, dir),
-      $scope.getBackupByTable(ev, TRANSACTION_TABLE, dir),  
-      $scope.getBackupByTable(ev, BALANCE_TABLE, dir),  
-      $scope.getBackupByTable(ev, BALANCE_HISTORY_TABLE, dir),  
-      $scope.getBackupByTable(ev, DELCUSTOMERS_TABLE, dir),  
-      $scope.getBackupByTable(ev, DELTRANSACTION_TABLE, dir),  
-      $scope.getBackupByTable(ev, VILLAGE_TABLE, dir)
-    ]);
+  let exportAlltables = (ev, dir, tables=[])=>{
+    let promises =[];
+    for(let table of tables){
+        promises.push($scope.getBackupByTable(ev, table, dir));
+    }
+    return Promise.all(promises);
   }
   
   let createBackupFolder = (tableName, dir)=>{
@@ -54,7 +81,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     // dialog.showSaveDialog({defaultPath:'hello.csv'},(filePaths)=>{
     dialog.showOpenDialog(options, (filePaths)=>{
       if(filePaths && filePaths[0])
-      exportAlltables(ev, filePaths[0])
+      exportAlltables(ev, filePaths[0], $scope.selected)
       .then((data)=>{
         $scope.showProgress = false;
         $rootScope.showToast(`Backup for all data is done.`)
@@ -69,9 +96,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       let options = {title:'Select folder for export', properties:['openDirectory']}
       dialog.showOpenDialog(options, (filePaths)=>{
         if(filePaths && filePaths[0])
-        exportAlltables(ev, filePaths[0])
+        exportAlltables(ev, filePaths[0], $scope.selected)
         .then((data)=>{
-          return deleteAllTables(ev);
+          return deleteAllTables(ev, $scope.selected)
         })
         .then((data)=>{
           $scope.showProgress = false;

@@ -1,4 +1,4 @@
-const {app, dialog, ipcMain, BrowserWindow} = require('electron');
+const {app, dialog, ipcMain, BrowserWindow, Menu} = require('electron');
 app.showExitPrompt = true
 
 let mainWindow;
@@ -17,6 +17,97 @@ app.on('quit', ()=> {
 ipcMain.on('closed-db', (event, message)=>{
   console.log('anp db closed now', message);
 });
+
+const template = [
+   {
+      label: 'Edit',
+      submenu: [
+         {
+            role: 'undo'
+         },
+         {
+            role: 'redo'
+         },
+         {
+            type: 'separator'
+         },
+         {
+            role: 'cut'
+         },
+         {
+            role: 'copy'
+         },
+         {
+            role: 'paste'
+         }
+      ]
+   },
+   
+   {
+      label: 'View',
+      submenu: [
+         {
+            type: 'separator'
+         },
+         {
+            role: 'resetzoom'
+         },
+         {
+            role: 'zoomin'
+         },
+         {
+            role: 'zoomout'
+         },
+         {
+            type: 'separator'
+         },
+         {
+            role: 'togglefullscreen'
+         }
+      ]
+   },
+   
+   {
+      role: 'window',
+      submenu: [
+         {
+            role: 'minimize'
+         },
+         {
+            role: 'close'
+         }
+      ]
+   },
+   {
+      label: 'Jhora Utility',
+      submenu: [
+         {
+            role: 'toggledevtools'
+         },
+         {
+            role: 'reload'
+         },
+         {
+            label: 'Print',
+            click () { console.log('printing'); mainWindow.webContents.print(); console.log('print done');}
+         },
+         {
+            label: 'About Us',
+            click () { require('electron').shell.openExternal('https://github.com/optimistanoop/jhora') }
+         }
+      ]
+   },
+   
+   {
+      role: 'help',
+      submenu: [
+         {
+            label: 'Learn More',
+            click () { require('electron').shell.openExternal('https://github.com/optimistanoop/jhora') }
+         }
+      ]
+   }
+]
 
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
@@ -41,6 +132,8 @@ app.on('ready', ()=> {
   mainWindow.once('ready-to-show', () => {
     setTimeout(function () {
       splash.destroy();
+      const menu = Menu.buildFromTemplate(template)
+      Menu.setApplicationMenu(menu)
       mainWindow.maximize();
       mainWindow.show();
     }, 3000);
