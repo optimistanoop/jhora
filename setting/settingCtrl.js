@@ -5,7 +5,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
   $scope.msg3 = `Delete steps- export (select folder for export) -> delete.`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
-  $scope.msg5 = `All balance calculations for cutomers to be happen for todays date.`;
+  $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
