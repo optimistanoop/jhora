@@ -90,10 +90,8 @@ const template = [
          {
             label: 'Print',
             click () { mainWindow.webContents.print({}, ()=>{
-                dialog.showMessageBox(mainWindow, { type: 'info', buttons: [], title: 'Print', message: 'Print done.' }, function (response) {
-                    if (response === 0) { // Runs the following if 'Yes' is clicked
-                      console.log('Anp print done.');
-                    }
+                dialog.showMessageBox( { type: 'info', buttons: [], title: 'Print', message: 'Print done.' }, function (response) {
+                    if (response === 0) { console.log('Anp print done.'); }
                 })
               }); 
             }
