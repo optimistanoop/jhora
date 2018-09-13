@@ -14,7 +14,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   const {dialog} = require('electron').remote;
   const csv2json=require("csvtojson");
   
-  $scope.items = ['Transactions','Balances','Balances_History','Customers','Villages'];
+  $scope.items = ['Transactions','Balances','Balances_History','Customers','Village'];
   $scope.selected = [TRANSACTION_TABLE,BALANCE_TABLE, BALANCE_HISTORY_TABLE];
   $scope.toggle = function (item, list) {
     item = item.toLowerCase();

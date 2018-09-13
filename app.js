@@ -89,7 +89,12 @@ const template = [
          },
          {
             label: 'Print',
-            click () { console.log('printing'); mainWindow.webContents.print(); console.log('print done');}
+            click () { mainWindow.webContents.print({}, ()=>{
+                dialog.showMessageBox( { type: 'info', buttons: [], title: 'Print', message: 'Print done.' }, function (response) {
+                    if (response === 0) { console.log('Anp print done.'); }
+                })
+              }); 
+            }
          },
          {
             label: 'About Us',
@@ -144,12 +149,7 @@ app.on('ready', ()=> {
       console.log('anp close');
       if (app.showExitPrompt) {
           e.preventDefault() // Prevents the window from closing
-          dialog.showMessageBox({
-              type: 'question',
-              buttons: ['Yes', 'No'],
-              title: 'Confirm',
-              message: 'Are you sure you want to quit?'
-          }, function (response) {
+          dialog.showMessageBox({ type: 'question', buttons: ['Yes', 'No'], title: 'Confirm', message: 'Are you sure you want to quit?' }, function (response) {
               if (response === 0) { // Runs the following if 'Yes' is clicked
                   console.log('anp exit yes');
                   mainWindow.webContents.send('close-db', 'bye');
