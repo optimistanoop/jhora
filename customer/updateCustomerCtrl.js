@@ -61,7 +61,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
           },0);
         })
       .catch((err)=>{
-          console.error('anp err occured while insertion',err);
           if (err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.mobile')) {
             $rootScope.showAlertDialog(ev,'Duplicate Mobile Number Found', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
             $scope.customer.mobile = '';
@@ -86,7 +85,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-        console.error(err);
+        $scope.showAlertDialog({}, 'Error', err);
       });
     };
 

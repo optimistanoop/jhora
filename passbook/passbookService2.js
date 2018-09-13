@@ -195,9 +195,7 @@ jhora.service('passbookService', function($mdDateLocale) {
           // calcOnlyForMonths should take diff of every tranDate from fromDate and calc P, I independently
           // calcOnlyForMonths should accumulate P, I 
           // calcOnlyForMonths should also give the type as final and cr/dr
-          config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Final');
-          
-          console.log('anp final config', config);
+          config = handleMonthlyCalc(from, to, config.results, config.calcResults, config.finalTran, config.fromTran, 'Final');          
         }
       }
       resolve(config);

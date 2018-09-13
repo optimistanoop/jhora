@@ -138,7 +138,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
           }
         })
         .catch((err) => {
-          console.error(err);
+          $scope.showAlertDialog({}, 'Error', err);
         })
     };
 
