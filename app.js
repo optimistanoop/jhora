@@ -47,12 +47,6 @@ const template = [
       label: 'View',
       submenu: [
          {
-            role: 'reload'
-         },
-         {
-            role: 'toggledevtools'
-         },
-         {
             type: 'separator'
          },
          {
@@ -84,12 +78,32 @@ const template = [
          }
       ]
    },
+   {
+      label: 'Jhora Utility',
+      submenu: [
+         {
+            role: 'toggledevtools'
+         },
+         {
+            role: 'reload'
+         },
+         {
+            label: 'Print',
+            click () { console.log('printing'); mainWindow.webContents.print(); console.log('print done');}
+         },
+         {
+            label: 'About Us',
+            click () { require('electron').shell.openExternal('https://github.com/optimistanoop/jhora') }
+         }
+      ]
+   },
    
    {
       role: 'help',
       submenu: [
          {
-            label: 'Learn More'
+            label: 'Learn More',
+            click () { require('electron').shell.openExternal('https://github.com/optimistanoop/jhora') }
          }
       ]
    }
