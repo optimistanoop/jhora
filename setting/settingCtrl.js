@@ -2,10 +2,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   
   $rootScope.template = {title: 'Setting'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
-  $scope.msg2 = `Import steps- export (select folder for eport) -> delete -> import`;
-  $scope.msg3 = `Delete steps- export (select folder for eport) -> delete`;
-  $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv `;
-  $scope.msg5 = `All calculations to be happen for todays date`;
+  $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
+  $scope.msg3 = `Delete steps- export (select folder for export) -> delete.`;
+  $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
+  $scope.msg5 = `All balance calculations for cutomers to be happen for todays date.`;
   $scope.showProgress = false;
   const json2csv = require('json2csv').parse;
   const fs = require('fs');
@@ -45,7 +45,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
     dir = path.join(dir, `${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`);
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
-    console.log('anp dir', dir);
     return path.join(dir, fileName);
   }
 
@@ -54,7 +53,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     let options = {title:'Select folder for export', properties:['openDirectory']}
     // dialog.showSaveDialog({defaultPath:'hello.csv'},(filePaths)=>{
     dialog.showOpenDialog(options, (filePaths)=>{
-      console.log(filePaths);
       if(filePaths && filePaths[0])
       exportAlltables(ev, filePaths[0])
       .then((data)=>{
@@ -70,7 +68,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     .then((data)=>{
       let options = {title:'Select folder for export', properties:['openDirectory']}
       dialog.showOpenDialog(options, (filePaths)=>{
-        console.log(filePaths);
         if(filePaths && filePaths[0])
         exportAlltables(ev, filePaths[0])
         .then((data)=>{
@@ -81,7 +78,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           $scope.showToast(`All Table data deleted.`)
         })
         .catch((err)=>{
-          console.error('anp an error occured while operation', err);
+          $scope.showAlertDialog(ev, 'Error', err);
+
         });
         
     })
@@ -191,7 +189,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       if(!rows.length){
         return q.selectAll(CUSTOMERS_TABLE)  
       }
-      return []
+      return q.wildCard('select c.id from customers c left join balances b on c.id= b.customerId where b.customerId is null')
     })
     .then((rows)=>{
       let promises = [];

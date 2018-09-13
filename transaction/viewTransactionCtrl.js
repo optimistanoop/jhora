@@ -57,7 +57,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
     })
     .catch((err)=>{
-      console.error('anp an err occured while deleting',err);
+      $scope.showAlertDialog({}, 'Error', err);
     });
   }
 
@@ -78,7 +78,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       }, 0);
     })
     .catch((err)=>{
-      console.error('anp got error while fetching data',err);
+      $scope.showAlertDialog({}, 'Error', err);
     });
   };
 

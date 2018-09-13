@@ -2,7 +2,7 @@
   "name": "Jhora",
   "productName": "Jhora",
   "description": "Jhora",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Anoop Kumar <optimistanoopr@gmail.com>",
   "copyright": "© 2018, KF Daniyari.",
   "homepage": "http://example.com",
@@ -11,10 +11,12 @@
   "build": {
     "appId": "com.example.electron-boilerplate-sqlite",
     "files": [
-      "app/**/*",
+      "**/*",
       "node_modules/**/*",
-      "package.json"
-    ]
+      "package.json",
+      "*"
+    ],
+    "icon":"./images/logo.ico"
   },
   "scripts": {
     "postinstall": "install-app-deps",

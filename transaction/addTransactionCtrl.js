@@ -102,7 +102,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       return {keys, values};
     }
 
-    $scope.insetTransactionAndBalance = (keys =[], values=[])=>{
+    $scope.insertTransactionAndBalance = (keys =[], values=[])=>{
       //let {keys, values} = $scope.dataMassage();
       return q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
@@ -134,13 +134,12 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       }else if(discount){
         $scope.showConfirmDialog(ev, 'Alert', `Are you sure for Rs. ${discount} discount ?`)
         .then((data)=>{
-          console.log('anp confirm', data);
           if(data){
             // add transaction
             // add discount
             // inactive all trans
             let {keys, values} = $scope.dataMassage();
-            return $scope.insetTransactionAndBalance(keys, values)
+            return $scope.insertTransactionAndBalance(keys, values)
           }
           throw Error;
         })
@@ -149,7 +148,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           $scope.transaction.amount = discount;
           $scope.transaction.type = 'Discount';
           let {keys, values} = $scope.dataMassage();
-          return $scope.insetTransactionAndBalance(keys, values)
+          return $scope.insertTransactionAndBalance(keys, values)
         })
         .then((data)=>{
           return q.updateActiveStatus(TRANSACTION_TABLE, 'active', '0', 'customerId', $scope.transaction.customerId);
@@ -161,16 +160,25 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           },0);
         })
         .catch((err)=>{
-            console.error('anp err, transaction insertion', err);
+          $scope.showAlertDialog(ev, 'Error', err);
         });
       }else {
-        $scope.processAddTransaction();
-      }
+        let {keys, values} = $scope.dataMassage();
+        $scope.insertTransactionAndBalance(keys, values)
+        .then((data)=>{
+          return q.updateActiveStatus(TRANSACTION_TABLE, 'active', '0', 'customerId', $scope.transaction.customerId);
+        })
+        .then((data)=>{
+          $timeout(()=>{
+            $scope.resetTransaction();
+            $rootScope.showToast('Transaction Added');
+          },0);
+      })
     }
 
-    $scope.processAddTransaction = ()=>{
+    $scope.processAddTransaction = (ev)=>{
       let {keys, values} = $scope.dataMassage();
-      $scope.insetTransactionAndBalance(keys, values)
+      return $scope.insertTransactionAndBalance(keys, values)
       .then((data)=>{
         $timeout(()=>{
           $scope.resetTransaction();
@@ -178,7 +186,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-        console.error('anp err, transaction insertion', err);
+        $scope.showAlertDialog(ev, 'Error', `While transaction insertion ${err}`);
       });
     };
     
@@ -215,7 +223,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $scope[modelName] = rows;
       })
       .catch((err)=>{
-        console.error(err);
+        $scope.showAlertDialog({}, 'Error', err);
       });
     };
 
@@ -239,7 +247,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
            })
          })
          .catch((err)=>{
-           console.error(err);
+           $scope.showAlertDialog({}, 'Error', err);
          });
      };
     $scope.init = ()=>{

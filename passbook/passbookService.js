@@ -225,7 +225,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     return calculateFinalPSI(rows,new Date());
     })
    .catch((err)=>{
-     console.error('anp got error while fetching data',err);
+     $scope.showAlertDialog({}, 'Error', err);
     });
   }
   return {calculateFinalPSI, calculatePSIForYears, calculatePSIForMonths, calculateSI,getUserData};

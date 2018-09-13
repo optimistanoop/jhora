@@ -30,7 +30,6 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 							 $rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
-		          console.error('anp err occured while updation',err);
 		          $scope.getError(ev, err);
 		    });
         }
@@ -45,7 +44,6 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 								$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
-			          console.error('anp err occured while insertion',err);
 			          $scope.getError(ev, err);
 			});
     };
@@ -81,7 +79,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-        console.error(err);
+				$scope.showAlertDialog({}, 'Error', err);
       });
     };
     $scope.getVillages(VILLAGE_TABLE);
@@ -98,7 +96,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 				      $scope.confirmVillage(village);
 				   })
 					 .catch((err)=>{
-						 console.error('anp an error occured while operation', err);
+						 $scope.showAlertDialog(ev, 'Error', err);
            });
          }
        }
@@ -114,7 +112,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 					$rootScope.showToast('Village Deleted');
         })
         .catch((err)=>{
-          console.error('anp an err occured while deleting', village);
+					$scope.showAlertDialog({}, 'Error', err);
         });
     }
 
