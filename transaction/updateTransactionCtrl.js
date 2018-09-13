@@ -192,7 +192,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         },0)
       })
       .catch((err)=>{
-        console.error(err);
+        $scope.showAlertDialog({}, 'Error', err);
       });
     };
 
@@ -213,7 +213,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
              })
          })
          .catch((err)=>{
-           console.error(err);
+           $scope.showAlertDialog({}, 'Error', err);
          });
      };
 
