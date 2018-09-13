@@ -45,7 +45,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
     dir = path.join(dir, `${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`);
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
-    console.log('anp dir', dir);
     return path.join(dir, fileName);
   }
 
@@ -54,7 +53,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     let options = {title:'Select folder for export', properties:['openDirectory']}
     // dialog.showSaveDialog({defaultPath:'hello.csv'},(filePaths)=>{
     dialog.showOpenDialog(options, (filePaths)=>{
-      console.log(filePaths);
       if(filePaths && filePaths[0])
       exportAlltables(ev, filePaths[0])
       .then((data)=>{
@@ -70,7 +68,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     .then((data)=>{
       let options = {title:'Select folder for export', properties:['openDirectory']}
       dialog.showOpenDialog(options, (filePaths)=>{
-        console.log(filePaths);
         if(filePaths && filePaths[0])
         exportAlltables(ev, filePaths[0])
         .then((data)=>{
@@ -81,7 +78,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           $scope.showToast(`All Table data deleted.`)
         })
         .catch((err)=>{
-          console.error('anp an error occured while operation', err);
+          $scope.showAlertDialog(ev, 'Error', err);
+
         });
         
     })

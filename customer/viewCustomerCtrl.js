@@ -48,7 +48,7 @@
           $rootScope.showToast(`${customer.name}'s Customer Deleted`);
         })
         .catch((err) => {
-          console.error('anp an err occured while deleting', err);
+          $scope.showAlertDialog({}, 'Error', `An err occured while deleting ${err}`);
         });
     }
 
@@ -73,7 +73,7 @@
             }
           })
           .catch((err) => {
-            console.error("error while getting", err);
+            $scope.showAlertDialog({}, 'Error', err);
           });
       } else {
         q.selectAll(tableName)

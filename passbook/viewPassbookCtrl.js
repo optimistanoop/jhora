@@ -78,7 +78,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
        },0)
      })
      .catch((err)=>{
-       console.error('anp an err occured while deleting',err);
+       $scope.showAlertDialog({}, 'Error', err);
      });
   }
 
@@ -92,16 +92,14 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
        row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
      }
      $timeout(()=>{
-       // $scope[modelName] = rows;
        $scope.transactions= rows;
-       // console.log('data',$scope[modelName]);
        $scope.hideNoDataFound = true;
        if(tableName == TRANSACTION_TABLE && rows && rows.length == 0)
        $scope.hideNoDataFound = false;
      }, 0);
    })
    .catch((err)=>{
-     console.error('anp got error while fetching data',err);
+     $scope.showAlertDialog({}, 'Error', err);
    });
  };
 
@@ -140,7 +138,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     }
     })
     .catch((err)=>{
-      console.error(err);
+      $scope.showAlertDialog({}, 'Error', err);
     });
   };
 
@@ -153,7 +151,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
       },0)
     })
     .catch((err)=>{
-      console.error('anp an error occured while operation', err);
+      $scope.showAlertDialog({}, 'Error', err);
     });
   }
 
