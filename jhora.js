@@ -229,48 +229,55 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider, $routeProvider,
     }
     return formattedDate ? formattedDate : null;
   };
+  
+  
+  let dir = '';
+  if(isElectron() && window.__dirname){
+    dir = 'file://' + __dirname;
+  } 
+  
   $routeProvider
     .when("/", {
-      templateUrl: 'file://' + __dirname + '/village/addViewVillage.html'
+      templateUrl: dir + '/village/addViewVillage.html'
     })
     .when("/customers", {
-      templateUrl: 'file://' + __dirname + '/customer/viewCustomer.html'
+      templateUrl: dir + '/customer/viewCustomer.html'
     })
     .when("/customers/add", {
-      templateUrl: 'file://' + __dirname + '/customer/addCustomer.html'
+      templateUrl: dir + '/customer/addCustomer.html'
     })
     .when("/customers/update/:id", {
-      templateUrl: 'file://' + __dirname + '/customer/updateCustomer.html'
+      templateUrl: dir + '/customer/updateCustomer.html'
     })
     .when("/transactions", {
-      templateUrl: 'file://' + __dirname + '/transaction/viewTransaction.html'
+      templateUrl: dir + '/transaction/viewTransaction.html'
     })
     .when("/transactions/add", {
-      templateUrl: 'file://' + __dirname + '/transaction/addTransaction.html'
+      templateUrl: dir + '/transaction/addTransaction.html'
     })
     .when("/transactions/add/:id", {
-      templateUrl: 'file://' + __dirname + '/transaction/addTransaction.html'
+      templateUrl: dir + '/transaction/addTransaction.html'
     })
     .when("/transactions/update/:id", {
-      templateUrl: 'file://' + __dirname + '/transaction/updateTransaction.html'
+      templateUrl: dir + '/transaction/updateTransaction.html'
     })
     .when("/passbook/view/:id", {
-      templateUrl: 'file://' + __dirname + '/passbook/viewPassbook.html'
+      templateUrl: dir + '/passbook/viewPassbook.html'
     })
     .when("/villages", {
-      templateUrl: 'file://' + __dirname + '/village/addViewVillage.html'
+      templateUrl: dir + '/village/addViewVillage.html'
     })
     .when("/villages/view/:id", {
-      templateUrl: 'file://' + __dirname + '/village/addViewVillage.html'
+      templateUrl: dir + '/village/addViewVillage.html'
     })
     .when("/passbook1/view", {
-      templateUrl: 'file://' + __dirname + '/passbook/viewPassbook1.html'
+      templateUrl: dir + '/passbook/viewPassbook1.html'
     })
     .when("/dashboard/view", {
-      templateUrl: 'file://' + __dirname + '/dashboard/dashboard.html'
+      templateUrl: dir + '/dashboard/dashboard.html'
     })
     .when("/setting", {
-      templateUrl: 'file://' + __dirname + '/setting/setting.html'
+      templateUrl: dir + '/setting/setting.html'
     });
   $locationProvider.hashPrefix('!');
   $locationProvider.html5Mode({
