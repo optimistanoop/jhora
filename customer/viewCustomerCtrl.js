@@ -1,7 +1,5 @@
   jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE, BALANCE_TABLE) {
-    const {
-      shell
-    } = require('electron');
+
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
     $scope.customer = {
@@ -20,7 +18,6 @@
       title: 'Customers'
     };
     $scope.deleteCustomer = (ev, customer) => {
-      shell.beep();
       q.selectAllById(TRANSACTION_TABLE, 'customerId', customer.id)
         .then((row) => {
           if (row.length > 0) {

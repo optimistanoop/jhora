@@ -3,7 +3,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
 
 
   const {dialog} = require('electron').remote;
-  const {shell} = require('electron');
   $rootScope.template = {title: 'Passbook'};
   $scope.custid=$routeParams.id;
   $scope.limits = TRANS_LIMITS;
@@ -36,7 +35,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   }
 
   $scope.deleteTransaction=(ev,transaction)=>{
-   shell.beep();
    $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
     .then((answer)=>{
       if(answer == 'submit') {
