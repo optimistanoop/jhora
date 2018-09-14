@@ -89,8 +89,10 @@ const template = [
          },
          {
             label: 'Print',
-            click () { mainWindow.webContents.print({}, ()=>{
-                dialog.showMessageBox( { type: 'info', buttons: [], title: 'Print', message: 'Print done.' }, function (response) {
+            click () { mainWindow.webContents.print({printBackground:true}, (success)=>{
+              let type = success ? 'info' : 'error';
+              let message = success ? 'Printing done.' : 'Some error occured while operation.';
+                dialog.showMessageBox( { type: type, buttons: [], title: 'Print', message: message }, function (response) {
                     if (response === 0) { console.log('Anp print done.'); }
                 })
               }); 

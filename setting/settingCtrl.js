@@ -1,6 +1,6 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
   
-  $rootScope.template = {title: 'Setting'};
+  $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
   $scope.msg3 = `Delete steps- export (select folder for export) -> delete.`;
@@ -76,40 +76,44 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   }
 
   $scope.export = (ev)=>{
-    $scope.showProgress = true;
     let options = {title:'Select folder for export', properties:['openDirectory']}
     // dialog.showSaveDialog({defaultPath:'hello.csv'},(filePaths)=>{
     dialog.showOpenDialog(options, (filePaths)=>{
-      if(filePaths && filePaths[0])
-      exportAlltables(ev, filePaths[0], $scope.selected)
-      .then((data)=>{
-        $scope.showProgress = false;
-        $rootScope.showToast(`Backup for all data is done.`)
-      }); 
+      if(filePaths && filePaths[0]){
+        $scope.showProgress = true;
+        exportAlltables(ev, filePaths[0], $scope.selected)
+        .then((data)=>{
+          $scope.showProgress = false;
+          $scope.showToast(`Backup for all data is done.`)
+        }); 
+      }else{
+        $scope.showToast('No folder selected for export.');
+      }
     });
   };
   
   $scope.delete = (ev)=>{
-    $scope.showProgress = true;
     $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
     .then((data)=>{
       let options = {title:'Select folder for export', properties:['openDirectory']}
       dialog.showOpenDialog(options, (filePaths)=>{
-        if(filePaths && filePaths[0])
-        exportAlltables(ev, filePaths[0], $scope.selected)
-        .then((data)=>{
-          return deleteAllTables(ev, $scope.selected)
-        })
-        .then((data)=>{
-          $scope.showProgress = false;
-          $scope.showToast(`All Table data deleted.`)
-        })
-        .catch((err)=>{
-          $scope.showAlertDialog(ev, 'Error', err);
-
-        });
-        
-    })
+        if(filePaths && filePaths[0]){
+          $scope.showProgress = true;
+          exportAlltables(ev, filePaths[0], $scope.selected)
+          .then((data)=>{
+            return deleteAllTables(ev, $scope.selected)
+          })
+          .then((data)=>{
+            $scope.showProgress = false;
+            $scope.showToast(`All Table data deleted.`)
+          })
+          .catch((err)=>{
+            $scope.showAlertDialog(ev, 'Error', err);
+          });
+        }else {
+          $scope.showToast(`No folder selected for delete backcup.`)
+        }        
+      })
     })
   };
   $scope.import = (ev)=>{
@@ -155,8 +159,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           $timeout(()=>{
             $scope.showProgress = false;
           },0)
-          data.length && $rootScope.showToast(`All data imported succesfully.`);
-          !data.length && $rootScope.showToast(`Nothing to import.`);
+          data.length && $scope.showToast(`All data imported succesfully.`);
+          !data.length && $scope.showToast(`Nothing to import.`);
         })
         .catch((err)=>{
           $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
@@ -242,10 +246,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     .then((data)=>{
       $scope.showProgress = false;
       if(data.length){
-        $rootScope.showToast(`Balances Updated`);
+        $scope.showToast(`Balances Updated`);
         $rootScope.$emit('updateCustomers');
       }else{
-        $rootScope.showToast('Nothing to update');
+        $scope.showToast('Nothing to update.');
       }
     })
   };
