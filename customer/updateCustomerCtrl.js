@@ -1,6 +1,5 @@
 
 jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
-    const {dialog} = require('electron').remote;
     $rootScope.template = {title: 'Edit Customer'};
     $scope.custid = $routeParams.id;
     $scope.customer = {date:'',father:'',guarantor:'',id:'',mobile:'',name:'',pageNo:'',rate:'',remarks:'',salutation:'',village:''};

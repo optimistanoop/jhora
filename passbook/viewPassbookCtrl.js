@@ -1,8 +1,6 @@
 
 jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $routeParams,$window,$mdDateLocale, passbookService, TRANSACTION_TYPES, TRANS_LIMITS, CUSTOMERS_TABLE, TRANSACTION_TABLE, DELTRANSACTION_TABLE,BALANCE_TABLE,BALANCE_COLUMNS) {
 
-
-  const {dialog} = require('electron').remote;
   $rootScope.template = {title: 'Passbook'};
   $scope.custid=$routeParams.id;
   $scope.limits = TRANS_LIMITS;
