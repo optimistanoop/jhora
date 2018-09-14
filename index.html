@@ -20,6 +20,33 @@
         messagingSenderId: "105398319929"
       };
       firebase.initializeApp(config);
+      var database = firebase.database();
+      function writeUserData(table,userId, name, email, imageUrl) {
+        database.ref(table + userId).set({
+          username: name,
+          email: email,
+          profile_picture : imageUrl
+        })
+        .then(function(error) {
+            if (error) {
+              // The write failed...
+              console.error('anp firebase errorp');
+            } else {
+              // Data saved successfully!
+              console.log('anp firebase donep');
+            }
+        })
+      }
+      //writeUserData('users/', 4,'anoop', 'optimistanoop@gmail.com', '/profile.png')
+      //writeUserData('transactions/', 1,'anoop', '100', '12-10-2018')
+      
+      // database.ref('/transactions/' + 1).once('value').then(function(snapshot) {
+      //   var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+      //   console.log('anp f', username);
+      //   console.log('anp fv', snapshot.val());
+      // });
+      
+      
     </script>
   <body>
     <div ng-controller="jhoraCtrl" ng-cloak >
