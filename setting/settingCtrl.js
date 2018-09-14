@@ -1,6 +1,6 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
   
-  $rootScope.template = {title: 'Setting'};
+  $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
   $scope.msg3 = `Delete steps- export (select folder for export) -> delete.`;
