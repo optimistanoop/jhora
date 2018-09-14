@@ -1,7 +1,5 @@
   jhora.controller('viewCustomerCtrl', function($rootScope, $scope, $timeout, VIEW_LIMITS, CUSTOMERS_TABLE, DELCUSTOMERS_TABLE, TRANSACTION_TABLE, BALANCE_TABLE) {
-    const {
-      shell
-    } = require('electron');
+
     $scope.limits = VIEW_LIMITS;
     $scope.queryFor = $scope.limits[0];
     $scope.customer = {
@@ -20,7 +18,6 @@
       title: 'Customers'
     };
     $scope.deleteCustomer = (ev, customer) => {
-      shell.beep();
       q.selectAllById(TRANSACTION_TABLE, 'customerId', customer.id)
         .then((row) => {
           if (row.length > 0) {
@@ -48,7 +45,7 @@
           $rootScope.showToast(`${customer.name}'s Customer Deleted`);
         })
         .catch((err) => {
-          console.error('anp an err occured while deleting', err);
+          $scope.showAlertDialog({}, 'Error', `An err occured while deleting ${err}`);
         });
     }
 
@@ -73,7 +70,7 @@
             }
           })
           .catch((err) => {
-            console.error("error while getting", err);
+            $scope.showAlertDialog({}, 'Error', err);
           });
       } else {
         q.selectAll(tableName)

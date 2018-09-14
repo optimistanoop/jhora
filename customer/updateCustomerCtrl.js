@@ -1,6 +1,5 @@
 
 jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE, CUSTOMER_SALUTATION) {
-    const {dialog} = require('electron').remote;
     $rootScope.template = {title: 'Edit Customer'};
     $scope.custid = $routeParams.id;
     $scope.customer = {date:'',father:'',guarantor:'',id:'',mobile:'',name:'',pageNo:'',rate:'',remarks:'',salutation:'',village:''};
@@ -61,7 +60,6 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
           },0);
         })
       .catch((err)=>{
-          console.error('anp err occured while insertion',err);
           if (err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.mobile')) {
             $rootScope.showAlertDialog(ev,'Duplicate Mobile Number Found', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
             $scope.customer.mobile = '';
@@ -86,7 +84,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-        console.error(err);
+        $scope.showAlertDialog({}, 'Error', err);
       });
     };
 

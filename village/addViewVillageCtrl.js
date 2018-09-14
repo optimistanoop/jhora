@@ -1,6 +1,5 @@
 jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $mdDialog, VIEW_LIMITS,CUSTOMERS_TABLE, TRANSACTION_TABLE, VILLAGE_TABLE){
 
-	const {shell} = require('electron');
 	$rootScope.template = {title: 'Add / View Villages'};
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
@@ -30,7 +29,6 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 							 $rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
-		          console.error('anp err occured while updation',err);
 		          $scope.getError(ev, err);
 		    });
         }
@@ -45,7 +43,6 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 								$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
-			          console.error('anp err occured while insertion',err);
 			          $scope.getError(ev, err);
 			});
     };
@@ -81,12 +78,11 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-        console.error(err);
+				$scope.showAlertDialog({}, 'Error', err);
       });
     };
     $scope.getVillages(VILLAGE_TABLE);
 		$scope.deleteVillage = (ev,village)=>{
-			shell.beep();
       q.selectAllById(CUSTOMERS_TABLE,'village',village.name)
       .then((rows)=>{
         if (rows.length>0) {
@@ -98,7 +94,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 				      $scope.confirmVillage(village);
 				   })
 					 .catch((err)=>{
-						 console.error('anp an error occured while operation', err);
+						 $scope.showAlertDialog(ev, 'Error', err);
            });
          }
        }
@@ -114,7 +110,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 					$rootScope.showToast('Village Deleted');
         })
         .catch((err)=>{
-          console.error('anp an err occured while deleting', village);
+					$scope.showAlertDialog({}, 'Error', err);
         });
     }
 

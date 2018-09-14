@@ -2,7 +2,6 @@
 
 jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE,passbookService,BALANCE_TABLE,BALANCE_COLUMNS) {
 
-    const {shell} = require('electron');
     $rootScope.template = {title: 'Transactions'};
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -16,7 +15,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.deleteDate = new Date();
     let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
     $scope.deleteTransaction=(ev,transaction)=>{
-      shell.beep()
       $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
       .then(function(answer) {
         if(answer == 'submit') {
@@ -57,7 +55,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
     })
     .catch((err)=>{
-      console.error('anp an err occured while deleting',err);
+      $scope.showAlertDialog({}, 'Error', err);
     });
   }
 
@@ -78,7 +76,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       }, 0);
     })
     .catch((err)=>{
-      console.error('anp got error while fetching data',err);
+      $scope.showAlertDialog({}, 'Error', err);
     });
   };
 
@@ -130,6 +128,10 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.tran.fromDate = null;
     $scope.getNewData(queryFor);
   };
+
+  $scope.reload = () =>{
+    $window.location.reload();
+  }
 
   $scope.getDataByTable(TRANSACTION_TABLE, TRANSACTION_TABLE,'active','1');
 

@@ -97,10 +97,10 @@ md-toolbar:not(.md-menu-toolbar){
   background-color: #267ED5;
 }
 .movedown {
-  margin-top: 50px;
+  width:450px;
 }
 .width {
-  width: 100px;
+  width: 250px;
 }
 .pad {
   padding-left:25px;

@@ -1,15 +1,94 @@
 <div flex ng-controller="settingCtrl">
-  <div flex="50">
-    <p >{{msg}}<p>
-    <p >{{msg2}}<p>
-    <p >{{msg3}}<p>
-    <p >{{msg4}}<p>
-    <p >{{msg5}}<p>
-  </div>
+  <md-progress-linear class="md-warn" ng-if="showProgress" md-mode="indeterminate"></md-progress-linear>
+  <div layout="row">
+    <md-card md-theme="docs-dark"  md-theme-watch>
+     <md-card-title>
+       <div layout="row" layout-wrap flex>
+          <div flex-xs flex="50">
+            <md-checkbox aria-label="Select All"
+                         ng-checked="isChecked()"
+                         md-indeterminate="isIndeterminate()"
+                         ng-click="toggleAll()">
+              <span ng-if="isChecked()">Un-</span>Select All
+            </md-checkbox>
+          </div>
+            <div class="demo-select-all-checkboxes" flex="100" ng-repeat="item in items">
+              <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+               {{ item }}
+              </md-checkbox>
+            </div>
+          </div>
+       <md-card-title-media>
+         <!--  -->
+         <md-card md-theme="dark-blue"  md-theme-watch>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Export Data</span>
+              <span class="md-subhead">For selected tables.</span>
+              <span class="md-subhead">{{msg}}</span>
+              <span class="md-subhead">{{msg4}}</span>
+            </md-card-title-text>
+            <md-card-title-media>
+              <div class="md-media-sm card-media"></div>
+            </md-card-title-media>
+          </md-card-title>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="export($event)" ng-disabled="!selected.length">Export Data</md-button>
+          </md-card-actions>
+        </md-card>
+         <!--  -->
+         <!--  -->
+         <md-card md-theme="dark-orange"  md-theme-watch>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Delete Data</span>
+              <span class="md-subhead">For selected tables.</span>
+              <span class="md-subhead">{{msg3}}</span>
+            </md-card-title-text>
+            <md-card-title-media>
+              <div class="md-media-sm card-media"></div>
+            </md-card-title-media>
+          </md-card-title>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button  ng-click="delete($event)" ng-disabled="!selected.length">Delete Data</md-button>
+          </md-card-actions>
+        </md-card>
+         <!--  -->
+       </md-card-title-media>
+     </md-card-title>
+   </md-card>
+  
+    <md-card md-theme="dark-purple"  md-theme-watch>
+     <md-card-title>
+       <md-card-title-text>
+         <span class="md-headline">Do Calculations</span>
+         <span class="md-subhead">For all non calulated customers.</span>
+         <span class="md-subhead">{{msg5}}</span>
+       </md-card-title-text>
+       <md-card-title-media>
+         <div class="md-media-sm card-media"></div>
+       </md-card-title-media>
+     </md-card-title>
+     <md-card-actions layout="row" layout-align="end center">
+       <md-button  ng-click="calc($event)">Do Calculations</md-button>
+     </md-card-actions>
+   </md-card>
+    <md-card md-theme="docs-dark"  md-theme-watch>
+     <md-card-title>
+       <md-card-title-text>
+         <span class="md-headline">Import Data</span>
+         <span class="md-subhead">For any desired table.</span>
+         <span class="md-subhead">{{msg2}}</span>
+       </md-card-title-text>
+       <md-card-title-media>
+         <div class="md-media-sm card-media"></div>
+       </md-card-title-media>
+     </md-card-title>
+     <md-card-actions layout="row" layout-align="end center">
+       <md-button  ng-click="import($event)">Import Data</md-button>
+     </md-card-actions>
+   </md-card>
 
-  <md-button class="md-raised md-primary" ng-click="export($event)">Export Data</md-button>
-  <md-button class="md-raised md-primary" ng-click="calc($event)">Do Calculations</md-button>
-  <md-button class="md-raised md-warn" ng-click="import($event)">Import Data</md-button>
-  <md-button class="md-raised md-warn" ng-click="delete($event)">Delete Data</md-button>
+  </div>
   <md-button class="md-raised md-primary" ng-click="back($event)">Back</md-button>
 </div>

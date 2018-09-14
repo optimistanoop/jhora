@@ -4,13 +4,13 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $rootScope.template = {title: 'Edit Transaction'};
     $scope.transid = $routeParams.id;
     $scope.transaction = { amount: '', date: null, promiseDate: null, type: '', customerId: '', name: '', village:'', remarks: '' };
-    
+
     $scope.onRateChange = (ev)=>{
       if($scope.transaction.rate == 0){
         $rootScope.showAlertDialog(ev, 'Alert', 'You have chaned rate, please verify.')
       }
     };
-    
+
     $scope.init = ()=> {
       q.selectAllById(TRANSACTION_TABLE, 'id', $scope.transid)
       .then((rows)=>
@@ -21,6 +21,12 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         $scope.setDefaults();
         $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
         $scope.getCustomerPassbook(TRANSACTION_TABLE);
+        if($scope.transaction.active == 0) {
+          $scope.active = true;
+        }
+        else {
+          $scope.active = false;
+        }
       },0)
     )};
 
@@ -38,6 +44,9 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
 
     $scope.typeSelected= (ev)=>{
       $scope.disablePromiseDate = true;
+      if($scope.transaction.type == "Cr" && $scope.transactions.length  == 1){
+        $rootScope.showAlertDialog(ev, 'Error', 'Please add Dr as first transaction of customer.')
+      }
       if ($scope.transaction.type == "Cr") {
         $scope.disablePromiseDate = true;
       } else if($scope.transaction.date && $scope.transaction.type == 'Dr'){
@@ -75,14 +84,48 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched();
     };
+    
+    
+    let validateFirstTransaction = (ev)=>{
+      if($scope.transactions.length == 1 &&  $scope.transaction.type == 'Cr'){
+        $scope.showAlertDialog(ev, 'Error', `Please select Dr as first transaction for customer.`);
+        return false
+      }else if($scope.transactions.length && $scope.transaction.type == 'Cr' && $scope.transactions[0].date > $scope.transaction.date){
+        $scope.showAlertDialog(ev, 'Error', `Cr should should not be the first transaction.`);
+        return false;
+      }
+      return true;
+    }
+    
     $scope.confirmTransaction=(ev,transaction)=>{
-
-      $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html')
-      .then((answer)=>{
-        if(answer == 'submit') {
-          $scope.updateTransaction(ev);
-        }
-      });
+      if($scope.transaction.active == 0 ) {
+        $scope.active = false;  
+        q.update(TRANSACTION_TABLE, ['active'],['1'] , 'id', $scope.transaction.id)
+        .then((data)=>{
+          return passbookService.getUserData($scope.transaction.customerId)
+              .then((calc)=>{
+                let balData = calc.results[calc.results.length-1][0];
+                let values = [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total];
+                q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId)
+          })
+        })
+        .then((data)=>{
+          $timeout (()=>{
+            $rootScope.showToast('Trasaction Activated Successfully');
+            $window.history.back();
+          },0)
+        })
+      }
+      else {
+        let valid = validateFirstTransaction(ev);
+        if(!valid) return;
+        $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html')
+        .then((answer)=>{
+          if(answer == 'submit') {
+            $scope.updateTransaction(ev);
+          }
+        });
+    }
   }
 
     $scope.updateTransaction= (ev)=>{
@@ -149,12 +192,12 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         },0)
       })
       .catch((err)=>{
-        console.error(err);
+        $scope.showAlertDialog({}, 'Error', err);
       });
     };
 
     $scope.getCustomerPassbook = (tableName)=>{
-         q.selectAllById(tableName, 'customerId', $scope.transaction.customerId)
+         q.selectAllByIdActive(tableName, 'customerId', $scope.transaction.customerId,'active',1)
          .then((rows)=>{
            if(rows.length)
            for(let row of rows){
@@ -170,7 +213,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
              })
          })
          .catch((err)=>{
-           console.error(err);
+           $scope.showAlertDialog({}, 'Error', err);
          });
      };
 
