@@ -2,7 +2,6 @@
 
 jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $mdDateLocale,$routeParams,$window, TRANSACTION_TYPES, VIEW_LIMITS, TRANSACTION_TABLE, DELTRANSACTION_TABLE,passbookService,BALANCE_TABLE,BALANCE_COLUMNS) {
 
-    const {shell} = require('electron');
     $rootScope.template = {title: 'Transactions'};
     $scope.types = TRANSACTION_TYPES;
     $scope.limits = VIEW_LIMITS;
@@ -16,7 +15,6 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     $scope.deleteDate = new Date();
     let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
     $scope.deleteTransaction=(ev,transaction)=>{
-      shell.beep()
       $rootScope.showDialog(ev,'transaction', transaction, 'transaction/previewTransaction.html','Are you sure to delete...?')
       .then(function(answer) {
         if(answer == 'submit') {
