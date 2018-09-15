@@ -239,7 +239,7 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider, $routeProvider,
   
   let dir = '';
   if(isElectron() && window.__dirname){
-    dir = 'file://' + __dirname;
+    dir = 'file://' + window.__dirname;
   } 
   
   $routeProvider
