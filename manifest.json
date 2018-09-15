@@ -1,0 +1,9 @@
+{ "name": "Jhora",
+  "short_name": "Jhora",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#106CC8",
+  "background_color": "#106CC8",
+  "icons": [ { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
+             { "src": "logo512.png", "sizes": "512x512", "type": "image/png" } ] 
+}

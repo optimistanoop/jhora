@@ -143,6 +143,12 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     };
 
     $scope.updateBal();
+    navigator.serviceWorker && navigator.serviceWorker.register('/sw.js',  {scope: '/'}).then((registration)=>{
+      console.log('registered with scope: ', registration.scope);
+      
+    }).catch((err)=>{
+      console.error('service worker err', err);
+    })
   })
   .constant('TABS', [{
       title: 'Add Customer',

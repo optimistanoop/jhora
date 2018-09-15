@@ -7,12 +7,12 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
   $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
-  const json2csv = {};
-  const fs = {};
-  const path = {};
-  const app = {};
-  const dialog = {};
-  const csv2json= {};
+  let json2csv = {};
+  let fs = {};
+  let path = {};
+  let app = {};
+  let dialog = {};
+  let csv2json= {};
   if(isElectron()){
      json2csv = require('json2csv').parse;
      fs = require('fs');
