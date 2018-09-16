@@ -10,13 +10,13 @@
     <meta name="msapplication-navbutton-color" content="#106CC8">
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#106CC8">
-    
+
     <link rel="stylesheet" href="./lib/font.css">
     <link rel="stylesheet" href="./lib/icon.css">
     <link rel="stylesheet" href="./lib/angular-material.min.css">
     <link rel="stylesheet" href="./jhora.css">
     <title>Jhora</title>
-    
+
     <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
     <script>
       // Initialize Firebase
@@ -48,14 +48,13 @@
       }
       //writeUserData('users/', 4,'anoop', 'optimistanoop@gmail.com', '/profile.png')
       //writeUserData('transactions/', 1,'anoop', '100', '12-10-2018')
-      
+
       // database.ref('/transactions/' + 1).once('value').then(function(snapshot) {
       //   var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
       //   console.log('anp f', username);
       //   console.log('anp fv', snapshot.val());
       // });
-      
-      
+
     </script>
   <body>
     <div ng-controller="jhoraCtrl" ng-cloak >
@@ -92,6 +91,7 @@
     <script src="./village/addViewVillageCtrl.js"></script>
     <script src="./dashboard/dashboardCtrl.js"></script>
     <script src="./setting/settingCtrl.js"></script>
+    <script src="./stats/statsCtrl.js"></script>
     <!-- this db.js will always be the last dependency added -->
     <script src="./FirebaseQuery.js"></script>
     <script src="./db.js"></script>
