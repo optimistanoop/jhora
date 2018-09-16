@@ -7,13 +7,21 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
   $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
-  const json2csv = require('json2csv').parse;
-  const fs = require('fs');
-  const path = require('path');
-  const {app} = require('electron').remote;
-  const {dialog} = require('electron').remote;
-  const csv2json=require("csvtojson");
-  
+  let json2csv = {};
+  let fs = {};
+  let path = {};
+  let app = {};
+  let dialog = {};
+  let csv2json= {};
+  if(isElectron()){
+     json2csv = require('json2csv').parse;
+     fs = require('fs');
+     path = require('path');
+     app = require('electron').remote.app;
+     dialog = require('electron').remote.dialog;
+     csv2json= require("csvtojson");
+  }
+
   $scope.items = ['Transactions','Balances','Balances_History','Customers','Village'];
   $scope.selected = [TRANSACTION_TABLE,BALANCE_TABLE, BALANCE_HISTORY_TABLE];
   $scope.toggle = function (item, list) {
