@@ -114,4 +114,19 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
         });
     }
 
+
+    $scope.editVillage = (village)=>{
+      // alert 
+      //console.log(village.name)
+      q.selectAllById('customers', 'village', village.name)
+      .then((data)=>{
+        console.log(data)
+        if(data.length == 0){
+          $scope.showAlertDialog({}, 'Info!!!', 'You can now edit '+ village.name + ' very soon');
+        }else{
+          $scope.showAlertDialog({}, 'Warning!!!', 'You can not edit '+ village.name+ " this vilage is used by "+data.length + 'customers');
+        }
+      })
+    }
+
 });
