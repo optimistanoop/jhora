@@ -143,14 +143,20 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     };
 
     $scope.updateBal();
-    navigator.serviceWorker && navigator.serviceWorker.register('/sw.js',  {scope: '/'}).then((registration)=>{
-      console.log('registered with scope: ', registration.scope);
-      
-    }).catch((err)=>{
-      console.error('service worker err', err);
-    })
+    if(!isElectron()){
+      navigator.serviceWorker && navigator.serviceWorker.register('/sw.js',  {scope: '/'}).then((registration)=>{
+        console.log('registered with scope: ', registration.scope);
+
+      }).catch((err)=>{
+        console.error('service worker err', err);
+      })
+    }
   })
   .constant('TABS', [{
+      title: 'Stats',
+      route: '/'
+    },
+    {
       title: 'Add Customer',
       route: '/customers/add'
     },
@@ -235,16 +241,16 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider, $routeProvider,
     }
     return formattedDate ? formattedDate : null;
   };
-  
-  
+
+
   let dir = '';
   if(isElectron() && window.__dirname){
     dir = 'file://' + window.__dirname;
-  } 
-  
+  }
+
   $routeProvider
     .when("/", {
-      templateUrl: dir + '/village/addViewVillage.html'
+      templateUrl: dir + '/stats/stats.html'
     })
     .when("/customers", {
       templateUrl: dir + '/customer/viewCustomer.html'

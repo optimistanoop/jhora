@@ -160,7 +160,7 @@ class Query {
     });
     return p;
   }
-  
+
   deleteTableByName(tableName){
     let p = new Promise( (resolve, reject)=>{
       let sql = `DELETE FROM ${tableName}`
@@ -234,6 +234,17 @@ class Query {
     });
     return p;
   }
+
+  selectDataByDatesWithoutCondition(tableName, key, value1, value2){
+   let p = new Promise( (resolve, reject)=>{
+     let sql = `SELECT count(id) FROM ${tableName} WHERE active = 1 AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
+     this.db.all(sql, (err, data)=>{
+       if(err) reject(err);
+       resolve(data);
+     });
+   });
+   return p;
+ }
 
 //get greater data and equal of selected date
   selectGreaterDataByDate(tableName,key,value){
@@ -310,6 +321,7 @@ class Query {
     return p;
   }
   
+
 };
 
 module.exports = Query;
