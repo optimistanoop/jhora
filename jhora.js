@@ -242,7 +242,6 @@ jhora.config(function($mdThemingProvider, $mdDateLocaleProvider, $routeProvider,
     return formattedDate ? formattedDate : null;
   };
 
-
   let dir = '';
   if(isElectron() && window.__dirname){
     dir = 'file://' + window.__dirname;
