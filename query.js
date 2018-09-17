@@ -223,7 +223,7 @@ class Query {
     return p;
   }
 
-  //get data between two dates
+  //get data between two dates with conditions
    selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
     let p = new Promise( (resolve, reject)=>{
       let sql = `SELECT * FROM ${tableName} WHERE ${conditionOn} = ${value3} AND active = 1 AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
@@ -235,6 +235,7 @@ class Query {
     return p;
   }
 
+  //get data between two dates without conditions
   selectDataByDatesWithoutCondition(tableName, key, value1, value2){
    let p = new Promise( (resolve, reject)=>{
      let sql = `SELECT count(id) FROM ${tableName} WHERE active = 1 AND date(${key}) BETWEEN '${value1}' AND '${value2}' ORDER BY date(date)`
@@ -320,9 +321,9 @@ class Query {
     });
     return p;
   }
-  countTransactionByType(key, value){
+  countTransactionByType(column, tableName, key, value){
     let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT amount FROM transactions WHERE ${key} = '${value}'`;
+      let sql = `SELECT ${column} FROM ${tableName} WHERE ${key} = '${value}'`;
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);
         resolve(data);
