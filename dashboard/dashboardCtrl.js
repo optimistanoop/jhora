@@ -1,5 +1,4 @@
 jhora.controller('dashboardCtrl', function($rootScope, $scope, $timeout) {
-  let Chart = require('chart.js');
   let barChart = document.getElementById("barChart");
   let pieChart = document.getElementById("pieChart");
   let donutChart = document.getElementById("donutChart");
