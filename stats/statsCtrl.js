@@ -38,7 +38,49 @@ jhora.controller('statsCtrl', function($rootScope, $scope, $timeout){
     q.selectDataByDatesWithoutCondition(transactions, 'date',from, to)
     .then(fn)
   }
+  $scope.transactionAverageDr = (transactions)=>{
 
+    q.countTransactionByType('type', 'Dr')
+    .then((data)=>{
+      console.log(data);
+      $timeout(()=>{
+
+        $scope.transactionCountDr = data.length
+      }, 0);
+      let count = data.length,
+      total = 0;
+      for (let i = 0; i < data.length; i++) {
+        total += data[i]['amount']
+      }
+      let avg = total/count;
+      $scope.avgDr = avg;
+    })
+  }
+  $scope.transactionAverageCr = (transactions)=>{
+
+    q.countTransactionByType('type', 'Cr')
+    .then((data)=>{
+      console.log(data);
+      $timeout(()=>{
+
+        $scope.transactionCountCr = data.length
+      }, 0);
+      let count = data.length,
+      total = 0;
+      for (let i = 0; i < data.length; i++) {
+        total += data[i]['amount']
+      }
+      let avg = total/count;
+      if (count == 0) {
+        $scope.avgCr = 0
+      }else {
+        $scope.avgCr = avg;
+      }
+
+    })
+  }
+  $scope.transactionAverageDr('Dr')
+  $scope.transactionAverageCr('Cr')
   $scope.countTransactionBetweenDates('transactions')
   $scope.countVillage('village')
   $scope.countCustomer('customers')
