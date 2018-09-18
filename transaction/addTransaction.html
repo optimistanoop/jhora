@@ -85,7 +85,7 @@
                 <div ng-messages="transactionForm.rate.$error" role="alert" multiple>
                   <div ng-message="required" class="my-message">You must supply rate.</div>
                   <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
-                  <div ng-message="max" class="my-message">Rate should be less than 6.</div>
+                  <div ng-message="max" class="my-message">Rate should be less than or equal to 6.</div>
                   <div ng-message="minlength" class="my-message">Rate should be of minimum 1 digit.</div>
                   <div ng-message="maxlength" class="my-message">Rate should be of maximum 3 digits.</div>
                 </div>

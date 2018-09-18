@@ -1,0 +1,10 @@
+<div ng-controller="statsCtrl">
+  <div flex="60">
+        <!-- <button type="button" ng-click="countCustomer('customers')"  name="button">Total Customer</button> -->
+        <h1>Total number of Customers - {{stats.totalCustomer}}</h1>
+        <h1 color="blue">Total number of Villages - {{stats.totalVillages}}</h1>
+        <h1 color="blue">Total number of transactions from {{stats.from}} to {{stats.to}} is - {{stats.transactionWithindates}}</h1>
+        <h1 color="blue">Average amount of debit per transactions is - {{stats.avgDr}}</h1>
+        <h1 color="blue">Average amount of Credit per transactions is - {{stats.avgCr}}</h1>
+    </div>
+</div>
