@@ -176,14 +176,14 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       title: 'Villages',
       route: '/villages'
     },
-    // {
-    //   title: 'Dashboard Demo',
-    //   route: '/dashboard/view'
-    // },
-    // {
-    //   title: 'Passbook Demo',
-    //   route: '/passbook1/view'
-    // },
+    {
+      title: 'Dashboard Demo',
+      route: '/dashboard/view'
+    },
+    {
+      title: 'Passbook Demo',
+      route: '/passbook1/view'
+    },
     {
       title: 'Settings',
       route: '/setting'
