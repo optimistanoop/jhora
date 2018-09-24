@@ -242,7 +242,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       return formattedDate ? formattedDate : null;
     };
 
-    let dir = '.';
+    let dir = '';
     if(isElectron() && window.__dirname){
       dir = 'file://' + window.__dirname;
     }
