@@ -50,5 +50,3 @@ class SQLiteWrapper {
 
 
 };
-
-module.exports = SQLiteWrapper;
