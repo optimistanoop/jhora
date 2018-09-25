@@ -1,3 +1,7 @@
+let isElectron = () => {
+  return window && window.process && window.process.type;
+}
+
 class Query {
   constructor(db){
      this.db = db;
@@ -335,4 +339,6 @@ class Query {
 
 };
 
-module.exports = Query;
+if(isElectron()){
+  module && (module.exports = Query);
+} 
