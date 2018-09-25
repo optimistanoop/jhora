@@ -146,44 +146,43 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   if(!isElectron()){
     navigator.serviceWorker && navigator.serviceWorker.register('/sw.js',  {scope: '/'}).then((registration)=>{
       console.log('registered with scope: ', registration.scope);
-
-    }).catch((err)=>{
-      console.error('service worker err', err);
-    })
-  }
-})
-.constant('TABS', [{
-  title: 'Stats',
-  route: '/'
-},
-{
-  title: 'Add Customer',
-  route: '/customers/add'
-},
-{
-  title: 'Add Transaction',
-  route: '/transactions/add'
-},
-{
-  title: 'Customers',
-  route: '/customers'
-},
-{
-  title: 'Transactions',
-  route: '/transactions'
-},
-{
-  title: 'Villages',
-  route: '/villages'
-},
-// {
-  //   title: 'Dashboard Demo',
-  //   route: '/dashboard/view'
-  // },
-  // {
-    //   title: 'Passbook Demo',
-    //   route: '/passbook1/view'
-    // },
+      }).catch((err)=>{
+        console.error('service worker err', err);
+      })
+    }
+  })
+  .constant('TABS', [{
+      title: 'Stats',
+      route: '/'
+    },
+    {
+      title: 'Add Customer',
+      route: '/customers/add'
+    },
+    {
+      title: 'Add Transaction',
+      route: '/transactions/add'
+    },
+    {
+      title: 'Customers',
+      route: '/customers'
+    },
+    {
+      title: 'Transactions',
+      route: '/transactions'
+    },
+    {
+      title: 'Villages',
+      route: '/villages'
+    },
+    {
+      title: 'Dashboard Demo',
+      route: '/dashboard/view'
+    },
+    {
+      title: 'Passbook Demo',
+      route: '/passbook1/view'
+    },
     {
       title: 'Settings',
       route: '/setting'
