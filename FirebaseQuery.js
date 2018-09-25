@@ -1,7 +1,18 @@
 class FirebaseWrapper {
 
   constructor(){
-
+    let config = {
+      apiKey: "AIzaSyD9B2YdN4gAPqryKSiHRQocPc9kA_ZSFLY",
+      authDomain: "jhoraapp.firebaseapp.com",
+      databaseURL: "https://jhoraapp.firebaseio.com",
+      projectId: "jhoraapp",
+      storageBucket: "",
+      messagingSenderId: "105398319929"
+    };
+    firebase.initializeApp(config);
+    this.db = firebase.database();;
+    this.fireStore = firebase.firestore();;
+    this.fireStore.settings({ timestampsInSnapshots: true });
   }
 
   update(tableName ='', keys = [], values =[], conditionOn, id){
@@ -13,7 +24,16 @@ class FirebaseWrapper {
 
   selectAll(tableName){
     let p = new Promise( (resolve, reject)=>{
-      resolve([]);
+      this.fireStore.collection(tableName).get()
+      .then((snapshots) => {
+        let rows = []
+        snapshots.forEach((doc) => {
+          let data = doc.data();
+          rows.push(data)
+        })
+        console.log('anp data', rows);
+        resolve(rows)
+      })
     });
     return p;
   }
@@ -26,8 +46,12 @@ class FirebaseWrapper {
   }
 
   insert(tableName ='', keys = [], values =[]){
+    let data = {}
+    for(let i = 0; i < keys.length; i++){
+      data[keys[i]] = values[i];
+    }
     let p = new Promise( (resolve, reject)=>{
-      resolve([]);
+      resolve(this.fireStore.collection(tableName).add(data));
     });
     return p;
   }

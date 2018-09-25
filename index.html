@@ -3,7 +3,7 @@
   <head>
   </head>
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
     <!-- Chrome, Firefox OS and Opera -->
     <meta name="theme-color" content="#106CC8">
     <!-- Windows Phone -->
@@ -16,46 +16,6 @@
     <link rel="stylesheet" href="./lib/angular-material.min.css">
     <link rel="stylesheet" href="./jhora.css">
     <title>Jhora</title>
-
-    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyD9B2YdN4gAPqryKSiHRQocPc9kA_ZSFLY",
-        authDomain: "jhoraapp.firebaseapp.com",
-        databaseURL: "https://jhoraapp.firebaseio.com",
-        projectId: "jhoraapp",
-        storageBucket: "",
-        messagingSenderId: "105398319929"
-      };
-      firebase.initializeApp(config);
-      var database = firebase.database();
-      function writeUserData(table,userId, name, email, imageUrl) {
-        database.ref(table + userId).set({
-          username: name,
-          email: email,
-          profile_picture : imageUrl
-        })
-        .then(function(error) {
-            if (error) {
-              // The write failed...
-              console.error('anp firebase errorp');
-            } else {
-              // Data saved successfully!
-              console.log('anp firebase donep');
-            }
-        })
-      }
-      //writeUserData('users/', 4,'anoop', 'optimistanoop@gmail.com', '/profile.png')
-      //writeUserData('transactions/', 1,'anoop', '100', '12-10-2018')
-
-      // database.ref('/transactions/' + 1).once('value').then(function(snapshot) {
-      //   var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
-      //   console.log('anp f', username);
-      //   console.log('anp fv', snapshot.val());
-      // });
-
-    </script>
   <body>
     <div ng-controller="jhoraCtrl" ng-cloak >
           <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
@@ -80,6 +40,7 @@
     <script src="./lib/angular-messages.min.js"></script>
     <script src="./lib/angular-material.min.js"></script>
     <script src="./lib/Chart.min.js"></script>
+    <script src="./lib/firebase.js"></script>
     <script src="./jhora.js"></script>
     <script src="./customer/addCustomerCtrl.js"></script>
     <script src="./customer/viewCustomerCtrl.js"></script>
@@ -95,6 +56,7 @@
     <script src="./stats/statsCtrl.js"></script>
     <!-- this db.js will always be the last dependency added -->
     <script src="./FirebaseQuery.js"></script>
+    <script src="./sqliteWrapper.js"></script>
     <script src="./db.js"></script>
   </body>
 </html>
