@@ -50,6 +50,7 @@ let dbInit = ()=>{
 if(isElectron()){
   dbInit()
 } else{
-  q = new FirebaseWrapper();
+  //q = new FirebaseWrapper();
+  q = new Query(new SQLiteWrapper());
   angular.bootstrap(document, ['jhora']);
 }
