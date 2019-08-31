@@ -40,13 +40,13 @@ let dbInit = ()=>{
   .catch((err)=>{
     console.error('anp an error occured while creating table', err);
   })
-  
+
 };
 
 if(isElectron()){
   dbInit()
 } else{
-  //q = new FirebaseWrapper();
-  q = new Query(new SQLiteWrapper());
+  q = new FirebaseWrapper();
+  //q = new Query(new SQLiteWrapper());
   angular.bootstrap(document, ['jhora']);
 }

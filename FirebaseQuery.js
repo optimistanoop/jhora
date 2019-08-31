@@ -77,12 +77,6 @@ class FirebaseWrapper {
     return p;
   }
 
-  selectAll(tableName){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
-  }
   wildCard(sql){
     let p = new Promise( (resolve, reject)=>{
       resolve([]);
