@@ -40,7 +40,7 @@ class FirebaseWrapper {
 
   async update(tableName ='', keys = [], values =[], conditionOn, id){
       let data = this.getReqObj(keys, values)
-      let snaps = await this.fireStore.collection(tableName).where(conditionOn, '===', id).get()
+      let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', id).get()
       let docId = ''
       snaps.forEach((doc) => {
         docId = doc.id
