@@ -93,7 +93,7 @@ class FirebaseWrapper {
   }
 
   async selectAllById(tableName, key, value){
-    let snaps = await this.fireStore.collection(tableName).where(key, '==', value).get()
+    let snaps = await this.fireStore.collection(tableName).where(key, '==', value).orderBy("timestamp", "desc").get()
     let rows = []
     snaps.forEach((doc) => {
       let data = doc.data();
@@ -103,6 +103,8 @@ class FirebaseWrapper {
   }
 
   selectAllByIdActive(tableName, key, value,conditionOn,value2){
+      //      let sql = `SELECT * FROM ${tableName} WHERE ${key} = '${value}' AND ${conditionOn} = '${value2}' order by date(date)`
+
     let p = new Promise( (resolve, reject)=>{
       resolve([]);
     });
@@ -183,7 +185,7 @@ class FirebaseWrapper {
   async selectDataByDatesWithoutCondition(tableName, key, value1, value2){
       let dayStartTime = this.getClientTime(value1).dateStartTime
       let dayEndTime = this.getClientTime(value2).dateEndTime
-      let snaps = await this.fireStore.collection(tableName).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).get()
+      let snaps = await this.fireStore.collection(tableName).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).orderBy("timestamp", "desc").get()
       return snaps.size
   }
 
