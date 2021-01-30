@@ -12,7 +12,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.init = ()=> {
-      q.selectAllById(TRANSACTION_TABLE, 'id', $scope.transid)
+      q.selectAllById(TRANSACTION_TABLE, 'uId', $scope.transid)
       .then((rows)=>
         $timeout(()=> {
         $scope.transaction = rows[0];
@@ -84,8 +84,8 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       $scope.transactionForm.$setPristine();
       $scope.transactionForm.$setUntouched();
     };
-    
-    
+
+
     let validateFirstTransaction = (ev)=>{
       if($scope.transactions.length == 1 &&  $scope.transaction.type == 'Cr'){
         $scope.showAlertDialog(ev, 'Error', `Please select Dr as first transaction for customer.`);
@@ -96,11 +96,11 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
       }
       return true;
     }
-    
+
     $scope.confirmTransaction=(ev,transaction)=>{
       if($scope.transaction.active == 0 ) {
-        $scope.active = false;  
-        q.update(TRANSACTION_TABLE, ['active'],['1'] , 'id', $scope.transaction.id)
+        $scope.active = false;
+        q.update(TRANSACTION_TABLE, ['active'],['1'] , 'uId', $scope.transaction.id)
         .then((data)=>{
           return passbookService.getUserData($scope.transaction.customerId)
               .then((calc)=>{
@@ -155,7 +155,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         keys.splice(index, 1);
         values.splice(index, 1);
       }
-      q.update(TRANSACTION_TABLE, keys, values, 'id', $scope.transaction.id)
+      q.update(TRANSACTION_TABLE, keys, values, 'uId', $scope.transaction.id)
       .then((data)=>{
         return passbookService.getUserData($scope.transaction.customerId)
             .then((calc)=>{

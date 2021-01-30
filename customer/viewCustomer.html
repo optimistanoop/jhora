@@ -69,7 +69,7 @@
       <td>{{ cust.dueFrom | date:"EEE,d/M/yy"}}</td>
       <td><span ng-if="cust.total == undefined">NA</span>{{ cust.total| currency :'&#8377;'}}</td>
       <td>{{ cust.nextDueDate | date:"EEE,d/M/yy"}}</td>
-      <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.id}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.uId}}"><md-tooltip md-direction="bottom">A/c-{{cust.id}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
    </table>

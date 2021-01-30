@@ -78,10 +78,8 @@ class FirebaseWrapper {
     return p;
   }
 
-  deleteTableByName(tableName){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
+  async deleteTableByName(tableName){
+    let p = true
     return p;
   }
 
@@ -102,13 +100,14 @@ class FirebaseWrapper {
     return rows;
   }
 
-  selectAllByIdActive(tableName, key, value,conditionOn,value2){
-      //      let sql = `SELECT * FROM ${tableName} WHERE ${key} = '${value}' AND ${conditionOn} = '${value2}' order by date(date)`
-
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async selectAllByIdActive(tableName, key, value,conditionOn,value2){
+      let snaps = await this.fireStore.collection(tableName).where(key, '==', value).where(conditionOn, '==', value2).orderBy('timestamp', 'desc').get()
+      let rows = []
+      snaps.forEach((doc) => {
+        let data = doc.data();
+        rows.push(data)
+      })
+      return rows;
   }
   //get data by year and month of selected data
   selectAllByYearMonth(tableName, key, value){
@@ -119,11 +118,16 @@ class FirebaseWrapper {
   }
 
   //get data between two dates
-  selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
+    let dayStartTime = this.getClientTime(value1).dateStartTime
+    let dayEndTime = this.getClientTime(value2).dateEndTime
+    let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', value3).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).orderBy("timestamp", "desc").get()
+    let rows = []
+    snaps.forEach((doc) => {
+      let data = doc.data();
+      rows.push(data)
+    })
+    return rows;
   }
 
   //get greater data and equal of selected date
@@ -142,11 +146,14 @@ class FirebaseWrapper {
     return p;
   }
 
-  updateStatus(tableName, key, value,conditionOn,id){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async updateStatus(tableName, key, value,conditionOn,id){
+      let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', id).get()
+      let batch = this.fireStore.batch();
+      let update = {[key]:value}
+      snaps.forEach((doc) => {
+          batch.update(doc, update)
+      })
+      return batch.commit()
   }
   async updateActiveStatus(tableName, key, value,conditionOn,id){
       let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', id).where('active', '==', '1').get()
@@ -176,7 +183,7 @@ class FirebaseWrapper {
       })
       snaps2.forEach((doc) => {
         let data = doc.data();
-        custMap[data.customerId] = {...custMap[data.customerId], ...data}
+        selectDataByDatescustMap[data.customerId] = {...custMap[data.customerId], ...data}
       })
       return Object.values(custMap)
   }
