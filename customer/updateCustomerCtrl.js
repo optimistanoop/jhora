@@ -46,11 +46,11 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         keys.splice(index1, 1);
         values.splice(index1, 1);
       }
-      q.update(CUSTOMERS_TABLE, keys, values, 'id', $scope.customer.id)
+      q.update(CUSTOMERS_TABLE, keys, values, 'uId', $scope.customer.uId)
       .then((data)=>{
           keys = ['name', 'village'];
           values = [$scope.customer.name, $scope.customer.village];
-          return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.id)
+          return q.update(TRANSACTION_TABLE, keys, values, 'customerId', $scope.customer.uId)
       })
       .then((data)=>{
         $timeout(()=>{
@@ -89,7 +89,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.init = ()=> {
-      q.selectAllById(CUSTOMERS_TABLE, 'id', $scope.custid)
+      q.selectAllById(CUSTOMERS_TABLE, 'uId', $scope.custid)
       .then((rows)=>
         $timeout(()=> {
         $scope.customer = rows[0];

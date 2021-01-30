@@ -18,7 +18,7 @@
       title: 'Customers'
     };
     $scope.deleteCustomer = (ev, customer) => {
-      q.selectAllById(TRANSACTION_TABLE, 'customerId', customer.id)
+      q.selectAllById(TRANSACTION_TABLE, 'customerId', customer.uId)
         .then((row) => {
           if (row.length > 0) {
             $rootScope.showAlertDialog(ev, `Customer in Use`, `Customer : ${customer.name} unable to delete .`);
@@ -38,7 +38,7 @@
       let values = [name, mobile, village, father, rate, guarantor, date, pageNo, remarks, salutation];
       q.insert(DELCUSTOMERS_TABLE, keys, values)
         .then((data) => {
-          return q.deleteRowById(CUSTOMERS_TABLE, customer.id);
+          return q.deleteRowById(CUSTOMERS_TABLE, customer.uId);
         })
         .then((data) => {
           $scope.getCustomers(CUSTOMERS_TABLE);
