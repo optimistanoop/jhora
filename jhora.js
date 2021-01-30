@@ -248,7 +248,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 
     $routeProvider
     .when("/", {
-      templateUrl: dir + '/stats/stats.html'
+      templateUrl: dir + '/village/addViewVillage.html'
     })
     .when("/customers", {
       templateUrl: dir + '/customer/viewCustomer.html'

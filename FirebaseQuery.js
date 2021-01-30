@@ -14,59 +14,49 @@ class FirebaseWrapper {
     this.fireStore = firebase.firestore();;
     this.fireStore.settings({ timestampsInSnapshots: true });
   }
-
-  update(tableName ='', keys = [], values =[], conditionOn, id){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  getReqObj(keys, values){
+      let data = {}
+      for(let i = 0; i < keys.length; i++){
+        data[keys[i]] = values[i];
+      }
+      return data
   }
-
-  selectAll(tableName){
-    let p = new Promise( (resolve, reject)=>{
-      this.fireStore.collection(tableName).get()
-      .then((snapshots) => {
-        let rows = []
-        snapshots.forEach((doc) => {
-          let data = doc.data();
-          rows.push(data)
-        })
-        console.log('anp data', rows);
-        resolve(rows)
+  async update(tableName ='', keys = [], values =[], conditionOn, id){
+      let data = this.getReqObj(keys, values)
+      let snaps = await this.fireStore.collection(tableName).where(conditionOn, '===', id).get()
+      let docId = ''
+      snaps.forEach((doc) => {
+        docId = doc.id
       })
-    });
+      let p = await this.fireStore.collection(tableName).doc(docId).update(data)
     return p;
   }
 
-  getTotalCountForTable(tableName){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
+  async selectAll(tableName){
+    let snapshots = await this.fireStore.collection(tableName).get()
+    let rows = []
+    snapshots.forEach((doc) => {
+      let data = doc.data();
+      rows.push(data)
+    })
+    console.log('anp data', rows);
+
+    return rows;
+  }
+
+  async getTotalCountForTable(tableName){
+    let snaps = await this.fireStore.collection(tableName).get()
+    return snaps.size
+  }
+
+  async insert(tableName ='', keys = [], values =[]){
+    let data = this.getReqObj(keys, values)
+    let p = await this.fireStore.collection(tableName).add(data)
     return p;
   }
 
-  insert(tableName ='', keys = [], values =[]){
-    let data = {}
-    for(let i = 0; i < keys.length; i++){
-      data[keys[i]] = values[i];
-    }
-    let p = new Promise( (resolve, reject)=>{
-      resolve(this.fireStore.collection(tableName).add(data));
-    });
-    return p;
-  }
-
-  update(tableName ='', keys = [], values =[], conditionOn, id){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
-  }
-
-  deleteRowById(tableName, id){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
+  async deleteRowById(tableName, id){
+    let p = await this.fireStore.collection(tableName).doc(id).delete()
     return p;
   }
 
@@ -84,12 +74,16 @@ class FirebaseWrapper {
     return p;
   }
 
-  selectAllById(tableName, key, value){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async selectAllById(tableName, key, value){
+    let snaps = await this.fireStore.collection(tableName).where(key, '==', value).get()
+    let rows = []
+    snaps.forEach((doc) => {
+      let data = doc.data();
+      rows.push(data)
+    })
+    return rows;
   }
+
   selectAllByIdActive(tableName, key, value,conditionOn,value2){
     let p = new Promise( (resolve, reject)=>{
       resolve([]);
