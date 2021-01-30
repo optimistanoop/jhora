@@ -3,7 +3,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 	$rootScope.template = {title: 'Add / View Villages'};
 	$scope.village = { name : ''} ;
 	$scope.limits = VIEW_LIMITS;
-  $scope.queryFor = $scope.limits[0];
+  	$scope.queryFor = $scope.limits[0];
 	$scope.hideNoDataFound = true;
 	$rootScope.editModeData = false;
 
@@ -104,10 +104,10 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
         let  {name} = village;
         let keys = ['name'];
         let values =[name];
-        return q.deleteRowById(VILLAGE_TABLE, village.id)
+        return q.deleteRowById(VILLAGE_TABLE, village.uId)
           .then((data)=>{
-          $scope.getVillages(VILLAGE_TABLE);
-					$rootScope.showToast('Village Deleted');
+          	$scope.getVillages(VILLAGE_TABLE);
+			$rootScope.showToast('Village Deleted');
         })
         .catch((err)=>{
 					$scope.showAlertDialog({}, 'Error', err);
@@ -116,7 +116,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 
 
     $scope.editVillage = (village)=>{
-      // alert 
+      // alert
       //console.log(village.name)
       q.selectAllById('customers', 'village', village.name)
       .then((data)=>{

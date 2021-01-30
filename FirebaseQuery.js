@@ -21,6 +21,15 @@ class FirebaseWrapper {
       }
       return data
   }
+
+  uuidv4() {
+    let x = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+    return Math.floor(new Date() / 1000)+"-"+ x;
+  }
+
   async update(tableName ='', keys = [], values =[], conditionOn, id){
       let data = this.getReqObj(keys, values)
       let snaps = await this.fireStore.collection(tableName).where(conditionOn, '===', id).get()
@@ -51,7 +60,8 @@ class FirebaseWrapper {
 
   async insert(tableName ='', keys = [], values =[]){
     let data = this.getReqObj(keys, values)
-    let p = await this.fireStore.collection(tableName).add(data)
+    data.uId = this.uuidv4()
+    let p = await this.fireStore.collection(tableName).doc(data.uId).set(data)
     return p;
   }
 
