@@ -1,5 +1,5 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
-  
+
   $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
@@ -56,7 +56,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         $scope.selected = $scope.items.slice(0).map(v => v.toLowerCase());;
       }
   };
-  
+
   let deleteAllTables = (ev, tables=[])=>{
     let promises =[];
     for(let table of tables){
@@ -71,7 +71,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     }
     return Promise.all(promises);
   }
-  
+
   let createBackupFolder = (tableName, dir)=>{
     dir = dir ? dir : app.getPath('downloads');
     let today = new Date();
@@ -93,13 +93,13 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         .then((data)=>{
           $scope.showProgress = false;
           $scope.showToast(`Backup for all data is done.`)
-        }); 
+        });
       }else{
         $scope.showToast('No folder selected for export.');
       }
     });
   };
-  
+
   $scope.delete = (ev)=>{
     $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
     .then((data)=>{
@@ -120,7 +120,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           });
         }else {
           $scope.showToast(`No folder selected for delete backcup.`)
-        }        
+        }
       })
     })
   };
@@ -175,7 +175,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         })
     });
   };
-  
+
   $scope.getBackupByTable = (ev, tableName, dir)=>{
     let p =new Promise( (resolve, reject)=>{
       q.selectAll(tableName)
@@ -192,7 +192,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         }else if (tableName == BALANCE_HISTORY_TABLE){
           fields = BALANCE_HISTORY_COLUMNS;
         }
-        const opts = { fields };      
+        const opts = { fields };
         const csv = json2csv(rows, opts);
         let backupPath = createBackupFolder(tableName, dir)
         fs.writeFile(backupPath, csv,  function (err) {
@@ -204,10 +204,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
       });
     });
-    
+
     return p;
   };
-  
+
   $scope.deleteByTable = (ev, tableName)=>{
     let p =new Promise( (resolve, reject)=>{
       q.deleteTableByName(tableName)
@@ -220,22 +220,22 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     });
     return p;
   };
-  
+
   $scope.calc = (ev)=>{
     $scope.showProgress = true;
     q.selectAll(BALANCE_TABLE)
     .then((rows)=>{
       if(!rows.length){
-        return q.selectAll(CUSTOMERS_TABLE)  
+        return q.selectAll(CUSTOMERS_TABLE)
       }
-      return q.wildCard('select c.id from customers c left join balances b on c.id= b.customerId where b.customerId is null')
+      return q.wildCard('select c.uId from customers c left join balances b on c.uId= b.customerId where b.customerId is null')
     })
     .then((rows)=>{
       let promises = [];
       if(rows.length){
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
-          promises.push(passbookService.getUserData(row.id));
+          promises.push(passbookService.getUserData(row.uId));
         }
       }
       return Promise.all(promises)
@@ -261,5 +261,5 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       }
     })
   };
-  
+
 });

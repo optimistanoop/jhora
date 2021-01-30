@@ -64,7 +64,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.updateSelectedCust = (customer)=>{
-        if(customer && customer.id){
+        if(customer && customer.uId){
           $scope.customer = customer;
           $scope.transaction.rate = $scope.customer.rate;
           if($scope.customer.salutation == 'Mrs'){
@@ -88,7 +88,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.dataMassage = ()=>{
-      $scope.transaction.customerId = $scope.customer.id;
+      $scope.transaction.customerId = $scope.customer.uId;
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;
       let date = $mdDateLocale.parseDate($scope.transaction.date);
@@ -229,7 +229,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.getCustomerPassbook = (tableName,column,value)=>{
-        q.selectAllByIdActive(tableName, 'customerId', $scope.customer.id,column,value)
+        q.selectAllByIdActive(tableName, 'customerId', $scope.customer.uId,column,value)
          .then((rows)=>{
            if(rows.length)
            for(let row of rows){

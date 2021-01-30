@@ -9,7 +9,7 @@
               <md-icon><i class="material-icons">person</i></md-icon>
               <md-select name="name" ng-model="transaction.customerId" ng-disabled="true" required>
                 <md-option><em>None</em></md-option>
-                <md-option ng-repeat="cust in customers" ng-value="cust.id">
+                <md-option ng-repeat="cust in customers" ng-value="cust.uId">
                   {{cust.name}}
                 </md-option>
               </md-select>
@@ -83,7 +83,7 @@
             <!-- <div layout-gt-xs="row">
                 <md-whiteframe flex-xs="35" ng-show="customer.name">
                   <label>A/c-</label>
-                 <span>{{customer.id}} - Name-{{customer.name}} - </span>
+                 <span>{{customer.uId}} - Name-{{customer.name}} - </span>
                </md-whiteframe>
                 <md-whiteframe flex-xs="35" ng-show="customer.village">
                   <label>- Village-</label>
@@ -101,7 +101,7 @@
          <md-card-title-text>
            <span class="md-headline">{{customer.name}} {{salutation}} {{customer.father}}</span>
            <span class="md-subhead">{{customer.village}}</span>
-           <span class="md-subhead">A/c No.-{{customer.id}}</span>
+           <span class="md-subhead">A/c No.-{{customer.uId}}</span>
            <span class="md-subhead">Rate -{{customer.rate}}%</span>
          </md-card-title-text>
          <md-card-title-media>
@@ -109,7 +109,7 @@
          </md-card-title-media>
        </md-card-title>
        <md-card-actions layout="row" layout-align="end center">
-         <md-button ><a ng-href="#!/passbook/view/{{customer.id}}" class="nolink">Passbook</a></md-button>
+         <md-button ><a ng-href="#!/passbook/view/{{customer.uId}}" class="nolink">Passbook</a></md-button>
        </md-card-actions>
      </md-card>
      <md-content layout-padding layout="row" >

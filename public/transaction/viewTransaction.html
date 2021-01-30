@@ -73,7 +73,7 @@
       <td>{{  tran.type }}</td>
       <td>{{  tran.promiseDate | date:"EEE,d/M/yy" }}</td>
       <td ng-show="queryFor == 'Deleted'">{{ tran.deletedOn | date:"EEE,d/M/yy" }}</td>
-      <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.id}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/transactions/update/{{tran.uId}}"><md-tooltip md-direction="bottom">A/c-{{tran.customerId}} - R-{{tran.rate}}%</md-tooltip><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
   </table>

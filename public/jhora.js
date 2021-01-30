@@ -119,7 +119,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
         let updatePromise = [];
         for (let cust of custs) {
           cust.date = cust.date ? new Date(cust.date) : null;
-          updatePromise.push(passbookService.getUserData(cust.id)
+          updatePromise.push(passbookService.getUserData(cust.uId)
           .then((datas) => {
             let balData = datas.results[datas.results.length - 1][0];
             let values = balData.customerId ? [balData.amount, balData.date, balData.calcTill, balData.calcOn, balData.customerId, balData.type, balData.p, balData.si, balData.rate, balData.total] : null;

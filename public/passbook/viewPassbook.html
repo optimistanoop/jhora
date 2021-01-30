@@ -89,8 +89,8 @@
          <td>{{ tran.type }}</td>
          <td>{{ tran.promiseDate | date:"EEE,d/M/yy" }}</td>
          <td ng-show="queryFor == 'Deleted'">{{ tran.deletedOn | date:"EEE,d/M/yy" }}</td>
-         <td ng-hide="queryFor == 'Deleted'"><a ng-href="#!/transactions/update/{{tran.id}}" ng-if="queryFor == 'All'"><i class="material-icons">edit</i></a>
-         <a ng-href="#!/transactions/update/{{tran.id}}" ng-if="queryFor == 'Settled' && (tran.type == 'Cr' || tran.type == 'Dr')"><i class="material-icons">edit</i></a></td>
+         <td ng-hide="queryFor == 'Deleted'"><a ng-href="#!/transactions/update/{{tran.uId}}" ng-if="queryFor == 'All'"><i class="material-icons">edit</i></a>
+         <a ng-href="#!/transactions/update/{{tran.uId}}" ng-if="queryFor == 'Settled' && (tran.type == 'Cr' || tran.type == 'Dr')"><i class="material-icons">edit</i></a></td>
          <td ng-click="deleteTransaction($event,tran)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
        </tr>
      </table>
@@ -142,7 +142,7 @@
 </div>
 
   <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
-  <md-button class="md-fab md-primary" style="float: right; "ng-href="#!/transactions/add/{{customer.id}}">
+  <md-button class="md-fab md-primary" style="float: right; "ng-href="#!/transactions/add/{{customer.uId}}">
     <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
     <md-icon md-svg-src="images/plus.svg"></md-icon>
   </md-button>

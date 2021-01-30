@@ -10,7 +10,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.deleteDate = new Date();
   let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
   $scope.init = ()=> {
-    q.selectAllById(CUSTOMERS_TABLE, 'id', $scope.custid)
+    q.selectAllById(CUSTOMERS_TABLE, 'uId', $scope.custid)
     .then((rows)=>{
       $timeout(()=> {
         $scope.customer = rows[0];
@@ -51,7 +51,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
     values[3] = nPromiseDate;
      q.insert(DELTRANSACTION_TABLE, keys, values)
      .then((data)=>{
-       return q.updateStatus(TRANSACTION_TABLE, 'active', '2', 'id', transaction.id)
+       return q.updateStatus(TRANSACTION_TABLE, 'active', '2', 'uId', transaction.uId)
      })
      .then((data)=>{
       q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)

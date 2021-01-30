@@ -112,7 +112,7 @@
          <md-card-title-text>
            <span class="md-headline">{{customer.name}} {{salutation}} {{customer.father}}</span>
            <span class="md-subhead">{{customer.village}}</span>
-           <span class="md-subhead">A/c No.-{{customer.id}}</span>
+           <span class="md-subhead">A/c No.-{{customer.uId}}</span>
            <span class="md-subhead">Rate -{{customer.rate}}%</span>
          </md-card-title-text>
          <md-card-title-media>
@@ -120,7 +120,7 @@
          </md-card-title-media>
        </md-card-title>
        <md-card-actions layout="row" layout-align="end center">
-         <md-button ><a ng-href="#!/passbook/view/{{customer.id}}" class="nolink">Passbook</a></md-button>
+         <md-button ><a ng-href="#!/passbook/view/{{customer.uId}}" class="nolink">Passbook</a></md-button>
        </md-card-actions>
      </md-card>
      <md-content layout-padding layout="row" ng-show="transactions.length >0">

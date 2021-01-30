@@ -66,7 +66,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
 
     $scope.updateSelectedCust = (customerId)=>{
       for(let cust of $scope.customers){
-        if(cust.id == customerId){
+        if(cust.uId == customerId){
           $scope.customer = cust;
           if($scope.customer.salutation == 'Mrs'){
           $scope.salutation = 'W/o' ;
@@ -100,7 +100,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     $scope.confirmTransaction=(ev,transaction)=>{
       if($scope.transaction.active == 0 ) {
         $scope.active = false;
-        q.update(TRANSACTION_TABLE, ['active'],['1'] , 'uId', $scope.transaction.id)
+        q.update(TRANSACTION_TABLE, ['active'],['1'] , 'uId', $scope.transaction.uId)
         .then((data)=>{
           return passbookService.getUserData($scope.transaction.customerId)
               .then((calc)=>{
@@ -155,7 +155,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         keys.splice(index, 1);
         values.splice(index, 1);
       }
-      q.update(TRANSACTION_TABLE, keys, values, 'uId', $scope.transaction.id)
+      q.update(TRANSACTION_TABLE, keys, values, 'uId', $scope.transaction.uId)
       .then((data)=>{
         return passbookService.getUserData($scope.transaction.customerId)
             .then((calc)=>{
