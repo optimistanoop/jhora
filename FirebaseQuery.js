@@ -159,10 +159,19 @@ class FirebaseWrapper {
     return p;
   }
 
-  async selectAllTwoTable(table1,table2,match1,match2){
-      let snaps1 = await this.fireStore.collection(table1).doc(match1).get()
-      let snaps2 = await this.fireStore.collection(table2).doc(match2).get()
-      return {...snaps1.data(), ...snaps2.data()}
+  async getCustomersBalances(table1,table2,match1,match2){
+      let snaps1 = await this.fireStore.collection(table1).get()
+      let snaps2 = await this.fireStore.collection(table2).get()
+      let custMap = {}
+      snaps1.forEach((doc) => {
+        let data = doc.data();
+        custMap[data.uId] = data
+      })
+      snaps2.forEach((doc) => {
+        let data = doc.data();
+        custMap[data.customerId] = {...custMap[data.customerId], ...data}
+      })
+      return Object.values(custMap)
   }
 
 
