@@ -19,7 +19,7 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       let keys = Object.keys($scope.village);
       let values = Object.values($scope.village);
       if($rootScope.editModeData == true){
-		    q.update(VILLAGE_TABLE, keys, values, 'id', $scope.village.id)
+		    q.update(VILLAGE_TABLE, keys, values, 'uId', $scope.village.uId)
 		      .then((data)=>{
 		      	$timeout(()=>{
 			          $scope.resetVillage();
@@ -31,20 +31,19 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 		    .catch((err)=>{
 		          $scope.getError(ev, err);
 		    });
-        }
-        else{
+        }else{
 			   q.insert(VILLAGE_TABLE, keys, values)
 			    .then((data)=>{
 			        $timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$rootScope.showToast('Village Added');
-			          $scope.getVillages(VILLAGE_TABLE);
-								$rootScope.template = {title: 'Villages'};
+					$rootScope.showToast('Village Added');
+			        $scope.getVillages(VILLAGE_TABLE);
+					$rootScope.template = {title: 'Villages'};
 			    })
 			    .catch((err)=>{
 			          $scope.getError(ev, err);
-			});
+				});
     };
 	};
 
@@ -81,44 +80,40 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 				$scope.showAlertDialog({}, 'Error', err);
       });
     };
+
     $scope.getVillages(VILLAGE_TABLE);
-		$scope.deleteVillage = (ev,village)=>{
+
+	$scope.deleteVillage = (ev,village)=>{
       q.selectAllById(CUSTOMERS_TABLE,'village',village.name)
       .then((rows)=>{
         if (rows.length>0) {
           $rootScope.showAlertDialog(ev,`Village in Use`, `Village : ${village.name} unable to delete .`);
-        }
-        else{
-					 $scope.showConfirmDialog(ev, 'Delete Village', `Are you sure to delete village: ${village.name} ?`)
-					 .then((data)=>{
-				      $scope.confirmVillage(village);
-				   })
-					 .catch((err)=>{
-						 $scope.showAlertDialog(ev, 'Error', err);
-           });
+        } else{
+			 $scope.showConfirmDialog(ev, 'Delete Village', `Are you sure to delete village: ${village.name} ?`)
+			 .then((data)=>{
+		      	$scope.confirmVillage(village);
+		   	 })
+			 .catch((err)=>{
+				 $scope.showAlertDialog(ev, 'Error', err);
+   			});
          }
-       }
-     )
-	  };
+       })
+	};
+
     $scope.confirmVillage = (village)=>{
-        let  {name} = village;
-        let keys = ['name'];
-        let values =[name];
         return q.deleteRowById(VILLAGE_TABLE, village.uId)
           .then((data)=>{
           	$scope.getVillages(VILLAGE_TABLE);
 			$rootScope.showToast('Village Deleted');
         })
         .catch((err)=>{
-					$scope.showAlertDialog({}, 'Error', err);
+			$scope.showAlertDialog({}, 'Error', err);
         });
     }
 
 
     $scope.editVillage = (village)=>{
-      // alert
-      //console.log(village.name)
-      q.selectAllById('customers', 'village', village.name)
+      q.selectAllById('customers', 'village', village.uId)
       .then((data)=>{
         console.log(data)
         if(data.length == 0){
