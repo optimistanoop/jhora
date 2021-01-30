@@ -30,6 +30,14 @@ class FirebaseWrapper {
     return Math.floor(new Date() / 1000)+"-"+ x;
   }
 
+  getClientTime(date){
+    let startTime = new Date(date).setHours(0, 0, 0, 0);
+    let endTime = new Date(date).setHours(23, 59, 59, 59);
+    let dateStartTimeUnix = parseInt( startTime / 1000 | 0);
+    let dateEndTimeUnix = parseInt(Math.floor(endTime / 1000 | 0))
+    return {dateStartTime: startTime, dateEndTime: endTime, dateStartTimeUnix: dateStartTimeUnix, dateEndTimeUnix: dateEndTimeUnix, time: (new Date).getTime(), date: new Date(), yymmdd: new Date(date).toISOString().split('T')[0]};
+  }
+
   async update(tableName ='', keys = [], values =[], conditionOn, id){
       let data = this.getReqObj(keys, values)
       let snaps = await this.fireStore.collection(tableName).where(conditionOn, '===', id).get()
@@ -156,17 +164,13 @@ class FirebaseWrapper {
     });
     return p;
   }
-  countTransactionByType(column, tableName, key, value){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
-  }
-  selectDataByDatesWithoutCondition(tableName, key, value1, value2){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+
+
+  async selectDataByDatesWithoutCondition(tableName, key, value1, value2){
+      let dayStartTime = this.getClientTime(value1).dateStartTime
+      let dayEndTime = this.getClientTime(value2).dateEndTime
+      let snaps = await this.fireStore.collection(tableName).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).get()
+      return snaps.size
   }
 
 }

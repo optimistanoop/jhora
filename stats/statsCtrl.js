@@ -6,7 +6,7 @@ jhora.controller('statsCtrl', function($rootScope, $scope, $timeout, TRANSACTION
     q.getTotalCountForTable(customer)
     .then((data)=>{
       $timeout(()=>{
-        $scope.stats.totalCustomer = data["count(id)"]
+        $scope.stats.totalCustomer = data
       },0);
     })
   }
@@ -15,7 +15,7 @@ jhora.controller('statsCtrl', function($rootScope, $scope, $timeout, TRANSACTION
     q.getTotalCountForTable(village)
     .then((data)=>{
       $timeout(()=>{
-        $scope.stats.totalVillages = data["count(id)"]
+        $scope.stats.totalVillages = data
       },0);
     })
   }
@@ -34,13 +34,13 @@ jhora.controller('statsCtrl', function($rootScope, $scope, $timeout, TRANSACTION
     q.selectDataByDatesWithoutCondition(transactions, 'date',from, to)
     .then((data)=>{
       $timeout(()=>{
-        $scope.stats.transactionWithindates = data[0]['count(id)']
+        $scope.stats.transactionWithindates = data
       }, 0);
     })
   }
 
   $scope.stats.transactionAverageDr = (transactions)=>{
-    q.countTransactionByType('amount',transactions,'type', 'Dr')
+    q.selectAllById(transactions,'type', 'Dr')
     .then((data)=>{
       let count = data.length,
       total = 0;
@@ -54,7 +54,7 @@ jhora.controller('statsCtrl', function($rootScope, $scope, $timeout, TRANSACTION
   }
 
   $scope.stats.transactionAverageCr = (transactions)=>{
-    q.countTransactionByType('amount',transactions,'type', 'Cr')
+    q.selectAllById(transactions,'type', 'Cr')
     .then((data)=>{
       let count = data.length,
       total = 0;
