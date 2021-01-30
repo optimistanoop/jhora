@@ -51,7 +51,7 @@
 
     $scope.getCustomers = (tableName) => {
       if (tableName == 'customers') {
-        q.selectAllTwoTable('customers c', 'balances b', 'c.*,b.total,b.dueFrom,b.nextDueDate', 'c.id', 'b.customerId')
+        q.selectAllTwoTable('customers', 'balances', 'uId', 'customerId')
           .then((rows) => {
             if (rows.length > 0) {
               for (let row of rows) {

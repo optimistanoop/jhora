@@ -325,20 +325,9 @@ class Query {
     });
     return p;
   }
-  countTransactionByType(column, tableName, key, value){
-    let p = new Promise( (resolve, reject)=>{
-      let sql = `SELECT ${column} FROM ${tableName} WHERE ${key} = '${value}'`;
-      this.db.all(sql, (err, data)=>{
-        if(err) reject(err);
-        resolve(data);
-      });
-    });
-    return p;
-  }
-
 
 };
 
 if(isElectron()){
   module && (module.exports = Query);
-} 
+}
