@@ -174,19 +174,20 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     {
       title: 'Villages',
       route: '/villages'
-    },
-    {
-      title: 'Dashboard Demo',
-      route: '/dashboard/view'
-    },
-    {
-      title: 'Passbook Demo',
-      route: '/passbook1/view'
-    },
-    {
-      title: 'Settings',
-      route: '/setting'
     }
+    // ,
+    // {
+    //   title: 'Dashboard Demo',
+    //   route: '/dashboard/view'
+    // },
+    // {
+    //   title: 'Passbook Demo',
+    //   route: '/passbook1/view'
+    // },
+    // {
+    //   title: 'Settings',
+    //   route: '/setting'
+    // }
   ])
   .constant('CUSTOMER_SALUTATION', ['Mr', 'Mrs', 'Miss'])
   .constant('TRANSACTION_TYPES', ['Dr', 'Cr', 'Settle'])
