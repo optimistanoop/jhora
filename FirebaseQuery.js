@@ -146,12 +146,17 @@ class FirebaseWrapper {
     });
     return p;
   }
-  updateActiveStatus(tableName, key, value,conditionOn,id){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async updateActiveStatus(tableName, key, value,conditionOn,id){
+      let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', id).where('active', '==', '1').get()
+      let batch = this.fireStore.batch();
+      let update = {[key]:value}
+      snaps.forEach((doc) => {
+          batch.update(doc, update)
+      })
+      return batch.commit()
   }
+
+
   bulkUpload(tableName, rows =[]){
     let p = new Promise( (resolve, reject)=>{
       resolve([]);

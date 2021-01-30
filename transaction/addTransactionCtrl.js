@@ -190,7 +190,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
         $scope.showAlertDialog(ev, 'Error', `While transaction insertion ${err}`);
       });
     };
-    
+
     let validateFirstTransaction = (ev)=>{
       if(!$scope.transactions.length && ($scope.transaction.type == 'Settle' || $scope.transaction.type == 'Cr')){
         $scope.showAlertDialog(ev, 'Error', `Please select Dr as first transaction for customer.`);
@@ -201,8 +201,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
       }
       return true;
     }
-    
-    
+
+
     $scope.addTransaction = (ev)=>{
       let valid =  validateFirstTransaction(ev);
       if(valid && $scope.transaction.type == 'Settle'){
@@ -253,7 +253,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
      };
     $scope.init = ()=>{
       if($scope.custId) {
-        q.selectAllById(CUSTOMERS_TABLE,'id',$scope.custId)
+        q.selectAllById(CUSTOMERS_TABLE,'uId',$scope.custId)
          .then((data)=>{
            $timeout(function() {
           $scope.nameDisable =true;

@@ -204,10 +204,10 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   .constant('BALANCE_HISTORY_COLUMNS', ['amount', 'date', 'calcTill', 'calcOn', 'dueFrom', 'nextDueDate', 'customerId', 'type', 'p', 'si', 'rate', 'total', 'action'])
   .constant('TOAST_DELAY', 3000)
   .constant('TOAST_POS', 'bottom right')
-  .constant('CUSTOMERS_COLUMNS', ['id', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
-  .constant('TRANSACTION_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'])
-  .constant('TRANSACTION_EXPORT_COLUMNS', ['id', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type', 'active'])
-  .constant('VILLAGE_COLUMNS', ['id', 'name']);
+  .constant('CUSTOMERS_COLUMNS', ['uId', 'salutation', 'name', 'pageNo', 'village', 'mobile', 'father', 'rate', 'guarantor', 'date', 'remarks'])
+  .constant('TRANSACTION_COLUMNS', ['uId', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type'])
+  .constant('TRANSACTION_EXPORT_COLUMNS', ['uId', 'name', 'village', 'amount', 'rate', 'customerId', 'date', 'promiseDate', 'remarks', 'type', 'active'])
+  .constant('VILLAGE_COLUMNS', ['uId', 'name']);
 
   jhora.config(function($mdThemingProvider, $mdDateLocaleProvider, $routeProvider, $locationProvider) {
 
