@@ -89,7 +89,7 @@ class FirebaseWrapper {
   }
 
   async selectAllById(tableName, key, value){
-    let snaps = await this.fireStore.collection(tableName).where(key, '==', value).orderBy("timestamp", "desc").get()
+    let snaps = await this.fireStore.collection(tableName).where(key, '==', value).orderBy("timestamp", "asc").get()
     let rows = []
     snaps.forEach((doc) => {
       let data = doc.data();
@@ -99,7 +99,7 @@ class FirebaseWrapper {
   }
 
   async selectAllByIdActive(tableName, key, value,conditionOn,value2){
-      let snaps = await this.fireStore.collection(tableName).where(key, '==', value).where(conditionOn, '==', value2).orderBy('timestamp', 'desc').get()
+      let snaps = await this.fireStore.collection(tableName).where(key, '==', value).where(conditionOn, '==', value2).orderBy('timestamp', 'asc').get()
       let rows = []
       snaps.forEach((doc) => {
         let data = doc.data();
@@ -119,7 +119,7 @@ class FirebaseWrapper {
   async selectDataByDates(tableName, key, value1, value2,conditionOn,value3){
     let dayStartTime = this.getClientTime(value1).dateStartTime
     let dayEndTime = this.getClientTime(value2).dateEndTime
-    let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', value3).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).orderBy("timestamp", "desc").get()
+    let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', value3).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).orderBy("timestamp", "asc").get()
     let rows = []
     snaps.forEach((doc) => {
       let data = doc.data();
@@ -190,7 +190,7 @@ class FirebaseWrapper {
   async selectDataByDatesWithoutCondition(tableName, key, value1, value2){
       let dayStartTime = this.getClientTime(value1).dateStartTime
       let dayEndTime = this.getClientTime(value2).dateEndTime
-      let snaps = await this.fireStore.collection(tableName).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).orderBy("timestamp", "desc").get()
+      let snaps = await this.fireStore.collection(tableName).where('active', '==', '1').where('timestamp', '>=', dayStartTime).where('timestamp', '<=', dayEndTime).orderBy("timestamp", "asc").get()
       return snaps.size
   }
 
