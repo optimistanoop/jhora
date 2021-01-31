@@ -21,7 +21,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
         $scope.setDefaults();
         $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
         $scope.getCustomerPassbook(TRANSACTION_TABLE);
-        if($scope.transaction.active == 0) {
+        if($scope.transaction.active == '0') {
           $scope.active = true;
         }
         else {
@@ -98,7 +98,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     }
 
     $scope.confirmTransaction=(ev,transaction)=>{
-      if($scope.transaction.active == 0 ) {
+      if($scope.transaction.active == '0' ) {
         $scope.active = false;
         q.update(TRANSACTION_TABLE, ['active'],['1'] , 'uId', $scope.transaction.uId)
         .then((data)=>{
@@ -197,7 +197,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.getCustomerPassbook = (tableName)=>{
-         q.selectAllByIdActive(tableName, 'customerId', $scope.transaction.customerId,'active',1)
+         q.selectAllByIdActive(tableName, 'customerId', $scope.transaction.customerId,'active','1')
          .then((rows)=>{
            if(rows.length)
            for(let row of rows){

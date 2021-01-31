@@ -74,7 +74,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           }else{
             $scope.salutation = 'D/o' ;
           }
-          $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
+          $scope.getCustomerPassbook(TRANSACTION_TABLE,'active','1');
         }else{
           $scope.customer = null;
           $scope.transactions = [];
@@ -103,7 +103,8 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     }
 
     $scope.insertTransactionAndBalance = (keys =[], values=[])=>{
-      //let {keys, values} = $scope.dataMassage();
+        keys.push('active')
+        values.push('1')
       return q.insert(TRANSACTION_TABLE, keys, values)
       .then((data)=>{
         return q.selectAllById(BALANCE_TABLE, 'customerId', $scope.transaction.customerId)

@@ -45,8 +45,7 @@ class FirebaseWrapper {
       snaps.forEach((doc) => {
         docId = doc.id
       })
-      let p = await this.fireStore.collection(tableName).doc(docId).update(data)
-    return p;
+      return await this.fireStore.collection(tableName).doc(docId).update(data)
   }
 
   async selectAll(tableName){
@@ -56,7 +55,6 @@ class FirebaseWrapper {
       let data = doc.data();
       rows.push(data)
     })
-    console.log('anp data', rows);
 
     return rows;
   }
@@ -69,13 +67,13 @@ class FirebaseWrapper {
   async insert(tableName ='', keys = [], values =[]){
     let data = this.getReqObj(keys, values)
     data.uId = this.uuidv4()
-    let p = await this.fireStore.collection(tableName).doc(data.uId).set(data)
-    return p;
+    let timestamp = new Date(data.date).getTime()
+    data.timestamp = timestamp ? timestamp : new Date().getTime()
+    return await this.fireStore.collection(tableName).doc(data.uId).set(data)
   }
 
   async deleteRowById(tableName, id){
-    let p = await this.fireStore.collection(tableName).doc(id).delete()
-    return p;
+    return await this.fireStore.collection(tableName).doc(id).delete()
   }
 
   async deleteTableByName(tableName){

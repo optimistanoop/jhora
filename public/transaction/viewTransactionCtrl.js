@@ -36,7 +36,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
       return q.updateStatus(TRANSACTION_TABLE, 'active', '2', 'uId', transaction.uId)
     })
     .then((data)=>{
-      return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)
+      return q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active','1')
     })
     .then((trans)=>{
       if(trans.length) {
@@ -95,7 +95,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
     if(queryFor == $scope.limits[1]) {
       $scope.getFilter(DELTRANSACTION_TABLE, 'date',1,1);
     }else{
-      $scope.getFilter(TRANSACTION_TABLE, 'date','active',1);
+      $scope.getFilter(TRANSACTION_TABLE, 'date','active','1');
     }
   }
 

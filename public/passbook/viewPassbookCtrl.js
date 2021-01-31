@@ -54,7 +54,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
        return q.updateStatus(TRANSACTION_TABLE, 'active', '2', 'uId', transaction.uId)
      })
      .then((data)=>{
-      q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active',1)
+      q.selectAllByIdActive(TRANSACTION_TABLE, 'customerId', transaction.customerId,'active','1')
         .then((trans)=>{
           if(trans.length) {
             passbookService.getUserData(transaction.customerId)
@@ -69,7 +69,7 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
           }
         })
        $timeout(()=> {
-         $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
+         $scope.getCustomerPassbook(TRANSACTION_TABLE,'active','1');
          $rootScope.showToast(`${transaction.name}'s Transaction Deleted`);
        },0)
      })
@@ -175,6 +175,6 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   }
 
   $scope.init();
-  $scope.getCustomerPassbook(TRANSACTION_TABLE,'active',1);
+  $scope.getCustomerPassbook(TRANSACTION_TABLE,'active','1');
 
 });

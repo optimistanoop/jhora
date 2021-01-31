@@ -42,7 +42,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
 
   let calculateSI = (p =0, r=0, t=0)=>{ return p*r*t/100; };
 
-  let getUpdatedPSI = (p =0, si=0, a=0)=>{ 
+  let getUpdatedPSI = (p =0, si=0, a=0)=>{
     let newPSI = {};
     if(a <= si){
       newPSI.si =  si - a;
@@ -120,9 +120,9 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
     psi = calculatePSI(trans, to);
     p = psi.p;
     si =  psi.si;
-    let total = p + si,    
+    let total = p + si,
     amount = p,
-    {balPassedTo, calcTill} = getBalPassedTo(to);   
+    {balPassedTo, calcTill} = getBalPassedTo(to);
     return {amount : Math.floor(amount), total: Math.floor(total), p: Math.floor(p), si: Math.floor(si), rate, type :'Dr', calcTill, calcOn: to, date : balPassedTo };
   };
 
@@ -150,13 +150,13 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
         if(to > fromPlus1Yr || nextTranType == 'Cr' || nextTranType == 'Settle' || nextTranType == 'Discount' || i == trans.length - 1){
           let finalResult;
           if(to > fromPlus1Yr){
-            // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end 
+            // remember Dr can also comer here // handle yr && multiple yrs // generate 1 tran on yr end
             finalResult = calculatePSIForYears(from, to, masterObj.results[lastIndexOFResults]);
             finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
             finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
-          } 
-          
+          }
+
           if(nextTranType == 'Cr' || nextTranType == 'Settle'|| nextTranType == 'Discount'|| lastTranAsCrOrSettleOrDiscount){
             // monthly
             let toCalcTrans = finalResult ? [finalResult] : masterObj.results[lastIndexOFResults];
@@ -169,14 +169,14 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
             masterObj.calcs.push(finalResult);
           }
           if(i == trans.length - 1){
-            // monthly 
+            // monthly
             let toCalcTrans = finalResult ? [finalResult]: masterObj.results[lastIndexOFResults];
             from = toCalcTrans[0].date;
             to = calcDate;
             finalResult = calculatePSIForMonths(from, to,  toCalcTrans);
             finalResult.mergedType = 'Final';
             finalResult.dueFrom = $mdDateLocale.parseDate(firstTran.date);
-            finalResult.nextDueDate = nextDueDate;            
+            finalResult.nextDueDate = nextDueDate;
             masterObj.calcs.push(finalResult);
           }
 
@@ -192,7 +192,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
           masterObj.results.push(lastResult);
         }
       }
-      
+
       let balData = firstTran.customerId ? masterObj.results[masterObj.results.length-1][0] : null;
       balData = firstTran.customerId ? {amount : balData.amount,
         date: $mdDateLocale.parseDate(balData.date),
@@ -214,7 +214,7 @@ jhora.service('passbookService', function($mdDateLocale,TRANSACTION_TABLE) {
   }
 
   let getUserData =(customerId)=> {
-   return  q.selectAllByIdActive(TRANSACTION_TABLE,'customerId',customerId,'active',1)
+   return  q.selectAllByIdActive(TRANSACTION_TABLE,'customerId',customerId,'active','1')
    .then((rows)=>{
     for(let row of rows){
       if(row.date){
