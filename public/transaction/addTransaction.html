@@ -1,14 +1,11 @@
 <div ng-controller="addTransactionCtrl" ng-cloak class="md-inline-form">
-  <div layout="row">
-    <div flex="70">
       <form novalidate name="transactionForm">
-        <md-content layout-padding>
-            <div layout="row">
-              <md-input-container flex-xs>
+        <md-content layout="column">
+              <md-input-container flex-sm>
                 <md-icon><i class="material-icons">person</i></md-icon>
-              </md-input-container>
 
-              <md-autocomplete class="pad" flex-xs  required
+
+              <md-autocomplete class="pad" flex-sm  required
                 md-no-cache="true"
                 md-input-name="name"
                 md-input-minlength="4"
@@ -35,7 +32,8 @@
                   <div ng-message="maxlength">Your entry is too long.</div>
                 </div>
               </md-autocomplete>
-              <md-input-container flex-xs>
+              </md-input-container>
+              <md-input-container class="md-block" flex-sm>
                 <label>Type</label>
                 <md-icon><i class="material-icons">credit_card</i></md-icon>
                 <md-select name="type" ng-model="transaction.type" ng-change="typeSelected($event)" required>
@@ -57,9 +55,8 @@
               </md-input-container>
             </div>
           </md-content>
-          <md-content layout-padding>
-            <div layout="row">
-              <md-input-container class="md-block" flex-xs>
+          <md-content layout-padding layout="column">
+              <md-input-container class="md-block" flex-sm>
                 <label>Amount</label>
                 <md-icon><i class="material-icons">money</i></md-icon>
                 <input name="amount" type="number" ng-model="transaction.amount" ng-minlength="3" ng-maxlength="6" ng-min="100" ng-max="200000" required>
@@ -71,14 +68,14 @@
                   <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
                 </div>
               </md-input-container>
-              <md-input-container flex-xs>
+              <md-input-container flex-sm>
                 <label>Promise Date</label>
                 <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-required ="!disablePromiseDate" md-open-on-focus ></md-datepicker>
                 <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
                   <div ng-message="required" class="my-message">You must supply a promise date.</div>
                 </div>
               </md-input-container>
-              <md-input-container class="md-block" flex-xs>
+              <md-input-container class="md-block" flex-sm>
                 <label>Rate</label>
                 <md-icon><i class="material-icons">trending_up</i></md-icon>
                 <input name="rate" type="number" ng-model="transaction.rate"  ng-change="onRateChange($event)" ng-disabled= "disablePromiseDate" ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
@@ -90,7 +87,7 @@
                   <div ng-message="maxlength" class="my-message">Rate should be of maximum 3 digits.</div>
                 </div>
               </md-input-container>
-              <md-input-container flex-xs>
+              <md-input-container flex-sm>
                 <label>Remarks</label>
                 <md-icon><i class="material-icons">note</i></md-icon>
                 <textarea ng-model="transaction.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus></textarea>
@@ -99,14 +96,12 @@
                   <div ng-message="md-maxlength" class="my-message">Father'sName should not be greater 80 alphabets.</div>
                 </div>
               </md-input-container>
-              </div>
+
           <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="addTransaction()">Submit</md-button>
           <md-button class="md-raised md-warn" ng-click="resetTransaction()">Reset</md-button>
           <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
       </md-content>
     </form>
-    </div>
-    <div flex="30">
       <md-card md-theme="dark-blue" ng-show="customer.name" md-theme-watch>
        <md-card-title>
          <md-card-title-text>
@@ -119,11 +114,11 @@
            <div class="md-media-sm card-media" style="color:red;">Due - {{dueBal | currency :'&#8377;'}}/-</div>
          </md-card-title-media>
        </md-card-title>
-       <md-card-actions layout="row" layout-align="end center">
+       <md-card-actions layout="column" layout-align="end center">
          <md-button ><a ng-href="#!/passbook/view/{{customer.uId}}" class="nolink">Passbook</a></md-button>
        </md-card-actions>
      </md-card>
-     <md-content layout-padding layout="row" ng-show="transactions.length >0">
+     <md-content layout-padding layout="column" ng-show="transactions.length >0">
        <table>
          <tr>
            <th>
@@ -151,6 +146,4 @@
          </tr>
        </table>
      </md-content>
-    </div>
-  </div>
 </div>
