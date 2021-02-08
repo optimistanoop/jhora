@@ -3,7 +3,7 @@
           <md-card md-theme="dark-blue" md-theme-watch >
             <md-card-header-text>
               <span class="md-title">{{customer.name}} {{salutation}} {{customer.father}}</span>
-              <span>{{customer.village }}</span>
+              <span class="md-title">{{customer.village }}</span>
               <span class="md-title" ng-if="hideNoDataFound"><strong> Total Amount Due - {{dueBal | currency :'&#8377;'}}/-</strong></span>
             </md-card-header-text>
              <div layout-padding>
@@ -27,10 +27,10 @@
             </md-option>
           </md-select>
         </md-input-container>
-        <md-input-container flex-sm ng-show="hideNoDataFound" class="search">
+        <md-input-container flex-sm ng-show="hideNoDataFound">
           <label>Search</label>
           <md-icon> <i class="material-icons">search</i> </md-icon>
-          <input ng-model="$ctrl.query" type="text" style="width:125px">
+          <input ng-model="$ctrl.query" type="text">
         </md-input-container>
       </md-content>
 
