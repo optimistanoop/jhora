@@ -151,10 +151,11 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       })
     }
   })
-  .constant('TABS', [{
-      title: 'Stats',
-      route: '/'
-    },
+  .constant('TABS', [
+    // {
+    //   title: 'Stats',
+    //   route: '/'
+    // },
     {
       title: 'Add Customer',
       route: '/customers/add'
@@ -249,7 +250,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 
     $routeProvider
     .when("/", {
-      templateUrl: dir + '/stats/stats.html'
+      templateUrl: dir + '/village/addViewVillage.html'
     })
     .when("/customers", {
       templateUrl: dir + '/customer/viewCustomer.html'
