@@ -1,8 +1,8 @@
 <div ng-controller="viewCustomerCtrl">
   <md-content layout-padding layout="row" >
     <md-input-container flex-xs style="width:200px;">
-      <label>Results for</label>
-      <md-icon><i class="material-icons">sort</i></md-icon>
+      <label>Sort</label>
+      <!-- <md-icon><i class="material-icons">sort</i></md-icon> -->
       <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
         <md-option><em>None</em></md-option>
         <md-option ng-repeat="limit in limits" ng-value="limit">
@@ -10,24 +10,22 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <div style="width:80%;margin: 10px auto;font-weight:bold;font-size:20pt;" ng-show="hideNoDataFound">
+    <!-- <div style="width:80%;margin: 10px auto;font-weight:bold;font-size:20pt;" ng-show="hideNoDataFound">
         <center><label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
         <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length | limitTo:4}} % </label></center>
-    </div>
-  <md-input-container flex-xs ng-show="hideNoDataFound">
+    </div> -->
+  <md-input-container flex-sm ng-show="hideNoDataFound">
     <label>Search</label>
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container>
-  <md-content style="width:100px;">
+
   <md-button class="md-fab md-primary" ng-href="#!/customers/add">
       <md-icon md-svg-src="images/plus.svg"></md-icon>
       <md-tooltip md-direction="top" >Add New Customer</md-tooltip>
     </md-button>
   </md-content>
-
-  </md-content>
-  <md-content layout-padding layout="row" ng-show="hideNoDataFound" >
+  <md-content layout-padding layout="column" ng-show="hideNoDataFound" >
   <table style="width:80%;margin: 0px auto;" class="customertable">
     <tr>
       <th>
@@ -77,8 +75,4 @@
   <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
     <h1>Sorry !! No customer data found</h1>
     <md-button class="md-fab md-primary" aria-label="Eat cake" style="float:right;" ng-href="#!/customers/add">
-   <md-tooltip md-direction="top" >Add New Customer</md-tooltip>
-            <md-icon md-svg-src="images/plus.svg"></md-icon>
-        </md-button>
-  </md-content>
 </div>
