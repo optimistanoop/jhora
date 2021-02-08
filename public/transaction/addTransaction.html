@@ -4,7 +4,6 @@
               <md-input-container flex-sm>
                 <md-icon><i class="material-icons">person</i></md-icon>
 
-
               <md-autocomplete class="pad" flex-sm  required
                 md-no-cache="true"
                 md-input-name="name"
@@ -97,11 +96,10 @@
                   <div ng-message="md-maxlength" class="my-message">Father'sName should not be greater 80 alphabets.</div>
                 </div>
               </md-input-container>
-
-          <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="addTransaction()">Submit</md-button>
-          <md-button class="md-raised md-warn" ng-click="resetTransaction()">Reset</md-button>
-          <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
       </md-content>
+      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="addTransaction()">Submit</md-button>
+      <md-button class="md-raised md-warn" ng-click="resetTransaction()">Reset</md-button>
+      <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
     </form>
       <md-card md-theme="dark-blue" ng-show="customer.name" md-theme-watch>
        <md-card-title>
