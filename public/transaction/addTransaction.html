@@ -53,6 +53,13 @@
                   <div ng-message="required" class="my-message">You must supply a date.</div>
                 </div>
               </md-input-container>
+              <md-input-container flex-sm>
+                <label>Promise Date</label>
+                <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-required ="!disablePromiseDate" md-open-on-focus ></md-datepicker>
+                <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
+                  <div ng-message="required" class="my-message">You must supply a promise date.</div>
+                </div>
+              </md-input-container>
             </div>
           </md-content>
           <md-content layout-padding layout="column">
@@ -68,13 +75,7 @@
                   <div ng-message="maxlength" class="my-message">Amount should be maximum of 6 digits.</div>
                 </div>
               </md-input-container>
-              <md-input-container flex-sm>
-                <label>Promise Date</label>
-                <md-datepicker name="promiseDate" ng-model="transaction.promiseDate" md-min-date="minPromiseDate" md-max-date="maxPromiseDate" ng-required ="!disablePromiseDate" md-open-on-focus ></md-datepicker>
-                <div ng-messages="transactionForm.promiseDate.$error" role="alert" multiple>
-                  <div ng-message="required" class="my-message">You must supply a promise date.</div>
-                </div>
-              </md-input-container>
+
               <md-input-container class="md-block" flex-sm>
                 <label>Rate</label>
                 <md-icon><i class="material-icons">trending_up</i></md-icon>
