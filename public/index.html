@@ -60,5 +60,22 @@
     <script src="./sqliteWrapper.js"></script>
     <script src="./query.js"></script>
     <script src="./db.js"></script>
+    <script type="text/javascript">
+    function signOut(){
+      firebase.auth().signOut().then(()=>{
+        window.location.href ="/";
+      }).catch((error)=>{
+        console.error('signout error', error);
+      });
+    }
+
+    firebase.auth().onAuthStateChanged((user)=>{
+      if(user){
+          console.log('Do nothing')
+      }else{
+          window.location.href ="/";
+      }
+    });
+    </script>
   </body>
 </html>
