@@ -10,7 +10,8 @@ class FirebaseWrapper {
       messagingSenderId: "105398319929"
     };
     firebase.initializeApp(config);
-    this.db = firebase.database();;
+    this.db = firebase.database();
+    this.auth = firebase.auth();
     this.fireStore = firebase.firestore();;
     this.fireStore.settings({ timestampsInSnapshots: true });
   }

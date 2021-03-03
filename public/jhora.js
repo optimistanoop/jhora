@@ -152,10 +152,6 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     }
   })
   .constant('TABS', [
-    // {
-    //   title: 'Stats',
-    //   route: '/'
-    // },
     {
       title: 'Add Customer',
       route: '/customers/add'

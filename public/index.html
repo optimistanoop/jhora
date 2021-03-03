@@ -1,81 +1,162 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  </head>
-    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
-    <link rel="manifest" href="./manifest.json" />
-    <!-- Chrome, Firefox OS and Opera -->
-    <meta name="theme-color" content="#106CC8">
-    <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#106CC8">
-    <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#106CC8">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
 
-    <link rel="stylesheet" href="./lib/font.css">
-    <link rel="stylesheet" href="./lib/icon.css">
-    <link rel="stylesheet" href="./lib/angular-material.min.css">
-    <link rel="stylesheet" href="./jhora.css">
-    <title>Jhora</title>
-  <body>
-    <div ng-controller="jhoraCtrl" ng-cloak >
-          <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()" >&times;</a>
-            <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs" class="tabs" ng-href="#!{{tab.route}}" >{{tab.title}}
-              <md-tooltip md-direction="right" >{{tab.title}}</md-tooltip>
-            </a>
-          </div>
-          <div id="main">
-          	<md-toolbar   class="md-theme-light _md _md-toolbar-transitions tabs" ng-click="openNav()">
-              	<h1 class="md-toolbar-tools">
-              	&#9776; Jhora</h1>
-                <div  style="text-align:center;margin-top: -41px;"  > {{template.title}}</div>
-            </md-toolbar>
-              <div ng-view ng-click="closeNav()"></div>
-          </div>
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+#resetBtn {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: block; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="id01" class="modal">
+    <div class="imgcontainer">
+      <img src="logo.png" alt="Avatar" class="avatar">
     </div>
-    <script src="./lib/angular.min.js"></script>
-    <script src="./lib/angular-route.min.js"></script>
-    <script src="./lib/angular-animate.min.js"></script>
-    <script src="./lib/angular-aria.min.js"></script>
-    <script src="./lib/angular-messages.min.js"></script>
-    <script src="./lib/angular-material.min.js"></script>
-    <script src="./lib/Chart.min.js"></script>
-    <!-- <script src="./lib/firebase.js"></script> -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase.js"></script>
-    <script src="./jhora.js"></script>
-    <script src="./customer/addCustomerCtrl.js"></script>
-    <script src="./customer/viewCustomerCtrl.js"></script>
-    <script src="./customer/updateCustomerCtrl.js"></script>
-    <script src="./transaction/addTransactionCtrl.js"></script>
-    <script src="./transaction/viewTransactionCtrl.js"></script>
-    <script src="./transaction/updateTransactionCtrl.js"></script>
-    <script src="./passbook/passbookService.js"></script>
-    <script src="./passbook/viewPassbookCtrl.js"></script>
-    <script src="./village/addViewVillageCtrl.js"></script>
-    <script src="./dashboard/dashboardCtrl.js"></script>
-    <script src="./setting/settingCtrl.js"></script>
-    <script src="./stats/statsCtrl.js"></script>
-    <!-- this db.js will always be the last dependency added -->
-    <script src="./FirebaseQuery.js"></script>
-    <script src="./sqliteWrapper.js"></script>
-    <script src="./query.js"></script>
-    <script src="./db.js"></script>
-    <script type="text/javascript">
-    function signOut(){
-      firebase.auth().signOut().then(()=>{
-        window.location.href ="/";
-      }).catch((error)=>{
-        console.error('signout error', error);
-      });
-    }
 
-    firebase.auth().onAuthStateChanged((user)=>{
-      if(user){
-          console.log('Do nothing')
-      }else{
-          window.location.href ="/";
-      }
-    });
-    </script>
-  </body>
+    <div class="container">
+      <label for="email"><b>Username</b></label>
+      <input id="email" type="text" placeholder="Enter Email" name="email" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input id="password" type="password" placeholder="Enter Password" name="psw" required>
+
+      <button id="submitbtn" type="submit">Login</button>
+      <button id="resetBtn" type="submit">Forgot password?</button>
+      <!-- <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label> -->
+    </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase.js"></script>
+<script src="./FirebaseQuery.js"></script>
+<script src="./login.js"></script>
+</body>
 </html>
