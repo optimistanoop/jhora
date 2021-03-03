@@ -194,7 +194,7 @@ class FirebaseWrapper {
       })
       snaps2.forEach((doc) => {
         let data = doc.data();
-        selectDataByDatescustMap[data.customerId] = {...custMap[data.customerId], ...data}
+        custMap[data.customerId] = {...custMap[data.customerId], ...data}
       })
       return Object.values(custMap)
   }
