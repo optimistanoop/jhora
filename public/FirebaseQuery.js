@@ -82,11 +82,23 @@ class FirebaseWrapper {
     return p;
   }
 
-  wildCard(sql){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async wildCard(sql){
+      // 'select c.uId from customers c left join balances b on c.uId= b.customerId where b.customerId is null'
+    let balances = await this.selectAll('balances')
+    let customers = await this.selectAll('customers')
+    let customerIdBalanceMap = {}
+    let rows = []
+    for(let bal of balances){
+        customerIdBalanceMap[bal.customerId] = bal
+    }
+
+    for(let cust of customers){
+        if(!customerIdBalanceMap[cust.uId]){
+            rows.push(cust)
+        }
+    }
+
+    return rows
   }
 
   async selectAllById(tableName, key, value){
