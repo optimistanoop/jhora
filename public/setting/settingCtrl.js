@@ -1,5 +1,25 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
 
+    // var save
+    // Data = (function () {
+    //     var a = document.createElement("a");
+    //     document.body.appendChild(a);
+    //     a.style = "display: none";
+    //     return function (data, fileName) {
+    //         var json = JSON.stringify(data),
+    //             blob = new Blob([json], {type: "octet/stream"}),
+    //             url = window.URL.createObjectURL(blob);
+    //         a.href = url;
+    //         a.download = fileName;
+    //         a.click();
+    //         window.URL.revokeObjectURL(url);
+    //     };
+    // }());
+    //
+    // var data = { x: 42, s: "hello, anoop", d: new Date() },
+    //     fileName = "my-download.json";
+
+
   $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
