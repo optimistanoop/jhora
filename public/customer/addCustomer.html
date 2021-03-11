@@ -27,7 +27,7 @@
           <md-input-container class="md-block" flex-sm>
             <label>{{columnName}}</label>
             <md-icon><i class="material-icons">person</i></md-icon>
-            <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20" ng-required="true">
+            <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20">
             <div ng-messages="customerForm.father.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply father name.</div>
               <div ng-message="minlength" class="my-message">Father's Name should be of minimum 4 alphabets.</div>
@@ -37,7 +37,7 @@
 
             <md-input-container class="md-block" flex-sm>
               <md-icon><i class="material-icons">home</i></md-icon>
-              <md-autocomplete flex-sm required
+              <md-autocomplete flex-sm
                 md-no-cache="true"
                 md-input-name="village"
                 md-input-minlength="4"
@@ -71,7 +71,7 @@
               <md-input-container class="md-block" flex-sm>
                 <label>Rate</label>
                 <md-icon><i class="material-icons">trending_up</i></md-icon>
-                <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
+                <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6">
                 <div ng-messages="customerForm.rate.$error" role="alert" multiple>
                   <div ng-message="required" class="my-message">You must supply rate.</div>
                   <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
