@@ -98,11 +98,11 @@
           <md-input-container class="md-block" flex-sm>
             <label>Page No</label>
             <md-icon><i class="material-icons">book</i></md-icon>
-            <input name="pageNo" type="text" ng-model="customer.pageNo" ng-minlength="1" md-maxlength="4">
+            <input name="pageNo" type="text" ng-model="customer.pageNo" ng-minlength="1" md-maxlength="10">
             <div ng-messages="customerForm.pageNo.$error" role="alert" multiple>
               <div ng-message="required" class="my-message">You must supply a Page No.</div>
               <div ng-message="minlength" class="my-message">Page No. should be of minimum 1 digit.</div>
-              <div ng-message="md-maxlength" class="my-message"> Page No. should be of maximum 4 digit.</div>
+              <div ng-message="md-maxlength" class="my-message"> Page No. should be of maximum 10 digit.</div>
             </div>
           </md-input-container>
           </md-content>
