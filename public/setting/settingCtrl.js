@@ -1,25 +1,5 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
 
-    // var save
-    // Data = (function () {
-    //     var a = document.createElement("a");
-    //     document.body.appendChild(a);
-    //     a.style = "display: none";
-    //     return function (data, fileName) {
-    //         var json = JSON.stringify(data),
-    //             blob = new Blob([json], {type: "octet/stream"}),
-    //             url = window.URL.createObjectURL(blob);
-    //         a.href = url;
-    //         a.download = fileName;
-    //         a.click();
-    //         window.URL.revokeObjectURL(url);
-    //     };
-    // }());
-    //
-    // var data = { x: 42, s: "hello, anoop", d: new Date() },
-    //     fileName = "my-download.json";
-
-
   $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
@@ -27,20 +7,8 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
   $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
-  let json2csv = {};
-  let fs = {};
-  let path = {};
-  let app = {};
-  let dialog = {};
-  let csv2json= {};
-  if(isElectron()){
-     json2csv = require('json2csv').parse;
-     fs = require('fs');
-     path = require('path');
-     app = require('electron').remote.app;
-     dialog = require('electron').remote.dialog;
-     csv2json= require("csvtojson");
-  }
+  const json2csvConverter = json2csv.parse;
+  const csv2jsonConverter = csv({output: "csv"});
 
   $scope.items = ['Transactions','Balances','Balances_History','Customers','Village'];
   $scope.selected = [TRANSACTION_TABLE,BALANCE_TABLE, BALANCE_HISTORY_TABLE];
@@ -84,70 +52,59 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     }
     return Promise.all(promises);
   }
-  let exportAlltables = (ev, dir, tables=[])=>{
+  let exportAlltables = (ev, tables=[])=>{
     let promises =[];
     for(let table of tables){
-        promises.push($scope.getBackupByTable(ev, table, dir));
+        promises.push($scope.getBackupByTable(ev, table));
     }
     return Promise.all(promises);
   }
 
-  let createBackupFolder = (tableName, dir)=>{
-    dir = dir ? dir : app.getPath('downloads');
+
+  let exportBackupFile = (tableName, content, contentType = "application/json")=>{
+      // download(jsonData, 'json.txt', 'text/plain');
+      // download(jsonData, 'json.json', '"octet/stream");
+
     let today = new Date();
     let fileName = `jhora-${tableName}-${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}.csv`;
-    dir = path.join(dir, `jhorabackup`);
-    if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
-    dir = path.join(dir, `${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`);
-    if (!fs.existsSync(dir)){ fs.mkdirSync(dir); }
-    return path.join(dir, fileName);
+    let a = document.createElement("a");
+    let file = new Blob([content], {type: contentType});
+    let url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   $scope.export = (ev)=>{
-    let options = {title:'Select folder for export', properties:['openDirectory']}
-    // dialog.showSaveDialog({defaultPath:'hello.csv'},(filePaths)=>{
-    dialog.showOpenDialog(options, (filePaths)=>{
-      if(filePaths && filePaths[0]){
-        $scope.showProgress = true;
-        exportAlltables(ev, filePaths[0], $scope.selected)
-        .then((data)=>{
-          $scope.showProgress = false;
-          $scope.showToast(`Backup for all data is done.`)
-        });
-      }else{
-        $scope.showToast('No folder selected for export.');
-      }
+    $scope.showProgress = true;
+    exportAlltables(ev, $scope.selected)
+    .then((data)=>{
+      $scope.showProgress = false;
+      $scope.showToast(`Backup for all data is done.`)
     });
-  };
+};
 
   $scope.delete = (ev)=>{
     $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
     .then((data)=>{
-      let options = {title:'Select folder for export', properties:['openDirectory']}
-      dialog.showOpenDialog(options, (filePaths)=>{
-        if(filePaths && filePaths[0]){
           $scope.showProgress = true;
-          exportAlltables(ev, filePaths[0], $scope.selected)
+          return exportAlltables(ev, $scope.selected)
           .then((data)=>{
             return deleteAllTables(ev, $scope.selected)
           })
           .then((data)=>{
             $scope.showProgress = false;
             $scope.showToast(`All Table data deleted.`)
+            return true
           })
           .catch((err)=>{
             $scope.showAlertDialog(ev, 'Error', err);
           });
-        }else {
-          $scope.showToast(`No folder selected for delete backcup.`)
-        }
-      })
     })
   };
   $scope.import = (ev)=>{
-    let options = {title:'select files to upload', filters:[{name:'csv', extensions:['csv']}], properties:['openFile', 'multiSelections', 'message']}
-    dialog.showOpenDialog(options, (filePaths)=>{
-      filePaths = filePaths ? filePaths :[];
+      let filePaths = [];
       let promises=[];
       let tableNames=[];
       $timeout(()=>{
@@ -174,8 +131,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
             let f = filePaths[i];
             let tableName = tableNames[i];
             if(f)
-            promises.push(csv2json()
-              .fromFile(f)
+            promises.push(csv2jsonConverter.fromFile(f)
               .then((jsonArr)=>{
                 return q.bulkUpload(tableName, jsonArr);
               })
@@ -193,10 +149,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         .catch((err)=>{
           $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
         })
-    });
   };
 
-  $scope.getBackupByTable = (ev, tableName, dir)=>{
+  $scope.getBackupByTable = (ev, tableName)=>{
     let p =new Promise( (resolve, reject)=>{
       q.selectAll(tableName)
       .then((rows)=>{
@@ -213,17 +168,14 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
           fields = BALANCE_HISTORY_COLUMNS;
         }
         const opts = { fields };
-        const csv = json2csv(rows, opts);
-        let backupPath = createBackupFolder(tableName, dir)
-        fs.writeFile(backupPath, csv,  function (err) {
-          if (err) reject(err);
-          resolve();
-        });
-      })
-      .catch((err)=>{
-        $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
-      });
+        const csv = json2csvConverter(rows, opts);
+        exportBackupFile(tableName, csv)
+        resolve();
     });
+  })
+  .catch((err)=>{
+    $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
+  });
 
     return p;
   };
