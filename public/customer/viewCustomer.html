@@ -29,6 +29,10 @@
   <table style="width:80%;margin: 0px auto;" class="customertable">
     <tr>
       <th>
+        <md-button ng-click="sortBy('sn')">SN</md-button>
+        <span class="sortorder" ng-show="propertyName === 'sn'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
         <md-button ng-click="sortBy('name')">Name</md-button>
         <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
       </th>
@@ -60,6 +64,7 @@
       <th ng-show="queryFor == 'All'">D</th>
     </tr>
     <tr ng-repeat="cust in customers | filter:$ctrl.query | orderBy:propertyName:reverse">
+        <td>{{ $index+1}}</td>
       <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{cust.uId}}">{{ cust.name }}</a></span><span ng-hide="queryFor == 'All'">{{ cust.name }}</span></td>
       <td>{{ cust.father }}</td>
       <td>{{ cust.village }}</td>
