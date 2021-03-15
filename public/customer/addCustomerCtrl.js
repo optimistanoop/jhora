@@ -11,7 +11,7 @@
         $scope.columnName = `Husband Name` ;
       }else {
         $scope.columnName = `Father's Name`;
-      }  
+      }
     }
     $scope.searchVillage = (keyword)=>{
       let result = [];
@@ -28,6 +28,7 @@
       $scope.columnName = `Father's Name`;
       $scope.customerForm.$setPristine();
       $scope.customerForm.$setUntouched();
+      $window.location.reload()
     };
 
     $scope.addCustomer = (ev)=>{
@@ -71,7 +72,7 @@
         $scope.showAlertDialog({}, 'Error', err);
       });
     };
-    
+
     $scope.getVillages(VILLAGE_TABLE);
 
   });
