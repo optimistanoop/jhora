@@ -1,46 +1,5 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
 
-  //     $scope.delete = (ev)=>{
-  //       $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
-  //       .then((data)=>{
-  //             $scope.showProgress = true;
-  //             return exportAlltables(ev, $scope.selected)
-  //             .then((data)=>{
-  //               return deleteAllTables(ev, $scope.selected)
-  //             })
-  //             .then((data)=>{
-  //               $scope.showProgress = false;
-  //               $scope.showToast(`All Table data deleted.`)
-  //               return true
-  //             })
-  //             .catch((err)=>{
-  //               $scope.showAlertDialog(ev, 'Error', err);
-  //             });
-  //       })
-  //     };
-  //
-  //
-  // let deleteAllTables = (ev, tables=[])=>{
-  //   let promises =[];
-  //   for(let table of tables){
-  //       promises.push($scope.deleteByTable(ev, table));
-  //   }
-  //   return Promise.all(promises);
-  // }
-  //
-  // $scope.deleteByTable = (ev, tableName)=>{
-  //   let p =new Promise( (resolve, reject)=>{
-  //     q.deleteTableByName(tableName)
-  //     .then((rows)=>{
-  //       resolve(rows);
-  //     })
-  //     .catch((err)=>{
-  //       $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
-  //     });
-  //   });
-  //   return p;
-  // };
-  //
   //    .then((data)=>{
     //         let promises=[]
     //         for(let tableName of tableNames){
@@ -104,10 +63,18 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   }
 
 
+    let deleteAllTables = (ev, tables=[])=>{
+      let promises =[];
+      for(let table of tables){
+          promises.push($scope.deleteByTable(ev, table));
+      }
+      return Promise.all(promises);
+    }
+
+
   let exportBackupFile = (tableName, content, contentType = "application/json")=>{
       // download(jsonData, 'json.txt', 'text/plain');
       // download(jsonData, 'json.json', '"octet/stream");
-
     let today = new Date();
     let fileName = `jhora-${tableName}-${$mdDateLocale.formatDate(today)}-${today.getHours()}-${today.getMinutes()}.csv`;
     let a = document.createElement("a");
@@ -215,6 +182,36 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   });
 
     return p;
+  };
+
+  $scope.deleteByTable = (ev, tableName)=>{
+      return q.deleteTableByName(tableName)
+      .then((rows)=>{
+        return rows;
+      })
+      .catch((err)=>{
+        $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
+      });
+  };
+
+
+  $scope.delete = (ev)=>{
+    $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
+    .then((data)=>{
+          $scope.showProgress = true;
+          return exportAlltables(ev, $scope.selected)
+          .then((data)=>{
+            return deleteAllTables(ev, $scope.selected)
+          })
+          .then((data)=>{
+            $scope.showProgress = false;
+            $scope.showToast(`All Table data deleted.`)
+            return true
+          })
+          .catch((err)=>{
+            $scope.showAlertDialog(ev, 'Error', err);
+          });
+    })
   };
 
   $scope.calc = (ev, customerType='newcustomers')=>{
