@@ -57,7 +57,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
   const json2csvConverter = json2csv.parse;
-  const csv2jsonConverter = csv({output: "csv"});
+  const csv2jsonConverter = csv();
 
   $scope.items = ['Transactions','Balances','Balances_History','Customers','Village'];
   $scope.selected = [TRANSACTION_TABLE,BALANCE_TABLE, BALANCE_HISTORY_TABLE];
@@ -118,6 +118,17 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     window.URL.revokeObjectURL(url);
   }
 
+  let readCsvDataFromFile = (fileToRead)=>{
+      return new Promise((resolve, reject)=>{
+          let reader = new FileReader();
+          reader.readAsText(fileToRead);
+          reader.onload = (event)=>{
+              let csvStr = event.target.result
+              resolve(csvStr)
+          };
+      })
+  }
+
   $scope.export = (ev)=>{
     $scope.showProgress = true;
     exportAlltables(ev, $scope.selected)
@@ -127,9 +138,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     });
 };
 
+
+
   $scope.import = (ev)=>{
       let promises=[];
-      let tableNames=[];
       const elem = document.getElementById('fileUpload')
       const files = elem ? elem.files:[]
       $timeout(()=>{
@@ -139,21 +151,19 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         for(let f of files){
           let splitedNames = f.name.split('-');
           let tableName = splitedNames[1] || '';
-          tableNames.push(tableName);
           // promises.push($scope.getBackupByTable(ev, tableName));
           promises.push([]);
         }
 
         Promise.all(promises).then((data)=>{
           let promises = [];
-          for(let i in files){
-            let f = files[i];
-            let tableName = tableNames[i];
+          for(let f of files){
+            let splitedNames = f.name.split('-');
+            let tableName = splitedNames[1] || '';
             if(f)
-            promises.push(csv2jsonConverter.fromFile(f)
-              .then((jsonArr)=>{
+            promises.push(readCsvDataFromFile(f).then((csvStr)=>csv2jsonConverter.fromString(csvStr)).then((jsonArr)=>{
                   console.log(tableName, jsonArr)
-                // return q.bulkUpload(tableName, jsonArr);
+                return q.bulkUpload(tableName, jsonArr);
               })
               .catch((err)=>{
                   console.log('err', err)
