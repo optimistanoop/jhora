@@ -82,7 +82,7 @@ class FirebaseWrapper {
     return p;
   }
 
-  async wildCard(sql){
+  async getNewCustomers(){
       // 'select c.uId from customers c left join balances b on c.uId= b.customerId where b.customerId is null'
     let balances = await this.selectAll('balances')
     let customers = await this.selectAll('customers')
@@ -177,11 +177,18 @@ class FirebaseWrapper {
   }
 
 
-  bulkUpload(tableName, rows =[]){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async bulkUpload(tableName, rows =[]){
+      let batch = this.fireStore.batch()
+      let uIds = []
+      for(let row of rows){
+        let uId = row.uId
+        uIds.push(uId)
+        row.timestamp = new Date().getTime()
+        let docRef = this.fireStore.collection(tableName).doc(uId)
+        batch.set(docRef, row);
+      }
+      await batch.commit()
+      return uIds
   }
 
   async getCustomersBalances(table1,table2,match1,match2){

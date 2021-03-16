@@ -185,7 +185,8 @@ class Query {
     });
     return p;
   }
-  wildCard(sql){
+  
+  getNewCustomers(sql){
     let p = new Promise( (resolve, reject)=>{
       this.db.all(sql, (err, data)=>{
         if(err) reject(err);

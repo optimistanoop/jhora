@@ -3,7 +3,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
-  $scope.msg3 = `Delete steps- export (select folder for export) -> delete.`;
+  $scope.msg3 = `All balance calculations for customers to be happen for todays date.`;
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
   $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.showProgress = false;
@@ -45,13 +45,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       }
   };
 
-  let deleteAllTables = (ev, tables=[])=>{
-    let promises =[];
-    for(let table of tables){
-        promises.push($scope.deleteByTable(ev, table));
-    }
-    return Promise.all(promises);
-  }
   let exportAlltables = (ev, tables=[])=>{
     let promises =[];
     for(let table of tables){
@@ -85,55 +78,36 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     });
 };
 
-  $scope.delete = (ev)=>{
-    $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
-    .then((data)=>{
-          $scope.showProgress = true;
-          return exportAlltables(ev, $scope.selected)
-          .then((data)=>{
-            return deleteAllTables(ev, $scope.selected)
-          })
-          .then((data)=>{
-            $scope.showProgress = false;
-            $scope.showToast(`All Table data deleted.`)
-            return true
-          })
-          .catch((err)=>{
-            $scope.showAlertDialog(ev, 'Error', err);
-          });
-    })
-  };
   $scope.import = (ev)=>{
-      let filePaths = [];
       let promises=[];
       let tableNames=[];
+      const elem = document.getElementById('fileUpload')
+      const files = elem ? elem.files:[]
       $timeout(()=>{
         $scope.showProgress = true;
       },0)
-      if(filePaths.length)
-        for(let f of filePaths){
-          let splitedNames = f.split('-');
+      if(files.length){
+        for(let f of files){
+          let splitedNames = f.name.split('-');
           let tableName = splitedNames[1] || '';
           tableNames.push(tableName);
-          promises.push($scope.getBackupByTable(ev, tableName));
+          // promises.push($scope.getBackupByTable(ev, tableName));
+          promises.push([]);
         }
-        Promise.all(promises)
-        .then((data)=>{
-          let promises=[]
-          for(let tableName of tableNames){
-            promises.push($scope.deleteByTable(ev, tableName));
-          }
-          return Promise.all(promises);
-        })
-        .then((data)=>{
+
+        Promise.all(promises).then((data)=>{
           let promises = [];
-          for(let i in filePaths){
-            let f = filePaths[i];
+          for(let i in files){
+            let f = files[i];
             let tableName = tableNames[i];
             if(f)
             promises.push(csv2jsonConverter.fromFile(f)
               .then((jsonArr)=>{
-                return q.bulkUpload(tableName, jsonArr);
+                  console.log(tableName, jsonArr)
+                // return q.bulkUpload(tableName, jsonArr);
+              })
+              .catch((err)=>{
+                  console.log('err', err)
               })
             );
           }
@@ -149,6 +123,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         .catch((err)=>{
           $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
         })
+    }else{
+        $scope.showToast(`Nothing to import.`);
+    }
   };
 
   $scope.getBackupByTable = (ev, tableName)=>{
@@ -180,29 +157,16 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
     return p;
   };
 
-  $scope.deleteByTable = (ev, tableName)=>{
-    let p =new Promise( (resolve, reject)=>{
-      q.deleteTableByName(tableName)
-      .then((rows)=>{
-        resolve(rows);
-      })
-      .catch((err)=>{
-        $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
-      });
-    });
-    return p;
-  };
-
-  $scope.calc = (ev)=>{
+  $scope.calc = (ev, customerType='newcustomers')=>{
     $scope.showProgress = true;
-    q.selectAll(BALANCE_TABLE)
-    .then((rows)=>{
-      if(!rows.length){
-        return q.selectAll(CUSTOMERS_TABLE)
-      }
-      return q.wildCard('select c.uId from customers c left join balances b on c.uId= b.customerId where b.customerId is null')
-    })
-    .then((rows)=>{
+    let ps = ''
+    if(customerType == 'newcustomers'){
+        ps = q.getNewCustomers()
+    }else if(customerType == 'allcustomers'){
+        ps = q.selectAll(CUSTOMERS_TABLE)
+    }
+
+    ps.then((rows)=>{
       let promises = [];
       if(rows.length){
         for(let row of rows){
