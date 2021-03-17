@@ -1,13 +1,5 @@
 jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLocale, passbookService, TRANSACTION_TABLE, CUSTOMERS_TABLE, BALANCE_TABLE, BALANCE_HISTORY_TABLE, DELTRANSACTION_TABLE, DELCUSTOMERS_TABLE,VILLAGE_TABLE, CUSTOMERS_COLUMNS, TRANSACTION_EXPORT_COLUMNS,BALANCE_COLUMNS, BALANCE_HISTORY_COLUMNS, VILLAGE_COLUMNS){
 
-  //    .then((data)=>{
-    //         let promises=[]
-    //         for(let tableName of tableNames){
-    //           promises.push($scope.deleteByTable(ev, tableName));
-    //         }
-    //         return Promise.all(promises);
-    //       })
-
   $rootScope.template = {title: 'Settings'};
   $scope.msg = `Check your exported file in <selected-folder>/jhorabackup/dd-mm-yy-hh-mm-ss folder once its done.`;
   $scope.msg2 = `Import steps- export (deault folder for export is /Downloads) -> delete -> import.`;
@@ -99,10 +91,11 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
 
   $scope.export = (ev)=>{
     $scope.showProgress = true;
-    exportAlltables(ev, $scope.selected)
+    return exportAlltables(ev, $scope.selected)
     .then((data)=>{
       $scope.showProgress = false;
       $scope.showToast(`Backup for all data is done.`)
+      return true
     });
 };
 
@@ -110,35 +103,43 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
 
   $scope.import = (ev)=>{
       let promises=[];
+      let tableNames=[];
       const elem = document.getElementById('fileUpload')
       const files = elem ? elem.files:[]
       $timeout(()=>{
         $scope.showProgress = true;
       },0)
-      if(files.length){
+      if(!files.length){ return $scope.showToast(`Nothing to import.`);}
+      
         for(let f of files){
           let splitedNames = f.name.split('-');
           let tableName = splitedNames[1] || '';
-          // promises.push($scope.getBackupByTable(ev, tableName));
-          promises.push([]);
+          tableNames.push(tableName)
+          promises.push($scope.getBackupByTable(ev, tableName));
         }
 
         Promise.all(promises).then((data)=>{
-          let promises = [];
-          for(let f of files){
-            let splitedNames = f.name.split('-');
-            let tableName = splitedNames[1] || '';
-            if(f)
-            promises.push(readCsvDataFromFile(f).then((csvStr)=>csv2jsonConverter.fromString(csvStr)).then((jsonArr)=>{
-                  console.log(tableName, jsonArr)
-                return q.bulkUpload(tableName, jsonArr);
-              })
-              .catch((err)=>{
-                  console.log('err', err)
-              })
-            );
-          }
-          return Promise.all(promises)
+              let promises=[]
+              for(let tableName of tableNames){
+                promises.push($scope.deleteByTable(ev, tableName));
+              }
+              return Promise.all(promises);
+          }).then((data)=>{
+              let promises = [];
+              for(let f of files){
+                let splitedNames = f.name.split('-');
+                let tableName = splitedNames[1] || '';
+                if(f)
+                promises.push(readCsvDataFromFile(f).then((csvStr)=>csv2jsonConverter.fromString(csvStr)).then((jsonArr)=>{
+                      console.log(tableName, jsonArr)
+                    return q.bulkUpload(tableName, jsonArr);
+                  })
+                  .catch((err)=>{
+                      console.log('err', err)
+                  })
+                );
+              }
+              return Promise.all(promises)
         })
         .then((data)=>{
           $timeout(()=>{
@@ -150,9 +151,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
         .catch((err)=>{
           $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
         })
-    }else{
-        $scope.showToast(`Nothing to import.`);
-    }
+
   };
 
   $scope.getBackupByTable = (ev, tableName)=>{

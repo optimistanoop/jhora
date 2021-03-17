@@ -78,8 +78,13 @@ class FirebaseWrapper {
   }
 
   async deleteTableByName(tableName){
-    let p = true
-    return p;
+      let batch = this.fireStore.batch()
+      let snapshots = await this.fireStore.collection(tableName).get()
+      snapshots.forEach((doc) => {
+          batch.delete(doc);
+      })
+      await batch.commit()
+      return true
   }
 
   async getNewCustomers(){
