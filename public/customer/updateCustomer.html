@@ -1,12 +1,12 @@
 <div ng-controller="updateCustomerCtrl"  ng-cloak class="md-inline-form">
   <form novalidate name="customerForm">
 
-    <md-content layout-padding layout="row">
+    <md-content layout-padding layout="column">
       <md-input-container class="md-block" flex-xs>
-             <label>salutation</label> 
+             <label>salutation</label>
             <md-icon><i class="material-icons">person</i></md-icon>
             <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
-             
+
              <md-option ng-repeat="salutation in salutations" ng-value="salutation">
                {{salutation}}
              </md-option>
@@ -67,7 +67,7 @@
       </md-autocomplete>
       </md-content>
 
-      <md-content layout-padding layout="row">
+      <md-content layout-padding layout="column">
       <md-input-container class="md-block" flex-xs>
         <label>Father's Name</label>
         <md-icon><i class="material-icons">person</i></md-icon>
@@ -101,7 +101,7 @@
         </div>
       </md-input-container>
       </md-content>
-      <md-content layout-padding layout="row">
+      <md-content layout-padding layout="column">
         <md-input-container class="md-block" flex-xs>
           <label>Guarantor</label>
           <md-icon><i class="material-icons">people</i></md-icon>

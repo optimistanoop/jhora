@@ -1,5 +1,5 @@
 <div ng-controller="updateTransactionCtrl" ng-cloak class="md-inline-form">
-  <div layout="row">
+  <div layout="column">
     <div flex="70">
       <md-content layout-padding>
         <form novalidate name="transactionForm">
@@ -108,11 +108,11 @@
            <div class="md-media-sm card-media" style="color:red;">Due - {{dueBal | currency :'&#8377;'}}/-</div>
          </md-card-title-media>
        </md-card-title>
-       <md-card-actions layout="row" layout-align="end center">
+       <md-card-actions layout="column" layout-align="end center">
          <md-button ><a ng-href="#!/passbook/view/{{customer.uId}}" class="nolink">Passbook</a></md-button>
        </md-card-actions>
      </md-card>
-     <md-content layout-padding layout="row" >
+     <md-content layout-padding layout="column" >
        <table>
          <tr>
            <th>
