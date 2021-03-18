@@ -207,8 +207,10 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     $scope.addTransaction = (ev)=>{
       let valid =  validateFirstTransaction(ev);
       if(valid && $scope.transaction.type == 'Settle'){
+        $rootScope.isLoader = true;
         $scope.processSettle(ev);
       }else if(valid){
+        $rootScope.isLoader = true;
         $scope.processAddTransaction(ev);
       }
     }

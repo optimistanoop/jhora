@@ -26,6 +26,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
       $rootScope.showDialog(ev,'customer', customer, 'customer/previewCustomer.html')
       .then(function(answer) {
         if(answer == 'submit') {
+          $rootScope.isLoader = true;
           $scope.confirmCustomer(ev);
         }
       });
@@ -46,7 +47,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
         keys.splice(index1, 1);
         values.splice(index1, 1);
       }
-      q.update(CUSTOMERS_TABLE, keys, values, 'uId', $scope.customer.uId)
+      return q.update(CUSTOMERS_TABLE, keys, values, 'uId', $scope.customer.uId)
       .then((data)=>{
           keys = ['name', 'village'];
           values = [$scope.customer.name, $scope.customer.village];
@@ -60,13 +61,7 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
           },0);
         })
       .catch((err)=>{
-          if (err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.mobile')) {
-            $rootScope.showAlertDialog(ev,'Duplicate Mobile Number Found', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
-            $scope.customer.mobile = '';
-          }else if(err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.pageNo')){
-            $rootScope.showAlertDialog(ev,'Duplicate Page Number Found', `Page Number : ${$scope.customer.pageNo} is already in use.`);
-            $scope.customer.pageNo = '';
-          }
+          $rootScope.showAlertDialog(ev,'An error occured!', `${err.message}`);
       });
     };
 

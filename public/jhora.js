@@ -6,6 +6,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   $scope.tabs = TABS;
   $rootScope.editMode = false;
   $rootScope.editModeData = {};
+  $rootScope.isLoader = false;
 
   $rootScope.template = $scope.tabs[0];
   $scope.goto = function(page) {
@@ -40,6 +41,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
 
   $rootScope.showToast = (msg) => {
     $mdToast.show($mdToast.simple().textContent(msg).position(TOAST_POS).hideDelay(TOAST_DELAY));
+    $rootScope.isLoader = false;
   };
 
   $rootScope.showAlertDialog = (ev, title, msg) => {
@@ -54,6 +56,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       .theme('dark-orange')
       .targetEvent(ev)
     );
+    $rootScope.isLoader = false;
   };
 
   $scope.showConfirmDialog = (ev, title, msg) => {

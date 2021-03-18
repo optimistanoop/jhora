@@ -129,6 +129,7 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
   }
 
     $scope.updateTransaction= (ev)=>{
+      $rootScope.isLoader = true;
       $scope.updateSelectedCust($scope.transaction.customerId);
       $scope.transaction.name = $scope.customer.name;
       $scope.transaction.village = $scope.customer.village;

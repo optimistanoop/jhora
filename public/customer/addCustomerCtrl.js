@@ -32,12 +32,13 @@
     };
 
     $scope.addCustomer = (ev)=>{
+      $rootScope.isLoader = true;
       let date = $mdDateLocale.parseDate($scope.customer.date);
       let keys = Object.keys($scope.customer);
       let index = keys.indexOf('date')
       let values = Object.values($scope.customer);
       values[index] = date;
-      q.insert(CUSTOMERS_TABLE, keys, values)
+      return q.insert(CUSTOMERS_TABLE, keys, values)
       .then((data)=>{
         $timeout(()=>{
           $scope.resetCustomer();
@@ -45,13 +46,7 @@
         $rootScope.showToast('Customer Added');
       })
       .catch((err)=>{
-          if (err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.mobile')) {
-            $rootScope.showAlertDialog(ev,'Duplicate Mobile Number', `Mobile Number : ${$scope.customer.mobile} is already in use.`);
-            $scope.customer.mobile = '';
-          }else if(err.code=="SQLITE_CONSTRAINT" && err.message.includes('customers.pageNo')){
-            $rootScope.showAlertDialog(ev,'Duplicate Page Number', `Page Number : ${$scope.customer.pageNo} is already in use.`);
-            $scope.customer.pageNo = '';
-          }
+        $rootScope.showAlertDialog(ev,'An error occured!', `${err.message}`);
       });
     };
 
