@@ -42,11 +42,12 @@ class FirebaseWrapper {
   async update(tableName ='', keys = [], values =[], conditionOn, id){
       let data = this.getReqObj(keys, values)
       let snaps = await this.fireStore.collection(tableName).where(conditionOn, '==', id).get()
-      let docId = ''
+      if(!snaps.size){return true}
+      let batch = this.fireStore.batch();
       snaps.forEach((doc) => {
-        docId = doc.id
+          batch.update(doc, data)
       })
-      return await this.fireStore.collection(tableName).doc(docId).update(data)
+      return batch.commit()
   }
 
   async selectAll(tableName){
