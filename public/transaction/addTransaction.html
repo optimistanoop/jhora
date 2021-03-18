@@ -39,7 +39,7 @@
                 <md-select name="type" ng-model="transaction.type" ng-change="typeSelected($event)" required>
                   <md-option><em>None</em></md-option>
                   <md-option ng-repeat="type in types" ng-value="type">
-                    {{type}}
+                    <span ng-class="{trcr: type == 'Cr', trdr: type == 'Dr', trst: type == 'Settle' }">{{type}}</span>
                   </md-option>
                 </md-select>
                 <div ng-messages="transactionForm.type.$error" role="alert" multiple>
