@@ -12,23 +12,28 @@ jhora.controller('updateTransactionCtrl', function($rootScope, $scope, $mdDateLo
     };
 
     $scope.init = ()=> {
-      q.selectAllById(TRANSACTION_TABLE, 'uId', $scope.transid)
-      .then((rows)=>
-        $timeout(()=> {
-        $scope.transaction = rows[0];
-        $scope.transaction.date = $scope.transaction.date ? new Date($scope.transaction.date) : undefined;
-        $scope.transaction.promiseDate = $scope.transaction.promiseDate ? new Date($scope.transaction.promiseDate) : undefined;
-        $scope.setDefaults();
-        $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
-        $scope.getCustomerPassbook(TRANSACTION_TABLE);
-        if($scope.transaction.active == '0') {
-          $scope.active = true;
-        }
-        else {
-          $scope.active = false;
-        }
-      },0)
-    )};
+      $rootScope.isLoader = true;
+      return q.selectAllById(TRANSACTION_TABLE, 'uId', $scope.transid)
+      .then((rows)=>{
+            $timeout(()=> {
+                $rootScope.isLoader = false;
+                $scope.transaction = rows[0];
+                $scope.transaction.date = $scope.transaction.date ? new Date($scope.transaction.date) : undefined;
+                $scope.transaction.promiseDate = $scope.transaction.promiseDate ? new Date($scope.transaction.promiseDate) : undefined;
+                $scope.setDefaults();
+                $scope.getDataByTable(CUSTOMERS_TABLE, CUSTOMERS_TABLE);
+                $scope.getCustomerPassbook(TRANSACTION_TABLE);
+                if($scope.transaction.active == '0') {
+                  $scope.active = true;
+                }else {
+                  $scope.active = false;
+                }
+            },0)
+      })
+      .catch((err)=>{
+        $scope.showAlertDialog(ev, 'Error', `An err occured while operation ${err}`);
+      });
+    };
 
     $scope.setDefaults = ()=>{
       $scope.types = UPDATE_TRANSACTION_TYPES;

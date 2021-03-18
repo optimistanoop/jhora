@@ -4,7 +4,7 @@
 
     <md-content layout="column">
       <md-input-container class="md-block" flex-xs>
-             <label>salutation</label>
+             <label>Salutation</label>
             <md-icon><i class="material-icons">person</i></md-icon>
             <md-select name="salutation" ng-model="customer.salutation" ng-required="true">
 
@@ -29,7 +29,7 @@
       <md-input-container class="md-block" flex-xs>
         <label>Mobile No</label>
         <md-icon><i class="material-icons">phone</i></md-icon>
-        <input name="mobile" type="number" ng-model="customer.mobile" ng-minlength="10" ng-maxlength="10" ng-min="6000000000" ng-max="9999999999" ng-required="true">
+        <input name="mobile" type="number" ng-model="customer.mobile" ng-minlength="10" ng-maxlength="10" ng-min="6000000000" ng-max="9999999999">
         <div ng-messages="customerForm.mobile.$error" role="alert" multiple>
           <div ng-message="required" class="my-message">You must supply a mobile No.</div>
           <div ng-message="minlength" class="my-message">Mobile No. should be of 10 digits.</div>
@@ -42,7 +42,7 @@
         <md-icon><i class="material-icons">home</i></md-icon>
       </md-input-container>
 
-      <md-autocomplete flex-xs required
+      <md-autocomplete flex-xs
         md-no-cache="true"
         md-input-name="village"
         md-input-minlength="4"
@@ -72,7 +72,7 @@
       <md-input-container class="md-block" flex-xs>
         <label>Father's Name</label>
         <md-icon><i class="material-icons">person</i></md-icon>
-        <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20" ng-required="true">
+        <input name="father" type="text" ng-model="customer.father" ng-minlength="4" md-maxlength="20">
         <div ng-messages="customerForm.father.$error" role="alert" multiple>
           <div ng-message="required" class="my-message">You must supply father name.</div>
           <div ng-message="minlength" class="my-message">Father's Name should be of minimum 4 alphabets.</div>
@@ -82,7 +82,7 @@
       <md-input-container class="md-block" flex-xs>
         <label>Rate</label>
         <md-icon><i class="material-icons">trending_up</i></md-icon>
-        <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6" ng-required="true">
+        <input name="rate" type="number" ng-model="customer.rate"  ng-minlength="1" ng-maxlength="3" ng-min="0" ng-max="6">
         <div ng-messages="customerForm.rate.$error" role="alert" multiple>
           <div ng-message="required" class="my-message">You must supply rate.</div>
           <div ng-message="min" class="my-message">Rate should be greater or equal to 0.</div>
@@ -94,7 +94,7 @@
       <md-input-container class="md-block" flex-xs>
         <label>Page No</label>
         <md-icon><i class="material-icons">book</i></md-icon>
-        <input name="pageNo" type="text" ng-model="customer.pageNo" ng-minlength="1" md-maxlength="4" ng-required="true">
+        <input name="pageNo" type="text" ng-model="customer.pageNo" ng-minlength="1" md-maxlength="4">
         <div ng-messages="customerForm.pageNo.$error" role="alert" multiple>
           <div ng-message="required" class="my-message">You must supply a Page No.</div>
           <div ng-message="minlength" class="my-message">Page No. should be of minimum 1 digit.</div>
@@ -106,7 +106,7 @@
         <md-input-container class="md-block" flex-xs>
           <label>Guarantor</label>
           <md-icon><i class="material-icons">people</i></md-icon>
-          <input name="guarantor" type="text" ng-model="customer.guarantor" ng-minlength="4" md-maxlength="20" ng-required="false">
+          <input name="guarantor" type="text" ng-model="customer.guarantor" ng-minlength="4" md-maxlength="20">
           <div ng-messages="customerForm.guarantor.$error" role="alert" multiple>
             <div ng-message="minlength" class="my-message">Guarantor's Name should be of minimum 4 alphabets.</div>
             <div ng-message="md-maxlength" class="my-message">Guarantor's Name should not be greater 20  alphabets.</div>
@@ -119,7 +119,7 @@
     <md-input-container class="md-block" flex-xs>
       <label>Remarks</label>
       <md-icon><i class="material-icons">note</i></md-icon>
-      <textarea name="remarks" type="text" ng-model="customer.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus ng-required="false"></textarea>
+      <textarea name="remarks" type="text" ng-model="customer.remarks" ng-minlength="4" md-maxlength="80" rows="1" md-select-on-focus></textarea>
       <div ng-messages="customerForm.remarks.$error" role="alert" multiple>
         <div ng-message="minlength" class="my-message">Remarks should be of minimum 4 alphabets.</div>
         <div ng-message="md-maxlength" class="my-message">Father's Name should not be greater 80 alphabets.</div>

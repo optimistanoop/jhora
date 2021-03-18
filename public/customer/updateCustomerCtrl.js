@@ -84,13 +84,19 @@ jhora.controller('updateCustomerCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.init = ()=> {
-      q.selectAllById(CUSTOMERS_TABLE, 'uId', $scope.custid)
-      .then((rows)=>
-        $timeout(()=> {
-        $scope.customer = rows[0];
-        $scope.customer.date = $scope.customer.date ? new Date($scope.customer.date) : null;
-      },0)
-    )};
+      $rootScope.isLoader = true;
+      return q.selectAllById(CUSTOMERS_TABLE, 'uId', $scope.custid)
+      .then((rows)=>{
+            $timeout(()=> {
+                $rootScope.isLoader = false;
+                $scope.customer = rows[0];
+                $scope.customer.date = $scope.customer.date ? new Date($scope.customer.date) : null;
+            },0)
+        })
+        .catch((err)=>{
+          $scope.showAlertDialog({}, 'Error', err);
+        });
+    };
 
     $scope.getVillages(VILLAGE_TABLE);
     $scope.init();
