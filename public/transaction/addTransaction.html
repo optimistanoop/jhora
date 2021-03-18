@@ -1,4 +1,5 @@
 <div ng-controller="addTransactionCtrl" ng-cloak class="md-inline-form">
+    <md-progress-linear class="md-warn" ng-if="isLoader" md-mode="indeterminate"></md-progress-linear>
       <form novalidate name="transactionForm">
         <md-content layout="column">
               <md-input-container flex-sm class=" md-input-focused">

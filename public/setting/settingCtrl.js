@@ -7,7 +7,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.msg4 = `Example File Name : jhora-customers-dd-mm-yy-hh-mm.csv.`;
   $scope.msg5 = `All balance calculations for customers to be happen for todays date.`;
   $scope.msg6 = `All balance calculations for customers to be happen for todays date.`;
-  $scope.showProgress = false;
   const json2csvConverter = json2csv.parse;
   const csv2jsonConverter = csv();
 
@@ -90,10 +89,9 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   }
 
   $scope.export = (ev)=>{
-    $scope.showProgress = true;
+    $rootScope.isLoader = true;
     return exportAlltables(ev, $scope.selected)
     .then((data)=>{
-      $scope.showProgress = false;
       $scope.showToast(`Backup for all data is done.`)
       return true
     });
@@ -107,10 +105,10 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       const elem = document.getElementById('fileUpload')
       const files = elem ? elem.files:[]
       $timeout(()=>{
-        $scope.showProgress = true;
+        $rootScope.isLoader = true;
       },0)
       if(!files.length){ return $scope.showToast(`Nothing to import.`);}
-      
+
         for(let f of files){
           let splitedNames = f.name.split('-');
           let tableName = splitedNames[1] || '';
@@ -142,9 +140,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
               return Promise.all(promises)
         })
         .then((data)=>{
-          $timeout(()=>{
-            $scope.showProgress = false;
-          },0)
           data.length && $scope.showToast(`All data imported succesfully.`);
           !data.length && $scope.showToast(`Nothing to import.`);
         })
@@ -197,13 +192,12 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   $scope.delete = (ev)=>{
     $scope.showConfirmDialog(ev, 'Delete all data', `Are you sure to delete all data ?`)
     .then((data)=>{
-          $scope.showProgress = true;
+          $rootScope.isLoader = true;
           return exportAlltables(ev, $scope.selected)
           .then((data)=>{
             return deleteAllTables(ev, $scope.selected)
           })
           .then((data)=>{
-            $scope.showProgress = false;
             $scope.showToast(`All Table data deleted.`)
             return true
           })
@@ -214,7 +208,7 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
   };
 
   $scope.calc = (ev, customerType='newcustomers')=>{
-    $scope.showProgress = true;
+    $rootScope.isLoader = true;
     let ps = ''
     if(customerType == 'newcustomers'){
         ps = q.getNewCustomers()
@@ -244,7 +238,6 @@ jhora.controller('settingCtrl', function($rootScope, $scope, $timeout, $mdDateLo
       return Promise.all(promises)
     })
     .then((data)=>{
-      $scope.showProgress = false;
       if(data.length){
         $scope.showToast(`Balances Updated`);
         $rootScope.$emit('updateCustomers');

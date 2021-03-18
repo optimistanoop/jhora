@@ -1,4 +1,5 @@
 <div ng-controller="viewTransactionCtrl">
+    <md-progress-linear class="md-warn" ng-if="isLoader" md-mode="indeterminate"></md-progress-linear>
     <md-content layout="row" ng-show="hideNoDataFound">
       <md-input-container flex-sm class="movedown">
         <label>From Date</label>

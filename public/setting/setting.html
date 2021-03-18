@@ -1,5 +1,5 @@
 <div flex ng-controller="settingCtrl">
-  <md-progress-linear class="md-warn" ng-if="showProgress" md-mode="indeterminate"></md-progress-linear>
+  <md-progress-linear class="md-warn" ng-if="isLoader" md-mode="indeterminate"></md-progress-linear>
 <div layout="column">
     <md-card md-theme="docs-dark"  md-theme-watch>
      <md-card-title>
@@ -103,4 +103,7 @@
  </md-card>
   </div>
   <md-button class="md-raised md-primary" ng-click="back($event)">Back</md-button>
+  <div layout="row" layout-sm="column" layout-align="space-around" style="position: absolute;bottom:1%;height:2000px;width:100%;" ng-show="isLoader">
+     <md-progress-circular md-mode="indeterminate" md-diameter="100" style="position:fixed;bottom:50%" ></md-progress-circular>
+  </div>
 </div>

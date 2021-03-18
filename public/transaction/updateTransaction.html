@@ -1,4 +1,5 @@
 <div ng-controller="updateTransactionCtrl" ng-cloak class="md-inline-form">
+  <md-progress-linear class="md-warn" ng-if="isLoader" md-mode="indeterminate"></md-progress-linear>
   <div layout="column">
     <div flex="70">
       <md-content>

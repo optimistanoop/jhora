@@ -18,15 +18,16 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     $scope.addVillage = (ev)=>{
       let keys = Object.keys($scope.village);
       let values = Object.values($scope.village);
+	  $rootScope.isLoader = true;
       if($rootScope.editModeData == true){
 		    q.update(VILLAGE_TABLE, keys, values, 'uId', $scope.village.uId)
 		      .then((data)=>{
 		      	$timeout(()=>{
 			          $scope.resetVillage();
 			        },0);
-							$rootScope.showToast('Village updated');
-		           $scope.getVillages(VILLAGE_TABLE);
-							 $rootScope.template = {title: 'Villages'};
+				$rootScope.showToast('Village updated');
+		        $scope.getVillages(VILLAGE_TABLE);
+				$rootScope.template = {title: 'Villages'};
 		    })
 		    .catch((err)=>{
 		          $scope.getError(ev, err);
@@ -48,10 +49,8 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
 	};
 
 	$scope.getError = (ev, error) => {
-		if (error.code=="SQLITE_CONSTRAINT") {
-			$rootScope.showAlertDialog(ev,'Duplicate Village Found', `Village : ${$scope.village.name} is already exists.`);
-			$scope.resetVillage();
-		}
+		$rootScope.showAlertDialog(ev,'Error', `${error}`);
+		$scope.resetVillage();
 	};
 
     $scope.getNewData= (queryFor)=>{
@@ -63,8 +62,10 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
     };
 
     $scope.getVillages = (tableName)=>{
-      q.selectAll(tableName)
+	  $rootScope.isLoader = true;
+      return q.selectAll(tableName)
       .then((rows)=>{
+		$rootScope.isLoader = false;
         if(rows.length)
         for(let row of rows){
           row.date = row.date ? new Date(row.date) : null;
@@ -77,11 +78,9 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
         },0);
       })
       .catch((err)=>{
-				$scope.showAlertDialog({}, 'Error', err);
+		$scope.showAlertDialog({}, 'Error', err);
       });
     };
-
-    $scope.getVillages(VILLAGE_TABLE);
 
 	$scope.deleteVillage = (ev,village)=>{
       q.selectAllById(CUSTOMERS_TABLE,'village',village.name)
@@ -124,4 +123,5 @@ jhora.controller('addViewVillageCtrl', function($rootScope, $scope, $timeout, $m
       })
     }
 
+	$scope.getVillages(VILLAGE_TABLE);
 });

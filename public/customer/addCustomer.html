@@ -1,4 +1,5 @@
 <div ng-controller="addCustomerCtrl"  ng-cloak class="md-inline-form">
+    <md-progress-linear class="md-warn" ng-if="isLoader" md-mode="indeterminate"></md-progress-linear>
       <form novalidate name="customerForm">
 
         <md-content layout="column">
