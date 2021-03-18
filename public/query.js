@@ -185,7 +185,7 @@ class Query {
     });
     return p;
   }
-  
+
   getNewCustomers(sql){
     let p = new Promise( (resolve, reject)=>{
       this.db.all(sql, (err, data)=>{
@@ -316,7 +316,7 @@ class Query {
     });
     return p;
   }
-  getCustomersBalances(table1,table2,match1,match2){
+  getJoinedTable(table1,table2,match1,match2){
     let p = new Promise( (resolve, reject)=>{
       let sql = `SELECT * FROM ${table1} LEFT JOIN ${table2} ON ${match1} = ${match2}`;
       this.db.all(sql, (err, data)=>{

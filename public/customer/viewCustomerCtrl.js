@@ -52,7 +52,7 @@
     $scope.getCustomers = (tableName) => {
       $rootScope.isLoader = true;
       if (tableName == 'customers') {
-        q.getCustomersBalances('customers', 'balances', 'uId', 'customerId')
+        q.getJoinedTable('customers', 'balances', 'uId', 'customerId')
           .then((rows) => {
             if (rows.length > 0) {
               for (let row of rows) {
