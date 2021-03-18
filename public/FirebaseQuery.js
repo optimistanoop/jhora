@@ -45,7 +45,7 @@ class FirebaseWrapper {
       if(!snaps.size){return true}
       let batch = this.fireStore.batch();
       snaps.forEach((doc) => {
-          batch.update(doc, data)
+          batch.update(this.fireStore.collection(tableName).doc(doc.id), data)
       })
       return batch.commit()
   }
@@ -82,10 +82,9 @@ class FirebaseWrapper {
       let batch = this.fireStore.batch()
       let snapshots = await this.fireStore.collection(tableName).get()
       snapshots.forEach((doc) => {
-          batch.delete(doc);
+          batch.delete(this.fireStore.collection(tableName).doc(doc.id));
       })
-      await batch.commit()
-      return true
+      return batch.commit()
   }
 
   async getNewCustomers(){
@@ -168,7 +167,7 @@ class FirebaseWrapper {
       let batch = this.fireStore.batch();
       let update = {[key]:value}
       snaps.forEach((doc) => {
-          batch.update(doc, update)
+          batch.update(this.fireStore.collection(tableName).doc(doc.id), update)
       })
       return batch.commit()
   }
@@ -177,7 +176,7 @@ class FirebaseWrapper {
       let batch = this.fireStore.batch();
       let update = {[key]:value}
       snaps.forEach((doc) => {
-          batch.update(doc, update)
+          batch.update(this.fireStore.collection(tableName).doc(doc.id), update)
       })
       return batch.commit()
   }
