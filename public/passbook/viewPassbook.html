@@ -131,4 +131,7 @@
     <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
     <md-icon md-svg-src="images/plus.svg"></md-icon>
   </md-button>
+  <div layout="row" layout-sm="column" layout-align="space-around" style="position: absolute;bottom:1%;height:2000px;width:100%;" ng-show="isLoader">
+     <md-progress-circular md-mode="indeterminate" md-diameter="100" style="position:fixed;bottom:50%" ></md-progress-circular>
+  </div>
 </div>

@@ -60,6 +60,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
   }
 
   $scope.getDataByTable = (tableName, modelName,column,value)=>{
+    $rootScope.isLoader = true;
     q.selectAllById(tableName,column,value)
     .then((rows)=>{
       if(rows.length)
@@ -73,6 +74,7 @@ jhora.controller('viewTransactionCtrl', function($rootScope, $scope, $timeout, $
         $scope.hideNoDataFound = true;
         if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows.length == 0)
         $scope.hideNoDataFound = false;
+        $rootScope.isLoader = false;
       }, 0);
     })
     .catch((err)=>{

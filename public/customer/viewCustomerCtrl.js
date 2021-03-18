@@ -50,6 +50,7 @@
     }
 
     $scope.getCustomers = (tableName) => {
+      $rootScope.isLoader = true;
       if (tableName == 'customers') {
         q.getCustomersBalances('customers', 'balances', 'uId', 'customerId')
           .then((rows) => {
@@ -68,6 +69,7 @@
                 $scope.hideNoDataFound = false;
               }, 0)
             }
+            $rootScope.isLoader = false;
           })
           .catch((err) => {
             $scope.showAlertDialog({}, 'Error', err);
@@ -90,7 +92,11 @@
                 $scope.hideNoDataFound = false;
               }, 0)
             }
+            $rootScope.isLoader = true;
           })
+          .catch((err) => {
+            $scope.showAlertDialog({}, 'Error', err);
+          });
       }
     }
 

@@ -10,14 +10,19 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
   $scope.deleteDate = new Date();
   let deletedOn =  $mdDateLocale.parseDate($scope.deleteDate);
   $scope.init = ()=> {
+    $rootScope.isLoader = true;
     q.selectAllById(CUSTOMERS_TABLE, 'uId', $scope.custid)
     .then((rows)=>{
       $timeout(()=> {
         $scope.customer = rows[0];
         $rootScope.template.title=`${$scope.customer.name}'s Passbook`;
         $scope.setSalutation();
+        $rootScope.isLoader = false;
       },0)
       })
+      .catch((err)=>{
+        $scope.showAlertDialog({}, 'Error', err);
+      });
     };
 
   $scope.hideNoDataFound = true;
@@ -111,27 +116,28 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
  }
 
  $scope.getCustomerPassbook = (tableName,column,value)=>{
+    $rootScope.isLoader = true;
     q.selectAllByIdActive(tableName, 'customerId', $scope.custid,column,value)
     .then((rows)=>{
       if(rows.length>0){
-      for(let row of rows){
-        row.date = row.date ? new Date(row.date) : null;
-        row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
-      }
-      $timeout(()=>{
-        $scope.transactions = rows || [];
-        $scope.minDate = $scope.transactions[0] ? $scope.transactions[0].date :new Date();
-        let lastDate = $scope.transactions[$scope.transactions.length -1].date;
-        $scope.maxDate = new Date(lastDate.getFullYear() + 5, lastDate.getMonth(), lastDate.getDate());
-        calculatePSIToday($scope.calcDate);
-        $scope.hideNoDataFound = true;
-        if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
-        $scope.hideNoDataFound = false;
-      },0);
-    }
-    else {
-      $scope.hideNoDataFound = false;
-    }
+          for(let row of rows){
+            row.date = row.date ? new Date(row.date) : null;
+            row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
+          }
+          $timeout(()=>{
+            $scope.transactions = rows || [];
+            $scope.minDate = $scope.transactions[0] ? $scope.transactions[0].date :new Date();
+            let lastDate = $scope.transactions[$scope.transactions.length -1].date;
+            $scope.maxDate = new Date(lastDate.getFullYear() + 5, lastDate.getMonth(), lastDate.getDate());
+            calculatePSIToday($scope.calcDate);
+            $scope.hideNoDataFound = true;
+            if((tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE) && rows && rows.length == 0)
+            $scope.hideNoDataFound = false;
+          },0);
+        }else {
+          $scope.hideNoDataFound = false;
+        }
+        $rootScope.isLoader = false;
     })
     .catch((err)=>{
       $scope.showAlertDialog({}, 'Error', err);
@@ -176,5 +182,4 @@ jhora.controller('viewPassbookCtrl', function($rootScope, $scope, $timeout, $rou
 
   $scope.init();
   $scope.getCustomerPassbook(TRANSACTION_TABLE,'active','1');
-
 });
