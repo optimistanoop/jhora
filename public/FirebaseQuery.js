@@ -187,7 +187,7 @@ class FirebaseWrapper {
       let batch = this.fireStore.batch()
       let uIds = []
       for(let row of rows){
-        let uId = row.uId
+        let uId = row.uId ? row.uId : this.uuidv4()
         uIds.push(uId)
         row.timestamp = new Date().getTime()
         let docRef = this.fireStore.collection(tableName).doc(uId)
