@@ -21,7 +21,6 @@
           <div id="mySidenav" style="background-color: rgb(57,73,171);" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()" >&times;</a>
             <a ng-click="goto($index)" style="color: #E0ECF8;" ng-repeat="tab in tabs" class="tabs" ng-href="#!{{tab.route}}" >{{tab.title}}
-              <md-tooltip md-direction="right" >{{tab.title}}</md-tooltip>
             </a>
             <md-button class="md-raised md-warn" style="margin-left:30px" onclick="signOut()">Logout</md-button>
           </div>

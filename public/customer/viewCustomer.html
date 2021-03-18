@@ -72,7 +72,7 @@
       <td>{{ cust.mobile }}</td>
       <td>{{ cust.dueFrom | date:"EEE,d/M/yy"}}</td>
       <td>{{ cust.nextDueDate | date:"EEE,d/M/yy"}}</td>
-      <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.uId}}"><md-tooltip md-direction="bottom">A/c-{{cust.uId}} - G-{{cust.guarantor}}</md-tooltip><i class="material-icons">edit</i></a></td>
+      <td ng-show="queryFor == 'All'"><a ng-href="#!/customers/update/{{cust.uId}}"><i class="material-icons">edit</i></a></td>
       <td ng-click="deleteCustomer($event,cust)" ng-show="queryFor == 'All'"><i class="material-icons" style="color:red">delete</i></td>
     </tr>
    </table>
