@@ -43,6 +43,10 @@
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th>
+        <md-button  ng-click="sortBy('sn')">SN</md-button>
+        <span class="sortorder" ng-show="propertyName === 'sn'" ng-class="{reverse: reverse}"></span>
+      </th>
+      <th>
         <md-button  ng-click="sortBy('amount')">Amount</md-button>
         <span class="sortorder" ng-show="propertyName === 'amount'" ng-class="{reverse: reverse}"></span>
       </th>
@@ -70,6 +74,7 @@
       <th ng-show="queryFor == 'All'">D</th>
     </tr>
     <tr ng-class="{trcr: tran.type == 'Cr', trdr: tran.type == 'Dr', trst: tran.type == 'Settle' }" ng-repeat="tran in transactions | filter:$ctrl.query | orderBy:propertyName:reverse">
+      <td>{{ $index+1}}</td>
       <td>{{ tran.amount | currency:'&#8377;' }}</td>
       <td>{{ tran.date | date:"EEE,d/M/yy" }}</td>
       <td><span ng-show="queryFor == 'All'"><a ng-href="#!/passbook/view/{{tran.customerId}}">{{ tran.name }}</a></span><span ng-hide="queryFor == 'All'">{{ tran.name }}</span></td>
