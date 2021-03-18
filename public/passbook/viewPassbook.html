@@ -16,9 +16,9 @@
          </md-card>
         </md-content>
 
-      <md-content layout-padding ng-class="{'line' :hideNoDataFound==true}">
+      <md-content ng-class="{'line' :hideNoDataFound==true}">
           <h3 ng-if="hideNoDataFound">Transactions</h3>
-        <md-input-container flex-sm>
+        <!-- <md-input-container flex-sm>
           <label>Sort</label>
           <md-icon><i class="material-icons">sort</i></md-icon>
           <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
@@ -26,7 +26,7 @@
               {{limit}}
             </md-option>
           </md-select>
-        </md-input-container>
+        </md-input-container> -->
         <md-input-container flex-sm ng-show="hideNoDataFound">
           <label>Search</label>
           <md-icon> <i class="material-icons">search</i> </md-icon>
@@ -38,7 +38,7 @@
          <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length }} % </label>
      </div> -->
-     <md-content  layout-padding ng-if="hideNoDataFound">
+     <md-content ng-if="hideNoDataFound">
      <table width="100%">
        <tr class="pointer">
          <th>
@@ -85,7 +85,7 @@
     </md-input-container>
   </md-content>
 
-    <md-content  layout-padding ng-show="hideNoDataFound" ng-hide="queryFor == 'Settled'">
+    <md-content ng-show="hideNoDataFound" ng-hide="queryFor == 'Settled'">
       <table class="customertable" >
         <tr class="pointer">
           <th>

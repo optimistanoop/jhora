@@ -1,15 +1,14 @@
 <div ng-controller="viewCustomerCtrl">
-  <md-content layout-padding layout="row" >
-    <md-input-container flex-xs style="width:200px;">
+  <md-content layout="row" >
+    <!-- <md-input-container flex-xs style="width:200px;">
       <label>Sort</label>
-      <!-- <md-icon><i class="material-icons">sort</i></md-icon> -->
       <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
         <md-option><em>None</em></md-option>
         <md-option ng-repeat="limit in limits" ng-value="limit">
           {{limit}}
         </md-option>
       </md-select>
-    </md-input-container>
+    </md-input-container> -->
     <!-- <div style="width:80%;margin: 10px auto;font-weight:bold;font-size:20pt;" ng-show="hideNoDataFound">
         <center><label>Total : {{ (customers | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
         <label> Percentage : {{ (100 / customers.length  ) * (customers | filter:$ctrl.query | orderBy:propertyName:reverse ).length | limitTo:4}} % </label></center>
@@ -20,12 +19,12 @@
     <input ng-model="$ctrl.query" type="text">
   </md-input-container>
 
-  <md-button class="md-fab md-primary" ng-href="#!/customers/add">
+  <!-- <md-button class="md-fab md-primary" ng-href="#!/customers/add">
       <md-icon md-svg-src="images/plus.svg"></md-icon>
       <md-tooltip md-direction="top" >Add New Customer</md-tooltip>
-    </md-button>
+    </md-button> -->
   </md-content>
-  <md-content layout-padding layout="column" ng-show="hideNoDataFound" >
+  <md-content layout="column" ng-show="hideNoDataFound" >
   <table style="width:80%;margin: 0px auto;" class="customertable">
     <tr>
       <th>

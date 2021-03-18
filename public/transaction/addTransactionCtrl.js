@@ -214,7 +214,7 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
     }
 
     $scope.getDataByTable = (tableName, modelName)=>{
-      q.selectAll(tableName)
+      return q.selectAll(tableName)
       .then((rows)=>{
         if(rows.length)
         for(let row of rows){
@@ -222,7 +222,9 @@ jhora.controller('addTransactionCtrl', function($rootScope, $scope, $timeout, $m
           if(tableName == TRANSACTION_TABLE || tableName == DELTRANSACTION_TABLE)
           row.promiseDate = row.promiseDate ? new Date(row.promiseDate) : null;
         }
-        $scope[modelName] = rows;
+        $timeout(()=>{
+            $scope[modelName] = rows;
+        }, 0)
       })
       .catch((err)=>{
         $scope.showAlertDialog({}, 'Error', err);

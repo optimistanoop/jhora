@@ -1,7 +1,7 @@
 <div ng-controller="addTransactionCtrl" ng-cloak class="md-inline-form">
       <form novalidate name="transactionForm">
         <md-content layout="column">
-              <md-input-container flex-sm>
+              <md-input-container flex-sm class=" md-input-focused">
                 <md-icon><i class="material-icons">person</i></md-icon>
 
               <md-autocomplete class="pad" flex-sm  required
@@ -59,9 +59,8 @@
                   <div ng-message="required" class="my-message">You must supply a promise date.</div>
                 </div>
               </md-input-container>
-            </div>
           </md-content>
-          <md-content layout-padding layout="column">
+          <md-content layout="column">
               <md-input-container class="md-block" flex-sm>
                 <label>Amount</label>
                 <md-icon><i class="material-icons">money</i></md-icon>
@@ -97,7 +96,7 @@
                 </div>
               </md-input-container>
       </md-content>
-      <md-button class="md-raised md-primary" ng-disabled="transactionForm.$invalid" ng-click="addTransaction()">Submit</md-button>
+      <md-button class="md-raised md-primary" ng-click="addTransaction()">Submit</md-button>
       <md-button class="md-raised md-warn" ng-click="resetTransaction()">Reset</md-button>
       <md-button class="md-raised md-primary" ng-click="back()">Back</md-button>
     </form>
@@ -117,7 +116,7 @@
          <md-button ><a ng-href="#!/passbook/view/{{customer.uId}}" class="nolink">Passbook</a></md-button>
        </md-card-actions>
      </md-card>
-     <md-content layout-padding layout="column" ng-show="transactions.length >0">
+     <md-content layout="column" ng-show="transactions.length >0">
        <table>
          <tr>
            <th>

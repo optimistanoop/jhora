@@ -1,5 +1,5 @@
 <div ng-controller="viewTransactionCtrl">
-    <md-content layout-padding layout="row" ng-show="hideNoDataFound">
+    <md-content layout="row" ng-show="hideNoDataFound">
       <md-input-container flex-sm class="movedown">
         <label>From Date</label>
         <md-datepicker name="fromDate" ng-model="tran.fromDate" ng-show="hideNoDataFound" md-max-date="maxDate" ng-change="getTransaction(queryFor)" md-open-on-focus ></md-datepicker>
@@ -17,16 +17,16 @@
        <label>Total : {{ (transactions | filter:$ctrl.query | orderBy:propertyName:reverse).length }} </label>
          <label> Percentage : {{ (100 / transactions.length  ) * (transactions | filter:$ctrl.query | orderBy:propertyName:reverse ).length | limitTo:4}} % </label>
      </div> -->
-    <md-content layout-padding layout="row" ng-show="hideNoDataFound">
-         <md-input-container flex-sm>
+    <md-content layout="row" ng-show="hideNoDataFound">
+         <!-- <md-input-container flex-sm>
            <label>Sort</label>
-           <!-- <md-icon><i class="material-icons">sort</i></md-icon> -->
+
            <md-select name="type" ng-model="queryFor" ng-change="getNewData(queryFor)">
              <md-option ng-repeat="limit in limits" ng-value="limit">
                {{limit}}
              </md-option>
            </md-select>
-         </md-input-container>
+         </md-input-container> -->
      <md-input-container flex-sm>
 
        <label>Search</label>
@@ -34,12 +34,12 @@
        <input ng-model="$ctrl.query" type="text">
      </md-input-container>
 
-     <md-button class="md-fab md-primary" ng-href="#!/transactions/add">
+     <!-- <md-button class="md-fab md-primary" ng-href="#!/transactions/add">
        <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
        <md-icon md-svg-src="images/plus.svg"></md-icon>
-    </md-button>
+    </md-button> -->
 </md-content>
-<md-content layout-padding layout="column" ng-show="hideNoDataFound">
+<md-content layout="column" ng-show="hideNoDataFound">
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th>

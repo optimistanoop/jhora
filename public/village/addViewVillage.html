@@ -1,6 +1,6 @@
 <div ng-controller="addViewVillageCtrl"  ng-cloak class="md-inline-form">
 
-        <md-content layout-padding layout="column" ng-show="hideNoDataFound">
+        <md-content layout="column" ng-show="hideNoDataFound">
     <table style="width:80%;margin: 0px auto;" class="customertable">
       <tr>
         <th>
@@ -21,10 +21,10 @@
     <md-content style="width:80%;margin: 10px auto;" ng-hide="hideNoDataFound">
       <h1>Sorry !! No village data found</h1>
     </md-content>
-      <md-content layout-padding>
+      <md-content>
       <form novalidate name="villageForm">
 
-         <md-content layout-padding layout="column">
+         <md-content layout="column" class="_md layout-column">
           <md-input-container class="md-block" flex-sm>
             <label>Name</label>
             <md-icon><i class="material-icons">home</i></md-icon>
