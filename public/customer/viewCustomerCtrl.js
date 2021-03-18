@@ -92,7 +92,7 @@
                 $scope.hideNoDataFound = false;
               }, 0)
             }
-            $rootScope.isLoader = true;
+            $rootScope.isLoader = false;
           })
           .catch((err) => {
             $scope.showAlertDialog({}, 'Error', err);
