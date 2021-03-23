@@ -25,6 +25,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
       # Runs a single command using the runners shell
       - name: install cli and deploy only hosting
       - run: npm install -g firebase-tools
