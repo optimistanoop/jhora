@@ -55,4 +55,4 @@ class JhoraLogin {
   }
 }
 
-new JhoraLogin(new FirebaseWrapper());
+new JhoraLogin(q);
