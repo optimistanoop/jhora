@@ -146,13 +146,12 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   };
 
   $scope.updateBal();
-  if(!isElectron()){
     navigator.serviceWorker && navigator.serviceWorker.register('/sw.js',  {scope: '/'}).then((registration)=>{
       console.log('registered with scope: ', registration.scope);
       }).catch((err)=>{
         console.error('service worker err', err);
       })
-    }
+    
   })
   .constant('TABS', [
     {
@@ -239,10 +238,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     };
 
     let dir = '.';
-    if(isElectron() && window.__dirname){
-      dir = 'file://' + window.__dirname;
-    }
-
+    
     $routeProvider
     .when("/", {
       templateUrl: dir + '/customer/viewCustomer.html'

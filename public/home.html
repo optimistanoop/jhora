@@ -57,6 +57,9 @@
     <script src="./setting/settingCtrl.js"></script>
     <script src="./FirebaseQuery.js"></script>
     <script type="text/javascript">
+      const q = new FirebaseWrapper();
+      angular.bootstrap(document, ['jhora']);
+      
     function signOut(){
       firebase.auth().signOut().then(()=>{
         window.location.href ="/";
@@ -72,6 +75,7 @@
           window.location.href ="/";
       }
     });
+
     </script>
   </body>
 </html>
