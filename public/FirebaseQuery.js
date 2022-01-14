@@ -211,3 +211,6 @@ class FirebaseWrapper {
   }
 
 }
+
+let q = new FirebaseWrapper();
+angular.bootstrap(document, ['jhora']);
