@@ -125,7 +125,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
           updatePromise.push(passbookService.getUserData(cust.uId)
           .then((datas) => {
             let balData = datas.results[datas.results.length - 1][0];
-            let values = balData.customerId ? [balData.amount, balData.date, balData.calcTill, balData.calcOn, balData.customerId, balData.type, balData.p, balData.si, balData.rate, balData.total] : null;
+            let values = balData.customerId ? [balData.amount,balData.date,balData.calcTill,balData.calcOn,balData.dueFrom,balData.nextDueDate,balData.customerId,balData.type,balData.p,balData.si,balData.rate,balData.total] : null;
             values && promises.push(q.update(BALANCE_TABLE, BALANCE_COLUMNS, values, 'customerId', balData.customerId));
           }))
         }
@@ -238,7 +238,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     };
 
     let dir = '.';
-    
+
     $routeProvider
     .when("/", {
       templateUrl: dir + '/customer/viewCustomer.html'
