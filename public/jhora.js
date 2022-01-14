@@ -101,6 +101,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
   };
 
   $scope.updateBal = () => {
+    $rootScope.showToast('Updating Balance...');
     q.selectAll(BALANCE_TABLE)
     .then((rows) => {
       if (rows.length > 0) {
@@ -145,7 +146,7 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     })
   };
 
-  $scope.updateBal();
+  new Date().getHours() < 10 && $scope.updateBal();
     navigator.serviceWorker && navigator.serviceWorker.register('/sw.js',  {scope: '/'}).then((registration)=>{
       console.log('registered with scope: ', registration.scope);
       }).catch((err)=>{
