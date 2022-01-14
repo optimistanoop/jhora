@@ -71,11 +71,11 @@ class FirebaseWrapper {
     data.uId = this.uuidv4()
     let timestamp = new Date(data.date).getTime()
     data.timestamp = timestamp ? timestamp : new Date().getTime()
-    return await this.fireStore.collection(tableName).doc(data.uId).set(data)
+    return this.fireStore.collection(tableName).doc(data.uId).set(data)
   }
 
   async deleteRowById(tableName, id){
-    return await this.fireStore.collection(tableName).doc(id).delete()
+    return this.fireStore.collection(tableName).doc(id).delete()
   }
 
   async deleteTableByName(tableName){
@@ -126,11 +126,8 @@ class FirebaseWrapper {
       return rows;
   }
   //get data by year and month of selected data
-  selectAllByYearMonth(tableName, key, value){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async selectAllByYearMonth(tableName, key, value){
+    return true;
   }
 
   //get data between two dates
@@ -147,19 +144,13 @@ class FirebaseWrapper {
   }
 
   //get greater data and equal of selected date
-  selectGreaterDataByDate(tableName,key,value){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async selectGreaterDataByDate(tableName,key,value){
+    return true;
   }
 
   //get less data of selected date
-  selectLessDataByDate(tableName,key,value){
-    let p = new Promise( (resolve, reject)=>{
-      resolve([]);
-    });
-    return p;
+  async selectLessDataByDate(tableName,key,value){
+    return true;
   }
 
   async updateStatus(tableName, key, value,conditionOn,id){
