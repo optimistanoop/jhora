@@ -25,7 +25,7 @@
     "release": "build"
   },
   "dependencies": {
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.4",
     "csvtojson": "^2.0.8",
     "json2csv": "^4.2.1",
     "sqlite3": "^4.0.2"
