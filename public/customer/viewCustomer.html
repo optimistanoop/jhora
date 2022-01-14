@@ -19,17 +19,11 @@
     <md-icon> <i class="material-icons">search</i> </md-icon>
     <input ng-model="$ctrl.query" type="text">
   </md-input-container>
-
-  <!-- <md-button class="md-fab md-primary" ng-href="#!/customers/add">
-      <md-icon md-svg-src="images/plus.svg"></md-icon>
-      <md-tooltip md-direction="top" >Add New Customer</md-tooltip>
-    </md-button> -->
   </md-content>
   <md-content layout="column" ng-show="hideNoDataFound" >
   <table style="width:80%;margin: 0px auto;" class="customertable">
     <tr>
-      <th>
-        <md-button ng-click="sortBy('sn')">SN</md-button>
+      <th>SN
         <span class="sortorder" ng-show="propertyName === 'sn'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>

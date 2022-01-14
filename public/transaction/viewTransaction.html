@@ -35,16 +35,12 @@
        <input ng-model="$ctrl.query" type="text">
      </md-input-container>
 
-     <!-- <md-button class="md-fab md-primary" ng-href="#!/transactions/add">
-       <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
-       <md-icon md-svg-src="images/plus.svg"></md-icon>
-    </md-button> -->
 </md-content>
 <md-content layout="column" ng-show="hideNoDataFound">
   <table style="width:80%;margin: 0px auto;">
     <tr>
       <th>
-        <md-button  ng-click="sortBy('sn')">SN</md-button>
+        SN
         <span class="sortorder" ng-show="propertyName === 'sn'" ng-class="{reverse: reverse}"></span>
       </th>
       <th>
@@ -90,10 +86,6 @@
   <md-content style="width:80%;margin: 0px auto;" ng-hide="hideNoDataFound">
     <h1>Sorry !! No transaction data found</h1>
       <md-button class="md-raised md-primary" ng-click="reload()">Back</md-button>
-          <md-button class="md-fab md-primary" aria-label="Eat cake" style="float: right;"ng-href="#!/transactions/add">
-            <md-tooltip md-direction="top" >Add New Transaction</md-tooltip>
-            <md-icon md-svg-src="images/plus.svg"></md-icon>
-        </md-button>
   </md-content>
   <div layout="row" layout-sm="column" layout-align="space-around" style="position: absolute;bottom:1%;height:2000px;width:100%;" ng-show="isLoader">
      <md-progress-circular md-mode="indeterminate" md-diameter="100" style="position:fixed;bottom:50%" ></md-progress-circular>
