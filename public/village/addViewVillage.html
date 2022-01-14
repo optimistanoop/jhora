@@ -3,6 +3,7 @@
         <md-content layout="column" ng-show="hideNoDataFound">
     <table style="width:80%;margin: 0px auto;" class="customertable">
       <tr>
+        <th>SN</th>
         <th>
           <md-button ng-click="sortBy('name')">Name</md-button>
           <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
@@ -11,6 +12,7 @@
         <th ng-show="queryFor == 'All'">Delete</th>
       </tr>
       <tr ng-repeat="village in villages | filter:$ctrl.query | orderBy:propertyName:reverse">
+        <td>{{ $index+1}}</td>
         <td>{{ village.name }}</td>
 
         <td ng-click="editVillage(village)" ng-show="queryFor == 'All'"><i class="material-icons">edit</i></td>
