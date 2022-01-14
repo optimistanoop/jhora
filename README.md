@@ -11,6 +11,7 @@ cd jhora
 npm install
 npm start
 ```
+### Branches
 
 ##### branch - master - web app only
 ##### branch - web_app - web app + desktop app + additional Work in progress features
