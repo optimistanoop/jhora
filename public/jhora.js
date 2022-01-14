@@ -180,10 +180,6 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
       route: '/setting'
     }
     // {
-    //   title: 'Dashboard Demo',
-    //   route: '/dashboard/view'
-    // },
-    // {
     //   title: 'Passbook Demo',
     //   route: '/passbook1/view'
     // },
@@ -280,12 +276,6 @@ jhora.controller('jhoraCtrl', function($rootScope, $scope, $mdToast, $mdDialog, 
     })
     .when("/villages/view/:id", {
       templateUrl: dir + '/village/addViewVillage.html'
-    })
-    .when("/passbook1/view", {
-      templateUrl: dir + '/passbook/viewPassbook1.html'
-    })
-    .when("/dashboard/view", {
-      templateUrl: dir + '/dashboard/dashboard.html'
     })
     .when("/setting", {
       templateUrl: dir + '/setting/setting.html'
