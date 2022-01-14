@@ -12,6 +12,10 @@ npm install
 npm start
 ```
 
+##### branch - master - web app only
+##### branch - web_app - web app + desktop app + additional Work in progress features
+##### branch - desktop_app_electron - desktop only
+
 ## To install dependency packages in windows OS
 
 `npm i -g windows-build-tools`
