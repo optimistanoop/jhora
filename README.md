@@ -17,6 +17,23 @@ npm start
 ##### branch - web_app - web app + desktop app + additional Work in progress features
 ##### branch - desktop_app_electron - desktop only
 
+#### To get indexes
+
+`firebase firestore:indexes`
+
+#### To deploy indexes
+
+`firebase deploy --only firestore:indexes`
+
+#### To deploy db rules
+
+`firebase deploy --only firestore:rules`
+
+#### To get db rules
+
+`firebase firestore:rules`
+
+
 ## To install dependency packages in windows OS
 
 `npm i -g windows-build-tools`
